@@ -1,0 +1,4 @@
+team_name: COVIDhub
+model_name: baseline
+model_abbr: COVIDhub-baseline
+team_model_designation: proposed

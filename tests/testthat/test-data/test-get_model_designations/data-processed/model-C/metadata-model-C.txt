@@ -1,0 +1,4 @@
+team_name: test team name
+model_name: C
+model_abbr: teamC-modelC
+team_model_designation: proposed

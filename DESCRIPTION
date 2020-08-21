@@ -1,0 +1,17 @@
+Package: covidHubUtils
+Title: Utility functions for the COVID-19 forecast hub
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: MIT
+Imports:
+  dplyr (>= 0.8.4), tibble (>= 2.1.3), tidyr (>= 1.0.2), MMWRweek (>= 0.1.1), lubridate (>= 1.7.4), purrr (>= 0.3.3), ggplot2, magrittr, Matrix, NlcOptim, quantgen
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

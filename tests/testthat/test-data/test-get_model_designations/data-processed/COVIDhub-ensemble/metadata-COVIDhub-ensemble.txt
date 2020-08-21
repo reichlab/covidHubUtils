@@ -1,0 +1,4 @@
+team_name: COVIDhub
+model_name: ensemble
+model_abbr: COVIDhub-ensemble
+team_model_designation: primary
