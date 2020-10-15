@@ -28,7 +28,7 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
 
       results_path <- file.path(
         file_path,
-        paste0(model, "/*", forecast_dates, "-", model, ".csv"))
+        paste0(model, "/", forecast_dates, "-", model, ".csv"))
       results_path <- results_path[file.exists(results_path)]
       results_path <- tail(results_path, 1)
       
