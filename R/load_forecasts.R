@@ -37,7 +37,7 @@ load_forecasts <- function (
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
   
-  all_locations <- readr::read_csv("data-locations/full_locations.csv")
+  all_locations <- covidHubUtils::hub_locations
   
   # validate locationn
   if (!all(locations %in% all_locations$location)){

@@ -41,7 +41,7 @@ load_truth <- function (truth_source,
   
   file_name<- paste0(gsub(" ","%20", target_variable), ".csv")
   
-  all_valid_fips <- readr::read_csv("data-locations/full_locations.csv") %>%
+  all_valid_fips <- covidHubUtils::hub_locations %>%
     pull(fips)
   
   if (length(locations) == 0){

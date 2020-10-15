@@ -34,7 +34,7 @@ plot_forecast <- function(forecast_data,
                                            "Incident Deaths"), 
                                several.ok = FALSE)
   # validate location
-  all_valid_fips <- readr::read_csv("data-locations/full_locations.csv") %>%
+  all_valid_fips <- covidHubUtils::hub_locations %>%
     pull(fips)
   location <- match.arg(location, 
                          choices = all_valid_fips, 

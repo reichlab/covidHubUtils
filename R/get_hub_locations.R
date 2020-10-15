@@ -1,11 +1,10 @@
-#' Create full_locations.csv in /data-locations for loading data from 
-#' zoltar and covidcast
+#' Create data/hub_locations.rda for loading data from zoltar and covidcast
 #'
 #' @return data frame with columns fips, location_name, population, geo_type,
 #' geo_value, abbreviation
 #' 
 get_locations <- function(){
-  locations <- readr::read_csv("data-locations/locations.csv") %>%
+  hub_locations <- readr::read_csv("https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/data-locations/locations.csv") %>%
     # add columns used for reading files in covidcast package 
     # US has "state" as geo_type
     dplyr::mutate (geo_type = ifelse(!is.na(abbreviation), "state", "county"),
@@ -21,6 +20,7 @@ get_locations <- function(){
                   fips = location) %>%
     dplyr::select(-c("state_abbreviation")) 
   
-  write.csv(locations, file = "data-locations/full_locations.csv")
-    
+  hub_locations[hub_locations$fips == 'US',]$location_name = 'United States'
+  
+  save(hub_locations, file = "data/hub_locations.rda")
 }
