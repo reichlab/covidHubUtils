@@ -4,8 +4,7 @@
 #' which to retrieve designations. If not provided, the function returns model
 #' designations for all models.
 #' @param source string specifying where forecasts will be loaded from:
-#' currently only "hub_repo" is supported; eventually, either "hub_repo" or
-#' "zoltar"
+#'  either "local_hub_repo" or "zoltar"
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
 #' 
@@ -13,7 +12,7 @@
 #' 
 #' @export
 get_model_designations <- function(models, source, hub_repo_path) {
-  source <- match.arg(source, choices = c("hub_repo", "zoltar"))
+  source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
 
   data_processed <- file.path(hub_repo_path, "data-processed")
 
@@ -44,8 +43,28 @@ get_model_designations <- function(models, source, hub_repo_path) {
         dplyr::filter(model %in% models)
     }
   } else {
-    # In the future, put logic to get this information from zoltar here
-    stop("Argument hub_repo_path must be provided; an interface via Zoltar is not yet supported.")
+    zoltar_connection <- zoltr::new_connection()
+    
+    zoltr::zoltar_authenticate(zoltar_connection, 
+                        Sys.getenv("Z_USERNAME"),
+                        Sys.getenv("Z_PASSWORD"))
+    
+    the_projects <- projects(zoltar_connection)
+    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+    primary_models <- models(zoltar_connection, project_url) 
+    
+    # filter to requested models
+    if(!missing(models)) {
+      primary_models <- primary_models %>%
+        dplyr::filter(model_abbr %in% models)
+    }
+    
+    model_info <- purrr::map_dfr(
+      primary_models$url,
+      zoltr::model_info,
+      zoltar_connection = zoltar_connection)  %>%
+      dplyr::select(abbreviation,notes) %>%
+      dplyr::filter(notes %in% c("primary", "secondary"))
   }
 
   return(model_info)
