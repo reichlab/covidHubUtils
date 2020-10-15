@@ -10,10 +10,10 @@ the Saturday of EW12."  This means that the forecast week end date is set to
 Saturday of EW11 (the previous week) for Sunday and Monday of EW12, and
 Saturday of EW12 (the current week) for Tuesday through Saturday of EW12.}
 \usage{
-calc_forecast_week_end_date(timezero)
+calc_forecast_week_end_date(forecast_date)
 }
 \arguments{
-\item{timezero}{character vector of dates in 'yyyy-mm-dd' format}
+\item{forecast_date}{character vector of dates in 'yyyy-mm-dd' format}
 }
 \value{
 character vector of dates in 'yyyy-mm-dd' format

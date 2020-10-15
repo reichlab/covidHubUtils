@@ -12,8 +12,7 @@ which to retrieve designations. If not provided, the function returns model
 designations for all models.}
 
 \item{source}{string specifying where forecasts will be loaded from:
-currently only "hub_repo" is supported; eventually, either "hub_repo" or
-"zoltar"}
+either "local_hub_repo" or "zoltar"}
 
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}

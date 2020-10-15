@@ -15,18 +15,24 @@
 #' 
 #' @return data frame with columns model, forecast_date,location, target, 
 #' type, quantile, value, horizon and target_end_date.
-
+#'
+#' @export
 load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
   
   forecasts <- purrr::map_dfr(
     models,
     function(model) {
-      results_path <- paste0(file_path, model, '/',
-                             forecast_date, '-', model, '.csv')
+      if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
+        file_path <- substr(file_path, 1, nchar(file_path) - 1)
+      }
+
+      results_path <- file.path(
+        file_path,
+        paste0(model, "/*", forecast_dates, "-", model, ".csv"))
       results_path <- results_path[file.exists(results_path)]
       results_path <- tail(results_path, 1)
       
-      if(length(results_path) == 0) {
+      if (length(results_path) == 0) {
         return(NULL)
       }
       
