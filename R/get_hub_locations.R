@@ -3,7 +3,7 @@
 #' @return data frame with columns fips, location_name, population, geo_type,
 #' geo_value, abbreviation
 #' 
-get_locations <- function(){
+get_hub_locations <- function(){
   hub_locations <- readr::read_csv("https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/data-locations/locations.csv") %>%
     # add columns used for reading files in covidcast package 
     # US has "state" as geo_type

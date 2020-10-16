@@ -6,7 +6,7 @@
 #' @param target_variable string specifying target type It should be one of 
 #' "Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths"
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
-#' @param truth_end_date date to include the last available truth point 
+#' @param truth_end_date date to include the last available truth point. Default to system date.
 #' @param temporal_resolution character specifying temporal resolution
 #' to include: currently support "weekly" and "daily". Default to 'weekly'
 #' @param remote_repo boolean specifying whether repo is remote or local
@@ -18,7 +18,7 @@
 #' @export
 load_truth <- function (truth_source,
                          target_variable, 
-                         truth_end_date,
+                         truth_end_date = Sys.Date(),
                          temporal_resolution = 'weekly',
                          locations,
                          remote_repo = TRUE,

@@ -12,7 +12,9 @@
 #' @param truth_source character specifying where the truths will be loaded from.
 #' Currently supports "jhu","usafacts", "nytimes". Default to "jhu".
 #' @param truth_as_of the plot includes the truth data that would have been 
-#' in real time as of the truth_as_of date
+#' in real time as of the truth_as_of date (not using this parameter when truth data 
+#' is from github repo)
+
 #' 
 #' @return ggplot graph
 #' 
@@ -24,27 +26,28 @@ plot_forecast <- function(forecast_data,
                           intervals = c(.5, .8, .95),
                           horizon,
                           truth_source = "jhu",
-                          truth_as_of){
+                          truth_as_of = NULL){
   
-  # validate target_variable
+  # Validate target_variable
   target_variable <- match.arg(target_variable, 
                                choices = c("Cumulative Cases",
                                            "Cumulative Deaths",
                                            "Incident Cases",
                                            "Incident Deaths"), 
                                several.ok = FALSE)
-  # validate location
+  # Validate location fips code
   all_valid_fips <- covidHubUtils::hub_locations %>%
     pull(fips)
   location <- match.arg(location, 
                          choices = all_valid_fips, 
                          several.ok = FALSE)
   
-  # validate truth_source
+  # Validate truth_source
   truth_source <- match.arg(truth_source, 
                             choices = c("jhu","usafacts", "nytimes"), 
                             several.ok = FALSE)
   
+  # Generate quantiles based on given intervals
   quantiles_to_plot <- unlist(lapply(intervals, function(interval){
     c(0.5 - as.numeric(interval)/2,
      0.5 + as.numeric(interval)/2)
@@ -54,19 +57,21 @@ plot_forecast <- function(forecast_data,
   #Prediction interval shades
   blues <- RColorBrewer::brewer.pal(n=length(quantiles_to_plot)/2+1, "Blues")
   
-  
+  # Include truth from remote git hub repo by default
+  # Not using truth_as_of if we are loading truth from git hub repos
   plot_data = covidHubUtils::get_plot_forecast_data (data = forecast_data, 
                                                      horizon = horizon,
                                                      quantiles_to_plot = quantiles_to_plot,
                                                      location = location,
                                                      truth_source = truth_source,
-                                                     target_variable = target_variable,
-                                                     truth_as_of = truth_as_of)
+                                                     target_variable = target_variable
+                                                     #truth_as_of = truth_as_of
+                                                     )
  
   
   ggplot(data = plot_data) +
     
-    # all quantiles
+    # Plot all prediction intervals
     geom_ribbon(data = plot_data %>%
                   dplyr::filter(type == "quantile"),
                 mapping = aes(x = target_end_date,
@@ -85,7 +90,9 @@ plot_forecast <- function(forecast_data,
     scale_color_manual(values = c(tail(blues,1),"black")) +
     scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
     ylab(target_variable) +
-    labs(title=paste0("Weekly COVID-19 ", target_variable, " in ", location,": observed and forecasted") ,
-         caption=paste0("source: ", toupper(truth_source)," (observed data),", model," (forecasts)")) 
+    labs(title=paste0("Weekly COVID-19 ", target_variable, " in ", 
+                      location,": observed and forecasted") ,
+         caption=paste0("source: ", toupper(truth_source)," (observed data),",
+                        model," (forecasts)")) 
 
 }

@@ -10,7 +10,7 @@
 #' @param target_variable string specifying target type. It should be one of 
 #' "Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths."
 #' @param  truth_as_of the plot includes the truth data that would have been 
-#' in real time as of the truth_as_of date. Default to today's date
+#' in real time as of the truth_as_of date.
 #' 
 #' @return data frame with columns model, 
 #' forecast_date, location, target, type, quantile, value, horizon and 
@@ -23,17 +23,17 @@ get_plot_forecast_data <- function(data,
                                    location,
                                    truth_source,
                                    target_variable,
-                                   truth_as_of = Sys.Date()){
+                                   truth_as_of = NULL){
   
   forecasts<- covidHubUtils::pivot_forecasts_wider(data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast") %>%
     dplyr::filter(horizon <= horizon, location == location)
   
-  
+  # Load truth from remote git hub repo. 
+  # Not using truth_as_of here.
   truth <- covidHubUtils::load_truth(truth_source,
               target_variable, 
-              #? truth_as_of?
-              truth_end_date = truth_as_of,
+              #truth_end_date = ,
               locations = location) %>%
     dplyr::rename(point = value) %>%
     dplyr::mutate(truth_forecast = "truth")
