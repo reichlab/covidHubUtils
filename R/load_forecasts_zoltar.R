@@ -11,7 +11,7 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date,location, target, 
+#' @return data frame with columns model, forecast_date,location, inc_cum, death_case,
 #' type, quantile, value, horizon and target_end_date.
 
 load_forecasts_zoltar <- function(models, forecast_dates, locations, 

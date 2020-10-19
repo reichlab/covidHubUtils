@@ -10,7 +10,7 @@
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date
 #' @param truth_source character specifying where the truths will be loaded from.
-#' Currently supports "jhu","usafacts", "nytimes". Default to "jhu".
+#' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)

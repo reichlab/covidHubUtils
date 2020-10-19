@@ -8,8 +8,8 @@
 #' Note that point forecasts and median quantiles do not necessarily align. 
 #' Throws an error if quantile levels are not in the forecast data.
 #'
-#' @return data frame with columns model, forecast_date, location, target, 
-#' horizon, type, point, target_end_date, point_forecast_type, alpha, Prediction Interval,
+#' @return data frame with columns model, forecast_date, location, inc_cum, death_case, 
+#' horizon, type, point, target_end_date, point_forecast_type, Prediction Interval,
 #' upper, lower.
 #' 
 #' @export
@@ -40,7 +40,7 @@ pivot_forecasts_wider <- function(data,
                   alpha = ifelse(endpoint_type == 'lower',
                                  format(2*quantile, digits=3, nsmall=3),
                                  format(2*(1-quantile), digits=3, nsmall=3)),
-                  `Prediction Interval` = fct_rev(paste0((1-as.numeric(alpha))*100, "%"))
+                  `Prediction Interval` = tidyverse::fct_rev(paste0((1-as.numeric(alpha))*100, "%"))
     ) %>%
     #dplyr::filter(alpha != "1.000") %>%
     dplyr::select(-quantile, -alpha) %>%

@@ -1,6 +1,5 @@
-#' Combine forecasts and truth to plot using plot_forecast().
-#' It will load truth with the corrsponding target and locations in forecast data.
-#' 
+#' Combines load_truth() and pivot_forecasts_wider(), returns the data.
+#'
 #' @param data forecasts data frame from load_forecast(). It has columns model, 
 #' forecast_date,location, target, type, quantile, value, horizon and 
 #' target_end_date.
@@ -13,7 +12,7 @@
 #' in real time as of the truth_as_of date.
 #' 
 #' @return data frame with columns model, 
-#' forecast_date, location, target, type, quantile, value, horizon and 
+#' forecast_date, location, inc_cum, death_case, type, quantile, value, horizon and 
 #' target_end_date.
 #' 
 #' @export
