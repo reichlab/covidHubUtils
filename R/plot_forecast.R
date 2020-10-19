@@ -25,7 +25,7 @@ plot_forecast <- function(forecast_data,
                           location,
                           intervals = c(.5, .8, .95),
                           horizon,
-                          truth_source = "jhu",
+                          truth_source = "JHU",
                           truth_as_of = NULL){
   
   # Validate target_variable
@@ -44,8 +44,9 @@ plot_forecast <- function(forecast_data,
   
   # Validate truth_source
   truth_source <- match.arg(truth_source, 
-                            choices = c("jhu","usafacts", "nytimes"), 
+                            choices = c("JHU","USAFacts", "NYTimes"), 
                             several.ok = FALSE)
+  
   
   # Generate quantiles based on given intervals
   quantiles_to_plot <- unlist(lapply(intervals, function(interval){
@@ -92,7 +93,7 @@ plot_forecast <- function(forecast_data,
     ylab(target_variable) +
     labs(title=paste0("Weekly COVID-19 ", target_variable, " in ", 
                       location,": observed and forecasted") ,
-         caption=paste0("source: ", toupper(truth_source)," (observed data),",
+         caption=paste0("source: ", toupper(truth_source)," (observed data), ",
                         model," (forecasts)")) 
 
 }

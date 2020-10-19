@@ -17,6 +17,8 @@
 pivot_forecasts_wider <- function(data, 
                                   quantiles = c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)){
   
+  quantiles = as.character(quantiles)
+  
   if(!all(quantiles %in% data$quantile)){
     stop("Not all quantile levels are available in the forecast data")
   }

@@ -27,6 +27,7 @@ get_plot_forecast_data <- function(data,
   
   forecasts<- covidHubUtils::pivot_forecasts_wider(data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast") %>%
+    # Filter horizons and locations. Only plot one location now.
     dplyr::filter(horizon <= horizon, location == location)
   
   # Load truth from remote git hub repo. 
