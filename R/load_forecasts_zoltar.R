@@ -54,14 +54,15 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       
       return (f)
     }
-  ) %>%
-    dplyr::mutate(value = as.double(value),
-                  quantile = as.double(quantile))
+  )
 
   if (nrow(forecast) ==0){
-    stop("Forecasts are not available in the given time window.")
+    stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
   } else {
     forecast <- forecast %>%
+      # Change value and quantile back to double
+      dplyr::mutate(value = as.double(value),
+                    quantile = as.double(quantile)) %>%
       # Keep only required columns
       dplyr::select(model, timezero, unit, target, class,quantile, value) %>%
       dplyr::rename(location = unit, forecast_date = timezero,
