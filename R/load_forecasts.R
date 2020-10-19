@@ -10,8 +10,7 @@
 #' @param forecast_date_window_size The number of days across which to 
 #' look for recent forecasts. Defaults to 1, which means to only look 
 #' at the last_forecast_date. 
-#' @param locations list of fips
-#' Defaults to all locations with available forecasts.
+#' @param locations list of fips. Defaults to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to c(“quantile”, “point”)
 #' @param targets character vector of targets to retrieve, for example
@@ -37,11 +36,16 @@ load_forecasts <- function (
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
   
-  all_locations <- covidHubUtils::hub_locations
+  # validate locations
+  all_valid_fips <- covidHubUtils::hub_locations %>%
+    pull(fips)
   
-  # validate locationn
-  if (!all(locations %in% all_locations$location)){
-    stop ("Not all locations are valid.")
+  if (!missing(locations)){
+    locations <- match.arg(locations, 
+                           choices = all_valid_fips, 
+                           several.ok = TRUE)
+  } else{
+    locations <- all_valid_fips
   }
   
   # validate types
