@@ -24,38 +24,58 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     Sys.getenv("Z_USERNAME"),
     Sys.getenv("Z_PASSWORD"))
   
-  ## construct Zoltar query
+  # Construct Zoltar project url
   the_projects <- projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
   
-  # obtain the quantile forecasts for required quantiles,
-  # and the filter to last submission from each model for each week
-  forecasts <-
-    # get forecasts from zoltar
-    zoltr::do_zoltar_query(
-      zoltar_connection = zoltar_connection,
-      project_url = project_url,
-      is_forecast_query = TRUE,
-      units= locations, 
-      timezeros = forecast_dates,
-      models = models,
-      targets = targets,
-      types = types, 
-      verbose = TRUE
-    ) %>%
-    # keep only required columns and required quantiles
-    dplyr::select(model, timezero, unit, target, class,quantile, value) %>%
-    dplyr::rename(location = unit, forecast_date = timezero,
-                  type = class) %>%
-    # create horizon and target_end_date columns
-    tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
-                    remove = FALSE) %>% 
-    dplyr::rename(horizon = n_unit) %>%
-    dplyr::mutate(
-      target_end_date = as.Date(covidHubUtils::calc_target_week_end_date(
-        forecast_date, as.numeric(horizon)))) %>%
-    dplyr::select(model, forecast_date, location, target,horizon,
-                  type, quantile, value, target_end_date)
+  # If do_zoltar_query throws an error, skip that error and return
+  # an empty dataframe
+  zoltar_query_skip_error = purrr::possibly(zoltr::do_zoltar_query, 
+                                            otherwise = data.frame())
+
+  # Get forecasts that were submitted in the time window
+  forecast <- purrr::map_dfr(
+    forecast_dates,
+    function (forecast_date) {
+      f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
+                              project_url = project_url,
+                              is_forecast_query = TRUE,
+                              units= locations, 
+                              timezeros = forecast_date,
+                              models = models,
+                              targets = targets,
+                              types = types, 
+                              verbose = TRUE)
+      # Cast value to characters for now so that it binds
+      if (nrow(f) > 0){
+        f <- dplyr::mutate(f, value = as.character(value),
+                           quantile = as.character(quantile))
+      }
+      
+      return (f)
+    }
+  ) %>%
+    dplyr::mutate(value = as.double(value),
+                  quantile = as.double(quantile))
+
+  if (nrow(forecast) ==0){
+    stop("Forecasts are not available in the given time window.")
+  } else {
+    forecast <- forecast %>%
+      # Keep only required columns
+      dplyr::select(model, timezero, unit, target, class,quantile, value) %>%
+      dplyr::rename(location = unit, forecast_date = timezero,
+                    type = class) %>%
+      # create horizon and target_end_date columns
+      tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
+                      remove = FALSE) %>% 
+      dplyr::rename(horizon = n_unit) %>%
+      dplyr::mutate(
+        target_end_date = as.Date(covidHubUtils::calc_target_week_end_date(
+          forecast_date, as.numeric(horizon)))) %>%
+      dplyr::select(model, forecast_date, location, target,horizon,
+                    type, quantile, value, target_end_date)
+  }
   
-  return(forecasts)
+  return(forecast)
 }
