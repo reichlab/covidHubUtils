@@ -74,7 +74,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       dplyr::mutate(
         target_end_date = as.Date(covidHubUtils::calc_target_week_end_date(
           forecast_date, as.numeric(horizon)))) %>%
-      dplyr::select(model, forecast_date, location, target,horizon,
+      dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                     type, quantile, value, target_end_date)
   }
   
