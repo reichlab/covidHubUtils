@@ -25,11 +25,11 @@ load_truth <- function (truth_source,
                         data_location = "remote_hub_repo",
                         local_repo_path = NULL){
   
-  # Validate truth source
+  # validate truth source
   truth_source <- match.arg(truth_source, 
                             choices = c("JHU","USAFacts", "NYTimes"), 
                             several.ok = TRUE)
-  # Validate target variable 
+  # validate target variable 
   target_variable <- match.arg(target_variable, 
                                choices = c("Cumulative Cases",
                                            "Cumulative Deaths",
@@ -37,12 +37,12 @@ load_truth <- function (truth_source,
                                            "Incident Deaths"), 
                                several.ok = FALSE)
   
-  # Validate temoral resolution
+  # validate temporal resolution
   temporal_resolution <- match.arg(temporal_resolution, 
                             choices = c("daily","weekly"), 
                             several.ok = FALSE)
   
-  # Validate data location
+  # validate data location
   # COVIDcast is not available now
   if(!missing(data_location)){
     data_location <- match.arg(data_location, 
@@ -54,6 +54,7 @@ load_truth <- function (truth_source,
     data_location = "remote_hub_repo"
   }
   
+  # validate locations
   all_valid_fips <- covidHubUtils::hub_locations %>%
     pull(fips)
   

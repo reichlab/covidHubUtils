@@ -20,7 +20,7 @@ pivot_forecasts_wider <- function(data,
   quantiles = as.character(quantiles)
   
   if(!all(quantiles %in% data$quantile)){
-    stop("Not all quantile levels are available in the forecast data")
+    stop("Error in pivot_forecast_wider: Not all quantile levels are available in the forecast data.")
   }
   
   data <- data %>%
@@ -40,7 +40,7 @@ pivot_forecasts_wider <- function(data,
                   alpha = ifelse(endpoint_type == 'lower',
                                  format(2*quantile, digits=3, nsmall=3),
                                  format(2*(1-quantile), digits=3, nsmall=3)),
-                  `Prediction Interval` = tidyverse::fct_rev(paste0((1-as.numeric(alpha))*100, "%"))
+                  `Prediction Interval` = fct_rev(paste0((1-as.numeric(alpha))*100, "%"))
     ) %>%
     #dplyr::filter(alpha != "1.000") %>%
     dplyr::select(-quantile, -alpha) %>%

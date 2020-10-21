@@ -17,6 +17,48 @@
 load_forecasts_zoltar <- function(models, forecast_dates, locations, 
                                   types, targets){
   
+  # validate models
+  all_valid_models <- covidHubUtils:::get_all_model_abbr()
+  
+  if (!missing(models)){
+    models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
+  } else {
+    models <- all_valid_models
+  }
+  
+  
+  # validate locations
+  all_valid_fips <- covidHubUtils::hub_locations %>%
+    pull(fips)
+  
+  if (!missing(locations)){
+    locations <- match.arg(locations, choices = all_valid_fips, several.ok = TRUE)
+  } else{
+    locations <- all_valid_fips
+  }
+  
+  # validate types
+  if (!missing(types)){
+    types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
+  } else {
+    types = c("point", "quantile")
+  }
+  
+  # validate targets 
+  all_valid_targets <- c(
+    paste(1:20,  "wk ahead inc death"),
+    paste(1:20,  "wk ahead cum death"),
+    paste(0:130, "day ahead inc hosp"),
+    paste(1:8, "wk ahead inc case")
+  )
+  
+  if (!missing(targets)){
+    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    targets = all_valid_targets
+  }
+  
+  
   # Set up Zoltar
   zoltar_connection <- zoltr::new_connection()
   zoltr::zoltar_authenticate(
@@ -25,13 +67,15 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     Sys.getenv("Z_PASSWORD"))
   
   # Construct Zoltar project url
-  the_projects <- projects(zoltar_connection)
+  the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
   
   # If do_zoltar_query throws an error, skip that error and return
   # an empty dataframe
   zoltar_query_skip_error = purrr::possibly(zoltr::do_zoltar_query, 
-                                            otherwise = data.frame())
+                                            otherwise = data.frame(),
+                                            # Not show error messages from zoltar
+                                            quiet = TRUE)
 
   # Get forecasts that were submitted in the time window
   forecast <- purrr::map_dfr(

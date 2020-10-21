@@ -33,6 +33,15 @@ load_forecasts <- function (
   source = "local_hub_repo",
   hub_repo_path) {
   
+  # validate models
+  all_valid_models <- covidHubUtils:::get_all_model_abbr()
+  
+  if (!missing(models)){
+    models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
+  } else {
+    models <- all_valid_models
+  }
+  
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
   
@@ -49,7 +58,25 @@ load_forecasts <- function (
   }
   
   # validate types
-  types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
+  if (!missing(types)){
+    types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
+  } else {
+    types = c("point", "quantile")
+  }
+  
+  # validate targets 
+  all_valid_targets <- c(
+    paste(1:20,  "wk ahead inc death"),
+    paste(1:20,  "wk ahead cum death"),
+    paste(0:130, "day ahead inc hosp"),
+    paste(1:8, "wk ahead inc case")
+  )
+  
+  if (!missing(targets)){
+    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    targets = all_valid_targets
+  }
   
   # path to data-processed folder in hub repo
   data_processed <- file.path(hub_repo_path, "data-processed/")

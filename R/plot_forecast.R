@@ -27,22 +27,26 @@ plot_forecast <- function(forecast_data,
                           horizon,
                           truth_source = "JHU",
                           truth_as_of = NULL){
+  # validate model
+  if (!model %in% forecast_data$model) {
+    stop("Error in plot_forecast: model is not in forecast_data.")
+  }
   
-  # Validate target_variable
+  # validate target_variable
   target_variable <- match.arg(target_variable, 
                                choices = c("Cumulative Cases",
                                            "Cumulative Deaths",
                                            "Incident Cases",
                                            "Incident Deaths"), 
                                several.ok = FALSE)
-  # Validate location fips code
+  # validate location fips code
   all_valid_fips <- covidHubUtils::hub_locations %>%
     pull(fips)
   location <- match.arg(location, 
                          choices = all_valid_fips, 
                          several.ok = FALSE)
   
-  # Validate truth_source
+  # validate truth_source
   truth_source <- match.arg(truth_source, 
                             choices = c("JHU","USAFacts", "NYTimes"), 
                             several.ok = FALSE)
