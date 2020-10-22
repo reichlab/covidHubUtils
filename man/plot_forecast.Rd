@@ -11,8 +11,8 @@ plot_forecast(
   location,
   intervals = c(0.5, 0.8, 0.95),
   horizon,
-  truth_source = "jhu",
-  truth_as_of
+  truth_source = "JHU",
+  truth_as_of = NULL
 )
 }
 \arguments{
@@ -32,10 +32,11 @@ to plot, defaults to c(.5, .8, .95)}
 forecast date}
 
 \item{truth_source}{character specifying where the truths will be loaded from.
-Currently supports "jhu","usafacts", "nytimes". Default to "jhu".}
+Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
-in real time as of the truth_as_of date}
+in real time as of the truth_as_of date (not using this parameter when truth data
+is from github repo)}
 }
 \value{
 ggplot graph

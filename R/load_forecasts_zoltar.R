@@ -59,25 +59,25 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   }
   
   
-  # Set up Zoltar
+  # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
   zoltr::zoltar_authenticate(
     zoltar_connection,
     Sys.getenv("Z_USERNAME"),
     Sys.getenv("Z_PASSWORD"))
   
-  # Construct Zoltar project url
+  # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
   
-  # If do_zoltar_query throws an error, skip that error and return
+  # if do_zoltar_query throws an error, skip that error and return
   # an empty dataframe
   zoltar_query_skip_error = purrr::possibly(zoltr::do_zoltar_query, 
                                             otherwise = data.frame(),
-                                            # Not show error messages from zoltar
+                                            # not show error messages from zoltar
                                             quiet = TRUE)
 
-  # Get forecasts that were submitted in the time window
+  # get forecasts that were submitted in the time window
   forecast <- purrr::map_dfr(
     forecast_dates,
     function (forecast_date) {
@@ -90,7 +90,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                               targets = targets,
                               types = types, 
                               verbose = TRUE)
-      # Cast value to characters for now so that it binds
+      # cast value to characters for now so that it binds
       if (nrow(f) > 0){
         f <- dplyr::mutate(f, value = as.character(value),
                            quantile = as.character(quantile))
@@ -104,10 +104,10 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
   } else {
     forecast <- forecast %>%
-      # Change value and quantile back to double
+      # change value and quantile back to double
       dplyr::mutate(value = as.double(value),
                     quantile = as.double(quantile)) %>%
-      # Keep only required columns
+      # keep only required columns
       dplyr::select(model, timezero, unit, target, class,quantile, value) %>%
       dplyr::rename(location = unit, forecast_date = timezero,
                     type = class) %>%

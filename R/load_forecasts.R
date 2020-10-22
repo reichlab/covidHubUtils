@@ -78,14 +78,15 @@ load_forecasts <- function (
     targets = all_valid_targets
   }
   
-  # path to data-processed folder in hub repo
-  data_processed <- file.path(hub_repo_path, "data-processed/")
   
   # dates of forecasts to load
   forecast_dates <- as.character(last_forecast_date +
                                    seq(from = -forecast_date_window_size, to = 0, by = 1))
 
   if (source == "local_hub_repo") {
+    # path to data-processed folder in hub repo
+    data_processed <- file.path(hub_repo_path, "data-processed/")
+    
     forecasts <- covidHubUtils:::load_forecasts_repo(file_path = data_processed, 
                                      models = models, 
                                      forecast_dates = forecast_dates, 

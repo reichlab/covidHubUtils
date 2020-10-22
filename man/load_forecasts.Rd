@@ -29,8 +29,7 @@ Defaults to the most recent forecast date in Zoltar or the hub repo.}
 look for recent forecasts. Defaults to 1, which means to only look
 at the last_forecast_date.}
 
-\item{locations}{list of fips
-Defaults to all locations with available forecasts.}
+\item{locations}{list of fips. Defaults to all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: “quantile”
 or “point”. Defaults to c(“quantile”, “point”)}
@@ -45,7 +44,7 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 repository}
 }
 \value{
-data frame with columns model, forecast_date,location, target,
+data frame with columns model, forecast_date, location, inc_cum, death_case,
 type, quantile, value, horizon and target_end_date.
 }
 \description{

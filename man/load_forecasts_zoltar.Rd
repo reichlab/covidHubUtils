@@ -23,7 +23,7 @@ or “point”. Defaults to c(“quantile”, “point”)}
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 }
 \value{
-data frame with columns model, forecast_date,location, target,
+data frame with columns model, forecast_date,location, inc_cum, death_case,
 type, quantile, value, horizon and target_end_date.
 }
 \description{

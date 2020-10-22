@@ -64,9 +64,9 @@ load_truth <- function (truth_source,
                            several.ok = TRUE)
   }
   
-  # Create file path and file name
+  # create file path and file name based on data_location
   if (data_location == "remote_hub_repo"){
-    # Path to the truth folder
+    # create path to the truth folder
     repo_path = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
     file_name<- paste0(gsub(" ","%20", target_variable), ".csv")
   } else if (data_location == "local_hub_repo") {
@@ -78,15 +78,17 @@ load_truth <- function (truth_source,
     }
   }
  
+  # load truth data from source
   truth <- purrr::map_dfr(
     truth_source,
     function (source) {
-      # Read file from path
+      # read file from path
       truth_folder_path <- ifelse(tolower(source) =="jhu", "/data-truth/truth-", paste0("/data-truth/",tolower(source),"/truth_",tolower(source),"-"))
       file_path <- paste0(repo_path, truth_folder_path, file_name)
       
       truth <- readr::read_csv(file_path) 
       
+      # add inc_cum and death_case columns and rename date column
       truth <- truth %>%
         dplyr::mutate(model = paste0("Observed Data (",source,")"), 
                       inc_cum = ifelse(
@@ -102,26 +104,26 @@ load_truth <- function (truth_source,
   ) %>%
     dplyr::select(model, inc_cum, death_case, target_end_date, location, value)
   
+  # filter to only include specified locations
   if (!missing(locations)){
     truth<- dplyr::filter(truth,location %in% locations) 
   }
     
-    
+  
   if (temporal_resolution == "weekly"){
-  #tidyr::separate(target, into = c("inc_cum","death_case"),remove = FALSE) %>%
     if (unlist(strsplit(target_variable, " "))[1] == "Cumulative") {
-      # Only keep weekly data
+      # only keep weekly data
       truth <- dplyr::filter(truth, 
                              target_end_date %in% seq.Date(
                                as.Date("2020-01-25"), 
                                to = truth_end_date, 
                                by="1 week")) 
     } else {
-      # Aggregate to weekly 
+      # aggregate to weekly 
       truth <- truth %>%
         dplyr::group_by(model, location) %>%
         arrange(target_end_date) %>%
-        # Generate weekly counts
+        # generate weekly counts
         dplyr:: mutate(value = RcppRoll::roll_sum(
           value, 7, align = "right", fill = NA)) %>%
         ungroup() %>%
@@ -131,15 +133,5 @@ load_truth <- function (truth_source,
     }
   }
   
-  # Read truth from Covidcast
-  # truth <- suppressMessages(
-  #   covidcast::covidcast_signal(data_source = truth_source,
-  #                               signal = target,
-  #                               start_day = as.Date("2020-01-25"),
-  #                               end_day = end_day,
-  #                               geo_type = location_types,
-  #                               geo_values = locations
-  #                               )
-  # )
   return (truth)
 }

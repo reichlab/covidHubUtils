@@ -20,8 +20,8 @@ Note that point forecasts and median quantiles do not necessarily align.
 Throws an error if quantile levels are not in the forecast data.}
 }
 \value{
-data frame with columns model, forecast_date, location, target,
-horizon, type, point, target_end_date, point_forecast_type, alpha, Prediction Interval,
+data frame with columns model, forecast_date, location, inc_cum, death_case,
+horizon, type, point, target_end_date, point_forecast_type, Prediction Interval,
 upper, lower.
 }
 \description{

@@ -2,17 +2,17 @@
 % Please edit documentation in R/get_plot_forecast_data.R
 \name{get_plot_forecast_data}
 \alias{get_plot_forecast_data}
-\title{Combine forecasts and truth to plot using plot_forecast().
-It will load truth with the corrsponding target and locations in forecast data.}
+\title{Combines load_truth() and pivot_forecasts_wider(), returns the data.}
 \usage{
 get_plot_forecast_data(
   data,
-  horizon,
+  model_to_plot,
+  horizons_to_plot,
   quantiles_to_plot,
-  location,
+  location_to_plot,
   truth_source,
   target_variable,
-  truth_as_of = Sys.Date()
+  truth_as_of = NULL
 )
 }
 \arguments{
@@ -20,23 +20,29 @@ get_plot_forecast_data(
 forecast_date,location, target, type, quantile, value, horizon and
 target_end_date.}
 
-\item{horizon}{forecasts are plotted for the horizon time steps after the
+\item{model_to_plot}{characters of model abbreviations}
+
+\item{horizons_to_plot}{forecasts are plotted for the horizon time steps after the
 forecast date}
 
 \item{quantiles_to_plot}{vector of quanitles to include in the plot}
+
+\item{location_to_plot}{character vector of one location.}
+
+\item{truth_source}{character vector specifying where the truths will
+be loaded from: currently support "JHU","USAFacts", "NYTimes"}
 
 \item{target_variable}{string specifying target type. It should be one of
 "Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths."}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
-in real time as of the truth_as_of date. Default to today's date}
+in real time as of the truth_as_of date.}
 }
 \value{
 data frame with columns model,
-forecast_date, location, target, type, quantile, value, horizon and
+forecast_date, location, inc_cum, death_case, type, quantile, value, horizon and
 target_end_date.
 }
 \description{
-Combine forecasts and truth to plot using plot_forecast().
-It will load truth with the corrsponding target and locations in forecast data.
+Combines load_truth() and pivot_forecasts_wider(), returns the data.
 }

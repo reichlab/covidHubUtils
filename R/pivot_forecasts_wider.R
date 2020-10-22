@@ -17,22 +17,26 @@
 pivot_forecasts_wider <- function(data, 
                                   quantiles = c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)){
   
+  # validate quantiles
   quantiles = as.character(quantiles)
   
   if(!all(quantiles %in% data$quantile)){
     stop("Error in pivot_forecast_wider: Not all quantile levels are available in the forecast data.")
   }
   
+  # filter to included specified quantiles and point forecasts
   data <- data %>%
     dplyr:: filter(as.character(quantile) %in% quantiles | type == "point") 
   
+  # get point forecasts: point forecasts and `0.5` quantile
   points <- data %>%
     dplyr::filter(quantile == 0.5 | type == "point") %>%
     dplyr::mutate(point_type = ifelse(type !="point", "median quantile","point forecast"),
                   type = "point") %>%
     dplyr::rename(point = value) %>%
     dplyr::select(-quantile)
-    
+  
+  # get quantile forecasts and generate corresponding prediction interval
   quantiles <- data %>%
     dplyr::filter(quantile != 0.5 & type != "point") %>%
    
