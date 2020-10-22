@@ -6,7 +6,7 @@
 #' "Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths,"
 #' @param location string for fips code or 'US'
 #' @param intervals values indicating which central prediction interval levels 
-#' to plot, defaults to c(.5, .8, .95)
+#' to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date
 #' @param truth_source character specifying where the truths will be loaded from.
