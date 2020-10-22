@@ -28,12 +28,27 @@ forecasts <- covidHubUtils::load_forecasts(models = "COVIDhub-ensemble",
 ```
 
 ```{r message=FALSE}
+# Plot point forecasts with prediction intervals
 covidHubUtils::plot_forecast (forecast_data = forecasts,
                               model = "COVIDhub-ensemble",
                               target_variable = "Incident Cases" ,
                               location = "US",
                               intervals = c(.5, .8, .95),
                               horizon = 4,
+                              truth_source = "JHU",
+                              truth_as_of = Sys.Date())
+
+```
+
+
+```{r message=FALSE}
+# Plot point forecasts only
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              model = "COVIDhub-ensemble",
+                              target_variable = "Incident Cases" ,
+                              location = "US",
+                              intervals = NULL,
+                              horizon = 3,
                               truth_source = "JHU",
                               truth_as_of = Sys.Date())
 

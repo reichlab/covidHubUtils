@@ -28,8 +28,12 @@ plot_forecast <- function(forecast_data,
                           truth_source = "JHU",
                           truth_as_of = NULL){
   # validate model
-  if (!model %in% forecast_data$model) {
-    stop("Error in plot_forecast: model is not in forecast_data.")
+  if (!missing(model)){
+    if (!model %in% forecast_data$model) {
+      stop("Error in plot_forecast: model is not in forecast_data.")
+    }
+  } else {
+    stop("Error in plot_forecast: Please provide a model parameter.")
   }
   
   # validate target_variable
@@ -73,6 +77,7 @@ plot_forecast <- function(forecast_data,
   
   
   # generate quantiles based on given intervals
+  
   quantiles_to_plot <- unlist(lapply(intervals, function(interval){
     c(0.5 - as.numeric(interval)/2,
      0.5 + as.numeric(interval)/2)
@@ -80,7 +85,11 @@ plot_forecast <- function(forecast_data,
   
   
   # prediction interval shades
-  blues <- RColorBrewer::brewer.pal(n=length(quantiles_to_plot)/2+1, "Blues")
+  if (!is.null(intervals)){
+    blues <- RColorBrewer::brewer.pal(n=length(quantiles_to_plot)/2+1, "Blues")
+  } else {
+    blues <- RColorBrewer::brewer.pal(n=4, "Blues")
+  }
   
   # include truth from remote git hub repo by default
   # not using truth_as_of if we are loading truth from git hub repos
@@ -95,15 +104,24 @@ plot_forecast <- function(forecast_data,
                                                      )
  
   
-  ggplot(data = plot_data) +
+  graph <- ggplot(data = plot_data)
     
+  if (!is.null(intervals)){
     # plot all prediction intervals
-    geom_ribbon(data = plot_data %>%
+    graph <- graph  +
+      geom_ribbon(data = plot_data %>%
                   dplyr::filter(type == "quantile"),
                 mapping = aes(x = target_end_date,
                               ymin=lower, ymax=upper,
                               fill=`Prediction Interval`)) +
-    # plot forecasts and truth 
+      
+      scale_fill_manual(values = blues[1:(length(blues)-1)])
+      
+  }
+  
+  # plot point forecasts and truth 
+  graph <- graph +
+    
     geom_line(data = plot_data %>%
                 dplyr::filter(!is.na(point)),
               mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
@@ -112,7 +130,6 @@ plot_forecast <- function(forecast_data,
                  dplyr::filter(!is.na(point)),
                mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
     
-    scale_fill_manual(values = blues[1:(length(blues)-1)]) +
     scale_color_manual(name = "Model", 
                        label = c(model, paste0("Observed Data (",truth_source,")")), 
                                  values = c(tail(blues,1),"black")) +
@@ -122,5 +139,7 @@ plot_forecast <- function(forecast_data,
                       location,": observed and forecasted") ,
          caption=paste0("source: ", truth_source," (observed data), ",
                         model," (forecasts)")) 
+  
+  return (graph)
 
 }

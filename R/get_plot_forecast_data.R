@@ -56,7 +56,6 @@ get_plot_forecast_data <- function(data,
                   inc_cum == inc_cum_to_plot,
                   death_case == death_case_to_plot)
   
-  # filter target
   
   forecasts<- covidHubUtils::pivot_forecasts_wider(data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast")
