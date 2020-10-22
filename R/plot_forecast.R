@@ -39,12 +39,32 @@ plot_forecast <- function(forecast_data,
                                            "Incident Cases",
                                            "Incident Deaths"), 
                                several.ok = FALSE)
+  
+  inc_cum = ifelse(
+    unlist(strsplit(target_variable, " "))[1] == "Cumulative",
+    "cum", 
+    "inc")
+  
+  death_case = ifelse(
+    unlist(strsplit(target_variable, " "))[2] == "Cases",
+    "case",
+    "death")
+
+  if (!(inc_cum %in% forecast_data$inc_cum & death_case %in% forecast_data$death_case)){
+    stop("Error in plot_forecast: target_variable is not in forecast data.")
+  }
+  
   # validate location fips code
   all_valid_fips <- covidHubUtils::hub_locations %>%
     pull(fips)
+  
   location <- match.arg(location, 
                          choices = all_valid_fips, 
                          several.ok = FALSE)
+  
+  if (!location %in% forecast_data$location){
+    stop("Error in plot_forecast: location is not in forecast_data.")
+  }
   
   # validate truth_source
   truth_source <- match.arg(truth_source, 
@@ -52,22 +72,23 @@ plot_forecast <- function(forecast_data,
                             several.ok = FALSE)
   
   
-  # Generate quantiles based on given intervals
+  # generate quantiles based on given intervals
   quantiles_to_plot <- unlist(lapply(intervals, function(interval){
     c(0.5 - as.numeric(interval)/2,
      0.5 + as.numeric(interval)/2)
   }))
   
   
-  #Prediction interval shades
+  # prediction interval shades
   blues <- RColorBrewer::brewer.pal(n=length(quantiles_to_plot)/2+1, "Blues")
   
-  # Include truth from remote git hub repo by default
-  # Not using truth_as_of if we are loading truth from git hub repos
+  # include truth from remote git hub repo by default
+  # not using truth_as_of if we are loading truth from git hub repos
   plot_data = covidHubUtils::get_plot_forecast_data (data = forecast_data, 
-                                                     horizon = horizon,
+                                                     model_to_plot = model,
+                                                     horizons_to_plot = horizon,
                                                      quantiles_to_plot = quantiles_to_plot,
-                                                     location = location,
+                                                     location_to_plot = location,
                                                      truth_source = truth_source,
                                                      target_variable = target_variable
                                                      #truth_as_of = truth_as_of
@@ -76,28 +97,30 @@ plot_forecast <- function(forecast_data,
   
   ggplot(data = plot_data) +
     
-    # Plot all prediction intervals
+    # plot all prediction intervals
     geom_ribbon(data = plot_data %>%
                   dplyr::filter(type == "quantile"),
                 mapping = aes(x = target_end_date,
                               ymin=lower, ymax=upper,
                               fill=`Prediction Interval`)) +
-  
+    # plot forecasts and truth 
     geom_line(data = plot_data %>%
                 dplyr::filter(!is.na(point)),
-              mapping = aes(x = target_end_date, y = point, color = model)) +
+              mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
     
     geom_point(data = plot_data %>%
                  dplyr::filter(!is.na(point)),
-               mapping = aes(x = target_end_date, y = point, color = model)) +
-  
+               mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
+    
     scale_fill_manual(values = blues[1:(length(blues)-1)]) +
-    scale_color_manual(values = c(tail(blues,1),"black")) +
+    scale_color_manual(name = "Model", 
+                       label = c(model, paste0("Observed Data (",truth_source,")")), 
+                                 values = c(tail(blues,1),"black")) +
     scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
     ylab(target_variable) +
     labs(title=paste0("Weekly COVID-19 ", target_variable, " in ", 
                       location,": observed and forecasted") ,
-         caption=paste0("source: ", toupper(truth_source)," (observed data), ",
+         caption=paste0("source: ", truth_source," (observed data), ",
                         model," (forecasts)")) 
 
 }
