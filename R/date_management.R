@@ -71,3 +71,23 @@ calc_target_week_end_date <- function(forecast_date, horizon) {
 
   return(result)
 }
+
+
+#' Calculate end date for a forecast is targeting. 
+#'
+#' @param forecast_date character vector of dates in 'yyyy-mm-dd' format
+#' @param horizon number of weeks ahead a prediction is targeting
+#' @param target_unit string of target unit. Currently only 'wk' and 'day' are supported.
+#'
+#' @return character vector of dates in 'yyyy-mm-dd' format
+#'
+#' @export
+calc_target_end_date <- function(forecast_date, horizon, target_unit){
+  if (target_unit == 'wk'){
+    result <- calc_target_week_end_date(forecast_date, horizon)
+  } else if (target_unit == 'day'){
+    result <- lubridate::ymd(forecast_date) + horizon
+  }
+  
+  return (result)
+}
