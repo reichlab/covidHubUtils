@@ -12,6 +12,7 @@ plot_forecast(
   intervals = c(0.5, 0.8, 0.95),
   horizon,
   truth_source = "JHU",
+  plot = TRUE,
   truth_as_of = NULL
 )
 }
@@ -21,17 +22,19 @@ plot_forecast(
 \item{model}{model_abbr specifying model to plot}
 
 \item{target_variable}{string specifying target type. It should be one of
-"Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths,"}
+Cumulative Deaths","Incident Cases" and "Incident Deaths,"}
 
 \item{location}{string for fips code or 'US'}
 
 \item{intervals}{values indicating which central prediction interval levels
-to plot, defaults to c(.5, .8, .95)}
+to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.}
 
 \item{horizon}{forecasts are plotted for the horizon time steps after the
 forecast date}
 
-\item{truth_source}{character specifying where the truths will be loaded from.
+\item{truth_source}{character specifying where the truths will be loaded from.}
+
+\item{plot}{boolean for showing the plot. Default to TRUE.
 Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
 
 \item{truth_as_of}{the plot includes the truth data that would have been

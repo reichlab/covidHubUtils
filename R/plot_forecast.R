@@ -3,13 +3,14 @@
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
 #' @param model model_abbr specifying model to plot
 #' @param target_variable string specifying target type. It should be one of 
-#' "Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths,"
+#' Cumulative Deaths","Incident Cases" and "Incident Deaths,"
 #' @param location string for fips code or 'US'
 #' @param intervals values indicating which central prediction interval levels 
 #' to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date
 #' @param truth_source character specifying where the truths will be loaded from.
+#' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
@@ -26,6 +27,7 @@ plot_forecast <- function(forecast_data,
                           intervals = c(.5, .8, .95),
                           horizon,
                           truth_source = "JHU",
+                          plot = TRUE,
                           truth_as_of = NULL){
   # validate model
   if (!missing(model)){
@@ -38,8 +40,7 @@ plot_forecast <- function(forecast_data,
   
   # validate target_variable
   target_variable <- match.arg(target_variable, 
-                               choices = c("Cumulative Cases",
-                                           "Cumulative Deaths",
+                               choices = c("Cumulative Deaths",
                                            "Incident Cases",
                                            "Incident Deaths"), 
                                several.ok = FALSE)
@@ -59,8 +60,7 @@ plot_forecast <- function(forecast_data,
   }
   
   # validate location fips code
-  all_valid_fips <- covidHubUtils::hub_locations %>%
-    pull(fips)
+  all_valid_fips <- covidHubUtils::hub_locations$fips
   
   location <- match.arg(location, 
                          choices = all_valid_fips, 
@@ -99,47 +99,47 @@ plot_forecast <- function(forecast_data,
                                                      quantiles_to_plot = quantiles_to_plot,
                                                      location_to_plot = location,
                                                      truth_source = truth_source,
-                                                     target_variable = target_variable
-                                                     #truth_as_of = truth_as_of
+                                                     target_variable = target_variable,
+                                                     truth_as_of = truth_as_of
                                                      )
  
   
-  graph <- ggplot(data = plot_data)
+  graph <- ggplot2::ggplot(data = plot_data)
     
   if (!is.null(intervals)){
     # plot all prediction intervals
     graph <- graph  +
-      geom_ribbon(data = plot_data %>%
+      ggplot2::geom_ribbon(data = plot_data %>%
                   dplyr::filter(type == "quantile"),
                 mapping = aes(x = target_end_date,
                               ymin=lower, ymax=upper,
                               fill=`Prediction Interval`)) +
       
-      scale_fill_manual(values = blues[1:(length(blues)-1)])
+      ggplot2::scale_fill_manual(values = blues[1:(length(blues)-1)])
       
   }
   
   # plot point forecasts and truth 
   graph <- graph +
     
-    geom_line(data = plot_data %>%
+    ggplot2::geom_line(data = plot_data %>%
                 dplyr::filter(!is.na(point)),
               mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
     
-    geom_point(data = plot_data %>%
+    ggplot2::geom_point(data = plot_data %>%
                  dplyr::filter(!is.na(point)),
                mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
     
-    scale_color_manual(name = "Model", 
+    ggplot2::scale_color_manual(name = "Model", 
                        label = c(model, paste0("Observed Data (",truth_source,")")), 
                                  values = c(tail(blues,1),"black")) +
-    scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
-    ylab(target_variable) +
-    labs(title=paste0("Weekly COVID-19 ", target_variable, " in ", 
-                      location,": observed and forecasted") ,
-         caption=paste0("source: ", truth_source," (observed data), ",
-                        model," (forecasts)")) 
-  
-  return (graph)
-
+    ggplot2::scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
+    ggplot2::ylab(target_variable) +
+    ggplot2::labs(title = paste0("Weekly COVID-19 ", target_variable, " in ", 
+                                 location,": observed and forecasted") ,
+                  caption = paste0("source: ", truth_source," (observed data), ",
+                                   model," (forecasts)")) 
+  if (plot){
+    print(graph)
+  }
 }

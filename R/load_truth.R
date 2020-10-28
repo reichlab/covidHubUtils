@@ -4,7 +4,7 @@
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support "JHU","USAFacts", "NYTimes"
 #' @param target_variable string specifying target type It should be one of 
-#' "Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths"
+#' "Cumulative Deaths","Incident Cases" and "Incident Deaths"
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
@@ -31,8 +31,7 @@ load_truth <- function (truth_source,
                             several.ok = TRUE)
   # validate target variable 
   target_variable <- match.arg(target_variable, 
-                               choices = c("Cumulative Cases",
-                                           "Cumulative Deaths",
+                               choices = c("Cumulative Deaths",
                                            "Incident Cases",
                                            "Incident Deaths"), 
                                several.ok = FALSE)
@@ -55,8 +54,7 @@ load_truth <- function (truth_source,
   }
   
   # validate locations
-  all_valid_fips <- covidHubUtils::hub_locations %>%
-    pull(fips)
+  all_valid_fips <- covidHubUtils::hub_locations$fips
   
   if (!missing(locations)){
     locations <- match.arg(locations, 
@@ -122,12 +120,12 @@ load_truth <- function (truth_source,
       # aggregate to weekly 
       truth <- truth %>%
         dplyr::group_by(model, location) %>%
-        arrange(target_end_date) %>%
+        dplyr::arrange(target_end_date) %>%
         # generate weekly counts
         dplyr:: mutate(value = RcppRoll::roll_sum(
           value, 7, align = "right", fill = NA)) %>%
-        ungroup() %>%
-        dplyr:: filter(target_end_date %in% seq.Date(
+        dplyr::ungroup() %>%
+        dplyr::filter(target_end_date %in% seq.Date(
           as.Date("2020-01-25"), to = truth_end_date, by="1 week")) 
   
     }

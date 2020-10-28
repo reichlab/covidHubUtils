@@ -2,13 +2,17 @@
 % Please edit documentation in R/get_all_model_abbr.R
 \name{get_all_model_abbr}
 \alias{get_all_model_abbr}
-\title{Get all valid model_abbrs from remote hub repo}
+\title{Get all valid model_abbrs}
 \usage{
-get_all_model_abbr()
+get_all_model_abbr(source)
+}
+\arguments{
+\item{source}{string specifying where to get all valid model abbreviations.
+Currently support "remote_hub_repo" and "zoltar".}
 }
 \value{
-a list of valid model names
+a list of valid model abbreviations
 }
 \description{
-Get all valid model_abbrs from remote hub repo
+Get all valid model_abbrs
 }

@@ -4,10 +4,7 @@
 \alias{pivot_forecasts_wider}
 \title{Return a data frame of forecasts with predictive quantiles in columns.}
 \usage{
-pivot_forecasts_wider(
-  data,
-  quantiles = c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
-)
+pivot_forecasts_wider(data, quantiles)
 }
 \arguments{
 \item{data}{forecasts data frame from load_forecast(). It has columns model,
@@ -15,7 +12,7 @@ forecast_date,location, target, type, quantile, value, horizon and
 target_end_date.}
 
 \item{quantiles}{vector of quantiles to return for plotting
-Defaults to c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975).
+Defaults to all available quantiles in forecast data.
 Note that point forecasts and median quantiles do not necessarily align.
 Throws an error if quantile levels are not in the forecast data.}
 }

@@ -10,6 +10,7 @@ get_plot_forecast_data(
   horizons_to_plot,
   quantiles_to_plot,
   location_to_plot,
+  include_truth = TRUE,
   truth_source,
   target_variable,
   truth_as_of = NULL
@@ -29,11 +30,14 @@ forecast date}
 
 \item{location_to_plot}{character vector of one location.}
 
+\item{include_truth}{boolean to indicate whether truth data should be plotted.
+Default to TRUE.}
+
 \item{truth_source}{character vector specifying where the truths will
 be loaded from: currently support "JHU","USAFacts", "NYTimes"}
 
 \item{target_variable}{string specifying target type. It should be one of
-"Cumulative Cases","Cumulative Deaths","Incident Cases" and "Incident Deaths."}
+"Cumulative Deaths","Incident Cases" and "Incident Deaths."}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date.}

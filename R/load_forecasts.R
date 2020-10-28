@@ -34,7 +34,7 @@ load_forecasts <- function (
   hub_repo_path) {
   
   # validate models
-  all_valid_models <- covidHubUtils:::get_all_model_abbr()
+  all_valid_models <- covidHubUtils:::get_all_model_abbr(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -46,8 +46,7 @@ load_forecasts <- function (
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
   
   # validate locations
-  all_valid_fips <- covidHubUtils::hub_locations %>%
-    pull(fips)
+  all_valid_fips <- covidHubUtils::hub_locations$fips
   
   if (!missing(locations)){
     locations <- match.arg(locations, 
@@ -64,13 +63,21 @@ load_forecasts <- function (
     types = c("point", "quantile")
   }
   
+  # validate targets
+  # set up Zoltar connection
+  zoltar_connection <- zoltr::new_connection()
+  zoltr::zoltar_authenticate(
+    zoltar_connection,
+    Sys.getenv("Z_USERNAME"),
+    Sys.getenv("Z_PASSWORD"))
+  
+  # construct Zoltar project url
+  the_projects <- zoltr::projects(zoltar_connection)
+  project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+  
   # validate targets 
-  all_valid_targets <- c(
-    paste(1:20,  "wk ahead inc death"),
-    paste(1:20,  "wk ahead cum death"),
-    paste(0:130, "day ahead inc hosp"),
-    paste(1:8, "wk ahead inc case")
-  )
+  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
+  
   
   if (!missing(targets)){
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)

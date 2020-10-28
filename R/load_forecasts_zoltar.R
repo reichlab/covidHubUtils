@@ -18,7 +18,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                                   types, targets){
   
   # validate models
-  all_valid_models <- covidHubUtils:::get_all_model_abbr()
+  all_valid_models <- covidHubUtils:::get_all_model_abbr(source = "zoltar")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -28,8 +28,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   
   
   # validate locations
-  all_valid_fips <- covidHubUtils::hub_locations %>%
-    pull(fips)
+  all_valid_fips <- covidHubUtils::hub_locations$fips
   
   if (!missing(locations)){
     locations <- match.arg(locations, choices = all_valid_fips, several.ok = TRUE)
@@ -44,21 +43,6 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     types = c("point", "quantile")
   }
   
-  # validate targets 
-  all_valid_targets <- c(
-    paste(1:20,  "wk ahead inc death"),
-    paste(1:20,  "wk ahead cum death"),
-    paste(0:130, "day ahead inc hosp"),
-    paste(1:8, "wk ahead inc case")
-  )
-  
-  if (!missing(targets)){
-    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
-  } else {
-    targets = all_valid_targets
-  }
-  
-  
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
   zoltr::zoltar_authenticate(
@@ -69,6 +53,16 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+  
+  # validate targets 
+  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
+  
+  if (!missing(targets)){
+    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    targets = all_valid_targets
+  }
+  
   
   # if do_zoltar_query throws an error, skip that error and return
   # an empty dataframe
@@ -104,22 +98,24 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
   } else {
     forecast <- forecast %>%
+      # only include the most recent forecast submitted in the time window
+      dplyr::filter(timezero == max(timezero)) %>%
       # change value and quantile back to double
       dplyr::mutate(value = as.double(value),
                     quantile = as.double(quantile)) %>%
       # keep only required columns
-      dplyr::select(model, timezero, unit, target, class,quantile, value) %>%
+      dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
       dplyr::rename(location = unit, forecast_date = timezero,
                     type = class) %>%
       # create horizon and target_end_date columns
       tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
                       remove = FALSE) %>% 
-      dplyr::rename(horizon = n_unit) %>%
-      dplyr::mutate(
-        target_end_date = as.Date(covidHubUtils::calc_target_week_end_date(
-          forecast_date, as.numeric(horizon)))) %>%
+      dplyr::rename(horizon = n_unit, target_unit = unit) %>%
+      dplyr::mutate(target_end_date = as.Date(unlist(
+        purrr::pmap(list(forecast_date, as.numeric(horizon), target_unit),
+                    covidHubUtils::calc_target_end_date)))) %>%
       dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
-                    type, quantile, value, target_end_date)
+                    target_unit, target_end_date, type, quantile, value)
   }
   
   return(forecast)

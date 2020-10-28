@@ -7,9 +7,9 @@ output: html_document
 
 ```{r message=FALSE}
 library(zoltr)
-library(dplyr)
+#library(dplyr)
 library(ggplot2)
-library(tidyverse)
+#library(tidyverse)
 library(covidHubUtils)
 ```
 
@@ -36,7 +36,7 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               intervals = c(.5, .8, .95),
                               horizon = 4,
                               truth_source = "JHU",
-                              truth_as_of = Sys.Date())
+                              truth_as_of = NULL)
 
 ```
 
@@ -50,6 +50,6 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               intervals = NULL,
                               horizon = 3,
                               truth_source = "JHU",
-                              truth_as_of = Sys.Date())
+                              truth_as_of = NULL)
 
 ```
