@@ -17,7 +17,7 @@
 #' is from github repo)
 
 #' 
-#' @return ggplot graph
+#' @return invisible ggplot object
 #' 
 #' @export
 plot_forecast <- function(forecast_data,
@@ -139,7 +139,10 @@ plot_forecast <- function(forecast_data,
                                  location,": observed and forecasted") ,
                   caption = paste0("source: ", truth_source," (observed data), ",
                                    model," (forecasts)")) 
+  
   if (plot){
     print(graph)
   }
+  
+  return (invisible(graph))
 }
