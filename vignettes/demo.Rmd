@@ -1,0 +1,57 @@
+---
+title: "demo_plot_forecast"
+author: "Serena Wang"
+date: "10/19/2020"
+output: html_document
+---
+
+```{r message=FALSE}
+library(zoltr)
+#library(dplyr)
+library(ggplot2)
+#library(tidyverse)
+library(covidHubUtils)
+```
+
+```{r message=FALSE}
+# Load forecasts that were submitted in a time window from zoltar
+inc_case_targets <- paste(1:4, "wk ahead inc case")
+forecasts <- covidHubUtils::load_forecasts(models = "COVIDhub-ensemble",
+                      last_forecast_date = Sys.Date(),
+                      forecast_date_window_size = 8,
+                      locations = "US",
+                      types = c("point", "quantile"),
+                      targets = c(inc_case_targets),
+                      source = "zoltar",
+                      hub_repo_path = "")
+
+```
+
+```{r message=FALSE}
+# Plot point forecasts with prediction intervals
+p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              model = "COVIDhub-ensemble",
+                              target_variable = "Incident Cases" ,
+                              location = "US",
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              truth_as_of = NULL)
+
+```
+
+
+```{r message=FALSE}
+# Plot point forecasts only
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              model = "COVIDhub-ensemble",
+                              target_variable = "Incident Cases" ,
+                              location = "US",
+                              intervals = NULL,
+                              horizon = 3,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              truth_as_of = NULL)
+
+```

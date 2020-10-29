@@ -2,45 +2,53 @@
 % Please edit documentation in R/load_forecasts.R
 \name{load_forecasts}
 \alias{load_forecasts}
-\title{load covid forecasts from local files or Zoltar}
+\title{load covid forecasts from local files or Zoltar.
+Return the most recent forecast from each model within
+forecast_date_window_size days of the last_forecast_date}
 \usage{
 load_forecasts(
   models,
-  last_timezero,
-  timezero_window_size,
+  last_forecast_date,
+  forecast_date_window_size = 1,
+  locations,
   types,
   targets,
-  source = "hub_repo",
+  source = "local_hub_repo",
   hub_repo_path
 )
 }
 \arguments{
-\item{models}{Character vector of model abbreviations}
+\item{models}{Character vector of model abbreviations.
+If missing, forecasts for all models that submitted forecasts
+meeting the other criteria are returned.}
 
-\item{last_timezero}{The last timezero date of forecasts to retrieve}
+\item{last_forecast_date}{The forecast date of forecasts to retrieve.
+Defaults to the most recent forecast date in Zoltar or the hub repo.}
 
-\item{timezero_window_size}{The number of days back to go.  A window size of
-0 will retrieve only forecasts submitted on the \code{last_timezero} date.}
+\item{forecast_date_window_size}{The number of days across which to
+look for recent forecasts. Defaults to 1, which means to only look
+at the last_forecast_date.}
+
+\item{locations}{list of fips. Defaults to all locations with available forecasts.}
+
+\item{types}{Character vector specifying type of forecasts to load: “quantile”
+or “point”. Defaults to c(“quantile”, “point”)}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death')}
+c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 
-\item{source}{string specifying where forecasts will be loaded from:
-currently only "hub_repo" is supported; eventually, either "hub_repo" or
-"zoltar"}
+\item{source}{string specifying where forecasts will be loaded from: either
+"local_hub_repo" or "zoltar"}
 
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
 }
 \value{
-data frame with columns model, timezero, location, target, quantile,
-value
+data frame with columns model, forecast_date, location, inc_cum, death_case,
+type, quantile, value, horizon and target_end_date.
 }
 \description{
-load covid forecasts from local files or Zoltar
-}
-\details{
-One of \code{hub_repo_path} or \code{zoltar_connection} must be provided. If
-both are provided, the \code{zoltar_connection} is ignored and forecasts are read
-in from the local clone of the repository.
+load covid forecasts from local files or Zoltar.
+Return the most recent forecast from each model within
+forecast_date_window_size days of the last_forecast_date
 }

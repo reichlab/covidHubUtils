@@ -11,10 +11,10 @@ end date is set to Saturday of EW12 (the current week) for Sunday and Monday
 of EW12, and Saturday of EW13 (the next week) for Tuesday through Saturday of
 EW12.}
 \usage{
-calc_target_week_end_date(timezero, horizon)
+calc_target_week_end_date(forecast_date, horizon)
 }
 \arguments{
-\item{timezero}{character vector of dates in 'yyyy-mm-dd' format}
+\item{forecast_date}{character vector of dates in 'yyyy-mm-dd' format}
 
 \item{horizon}{number of weeks ahead a prediction is targeting}
 }
