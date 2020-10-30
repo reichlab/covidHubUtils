@@ -93,15 +93,14 @@ plot_forecast <- function(forecast_data,
   
   # include truth from remote git hub repo by default
   # not using truth_as_of if we are loading truth from git hub repos
-  plot_data = covidHubUtils::get_plot_forecast_data (data = forecast_data, 
-                                                     model_to_plot = model,
-                                                     horizons_to_plot = horizon,
-                                                     quantiles_to_plot = quantiles_to_plot,
-                                                     location_to_plot = location,
-                                                     truth_source = truth_source,
-                                                     target_variable = target_variable,
-                                                     truth_as_of = truth_as_of
-                                                     )
+  plot_data = get_plot_forecast_data (data = forecast_data, 
+                                      model_to_plot = model,
+                                      horizons_to_plot = horizon,
+                                      quantiles_to_plot = quantiles_to_plot,
+                                      location_to_plot = location,
+                                      truth_source = truth_source,
+                                      target_variable = target_variable,
+                                      truth_as_of = truth_as_of)
  
   
   graph <- ggplot2::ggplot(data = plot_data)

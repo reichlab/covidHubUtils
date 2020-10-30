@@ -34,7 +34,7 @@ load_forecasts <- function (
   hub_repo_path) {
   
   # validate models
-  all_valid_models <- covidHubUtils:::get_all_model_abbr(source = "remote_hub_repo")
+  all_valid_models <- get_all_model_abbr(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -94,14 +94,14 @@ load_forecasts <- function (
     # path to data-processed folder in hub repo
     data_processed <- file.path(hub_repo_path, "data-processed/")
     
-    forecasts <- covidHubUtils:::load_forecasts_repo(file_path = data_processed, 
+    forecasts <- load_forecasts_repo(file_path = data_processed, 
                                      models = models, 
                                      forecast_dates = forecast_dates, 
                                      locations = locations, 
                                      types = types, 
                                      targets = targets)
   } else {
-    forecasts <- covidHubUtils:::load_forecasts_zoltar(models = models, 
+    forecasts <- load_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 
                                        locations = locations, 
                                        types = types,

@@ -65,13 +65,13 @@ get_plot_forecast_data <- function(data,
                   death_case == death_case_to_plot)
   
   
-  forecasts<- covidHubUtils::pivot_forecasts_wider(data, quantiles_to_plot) %>%
+  forecasts<- pivot_forecasts_wider(data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast")
    
   if (include_truth){
     # load truth from remote git hub repo. 
     # not using truth_as_of here.
-    truth <- covidHubUtils::load_truth(truth_source,
+    truth <- load_truth(truth_source,
                 target_variable, 
                 #truth_end_date = ,
                 locations = location_to_plot) %>%

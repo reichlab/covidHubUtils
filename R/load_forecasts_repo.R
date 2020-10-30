@@ -20,7 +20,7 @@
 load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
   
   # validate models
-  all_valid_models <- covidHubUtils:::get_all_model_abbr(source = "remote_hub_repo")
+  all_valid_models <- get_all_model_abbr(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -116,7 +116,7 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
     dplyr::rename(horizon = n_unit, target_unit = unit) %>%
     dplyr::mutate(target_end_date = as.Date(unlist(
       purrr::pmap(list(forecast_date, as.numeric(horizon), target_unit),
-                  covidHubUtils::calc_target_end_date)))) %>%
+                  calc_target_end_date)))) %>%
     dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                   target_unit, target_end_date, type, quantile, value)
   
