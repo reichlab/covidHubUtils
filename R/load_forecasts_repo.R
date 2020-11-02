@@ -66,8 +66,11 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
     targets = all_valid_targets
   }
   
+  # set up parallelization
+  future::plan(multiprocess)
   
-  forecasts <- purrr::map_dfr(
+  
+  forecasts <- furrr::future_map_dfr(
     models,
     function(model) {
       if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
@@ -84,16 +87,15 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
         return(NULL)
       }
       
-      readr::read_csv(results_path,
-                      col_types = readr::cols(
-                        forecast_date = readr::col_date(format = ""),
-                        target = readr::col_character(),
-                        target_end_date = readr::col_date(format = ""),
-                        location = readr::col_character(),
-                        type = readr::col_character(),
-                        quantile = readr::col_double(),
-                        value = readr::col_double()
-                      )) %>%
+      data.table::fread(results_path,
+                        colClasses = c(
+                          "forecast_date"   = "Date",
+                          "target"          = "character",
+                          "target_end_date" = "Date",
+                          "location"        = "character",
+                          "type"            = "character",
+                          "quantile"        = "double",
+                          "value"           = "double")) %>%
         dplyr::filter(
           tolower(type) %in% types,
           location %in% locations,
@@ -107,16 +109,21 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
           quantile = quantile,
           value = value
         )
-    }
+    }, .options = furrr_options(seed = TRUE)
   ) %>%
     # only include the most recent forecast submitted in the time window
     dplyr::filter(forecast_date == max(forecast_date)) %>%
     tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
                     remove = FALSE) %>% 
     dplyr::rename(horizon = n_unit, target_unit = unit) %>%
-    dplyr::mutate(target_end_date = as.Date(unlist(
-      purrr::pmap(list(forecast_date, as.numeric(horizon), target_unit),
-                  calc_target_end_date)))) %>%
+    # SLOW...
+    #dplyr::mutate(target_end_date = as.Date(unlist(
+    #  furrr::future_pmap(list(forecast_date, as.numeric(horizon), target_unit),
+    #              calc_target_end_date)))) %>%
+    dplyr::mutate(
+      target_end_date = as.Date(calc_target_week_end_date(forecast_date, 
+                                                          as.numeric(horizon)))
+    ) %>%
     dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                   target_unit, target_end_date, type, quantile, value)
   
