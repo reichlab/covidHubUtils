@@ -111,9 +111,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
                       remove = FALSE) %>% 
       dplyr::rename(horizon = n_unit, target_unit = unit) %>%
-      dplyr::mutate(target_end_date = as.Date(unlist(
-        purrr::pmap(list(forecast_date, as.numeric(horizon), target_unit),
-                    calc_target_end_date)))) %>%
+      dplyr::mutate(target_end_date = as.Date(calc_target_week_end_date(forecast_date, as.numeric(horizon)))) %>%
       dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                     target_unit, target_end_date, type, quantile, value)
   }
