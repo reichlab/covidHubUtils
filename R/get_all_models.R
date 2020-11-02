@@ -1,11 +1,11 @@
-#' Get all valid model_abbrs
+#' Get all valid model names
 #' 
-#' @param source string specifying where to get all valid model abbreviations.
+#' @param source string specifying where to get all valid model names
 #' Currently support "remote_hub_repo" and "zoltar".
 #' 
-#' @return a list of valid model abbreviations
+#' @return a list of valid model names
 #' 
-get_all_model_abbr <- function(source) {
+get_all_models <- function(source) {
   
   # validate source
   source <- match.arg(source, choices = c("remote_hub_repo", "zoltar"), several.ok = FALSE)
@@ -17,7 +17,7 @@ get_all_model_abbr <- function(source) {
     
     # get all files in data-processed/ from tree structure 
     filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = F)
-    filenames<-grep("data-processed/", filelist, value = TRUE, fixed = TRUE)
+    filenames <- grep("data-processed/", filelist, value = TRUE, fixed = TRUE)
     
     # filter to get subfolder directories for each model
     folders <- filenames %>% 
@@ -25,7 +25,7 @@ get_all_model_abbr <- function(source) {
       grep(pattern = "\\.", invert = TRUE, value = TRUE)
     
     # subtract model_abbr from folder directories
-    model_abbrs <- sapply(folders, function (filename) {
+    models <- sapply(folders, function (filename) {
       unlist(strsplit(filename,"/"))[2]
     })
     
@@ -41,9 +41,9 @@ get_all_model_abbr <- function(source) {
     the_projects <- zoltr::projects(zoltar_connection)
     project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
     
-    model_abbrs <- zoltr::models(zoltar_connection, project_url)$model_abbr
+    models <- zoltr::models(zoltar_connection, project_url)$model_abbr
   }
   
-  return (unique(model_abbrs))
+  return (unique(models))
 }
   

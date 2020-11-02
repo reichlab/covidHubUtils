@@ -18,7 +18,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                                   types, targets){
   
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "zoltar")
+  all_valid_models <- get_all_models(source = "zoltar")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -63,6 +63,11 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     targets = all_valid_targets
   }
   
+  
+  message("Large queries that span many combinations of forecast dates, models, locations, 
+  and targets can take a long time to process. To reduce run-time of queries, 
+  we encourage users to download a local copy of the COVID-19 Forecast Hub repository 
+  so queries can be run locally: https://github.com/reichlab/covid19-forecast-hub/")
   
   # if do_zoltar_query throws an error, skip that error and return
   # an empty dataframe

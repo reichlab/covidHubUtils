@@ -34,7 +34,7 @@ load_forecasts <- function (
   hub_repo_path) {
   
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "remote_hub_repo")
+  all_valid_models <- get_all_models(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -101,6 +101,11 @@ load_forecasts <- function (
                                      types = types, 
                                      targets = targets)
   } else {
+    message("Large queries that span many combinations of forecast dates, models, locations, 
+    and targets can take a long time to process. To reduce run-time of queries, 
+    we encourage users to download a local copy of the COVID-19 Forecast Hub repository 
+    so queries can be run locally: https://github.com/reichlab/covid19-forecast-hub/")
+    
     forecasts <- load_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 
                                        locations = locations, 
