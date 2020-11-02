@@ -18,7 +18,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                                   types, targets){
   
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "zoltar")
+  all_valid_models <- get_all_models(source = "zoltar")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)

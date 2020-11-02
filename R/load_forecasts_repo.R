@@ -20,7 +20,7 @@
 load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
   
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "remote_hub_repo")
+  all_valid_models <- get_all_models(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
