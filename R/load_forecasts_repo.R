@@ -85,14 +85,14 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
       }
       
       readr::read_csv(results_path,
-                      col_types = cols(
-                        forecast_date = col_date(format = ""),
-                        target = col_character(),
-                        target_end_date = col_date(format = ""),
-                        location = col_character(),
-                        type = col_character(),
-                        quantile = col_double(),
-                        value = col_double()
+                      col_types = readr::cols(
+                        forecast_date = readr::col_date(format = ""),
+                        target = readr::col_character(),
+                        target_end_date = readr::col_date(format = ""),
+                        location = readr::col_character(),
+                        type = readr::col_character(),
+                        quantile = readr::col_double(),
+                        value = readr::col_double()
                       )) %>%
         dplyr::filter(
           tolower(type) %in% types,

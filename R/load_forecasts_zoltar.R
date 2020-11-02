@@ -71,8 +71,12 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                                             # not show error messages from zoltar
                                             quiet = TRUE)
 
+  
+  # set up parallelization
+  future::plan(multiprocess)
+  
   # get forecasts that were submitted in the time window
-  forecast <- purrr::map_dfr(
+  forecast <- furrr::future_map_dfr(
     forecast_dates,
     function (forecast_date) {
       f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
@@ -91,7 +95,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       }
       
       return (f)
-    }
+    }, .options = furrr_options(seed = TRUE)
   )
 
   if (nrow(forecast) ==0){
@@ -111,9 +115,14 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
                       remove = FALSE) %>% 
       dplyr::rename(horizon = n_unit, target_unit = unit) %>%
-      dplyr::mutate(target_end_date = as.Date(unlist(
-        purrr::pmap(list(forecast_date, as.numeric(horizon), target_unit),
-                    calc_target_end_date)))) %>%
+      # SLOW...
+      #dplyr::mutate(target_end_date = as.Date(unlist(
+      #  furrr::future_pmap(list(forecast_date, as.numeric(horizon), target_unit),
+      #              calc_target_end_date)))) %>%
+      dplyr::mutate(
+        target_end_date = as.Date(calc_target_week_end_date(forecast_date, 
+                                                            as.numeric(horizon)))
+      ) %>%
       dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                     target_unit, target_end_date, type, quantile, value)
   }
