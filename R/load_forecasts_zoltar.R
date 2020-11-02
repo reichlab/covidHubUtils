@@ -64,6 +64,11 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   }
   
   
+  message("Large queries that span many combinations of forecast dates, models, locations, 
+  and targets can take a long time to process. To reduce run-time of queries, 
+  we encourage users to download a local copy of the COVID-19 Forecast Hub repository 
+  so queries can be run locally: https://github.com/reichlab/covid19-forecast-hub/")
+  
   # if do_zoltar_query throws an error, skip that error and return
   # an empty dataframe
   zoltar_query_skip_error = purrr::possibly(zoltr::do_zoltar_query, 
