@@ -83,7 +83,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
                               project_url = project_url,
                               is_forecast_query = TRUE,
-                              units= locations, 
+                              units = locations, 
                               timezeros = forecast_date,
                               models = models,
                               targets = targets,
@@ -104,7 +104,9 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   } else {
     forecast <- forecast %>%
       # only include the most recent forecast submitted in the time window
+      dplyr::group_by(model) %>%
       dplyr::filter(timezero == max(timezero)) %>%
+      dplyr::ungroup() %>%
       # change value and quantile back to double
       dplyr::mutate(value = as.double(value),
                     quantile = as.double(quantile)) %>%

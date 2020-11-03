@@ -85,14 +85,14 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
       }
       
       readr::read_csv(results_path,
-                      col_types = cols(
-                        forecast_date = col_date(format = ""),
-                        target = col_character(),
-                        target_end_date = col_date(format = ""),
-                        location = col_character(),
-                        type = col_character(),
-                        quantile = col_double(),
-                        value = col_double()
+                      col_types = readr::cols(
+                        forecast_date = readr::col_date(format = ""),
+                        target = readr::col_character(),
+                        target_end_date = readr::col_date(format = ""),
+                        location = readr::col_character(),
+                        type = readr::col_character(),
+                        quantile = readr::col_double(),
+                        value = readr::col_double()
                       )) %>%
         dplyr::filter(
           tolower(type) %in% types,
@@ -110,7 +110,9 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
     }
   ) %>%
     # only include the most recent forecast submitted in the time window
+    dplyr::group_by(model) %>%
     dplyr::filter(forecast_date == max(forecast_date)) %>%
+    dplyr::ungroup() %>%
     tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
                     remove = FALSE) %>% 
     dplyr::rename(horizon = n_unit, target_unit = unit) %>%
