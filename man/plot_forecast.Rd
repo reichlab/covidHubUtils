@@ -42,7 +42,7 @@ in real time as of the truth_as_of date (not using this parameter when truth dat
 is from github repo)}
 }
 \value{
-invisible ggplot graph
+invisible ggplot object
 }
 \description{
 Plot forecasts with truth for only one model, one target and one location

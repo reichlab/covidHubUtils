@@ -20,8 +20,8 @@
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
 #'
-#' @return data frame with columns model, forecast_date, location, inc_cum, death_case, 
-#' type, quantile, value, horizon and target_end_date.
+#' @return data frame with columns model, forecast_date, location, inc_cum, 
+#' death_case, horizon, temporal_resolution, target_end_date, type, quantile, value
 #' @export
 load_forecasts <- function (
   models,

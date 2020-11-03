@@ -13,8 +13,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date,location, target, 
-#' type, quantile, value, horizon and target_end_date.
+#' @return data frame with columns model, forecast_date, location, inc_cum, 
+#' death_case, horizon,temporal_resolution, target_end_date, type, quantile, value
 #'
 #' @export
 load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
@@ -113,14 +113,13 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
     dplyr::group_by(model) %>%
     dplyr::filter(forecast_date == max(forecast_date)) %>%
     dplyr::ungroup() %>%
-    tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
-                    remove = FALSE) %>% 
-    dplyr::rename(horizon = n_unit, target_unit = unit) %>%
-    dplyr::mutate(target_end_date = as.Date(unlist(
-      purrr::pmap(list(forecast_date, as.numeric(horizon), target_unit),
-                  calc_target_end_date)))) %>%
+    tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","inc_cum","death_case"),
+                    remove = FALSE) %>%
+    dplyr::mutate(target_end_date = as.Date(
+      calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
+      )) %>%
     dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
-                  target_unit, target_end_date, type, quantile, value)
+                  temporal_resolution, target_end_date, type, quantile, value)
   
   return(forecasts)
   

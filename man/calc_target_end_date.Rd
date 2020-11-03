@@ -4,14 +4,14 @@
 \alias{calc_target_end_date}
 \title{Calculate end date for a forecast is targeting.}
 \usage{
-calc_target_end_date(forecast_date, horizon, target_unit)
+calc_target_end_date(forecast_date, horizon, temporal_resolution)
 }
 \arguments{
 \item{forecast_date}{character vector of dates in 'yyyy-mm-dd' format}
 
 \item{horizon}{number of weeks ahead a prediction is targeting}
 
-\item{target_unit}{string of target unit. Currently only 'wk' and 'day' are supported.}
+\item{temporal_resolution}{string of target unit. Currently only 'wk' and 'day' are supported.}
 }
 \value{
 character vector of dates in 'yyyy-mm-dd' format

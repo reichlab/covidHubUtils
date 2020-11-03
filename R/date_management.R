@@ -11,13 +11,9 @@ date_to_week_end_date <- function(forecast_date, week_offset = 0) {
   if(!(length(week_offset) %in% c(1, length(forecast_date)))) {
     stop("week_offset must be either length 1 or the same length as forecast_date")
   }
-
-  result <- purrr::pmap_chr(
-    MMWRweek::MMWRweek(lubridate::ymd(forecast_date) + week_offset*7),
-    function(MMWRyear, MMWRweek, MMWRday) {
-      as.character(MMWRweek::MMWRweek2Date(MMWRyear, MMWRweek, 7))
-    }
-  )
+  
+  result <- as.character(lubridate::ceiling_date(
+    lubridate::ymd(forecast_date) + week_offset*7, unit = 'week') - 1)
 
   return(result)
 }
@@ -65,8 +61,8 @@ calc_forecast_week_end_date <- function(forecast_date) {
 calc_target_week_end_date <- function(forecast_date, horizon) {
   result <- ifelse(
     lubridate::wday(lubridate::ymd(forecast_date), label=TRUE) %in% c('Sun', 'Mon'),
-    date_to_week_end_date(forecast_date, week_offset=horizon-1),
-    date_to_week_end_date(forecast_date, week_offset=horizon)
+    date_to_week_end_date(forecast_date, week_offset = horizon-1),
+    date_to_week_end_date(forecast_date, week_offset = horizon)
   )
 
   return(result)
@@ -77,17 +73,14 @@ calc_target_week_end_date <- function(forecast_date, horizon) {
 #'
 #' @param forecast_date character vector of dates in 'yyyy-mm-dd' format
 #' @param horizon number of weeks ahead a prediction is targeting
-#' @param target_unit string of target unit. Currently only 'wk' and 'day' are supported.
+#' @param temporal_resolution string of target unit. Currently only 'wk' and 'day' are supported.
 #'
 #' @return character vector of dates in 'yyyy-mm-dd' format
 #'
 #' @export
-calc_target_end_date <- function(forecast_date, horizon, target_unit){
-  if (target_unit == 'wk'){
-    result <- calc_target_week_end_date(forecast_date, horizon)
-  } else if (target_unit == 'day'){
-    result <- lubridate::ymd(forecast_date) + horizon
-  }
-  
-  return (result)
+calc_target_end_date <- function(forecast_date, horizon, temporal_resolution){
+  result <- ifelse(temporal_resolution == 'wk',
+                 calc_target_week_end_date(forecast_date, horizon),
+                 as.character(lubridate::ymd(forecast_date) + horizon))
+  return(result)
 }

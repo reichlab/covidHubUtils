@@ -11,8 +11,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date,location, inc_cum, death_case,
-#' type, quantile, value, horizon and target_end_date.
+#' @return data frame with columns model, forecast_date, location, inc_cum, 
+#' death_case, horizon, temporal_resolution, target_end_date, type, quantile, value
 
 load_forecasts_zoltar <- function(models, forecast_dates, locations, 
                                   types, targets){
@@ -91,13 +91,12 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                               verbose = TRUE)
       # cast value to characters for now so that it binds
       if (nrow(f) > 0){
-        f <- dplyr::mutate(f, value = as.character(value),
-                           quantile = as.character(quantile))
+        f <- dplyr::mutate(f, value = as.character(value))
       }
       
       return (f)
     }
-  )
+  ) 
 
   if (nrow(forecast) ==0){
     stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
@@ -108,19 +107,19 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       dplyr::filter(timezero == max(timezero)) %>%
       dplyr::ungroup() %>%
       # change value and quantile back to double
-      dplyr::mutate(value = as.double(value),
-                    quantile = as.double(quantile)) %>%
+      dplyr::mutate(value = as.double(value)) %>%
       # keep only required columns
       dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
       dplyr::rename(location = unit, forecast_date = timezero,
                     type = class) %>%
       # create horizon and target_end_date columns
-      tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
+      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","inc_cum","death_case"),
                       remove = FALSE) %>% 
-      dplyr::rename(horizon = n_unit, target_unit = unit) %>%
-      dplyr::mutate(target_end_date = as.Date(calc_target_week_end_date(forecast_date, as.numeric(horizon)))) %>%
+      dplyr::mutate(target_end_date = as.Date(
+        calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
+        )) %>%
       dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
-                    target_unit, target_end_date, type, quantile, value)
+                    temporal_resolution, target_end_date, type, quantile, value)
   }
   
   return(forecast)

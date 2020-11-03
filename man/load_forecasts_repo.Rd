@@ -33,8 +33,8 @@ or “point”. Defaults to c(“quantile”, “point”)}
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 }
 \value{
-data frame with columns model, forecast_date,location, target,
-type, quantile, value, horizon and target_end_date.
+data frame with columns model, forecast_date, location, inc_cum,
+death_case, horizon,temporal_resolution, target_end_date, type, quantile, value
 }
 \description{
 Load forecasts from reichlab/covid19-forecast-hub repo.

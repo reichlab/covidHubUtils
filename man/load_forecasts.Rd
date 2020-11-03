@@ -44,8 +44,8 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 repository}
 }
 \value{
-data frame with columns model, forecast_date, location, inc_cum, death_case,
-type, quantile, value, horizon and target_end_date.
+data frame with columns model, forecast_date, location, inc_cum,
+death_case, horizon, temporal_resolution, target_end_date, type, quantile, value
 }
 \description{
 load covid forecasts from local files or Zoltar.
