@@ -16,7 +16,7 @@ get_model_designations <- function(models, source, hub_repo_path) {
 
   if(source == "local_hub_repo") {
     if (missing(hub_repo_path)){
-      stop ("Error in get_model_designations: Please provice a hub_repo_path")
+      stop ("Error in get_model_designations: Please provide a hub_repo_path")
     } else {
  
       data_processed <- file.path(hub_repo_path, "data-processed")

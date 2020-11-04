@@ -1,16 +1,25 @@
 #' Get all valid model names
 #' 
 #' @param source string specifying where to get all valid model names
-#' Currently support "remote_hub_repo" and "zoltar".
+#' Currently support "local_hub_repo", "remote_hub_repo" and "zoltar".
 #' 
 #' @return a list of valid model names
 #' 
-get_all_models <- function(source) {
+#' @export
+get_all_models <- function(source = "zoltar", hub_repo_path) {
   
   # validate source
   source <- match.arg(source, choices = c("remote_hub_repo", "zoltar"), several.ok = FALSE)
   
-  if (source == "remote_hub_repo") {
+  if (source == "local_hub_repo") {
+    if (missing(hub_repo_path)) {
+      stop ("Error in get_all_models: Please provide a hub_repo_path")
+    }
+
+    data_processed <- file.path(hub_repo_path, "data-processed")
+    models <- list.dirs(data_processed, full.names = FALSE)
+    models <- models[nchar(models) > 0]
+  } else if (source == "remote_hub_repo") {
     # set up remote hub repo request
     req <- httr::GET("https://api.github.com/repos/reichlab/covid19-forecast-hub/git/trees/master?recursive=1")
     httr::stop_for_status(req)
