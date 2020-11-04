@@ -81,7 +81,7 @@ calc_target_week_end_date <- function(forecast_date, horizon) {
 #'
 #' @export
 calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
-  result <- rep(NA_character)
+  result <- rep(NA_character_)
   inds <- (temporal_resolution == "wk")
   result[inds] <- calc_target_week_end_date(forecast_date[inds], horizon)
   result[!inds] <- as.character(lubridate::ymd(forecast_date[!inds]) + horizon)
