@@ -2,7 +2,7 @@
 #' MMWR epidemic week for the given date,offset a specified number 
 #' of epidemic week from a specified date
 #'
-#' @param forecast_date character vector of dates in 'yyyy-mm-dd' format
+#' @param forecast_date vector of dates as Date objects
 #' @param integer vector of week offsets.  must be either length 1 or the same
 #'     length as forecast_date
 #'
@@ -13,7 +13,7 @@ date_to_week_end_date <- function(forecast_date, week_offset = 0) {
   }
   
   result <- as.character(lubridate::ceiling_date(
-    lubridate::ymd(forecast_date) + week_offset*7, unit = 'week') - 1)
+    forecast_date + week_offset*7, unit = 'week') - 1)
 
   return(result)
 }
@@ -33,11 +33,11 @@ date_to_week_end_date <- function(forecast_date, week_offset = 0) {
 #'
 #' @export
 calc_forecast_week_end_date <- function(forecast_date) {
-  result <- ifelse(
-    lubridate::wday(lubridate::ymd(forecast_date), label=TRUE) %in% c('Sun', 'Mon'),
-    date_to_week_end_date(forecast_date, week_offset=-1),
-    date_to_week_end_date(forecast_date, week_offset=0)
-  )
+  forecast_date <- lubridate::ymd(forecast_date)
+  result <- rep(NA_character_, length(forecast_date))
+  inds <- (lubridate::wday(forecast_date, label = TRUE) %in% c("Sun", "Mon"))
+  result[inds] <- date_to_week_end_date(forecast_date[inds], week_offset = -1)
+  result[!inds] <- date_to_week_end_date(forecast_date[!inds], week_offset = 0)
 
   return(result)
 }
@@ -59,11 +59,21 @@ calc_forecast_week_end_date <- function(forecast_date) {
 #'
 #' @export
 calc_target_week_end_date <- function(forecast_date, horizon) {
-  result <- ifelse(
-    lubridate::wday(lubridate::ymd(forecast_date), label=TRUE) %in% c('Sun', 'Mon'),
-    date_to_week_end_date(forecast_date, week_offset = horizon-1),
-    date_to_week_end_date(forecast_date, week_offset = horizon)
-  )
+  forecast_date <- lubridate::ymd(forecast_date)
+  result <- rep(NA_character_, length(forecast_date))
+  inds <- (lubridate::wday(forecast_date, label = TRUE) %in% c("Sun", "Mon"))
+
+  if (length(horizon) == 1) {
+    result[inds] <- date_to_week_end_date(forecast_date[inds],
+      week_offset = horizon - 1)
+    result[!inds] <- date_to_week_end_date(forecast_date[!inds],
+      week_offset = horizon)
+  } else if (length(horizon) == length(forecast_date)) {
+    result[inds] <- date_to_week_end_date(forecast_date[inds],
+      week_offset = horizon[inds] - 1)
+    result[!inds] <- date_to_week_end_date(forecast_date[!inds],
+      week_offset = horizon[!inds])
+  }
 
   return(result)
 }
@@ -78,9 +88,19 @@ calc_target_week_end_date <- function(forecast_date, horizon) {
 #' @return character vector of dates in 'yyyy-mm-dd' format
 #'
 #' @export
-calc_target_end_date <- function(forecast_date, horizon, temporal_resolution){
-  result <- ifelse(temporal_resolution == 'wk',
-                 calc_target_week_end_date(forecast_date, horizon),
-                 as.character(lubridate::ymd(forecast_date) + horizon))
+calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
+  result <- rep(NA_character_)
+  inds <- (temporal_resolution == "wk")
+  if (length(horizon) == 1) {
+    result[inds] <- calc_target_week_end_date(forecast_date[inds], horizon)
+    result[!inds] <-
+      as.character(lubridate::ymd(forecast_date[!inds]) + horizon)
+  } else if (length(horizon) == length(forecast_date)) {
+    result[inds] <- 
+      calc_target_week_end_date(forecast_date[inds], horizon[inds])
+    result[!inds] <- 
+      as.character(lubridate::ymd(forecast_date[!inds]) + horizon[!inds])
+  }
+
   return(result)
 }

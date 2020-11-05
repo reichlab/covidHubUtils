@@ -4,11 +4,11 @@
 \alias{get_all_models}
 \title{Get all valid model names}
 \usage{
-get_all_models(source)
+get_all_models(source = "zoltar", hub_repo_path)
 }
 \arguments{
 \item{source}{string specifying where to get all valid model names
-Currently support "remote_hub_repo" and "zoltar".}
+Currently support "local_hub_repo", "remote_hub_repo" and "zoltar".}
 }
 \value{
 a list of valid model names

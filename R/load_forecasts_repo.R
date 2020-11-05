@@ -109,10 +109,6 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
         )
     }
   ) %>%
-    # only include the most recent forecast submitted in the time window
-    dplyr::group_by(model) %>%
-    dplyr::filter(forecast_date == max(forecast_date)) %>%
-    dplyr::ungroup() %>%
     tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","inc_cum","death_case"),
                     remove = FALSE) %>%
     dplyr::mutate(target_end_date = as.Date(

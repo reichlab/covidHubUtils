@@ -45,10 +45,11 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
-  zoltr::zoltar_authenticate(
-    zoltar_connection,
-    Sys.getenv("Z_USERNAME"),
-    Sys.getenv("Z_PASSWORD"))
+  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+  } else {
+    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+  }
   
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
