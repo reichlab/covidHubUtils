@@ -41,10 +41,11 @@ get_all_models <- function(source = "zoltar", hub_repo_path) {
   } else if (source == "zoltar"){
     # set up Zoltar connection
     zoltar_connection <- zoltr::new_connection()
-    zoltr::zoltar_authenticate(
-      zoltar_connection,
-      Sys.getenv("Z_USERNAME"),
-      Sys.getenv("Z_PASSWORD"))
+    if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+      zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+    } else {
+      zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+    }
     
     # construct Zoltar project url
     the_projects <- zoltr::projects(zoltar_connection)
