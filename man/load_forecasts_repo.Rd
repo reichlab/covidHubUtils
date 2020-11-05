@@ -14,8 +14,7 @@ load_forecasts_repo(
 )
 }
 \arguments{
-\item{file_path}{path to local clone of the reichlab/covid19-forecast-hub
-repository}
+\item{file_path}{path to local clone of the reichlab/covid19-forecast-hub/data-processed}
 
 \item{models}{character vector of model abbreviations.
 If missing, forecasts for all models that submitted forecasts
