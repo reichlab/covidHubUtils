@@ -9,7 +9,9 @@
 get_all_models <- function(source = "zoltar", hub_repo_path) {
   
   # validate source
-  source <- match.arg(source, choices = c("remote_hub_repo", "zoltar"), several.ok = FALSE)
+  source <- match.arg(source, 
+                      choices = c("remote_hub_repo","local_hub_repo", "zoltar"), 
+                      several.ok = FALSE)
   
   if (source == "local_hub_repo") {
     if (missing(hub_repo_path)) {
@@ -17,8 +19,12 @@ get_all_models <- function(source = "zoltar", hub_repo_path) {
     }
 
     data_processed <- file.path(hub_repo_path, "data-processed")
+    if (!dir.exists(data_processed)){
+      stop ("Error in get_all_models: data_processeed subdirectory does not exist.")
+    }
     models <- list.dirs(data_processed, full.names = FALSE)
     models <- models[nchar(models) > 0]
+    
   } else if (source == "remote_hub_repo") {
     # set up remote hub repo request
     req <- httr::GET("https://api.github.com/repos/reichlab/covid19-forecast-hub/git/trees/master?recursive=1")
