@@ -5,36 +5,42 @@
 \title{Combines load_truth() and pivot_forecasts_wider(), returns the data.}
 \usage{
 get_plot_forecast_data(
-  data,
+  forecast_data,
+  truth_data = NULL,
   model_to_plot,
   horizons_to_plot,
   quantiles_to_plot,
   location_to_plot,
-  include_truth = TRUE,
+  plot_truth = TRUE,
   truth_source,
   target_variable,
   truth_as_of = NULL
 )
 }
 \arguments{
-\item{data}{forecasts data frame from load_forecast(). It has columns model,
-forecast_date,location, target, type, quantile, value, horizon and
-target_end_date.}
+\item{forecast_data}{forecasts data frame from load_forecast().
+It has columns model, forecast_date,location, target, type, quantile,
+value, horizon and target_end_date.}
+
+\item{truth_data}{optional data frame with forecasts in the format returned
+by load_truth().}
 
 \item{model_to_plot}{characters of model abbreviations}
 
-\item{horizons_to_plot}{forecasts are plotted for the horizon time steps after the
-forecast date}
+\item{horizons_to_plot}{forecasts are plotted for the horizon time steps after
+the forecast date.}
 
 \item{quantiles_to_plot}{vector of quanitles to include in the plot}
 
 \item{location_to_plot}{character vector of one location.}
 
-\item{include_truth}{boolean to indicate whether truth data should be plotted.
+\item{plot_truth}{boolean to indicate whether truth data should be plotted.
 Default to TRUE.}
 
-\item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support "JHU","USAFacts", "NYTimes"}
+\item{truth_source}{character specifying where the truth data will
+be loaded from if truth_data is not provided.
+Otherwise, this character specifies the data source to plot.
+Currently support "JHU","USAFacts" and "NYTimes".}
 
 \item{target_variable}{string specifying target type. It should be one of
 "Cumulative Deaths","Incident Cases" and "Incident Deaths."}

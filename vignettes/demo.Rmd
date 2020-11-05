@@ -28,22 +28,22 @@ forecasts <- covidHubUtils::load_forecasts(models = "COVIDhub-ensemble",
 ```
 
 ```{r message=FALSE}
-# Plot point forecasts with prediction intervals
+# Plot point forecasts with prediction intervals and without user-provided truth data
 p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
-                              model = "COVIDhub-ensemble",
-                              target_variable = "Incident Cases" ,
-                              location = "US",
-                              intervals = c(.5, .8, .95),
-                              horizon = 4,
-                              truth_source = "JHU",
-                              plot = TRUE,
-                              truth_as_of = NULL)
+                                   model = "COVIDhub-ensemble",
+                                   target_variable = "Incident Cases" ,
+                                   location = "US",
+                                   intervals = c(.5, .8, .95),
+                                   horizon = 4,
+                                   truth_source = "JHU",
+                                   plot = TRUE,
+                                   truth_as_of = NULL)
 
 ```
 
 
 ```{r message=FALSE}
-# Plot point forecasts only
+# Plot point forecasts only and without user-provided truth data
 covidHubUtils::plot_forecast (forecast_data = forecasts,
                               model = "COVIDhub-ensemble",
                               target_variable = "Incident Cases" ,
@@ -55,3 +55,25 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               truth_as_of = NULL)
 
 ```
+
+```{r message=FALSE}
+# Plot forecasts with user-provided truth data
+truth_data <- covidHubUtils::load_truth(truth_source = "NYTimes",
+                                       target_variable = "Incident Cases",
+                                       locations = 'US')
+
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              truth_data = truth_data,
+                              model = "COVIDhub-ensemble",
+                              target_variable = "Incident Cases" ,
+                              location = "US",
+                              intervals = c(.5, .8, .95),
+                              horizon = 3,
+                              truth_source = "NYTimes",
+                              plot = TRUE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+
+```
+

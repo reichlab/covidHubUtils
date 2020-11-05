@@ -6,6 +6,7 @@
 \usage{
 plot_forecast(
   forecast_data,
+  truth_data = NULL,
   model,
   target_variable,
   location,
@@ -18,6 +19,9 @@ plot_forecast(
 }
 \arguments{
 \item{forecast_data}{data frame with truth and forecasts from load_forecasts()}
+
+\item{truth_data}{optional data frame with forecasts in the format returned
+by load_truth().}
 
 \item{model}{model_abbr specifying model to plot}
 
@@ -32,7 +36,10 @@ to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.}
 \item{horizon}{forecasts are plotted for the horizon time steps after the
 forecast date}
 
-\item{truth_source}{character specifying where the truths will be loaded from.}
+\item{truth_source}{character specifying where the truth data will
+be loaded from if truth_data is not provided.
+Otherwise, this character specifies the data source to plot.
+Currently support "JHU","USAFacts" and "NYTimes".}
 
 \item{plot}{boolean for showing the plot. Default to TRUE.
 Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
