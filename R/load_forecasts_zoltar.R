@@ -11,8 +11,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date, location, inc_cum, 
-#' death_case, horizon, temporal_resolution, target_end_date, type, quantile, value
+#' @return data frame with columns model, forecast_date, location, horizon,
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value
 
 load_forecasts_zoltar <- function(models, forecast_dates, locations, 
                                   types, targets){
@@ -25,7 +25,6 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   } else {
     models <- all_valid_models
   }
-  
   
   # validate locations
   all_valid_fips <- covidHubUtils::hub_locations$fips
@@ -63,7 +62,6 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   } else {
     targets = all_valid_targets
   }
-  
   
   message("Large queries that span many combinations of forecast dates, models, locations, 
   and targets can take a long time to process. To reduce run-time of queries, 
@@ -114,13 +112,13 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       dplyr::rename(location = unit, forecast_date = timezero,
                     type = class) %>%
       # create horizon and target_end_date columns
-      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","inc_cum","death_case"),
-                      remove = FALSE) %>% 
+      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
+                      remove = FALSE, extra = "merge") %>%
       dplyr::mutate(target_end_date = as.Date(
         calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
         )) %>%
-      dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
-                    temporal_resolution, target_end_date, type, quantile, value)
+      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
+                    target_variable, target_end_date, type, quantile, value)
   }
   
   return(forecast)

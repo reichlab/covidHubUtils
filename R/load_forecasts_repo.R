@@ -12,8 +12,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date, location, inc_cum, 
-#' death_case, horizon,temporal_resolution, target_end_date, type, quantile, value
+#' @return data frame with columns model, forecast_date, location, horizon,
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value
 #'
 #' @export
 load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
@@ -115,13 +115,13 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
         )
     }
   ) %>%
-    tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","inc_cum","death_case"),
-                    remove = FALSE) %>%
+    tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
+                    remove = FALSE, extra = "merge") %>%
     dplyr::mutate(target_end_date = as.Date(
       calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
       )) %>%
-    dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
-                  temporal_resolution, target_end_date, type, quantile, value)
+    dplyr::select(model, forecast_date, location, horizon, temporal_resolution, 
+                  target_variable, target_end_date, type, quantile, value)
   
   return(forecasts)
   

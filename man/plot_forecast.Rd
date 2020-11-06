@@ -26,7 +26,7 @@ by load_truth().}
 \item{model}{model_abbr specifying model to plot}
 
 \item{target_variable}{string specifying target type. It should be one of
-Cumulative Deaths","Incident Cases" and "Incident Deaths,"}
+"cum death", "inc case", "inc death"}
 
 \item{location}{string for fips code or 'US'}
 

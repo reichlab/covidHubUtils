@@ -1,4 +1,4 @@
-#' load covid forecasts from local files or Zoltar.  
+#' Load covid forecasts from local hub repo or Zoltar.  
 #' Return the most recent forecast from each model within 
 #' forecast_date_window_size days of the last_forecast_date
 #' 
@@ -20,8 +20,9 @@
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
 #'
-#' @return data frame with columns model, forecast_date, location, inc_cum, 
-#' death_case, horizon, temporal_resolution, target_end_date, type, quantile, value
+#' @return data frame with columns model, forecast_date, location, horizon, 
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' 
 #' @export
 load_forecasts <- function (
   models,
@@ -102,11 +103,6 @@ load_forecasts <- function (
                                      types = types, 
                                      targets = targets)
   } else {
-    message("Large queries that span many combinations of forecast dates, models, locations, 
-    and targets can take a long time to process. To reduce run-time of queries, 
-    we encourage users to download a local copy of the COVID-19 Forecast Hub repository 
-    so queries can be run locally: https://github.com/reichlab/covid19-forecast-hub/")
-    
     forecasts <- load_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 
                                        locations = locations, 

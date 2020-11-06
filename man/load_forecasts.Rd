@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_forecasts.R
 \name{load_forecasts}
 \alias{load_forecasts}
-\title{load covid forecasts from local files or Zoltar.
+\title{Load covid forecasts from local hub repo or Zoltar.
 Return the most recent forecast from each model within
 forecast_date_window_size days of the last_forecast_date}
 \usage{
@@ -44,11 +44,11 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 repository}
 }
 \value{
-data frame with columns model, forecast_date, location, inc_cum,
-death_case, horizon, temporal_resolution, target_end_date, type, quantile, value
+data frame with columns model, forecast_date, location, horizon,
+temporal_resolution, target_variable, target_end_date, type, quantile, value
 }
 \description{
-load covid forecasts from local files or Zoltar.
+Load covid forecasts from local hub repo or Zoltar.
 Return the most recent forecast from each model within
 forecast_date_window_size days of the last_forecast_date
 }

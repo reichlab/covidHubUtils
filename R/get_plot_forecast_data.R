@@ -17,12 +17,12 @@
 #' Otherwise, this character specifies the data source to plot. 
 #' Currently support "JHU","USAFacts" and "NYTimes".
 #' @param target_variable string specifying target type. It should be one of 
-#' "Cumulative Deaths","Incident Cases" and "Incident Deaths."
+#' "cum death", "inc case", "inc death" and "inc hosp"
 #' @param  truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date.
 #' 
 #' @return data frame with columns model, 
-#' forecast_date, location, inc_cum, death_case, type, quantile, value, horizon and 
+#' forecast_date, location, target_variable, type, quantile, value, horizon and 
 #' target_end_date.
 #' 
 #' @export
@@ -52,23 +52,16 @@ get_plot_forecast_data <- function(forecast_data,
   } else {
     stop("Error in get_plot_forecast_data: Please provide a location_to_plot parameter.")
   }
-  
-  # get inc_cum_to_plot and death_case_to_plot
-  inc_cum_to_plot = ifelse(
-    unlist(strsplit(target_variable, " "))[1] == "Cumulative","cum", "inc")
-  
-  death_case_to_plot = ifelse(
-    unlist(strsplit(target_variable, " "))[2] == "Cases","case","death")
-  
+
   # validate truth data if provided
   if (!is.null(truth_data)){
     # check if truth_data has all needed columns
-    columns_check <- all(c("model", "inc_cum", "death_case", 
+    columns_check <- all(c("model", "target_variable", 
                            "target_end_date", "location", "value") 
                          %in% colnames(truth_data))
     if(columns_check == FALSE){
-      stop("Error in get_plot_forecast_data: Please provide columns model, inc_cum, 
-           death_case, target_end_date, location and value in truth_data.")
+      stop("Error in get_plot_forecast_data: Please provide columns model, 
+           target_variable, target_end_date, location and value in truth_data.")
     } else {
       # check if truth_data has data from specified source
       if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)){
@@ -79,8 +72,7 @@ get_plot_forecast_data <- function(forecast_data,
         stop("Error in get_plot_forecast_data: Please provide a valid location_to_plot.")
       }
       # check if truth_data has specified target variable
-      if (!(inc_cum_to_plot %in% truth_data$inc_cum & 
-          death_case_to_plot %in% truth_data$death_case)){
+      if (!(target_variable %in% truth_data$target_variable)){
         stop("Error in get_plot_forecast_data: Please provide a valid target variable.")
       }
     }
@@ -96,8 +88,7 @@ get_plot_forecast_data <- function(forecast_data,
     dplyr::filter(model == model_to_plot,
                   horizon <= horizons_to_plot, 
                   location == location_to_plot,
-                  inc_cum == inc_cum_to_plot,
-                  death_case == death_case_to_plot)
+                  target_variable == target_variable)
   
   
   forecasts<- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
@@ -116,8 +107,7 @@ get_plot_forecast_data <- function(forecast_data,
     truth <- truth_data %>%
       dplyr::filter(model == paste0("Observed Data (",truth_source,")"), 
                     location == location_to_plot,
-                    inc_cum == inc_cum_to_plot,
-                    death_case == death_case_to_plot) %>%
+                    target_variable == target_variable) %>%
       dplyr::rename(point = value) %>%
       dplyr::mutate(truth_forecast = "truth",
                     point = as.numeric(point))

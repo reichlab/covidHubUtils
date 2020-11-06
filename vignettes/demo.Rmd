@@ -1,7 +1,7 @@
 ---
 title: "demo_plot_forecast"
 author: "Serena Wang"
-date: "10/19/2020"
+date: "11/06/2020"
 output: html_document
 ---
 
@@ -31,7 +31,7 @@ forecasts <- covidHubUtils::load_forecasts(models = "COVIDhub-ensemble",
 # Plot point forecasts with prediction intervals and without user-provided truth data
 p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
                                    model = "COVIDhub-ensemble",
-                                   target_variable = "Incident Cases" ,
+                                   target_variable = "inc case",
                                    location = "US",
                                    intervals = c(.5, .8, .95),
                                    horizon = 4,
@@ -46,7 +46,7 @@ p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
 # Plot point forecasts only and without user-provided truth data
 covidHubUtils::plot_forecast (forecast_data = forecasts,
                               model = "COVIDhub-ensemble",
-                              target_variable = "Incident Cases" ,
+                              target_variable = "inc case",
                               location = "US",
                               intervals = NULL,
                               horizon = 3,
@@ -59,13 +59,13 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
 ```{r message=FALSE}
 # Plot forecasts with user-provided truth data
 truth_data <- covidHubUtils::load_truth(truth_source = "NYTimes",
-                                       target_variable = "Incident Cases",
+                                       target_variable = "inc case",
                                        locations = 'US')
 
 covidHubUtils::plot_forecast (forecast_data = forecasts,
                               truth_data = truth_data,
                               model = "COVIDhub-ensemble",
-                              target_variable = "Incident Cases" ,
+                              target_variable = "inc case",
                               location = "US",
                               intervals = c(.5, .8, .95),
                               horizon = 3,
