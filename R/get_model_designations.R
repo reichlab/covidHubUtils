@@ -16,7 +16,7 @@ get_model_designations <- function(models, source, hub_repo_path) {
 
   if(source == "local_hub_repo") {
     if (missing(hub_repo_path)){
-      stop ("Error in get_model_designations: Please provice a hub_repo_path")
+      stop ("Error in get_model_designations: Please provide a hub_repo_path")
     } else {
  
       data_processed <- file.path(hub_repo_path, "data-processed")
@@ -51,9 +51,11 @@ get_model_designations <- function(models, source, hub_repo_path) {
     # set up Zoltar connection
     zoltar_connection <- zoltr::new_connection()
     
-    zoltr::zoltar_authenticate(zoltar_connection, 
-                        Sys.getenv("Z_USERNAME"),
-                        Sys.getenv("Z_PASSWORD"))
+    if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+      zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+    } else {
+      zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+    }
     
     the_projects <- zoltr::projects(zoltar_connection)
     project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]

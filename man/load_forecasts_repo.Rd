@@ -14,8 +14,7 @@ load_forecasts_repo(
 )
 }
 \arguments{
-\item{file_path}{path to local clone of the reichlab/covid19-forecast-hub
-repository}
+\item{file_path}{path to local clone of the reichlab/covid19-forecast-hub/data-processed}
 
 \item{models}{character vector of model abbreviations.
 If missing, forecasts for all models that submitted forecasts
@@ -33,8 +32,8 @@ or “point”. Defaults to c(“quantile”, “point”)}
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 }
 \value{
-data frame with columns model, forecast_date,location, target,
-type, quantile, value, horizon and target_end_date.
+data frame with columns model, forecast_date, location, horizon,
+temporal_resolution, target_variable, target_end_date, type, quantile, value
 }
 \description{
 Load forecasts from reichlab/covid19-forecast-hub repo.

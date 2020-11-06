@@ -1,4 +1,4 @@
-#' load covid forecasts from local files or Zoltar.  
+#' Load covid forecasts from local hub repo or Zoltar.  
 #' Return the most recent forecast from each model within 
 #' forecast_date_window_size days of the last_forecast_date
 #' 
@@ -20,8 +20,9 @@
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
 #'
-#' @return data frame with columns model, forecast_date, location, inc_cum, death_case, 
-#' type, quantile, value, horizon and target_end_date.
+#' @return data frame with columns model, forecast_date, location, horizon, 
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' 
 #' @export
 load_forecasts <- function (
   models,
@@ -34,7 +35,7 @@ load_forecasts <- function (
   hub_repo_path) {
   
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "remote_hub_repo")
+  all_valid_models <- get_all_models(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -66,10 +67,11 @@ load_forecasts <- function (
   # validate targets
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
-  zoltr::zoltar_authenticate(
-    zoltar_connection,
-    Sys.getenv("Z_USERNAME"),
-    Sys.getenv("Z_PASSWORD"))
+  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+  } else {
+    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+  }
   
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)

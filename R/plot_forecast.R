@@ -1,15 +1,20 @@
 #' Plot forecasts with truth for only one model, one target and one location
 #'
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
+#' @param truth_data optional data frame with forecasts in the format returned 
+#' by load_truth().
 #' @param model model_abbr specifying model to plot
 #' @param target_variable string specifying target type. It should be one of 
-#' Cumulative Deaths","Incident Cases" and "Incident Deaths,"
+#' "cum death", "inc case", "inc death"
 #' @param location string for fips code or 'US'
 #' @param intervals values indicating which central prediction interval levels 
 #' to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date
-#' @param truth_source character specifying where the truths will be loaded from.
+#' @param truth_source character specifying where the truth data will
+#' be loaded from if truth_data is not provided. 
+#' Otherwise, this character specifies the data source to plot. 
+#' Currently support "JHU","USAFacts" and "NYTimes".
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param truth_as_of the plot includes the truth data that would have been 
@@ -21,6 +26,7 @@
 #' 
 #' @export
 plot_forecast <- function(forecast_data,
+                          truth_data = NULL, 
                           model,
                           target_variable,
                           location,
@@ -29,6 +35,60 @@ plot_forecast <- function(forecast_data,
                           truth_source = "JHU",
                           plot = TRUE,
                           truth_as_of = NULL){
+  
+  # validate truth_source
+  truth_source <- match.arg(truth_source, 
+                            choices = c("JHU","USAFacts", "NYTimes"), 
+                            several.ok = FALSE)
+  
+  # validate location fips code
+  all_valid_fips <- covidHubUtils::hub_locations$fips
+  
+  location <- match.arg(location, 
+                        choices = all_valid_fips, 
+                        several.ok = FALSE)
+  
+  if (!location %in% forecast_data$location){
+    stop("Error in plot_forecast: location is not in forecast_data.")
+  }
+  
+  # validate target_variable
+  target_variable <- match.arg(target_variable, 
+                               choices = c("cum death",
+                                           "inc case",
+                                           "inc death"), 
+                               several.ok = FALSE)
+  
+  if (!(target_variable %in% forecast_data$target_variable)){
+    stop("Error in plot_forecast: Please provide a valid target variable.")
+  }
+  
+  
+  # validate truth data if provided
+  if (!is.null(truth_data)){
+    # check if truth_data has all needed columns
+    columns_check <- all(c("model", "target_variable", 
+                          "target_end_date", "location","value") 
+                        %in% colnames(truth_data))
+    if(!columns_check){
+      stop("Error in plot_forecast: Please provide columns model, 
+           target_variable, target_end_date, location and value in truth_data.")
+    } else {
+      # check if truth_data has data from specified source
+      if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)) {
+        stop("Error in plot_forecast: Please provide a valid truth_source to plot.")
+      }
+      # check if truth_data has data from specified location
+      if (!(location %in% truth_data$location)){
+        stop("Error in plot_forecast: Please provide a valid location to plot.")
+      }
+      # check if truth_data has specified target variable
+      if (!(target_variable %in% truth_data$target_variable)){
+        stop("Error in plot_forecast: Please provide a valid target variable.")
+      }
+    }
+  }
+  
   # validate model
   if (!missing(model)){
     if (!model %in% forecast_data$model) {
@@ -38,46 +98,8 @@ plot_forecast <- function(forecast_data,
     stop("Error in plot_forecast: Please provide a model parameter.")
   }
   
-  # validate target_variable
-  target_variable <- match.arg(target_variable, 
-                               choices = c("Cumulative Deaths",
-                                           "Incident Cases",
-                                           "Incident Deaths"), 
-                               several.ok = FALSE)
-  
-  inc_cum = ifelse(
-    unlist(strsplit(target_variable, " "))[1] == "Cumulative",
-    "cum", 
-    "inc")
-  
-  death_case = ifelse(
-    unlist(strsplit(target_variable, " "))[2] == "Cases",
-    "case",
-    "death")
-
-  if (!(inc_cum %in% forecast_data$inc_cum & death_case %in% forecast_data$death_case)){
-    stop("Error in plot_forecast: target_variable is not in forecast data.")
-  }
-  
-  # validate location fips code
-  all_valid_fips <- covidHubUtils::hub_locations$fips
-  
-  location <- match.arg(location, 
-                         choices = all_valid_fips, 
-                         several.ok = FALSE)
-  
-  if (!location %in% forecast_data$location){
-    stop("Error in plot_forecast: location is not in forecast_data.")
-  }
-  
-  # validate truth_source
-  truth_source <- match.arg(truth_source, 
-                            choices = c("JHU","USAFacts", "NYTimes"), 
-                            several.ok = FALSE)
-  
   
   # generate quantiles based on given intervals
-  
   quantiles_to_plot <- unlist(lapply(intervals, function(interval){
     c(0.5 - as.numeric(interval)/2,
      0.5 + as.numeric(interval)/2)
@@ -93,15 +115,35 @@ plot_forecast <- function(forecast_data,
   
   # include truth from remote git hub repo by default
   # not using truth_as_of if we are loading truth from git hub repos
-  plot_data = get_plot_forecast_data (data = forecast_data, 
+  plot_data = get_plot_forecast_data (forecast_data = forecast_data, 
+                                      truth_data = truth_data,
                                       model_to_plot = model,
                                       horizons_to_plot = horizon,
                                       quantiles_to_plot = quantiles_to_plot,
                                       location_to_plot = location,
+                                      plot_truth = TRUE,
                                       truth_source = truth_source,
-                                      target_variable = target_variable,
-                                      truth_as_of = truth_as_of)
+                                      target_variable = target_variable)
  
+  # generate caption and full target variable
+  if(!is.null(truth_as_of)){
+    caption <- paste0("source: ", truth_source," (observed data as of ",
+                      as.Date(truth_as_of), "), ", model, " (forecasts)")
+  } else {
+    caption <- paste0("source: ", truth_source," (observed data), ",
+                      model," (forecasts)")
+  }
+  
+  if (target_variable == "cum death"){
+    full_target_variable = "Cumulative Deaths"
+  } else if (target_variable == "inc case"){
+    full_target_variable = "Incident Cases"
+  } else if (target_variable == "inc death"){
+    full_target_variable = "Incident Deaths"
+  } else if (target_variable == "inc hosp"){
+    full_target_variable = "Incident Hospitalizations"
+  }
+  
   
   graph <- ggplot2::ggplot(data = plot_data)
     
@@ -120,24 +162,24 @@ plot_forecast <- function(forecast_data,
   
   # plot point forecasts and truth 
   graph <- graph +
-    
     ggplot2::geom_line(data = plot_data %>%
                 dplyr::filter(!is.na(point)),
-              mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
-    
+              mapping = aes(x = target_end_date, 
+                            y = point, 
+                            color = truth_forecast)) +
     ggplot2::geom_point(data = plot_data %>%
                  dplyr::filter(!is.na(point)),
-               mapping = aes(x = target_end_date, y = point, color = truth_forecast)) +
-    
+               mapping = aes(x = target_end_date, 
+                             y = point, 
+                             color = truth_forecast)) +
     ggplot2::scale_color_manual(name = "Model", 
                        label = c(model, paste0("Observed Data (",truth_source,")")), 
                                  values = c(tail(blues,1),"black")) +
     ggplot2::scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
-    ggplot2::ylab(target_variable) +
-    ggplot2::labs(title = paste0("Weekly COVID-19 ", target_variable, " in ", 
+    ggplot2::ylab(full_target_variable) +
+    ggplot2::labs(title = paste0("Weekly COVID-19 ", full_target_variable, " in ", 
                                  location,": observed and forecasted") ,
-                  caption = paste0("source: ", truth_source," (observed data), ",
-                                   model," (forecasts)")) 
+                  caption = caption)
   
   if (plot){
     print(graph)

@@ -9,7 +9,7 @@ of epidemic week from a specified date}
 date_to_week_end_date(forecast_date, week_offset = 0)
 }
 \arguments{
-\item{forecast_date}{character vector of dates in 'yyyy-mm-dd' format}
+\item{forecast_date}{vector of dates as Date objects}
 
 \item{integer}{vector of week offsets.  must be either length 1 or the same
 length as forecast_date}

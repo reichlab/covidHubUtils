@@ -1,7 +1,6 @@
 #' Load forecasts from reichlab/covid19-forecast-hub repo.
 #' 
-#' @param file_path path to local clone of the reichlab/covid19-forecast-hub
-#' repository
+#' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
 #' @param models character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
@@ -13,14 +12,20 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date,location, target, 
-#' type, quantile, value, horizon and target_end_date.
+#' @return data frame with columns model, forecast_date, location, horizon,
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value
 #'
 #' @export
 load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
   
+  #validate file path to data-processed folder
+  if (!dir.exists(file_path)){
+    stop("Error in load_forecasts_repo: data-processed folder does not 
+         exist in the local_hub_repo directory.")
+  }
+  
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "remote_hub_repo")
+  all_valid_models <- get_all_models(source = "remote_hub_repo")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -48,10 +53,11 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
   # validate targets
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
-  zoltr::zoltar_authenticate(
-    zoltar_connection,
-    Sys.getenv("Z_USERNAME"),
-    Sys.getenv("Z_PASSWORD"))
+  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+  } else {
+    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+  }
   
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
@@ -87,6 +93,7 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
         return(NULL)
       }
       
+<<<<<<< HEAD
       data.table::fread(results_path,
                         colClasses = c(
                           "forecast_date"   = "Date",
@@ -96,6 +103,18 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
                           "type"            = "character",
                           "quantile"        = "double",
                           "value"           = "double")) %>%
+=======
+      readr::read_csv(results_path,
+                      col_types = readr::cols(
+                        forecast_date = readr::col_date(format = ""),
+                        target = readr::col_character(),
+                        target_end_date = readr::col_date(format = ""),
+                        location = readr::col_character(),
+                        type = readr::col_character(),
+                        quantile = readr::col_double(),
+                        value = readr::col_double()
+                      )) %>%
+>>>>>>> origin/master
         dplyr::filter(
           tolower(type) %in% types,
           location %in% locations,
@@ -111,6 +130,7 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
         )
     }, .options = furrr_options(seed = TRUE)
   ) %>%
+<<<<<<< HEAD
     # only include the most recent forecast submitted in the time window
     dplyr::filter(forecast_date == max(forecast_date)) %>%
     tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
@@ -126,6 +146,15 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
     ) %>%
     dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                   target_unit, target_end_date, type, quantile, value)
+=======
+    tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
+                    remove = FALSE, extra = "merge") %>%
+    dplyr::mutate(target_end_date = as.Date(
+      calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
+      )) %>%
+    dplyr::select(model, forecast_date, location, horizon, temporal_resolution, 
+                  target_variable, target_end_date, type, quantile, value)
+>>>>>>> origin/master
   
   return(forecasts)
   

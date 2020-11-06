@@ -4,10 +4,10 @@
 \alias{pivot_forecasts_wider}
 \title{Return a data frame of forecasts with predictive quantiles in columns.}
 \usage{
-pivot_forecasts_wider(data, quantiles)
+pivot_forecasts_wider(forecast_data, quantiles)
 }
 \arguments{
-\item{data}{forecasts data frame from load_forecast(). It has columns model,
+\item{forecast_data}{forecasts data frame from load_forecast(). It has columns model,
 forecast_date,location, target, type, quantile, value, horizon and
 target_end_date.}
 
@@ -17,9 +17,9 @@ Note that point forecasts and median quantiles do not necessarily align.
 Throws an error if quantile levels are not in the forecast data.}
 }
 \value{
-data frame with columns model, forecast_date, location, inc_cum, death_case,
-horizon, type, point, target_end_date, point_forecast_type, Prediction Interval,
-upper, lower.
+data frame with columns model, forecast_date, location,
+horizon, temporal_resolution, target_variable, target_end_date, type, point,
+point_type, Prediction Interval, upper, lower.
 }
 \description{
 Return a data frame of forecasts with predictive quantiles in columns.

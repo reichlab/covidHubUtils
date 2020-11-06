@@ -20,7 +20,7 @@ load_truth(
 be loaded from: currently support "JHU","USAFacts", "NYTimes"}
 
 \item{target_variable}{string specifying target type It should be one of
-"Cumulative Deaths","Incident Cases" and "Incident Deaths"}
+"cum death", "inc case", "inc death"}
 
 \item{truth_end_date}{date to include the last available truth point. Default to system date.}
 

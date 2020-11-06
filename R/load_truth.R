@@ -4,7 +4,7 @@
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support "JHU","USAFacts", "NYTimes"
 #' @param target_variable string specifying target type It should be one of 
-#' "Cumulative Deaths","Incident Cases" and "Incident Deaths"
+#' "cum death", "inc case", "inc death"
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
@@ -29,13 +29,14 @@ load_truth <- function (truth_source,
   truth_source <- match.arg(truth_source, 
                             choices = c("JHU","USAFacts", "NYTimes"), 
                             several.ok = TRUE)
+  
   # validate target variable 
   target_variable <- match.arg(target_variable, 
-                               choices = c("Cumulative Deaths",
-                                           "Incident Cases",
-                                           "Incident Deaths"), 
+                               choices = c("cum death",
+                                           "inc case",
+                                           "inc death"), 
                                several.ok = FALSE)
-  
+
   # validate temporal resolution
   temporal_resolution <- match.arg(temporal_resolution, 
                             choices = c("daily","weekly"), 
@@ -62,17 +63,26 @@ load_truth <- function (truth_source,
                            several.ok = TRUE)
   }
   
+  # generate full target variable
+  if (target_variable == "cum death"){
+    full_target_variable = "Cumulative Deaths"
+  } else if (target_variable == "inc case"){
+    full_target_variable = "Incident Cases"
+  } else if (target_variable == "inc death"){
+    full_target_variable = "Incident Deaths"
+  }
+  
   # create file path and file name based on data_location
   if (data_location == "remote_hub_repo"){
     # create path to the truth folder
     repo_path = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
-    file_name<- paste0(gsub(" ","%20", target_variable), ".csv")
+    file_name<- paste0(gsub(" ","%20", full_target_variable), ".csv")
   } else if (data_location == "local_hub_repo") {
     if (missing(local_repo_path) | is.na(local_repo_path) | is.null(local_repo_path)) {
       stop ("Error in local_repo_path : Please provide a valid local_repo_path.")
     } else {
       repo_path = local_repo_path
-      file_name<- paste0(target_variable, ".csv")
+      file_name<- paste0(full_target_variable, ".csv")
     }
   }
  
@@ -81,7 +91,10 @@ load_truth <- function (truth_source,
     truth_source,
     function (source) {
       # read file from path
-      truth_folder_path <- ifelse(tolower(source) =="jhu", "/data-truth/truth-", paste0("/data-truth/",tolower(source),"/truth_",tolower(source),"-"))
+      truth_folder_path <- ifelse(tolower(source) =="jhu", 
+                                  "/data-truth/truth-", 
+                                  paste0("/data-truth/",tolower(source),"/truth_",
+                                         tolower(source),"-"))
       file_path <- paste0(repo_path, truth_folder_path, file_name)
       
       truth <- readr::read_csv(file_path) 
@@ -89,18 +102,11 @@ load_truth <- function (truth_source,
       # add inc_cum and death_case columns and rename date column
       truth <- truth %>%
         dplyr::mutate(model = paste0("Observed Data (",source,")"), 
-                      inc_cum = ifelse(
-                        unlist(strsplit(target_variable, " "))[1] == "Cumulative",
-                        "cum", 
-                        "inc"),
-                      death_case = ifelse(
-                        unlist(strsplit(target_variable, " "))[2] == "Cases",
-                        "case",
-                        "death")) %>%
+                      target_variable = target_variable) %>%
         dplyr::rename(target_end_date = date)
     }
   ) %>%
-    dplyr::select(model, inc_cum, death_case, target_end_date, location, value)
+    dplyr::select(model, target_variable, target_end_date, location, value)
   
   # filter to only include specified locations
   if (!missing(locations)){
@@ -109,7 +115,7 @@ load_truth <- function (truth_source,
     
   
   if (temporal_resolution == "weekly"){
-    if (unlist(strsplit(target_variable, " "))[1] == "Cumulative") {
+    if (unlist(strsplit(target_variable, " "))[1] == "cum") {
       # only keep weekly data
       truth <- dplyr::filter(truth, 
                              target_end_date %in% seq.Date(

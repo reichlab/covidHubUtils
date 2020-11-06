@@ -11,21 +11,20 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
-#' @return data frame with columns model, forecast_date,location, inc_cum, death_case,
-#' type, quantile, value, horizon and target_end_date.
+#' @return data frame with columns model, forecast_date, location, horizon,
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value
 
 load_forecasts_zoltar <- function(models, forecast_dates, locations, 
                                   types, targets){
   
   # validate models
-  all_valid_models <- get_all_model_abbr(source = "zoltar")
+  all_valid_models <- get_all_models(source = "zoltar")
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
   } else {
     models <- all_valid_models
   }
-  
   
   # validate locations
   all_valid_fips <- covidHubUtils::hub_locations$fips
@@ -45,10 +44,11 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
   
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
-  zoltr::zoltar_authenticate(
-    zoltar_connection,
-    Sys.getenv("Z_USERNAME"),
-    Sys.getenv("Z_PASSWORD"))
+  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+  } else {
+    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+  }
   
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
@@ -63,6 +63,10 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     targets = all_valid_targets
   }
   
+  message("Large queries that span many combinations of forecast dates, models, locations, 
+  and targets can take a long time to process. To reduce run-time of queries, 
+  we encourage users to download a local copy of the COVID-19 Forecast Hub repository 
+  so queries can be run locally: https://github.com/reichlab/covid19-forecast-hub/")
   
   # if do_zoltar_query throws an error, skip that error and return
   # an empty dataframe
@@ -82,7 +86,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
                               project_url = project_url,
                               is_forecast_query = TRUE,
-                              units= locations, 
+                              units = locations, 
                               timezeros = forecast_date,
                               models = models,
                               targets = targets,
@@ -90,28 +94,34 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                               verbose = TRUE)
       # cast value to characters for now so that it binds
       if (nrow(f) > 0){
-        f <- dplyr::mutate(f, value = as.character(value),
-                           quantile = as.character(quantile))
+        f <- dplyr::mutate(f, value = as.character(value))
       }
       
       return (f)
+<<<<<<< HEAD
     }, .options = furrr_options(seed = TRUE)
   )
+=======
+    }
+  ) 
+>>>>>>> origin/master
 
   if (nrow(forecast) ==0){
     stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
   } else {
     forecast <- forecast %>%
       # only include the most recent forecast submitted in the time window
+      dplyr::group_by(model) %>%
       dplyr::filter(timezero == max(timezero)) %>%
+      dplyr::ungroup() %>%
       # change value and quantile back to double
-      dplyr::mutate(value = as.double(value),
-                    quantile = as.double(quantile)) %>%
+      dplyr::mutate(value = as.double(value)) %>%
       # keep only required columns
       dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
       dplyr::rename(location = unit, forecast_date = timezero,
                     type = class) %>%
       # create horizon and target_end_date columns
+<<<<<<< HEAD
       tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
                       remove = FALSE) %>% 
       dplyr::rename(horizon = n_unit, target_unit = unit) %>%
@@ -125,6 +135,15 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       ) %>%
       dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
                     target_unit, target_end_date, type, quantile, value)
+=======
+      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
+                      remove = FALSE, extra = "merge") %>%
+      dplyr::mutate(target_end_date = as.Date(
+        calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
+        )) %>%
+      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
+                    target_variable, target_end_date, type, quantile, value)
+>>>>>>> origin/master
   }
   
   return(forecast)
