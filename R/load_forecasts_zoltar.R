@@ -75,12 +75,9 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                                             # not show error messages from zoltar
                                             quiet = TRUE)
 
-  
-  # set up parallelization
-  future::plan(multiprocess)
-  
+
   # get forecasts that were submitted in the time window
-  forecast <- furrr::future_map_dfr(
+  forecast <- purrr::map_dfr(
     forecast_dates,
     function (forecast_date) {
       f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
@@ -98,13 +95,9 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       }
       
       return (f)
-<<<<<<< HEAD
-    }, .options = furrr_options(seed = TRUE)
-  )
-=======
     }
   ) 
->>>>>>> origin/master
+
 
   if (nrow(forecast) ==0){
     stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
@@ -121,21 +114,6 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
       dplyr::rename(location = unit, forecast_date = timezero,
                     type = class) %>%
       # create horizon and target_end_date columns
-<<<<<<< HEAD
-      tidyr::separate(target, into=c("n_unit","unit","ahead","inc_cum","death_case"),
-                      remove = FALSE) %>% 
-      dplyr::rename(horizon = n_unit, target_unit = unit) %>%
-      # SLOW...
-      #dplyr::mutate(target_end_date = as.Date(unlist(
-      #  furrr::future_pmap(list(forecast_date, as.numeric(horizon), target_unit),
-      #              calc_target_end_date)))) %>%
-      dplyr::mutate(
-        target_end_date = as.Date(calc_target_week_end_date(forecast_date, 
-                                                            as.numeric(horizon)))
-      ) %>%
-      dplyr::select(model, forecast_date, location, inc_cum, death_case, horizon,
-                    target_unit, target_end_date, type, quantile, value)
-=======
       tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
                       remove = FALSE, extra = "merge") %>%
       dplyr::mutate(target_end_date = as.Date(
@@ -143,7 +121,6 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
         )) %>%
       dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
                     target_variable, target_end_date, type, quantile, value)
->>>>>>> origin/master
   }
   
   return(forecast)
