@@ -24,9 +24,10 @@
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value
 #' 
 #' @export
-load_forecasts <- function (
+load_latest_forecasts <- function (
   models,
-  forecast_dates,
+  last_forecast_date,
+  forecast_date_window_size = 1,
   locations,
   types,
   targets,
@@ -87,6 +88,10 @@ load_forecasts <- function (
   }
   
   
+  # dates of forecasts to load
+  forecast_dates <- as.character(last_forecast_date +
+                                   seq(from = -forecast_date_window_size, to = 0, by = 1))
+
   if (source == "local_hub_repo") {
     # path to data-processed folder in hub repo
     data_processed <- file.path(hub_repo_path, "data-processed/")
@@ -98,8 +103,6 @@ load_forecasts <- function (
                                      types = types, 
                                      targets = targets)
   } else {
-    # change load_forecasts_zoltar? 
-    # or just call do_zoltar_query here?
     forecasts <- load_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 
                                        locations = locations, 
