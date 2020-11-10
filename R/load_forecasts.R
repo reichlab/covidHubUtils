@@ -1,5 +1,5 @@
 #' Load covid forecasts from Zoltar.  
-#' Return the all available forecasts submitted on forecast_dates
+#' Return all available forecasts submitted on forecast_dates
 #' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 

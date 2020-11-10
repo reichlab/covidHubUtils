@@ -1,4 +1,5 @@
-#' Load forecasts from reichlab/covid19-forecast-hub repo.
+#' Load the latest forecasts submitted in a time window
+#' from reichlab/covid19-forecast-hub repo.
 #' 
 #' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
 #' @param models character vector of model abbreviations.
