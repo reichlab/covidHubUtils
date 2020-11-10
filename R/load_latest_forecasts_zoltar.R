@@ -1,4 +1,4 @@
-#' Load the latest forecasts submitted in a time window from zoltar.
+#' Load the most recent forecasts submitted in a time window from zoltar.
 #' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 

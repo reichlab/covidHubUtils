@@ -1,4 +1,4 @@
-#' Load the latest forecasts submitted in a time window
+#' Load the most recent forecast submitted in a time window
 #' from reichlab/covid19-forecast-hub repo.
 #' 
 #' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
