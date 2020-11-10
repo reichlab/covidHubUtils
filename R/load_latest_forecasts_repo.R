@@ -16,7 +16,7 @@
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value
 #'
 #' @export
-load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
+load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
   
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){

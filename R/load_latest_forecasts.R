@@ -96,14 +96,14 @@ load_latest_forecasts <- function (
     # path to data-processed folder in hub repo
     data_processed <- file.path(hub_repo_path, "data-processed/")
     
-    forecasts <- load_forecasts_repo(file_path = data_processed, 
+    forecasts <- load_latest_forecasts_repo(file_path = data_processed, 
                                      models = models, 
                                      forecast_dates = forecast_dates, 
                                      locations = locations, 
                                      types = types, 
                                      targets = targets)
   } else {
-    forecasts <- load_forecasts_zoltar(models = models, 
+    forecasts <- load_latest_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 
                                        locations = locations, 
                                        types = types,
