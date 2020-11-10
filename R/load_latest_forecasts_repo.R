@@ -1,4 +1,5 @@
-#' Load forecasts from reichlab/covid19-forecast-hub repo.
+#' Load the most recent forecast submitted in a time window
+#' from reichlab/covid19-forecast-hub repo.
 #' 
 #' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
 #' @param models character vector of model abbreviations.
@@ -16,7 +17,7 @@
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value
 #'
 #' @export
-load_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
+load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locations, types, targets){
   
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
@@ -72,7 +73,6 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
     targets = all_valid_targets
   }
   
-  
   forecasts <- purrr::map_dfr(
     models,
     function(model) {
@@ -99,7 +99,7 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
                         type = readr::col_character(),
                         quantile = readr::col_double(),
                         value = readr::col_double()
-                      )) %>%
+                      ))%>%
         dplyr::filter(
           tolower(type) %in% types,
           location %in% locations,
@@ -122,7 +122,7 @@ load_forecasts_repo <- function(file_path, models, forecast_dates, locations, ty
       )) %>%
     dplyr::select(model, forecast_date, location, horizon, temporal_resolution, 
                   target_variable, target_end_date, type, quantile, value)
-  
+
   return(forecasts)
   
 }

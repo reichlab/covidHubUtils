@@ -16,7 +16,7 @@ library(covidHubUtils)
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
-forecasts <- covidHubUtils::load_forecasts(models = "COVIDhub-ensemble",
+forecasts <- covidHubUtils::load_latest_forecasts(models = "COVIDhub-ensemble",
                       last_forecast_date = Sys.Date(),
                       forecast_date_window_size = 8,
                       locations = "US",

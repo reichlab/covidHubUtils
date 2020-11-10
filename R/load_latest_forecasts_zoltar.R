@@ -1,4 +1,4 @@
-#' Load forecasts from zoltar
+#' Load the most recent forecasts submitted in a time window from zoltar.
 #' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
@@ -14,7 +14,7 @@
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value
 
-load_forecasts_zoltar <- function(models, forecast_dates, locations, 
+load_latest_forecasts_zoltar <- function(models, forecast_dates, locations, 
                                   types, targets){
   
   # validate models
@@ -75,6 +75,7 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
                                             # not show error messages from zoltar
                                             quiet = TRUE)
 
+
   # get forecasts that were submitted in the time window
   forecast <- purrr::map_dfr(
     forecast_dates,
@@ -97,8 +98,9 @@ load_forecasts_zoltar <- function(models, forecast_dates, locations,
     }
   ) 
 
+
   if (nrow(forecast) ==0){
-    stop("Error in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
+    warning("Warning in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
   } else {
     forecast <- forecast %>%
       # only include the most recent forecast submitted in the time window

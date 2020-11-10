@@ -2,19 +2,15 @@
 % Please edit documentation in R/load_forecasts.R
 \name{load_forecasts}
 \alias{load_forecasts}
-\title{Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date}
+\title{Load covid forecasts from Zoltar.
+Return the all available forecasts submitted on forecast_dates}
 \usage{
 load_forecasts(
-  models,
-  last_forecast_date,
-  forecast_date_window_size = 1,
-  locations,
-  types,
-  targets,
-  source = "local_hub_repo",
-  hub_repo_path
+  models = NULL,
+  forecast_dates = NULL,
+  locations = NULL,
+  types = NULL,
+  targets = NULL
 )
 }
 \arguments{
@@ -22,12 +18,8 @@ load_forecasts(
 If missing, forecasts for all models that submitted forecasts
 meeting the other criteria are returned.}
 
-\item{last_forecast_date}{The forecast date of forecasts to retrieve.
-Defaults to the most recent forecast date in Zoltar or the hub repo.}
-
-\item{forecast_date_window_size}{The number of days across which to
-look for recent forecasts. Defaults to 1, which means to only look
-at the last_forecast_date.}
+\item{forecast_dates}{The forecast date of forecasts to retrieve.
+Defaults to all valid forecast dates in Zoltar.}
 
 \item{locations}{list of fips. Defaults to all locations with available forecasts.}
 
@@ -36,19 +28,12 @@ or “point”. Defaults to c(“quantile”, “point”)}
 
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
-
-\item{source}{string specifying where forecasts will be loaded from: either
-"local_hub_repo" or "zoltar"}
-
-\item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
-repository}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value
 }
 \description{
-Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date
+Load covid forecasts from Zoltar.
+Return the all available forecasts submitted on forecast_dates
 }
