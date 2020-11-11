@@ -3,10 +3,12 @@
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
 #' @param truth_data optional data frame with forecasts in the format returned 
 #' by load_truth().
-#' @param model model_abbr specifying model to plot
+#' @param model model_abbr specifying model to plot. Optional if there is only
+#' one model available in forecast data.
 #' @param target_variable string specifying target type. It should be one of 
 #' "cum death", "inc case", "inc death"
-#' @param location string for fips code or 'US'
+#' @param location string for fips code or 'US'. Optional if there is only one
+#' location available in forecast data.
 #' @param intervals values indicating which central prediction interval levels 
 #' to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
 #' If not provided, it will default to all available intervals in forecast data.
