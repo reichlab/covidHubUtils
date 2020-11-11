@@ -86,10 +86,13 @@ get_plot_forecast_data <- function(forecast_data,
   # filter horizons and locations. Only plot one location now.
   forecast_data <- forecast_data %>%
     dplyr::filter(model == model_to_plot,
-                  horizon <= horizons_to_plot, 
                   location == location_to_plot,
                   target_variable == target_variable)
   
+  if (!missing(horizons_to_plot)){
+    forecast_data <- forecast_data %>%
+      dplyr::filter(horizon <= horizons_to_plot)
+  }
   
   forecasts<- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast")

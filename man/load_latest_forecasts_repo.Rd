@@ -2,7 +2,8 @@
 % Please edit documentation in R/load_latest_forecasts_repo.R
 \name{load_latest_forecasts_repo}
 \alias{load_latest_forecasts_repo}
-\title{Load forecasts from reichlab/covid19-forecast-hub repo.}
+\title{Load the most recent forecast submitted in a time window
+from reichlab/covid19-forecast-hub repo.}
 \usage{
 load_latest_forecasts_repo(
   file_path,
@@ -36,5 +37,6 @@ data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value
 }
 \description{
-Load forecasts from reichlab/covid19-forecast-hub repo.
+Load the most recent forecast submitted in a time window
+from reichlab/covid19-forecast-hub repo.
 }

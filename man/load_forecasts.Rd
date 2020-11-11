@@ -3,7 +3,7 @@
 \name{load_forecasts}
 \alias{load_forecasts}
 \title{Load covid forecasts from Zoltar.
-Return the all available forecasts submitted on forecast_dates}
+Return all available forecasts submitted on forecast_dates}
 \usage{
 load_forecasts(
   models = NULL,
@@ -35,5 +35,5 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value
 }
 \description{
 Load covid forecasts from Zoltar.
-Return the all available forecasts submitted on forecast_dates
+Return all available forecasts submitted on forecast_dates
 }

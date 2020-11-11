@@ -9,8 +9,9 @@
 #' @param location string for fips code or 'US'
 #' @param intervals values indicating which central prediction interval levels 
 #' to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
+#' If not provided, it will default to all available intervals in forecast data.
 #' @param horizon forecasts are plotted for the horizon time steps after the 
-#' forecast date
+#' forecast date. Default to all available horizons in forecast data. 
 #' @param truth_source character specifying where the truth data will
 #' be loaded from if truth_data is not provided. 
 #' Otherwise, this character specifies the data source to plot. 
@@ -35,6 +36,31 @@ plot_forecast <- function(forecast_data,
                           truth_source = "JHU",
                           plot = TRUE,
                           truth_as_of = NULL){
+ 
+   # optional model and location
+  if (length(unique(forecast_data$model)) == 1){
+    model = unique(forecast_data$model)
+  } else {
+    if (!missing(model)){
+      if (!(model %in% forecast_data$model)) {
+        stop("Error in plot_forecast: model is not available in forecast data.")
+      }
+    } else {
+      stop("Error in plot_forecast: Please select a model to plot.")
+    }
+  }
+  
+  if (length(unique(forecast_data$location)) == 1){
+    location = unique(forecast_data$location)
+  } else {
+    if (!missing(location)){
+      if (!(location %in% forecast_data$location)) {
+        stop("Error in plot_forecast: location is not available in forecast data.")
+      }
+    } else {
+      stop("Error in plot_forecast: Please select a location to plot.")
+    }
+  }
   
   # validate truth_source
   truth_source <- match.arg(truth_source, 
@@ -49,7 +75,7 @@ plot_forecast <- function(forecast_data,
                         several.ok = FALSE)
   
   if (!location %in% forecast_data$location){
-    stop("Error in plot_forecast: location is not in forecast_data.")
+    stop("Error in plot_forecast: location is not available in forecast_data.")
   }
   
   # validate target_variable
@@ -89,15 +115,18 @@ plot_forecast <- function(forecast_data,
     }
   }
   
-  # validate model
-  if (!missing(model)){
-    if (!model %in% forecast_data$model) {
-      stop("Error in plot_forecast: model is not in forecast_data.")
+  # if interval is missing, default to all available intervals in forecast data
+  if (missing(intervals)){
+    lower_bounds <- unique(forecast_data[forecast_data$quantile < 0.5,]$quantile)
+    # if quantile forecasts are not available, plot point forecasts only
+    if (is.na(lower_bounds)){
+      intervals = NULL
+    } else {
+      intervals <- lapply(lower_bounds, function(l){
+        1-as.numeric(2*l)
+      })
     }
-  } else {
-    stop("Error in plot_forecast: Please provide a model parameter.")
   }
-  
   
   # generate quantiles based on given intervals
   quantiles_to_plot <- unlist(lapply(intervals, function(interval){

@@ -31,10 +31,11 @@ by load_truth().}
 \item{location}{string for fips code or 'US'}
 
 \item{intervals}{values indicating which central prediction interval levels
-to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.}
+to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
+If not provided, it will default to all available intervals in forecast data.}
 
 \item{horizon}{forecasts are plotted for the horizon time steps after the
-forecast date}
+forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if truth_data is not provided.

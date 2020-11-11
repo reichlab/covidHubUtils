@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_latest_forecasts_zoltar.R
 \name{load_latest_forecasts_zoltar}
 \alias{load_latest_forecasts_zoltar}
-\title{Load forecasts from zoltar}
+\title{Load the most recent forecasts submitted in a time window from zoltar.}
 \usage{
 load_latest_forecasts_zoltar(models, forecast_dates, locations, types, targets)
 }
@@ -27,5 +27,5 @@ data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value
 }
 \description{
-Load forecasts from zoltar
+Load the most recent forecasts submitted in a time window from zoltar.
 }
