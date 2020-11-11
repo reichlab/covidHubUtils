@@ -1,17 +1,20 @@
 # covidHubUtils
 Utility functions for the COVID-19 forecast hub
 
-We have discussed including the following functions in this repository:
+Currently available:
 
 **Reading Forecast Data**
- * `get_model_designations(model_abbrs, hub_repo_path, zoltar_connection)`: Assemble a data frame with columns model and designation
- * `load_forecasts(model_abbrs, forecast_dates, targets, <other qualifiers here>, hub_repo_path, zoltar_connection)`: load forecasts either from csv files within a local clone of the covid19-forecast-hub repository or calling `zoltr::do_zoltar_query`.  The two sources differ in format, so standardize return results around the format used by Zoltar.
-
+ * `get_model_designations(models, source, hub_repo_path)`: Assemble a data frame with columns model and designation.
+ * `load_latest_forecasts(models, last_forecast_date, forecast_date_window_size = 1, locations, types, targets, source, hub_repo_path)`: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.
+ * `load_forecasts(models, forecast_dates, locations, types, targets)`: Load all available forecasts from Zoltar.
+ 
 **Reading Observed "Truth" Data**
-* `load_truth(truth_source, truth_date, hub_repo_path, hub_zoltar_connection, project_url)`: load truth data either by calling `zoltr::truth` or by calling `covidData::load_jhu_data` and converting to format used by zoltr, or by reading in a csv file.
+* `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository.
 
 **Plotting Forecasts**
- * `plot_forecasts(forecasts, truth_source, truth_date, <options for plots here>, plot_path)`: plot by assembling truth and then calling `zoltr::plot_forecasts`
+ * `plot_forecast(forecast_data, truth_data, model, target_variable, location, intervals, horizon, truth_source, plot, truth_as_of)`: Plot forecast with optional truth data for only one combination of model, target and location.
+
+Coming next: 
 
 **Scoring Forecasts**
  * `score_forecasts(forecasts, truth, scores = c("WIS", "PIT", "interval coverage", "quantile coverage", ...))` Calculate specified scores for each combination of `timezero`, `unit`, and `target` in the `forecasts` data frame.
