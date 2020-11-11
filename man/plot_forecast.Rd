@@ -14,7 +14,9 @@ plot_forecast(
   horizon,
   truth_source = "JHU",
   plot = TRUE,
-  truth_as_of = NULL
+  truth_as_of = NULL,
+  title = "default",
+  show.caption = TRUE
 )
 }
 \arguments{
@@ -50,6 +52,11 @@ Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date (not using this parameter when truth data
 is from github repo)}
+
+\item{title}{optional text for the title of the plot. if left as "default",
+the title will be automatically generated. if NULL, no title shown.}
+
+\item{show.caption}{logical, if TRUE, caption will be included showing data sources}
 }
 \value{
 invisible ggplot object
