@@ -24,7 +24,7 @@
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)
 #' @param title optional text for the title of the plot. if left as "default",
-#' the title will be automatically generated. if NULL, no title shown.
+#' the title will be automatically generated. if "none", no title will be plotted. 
 #' @param show.caption logical, if TRUE, caption will be included showing data sources
 
 #' 
@@ -46,7 +46,7 @@ plot_forecast <- function(forecast_data,
  
   # title format
   if(is.na(title))
-    stop("title argument must be NULL or interpretable as a character.")
+    stop("title argument interpretable as a character.")
   
   # optional model and location
   if (length(unique(forecast_data$model)) == 1){
@@ -189,12 +189,14 @@ plot_forecast <- function(forecast_data,
   }
   
   # generate title if specified as "default", otherwise leave as is
-  if(!is.null(title)){
-    if(title == "default") {
+  if(title == "default") {
     title <- paste0("Weekly COVID-19 ", full_target_variable, " in ", 
       location,": observed and forecasted")
-    }
   }
+  if(title == "none") {
+    title <- NULL
+  }
+
   
   graph <- ggplot2::ggplot(data = plot_data)
     

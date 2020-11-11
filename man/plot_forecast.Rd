@@ -54,7 +54,7 @@ in real time as of the truth_as_of date (not using this parameter when truth dat
 is from github repo)}
 
 \item{title}{optional text for the title of the plot. if left as "default",
-the title will be automatically generated. if NULL, no title shown.}
+the title will be automatically generated. if "none", no title will be plotted.}
 
 \item{show.caption}{logical, if TRUE, caption will be included showing data sources}
 }
