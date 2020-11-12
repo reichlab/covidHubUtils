@@ -226,8 +226,9 @@ plot_forecast <- function(forecast_data,
                              y = point, 
                              color = truth_forecast)) +
     ggplot2::scale_color_manual(name = "Model", 
-                       label = c(model, paste0("Observed Data (",truth_source,")")), 
-                                 values = c(tail(blues,1),"black")) +
+                                label = unique(plot_data$model),
+                                values = c("truth" = "black",
+                                           "forecast" = tail(blues,1))) +
     ggplot2::scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
     ggplot2::ylab(full_target_variable) +
     ggplot2::labs(title = title ,
