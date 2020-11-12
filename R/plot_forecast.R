@@ -23,6 +23,9 @@
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)
+#' @param title optional text for the title of the plot. if left as "default",
+#' the title will be automatically generated. if "none", no title will be plotted. 
+#' @param show.caption logical, if TRUE, caption will be included showing data sources
 
 #' 
 #' @return invisible ggplot object
@@ -37,9 +40,15 @@ plot_forecast <- function(forecast_data,
                           horizon,
                           truth_source = "JHU",
                           plot = TRUE,
-                          truth_as_of = NULL){
+                          truth_as_of = NULL, 
+                          title = "default", 
+                          show.caption = TRUE){
  
-   # optional model and location
+  # title format
+  if(is.na(title))
+    stop("title argument interpretable as a character.")
+  
+  # optional model and location
   if (length(unique(forecast_data$model)) == 1){
     model = unique(forecast_data$model)
   } else {
@@ -157,12 +166,16 @@ plot_forecast <- function(forecast_data,
                                       target_variable = target_variable)
  
   # generate caption and full target variable
-  if(!is.null(truth_as_of)){
-    caption <- paste0("source: ", truth_source," (observed data as of ",
-                      as.Date(truth_as_of), "), ", model, " (forecasts)")
+  if(show.caption){
+    if(!is.null(truth_as_of)){
+      caption <- paste0("source: ", truth_source," (observed data as of ",
+        as.Date(truth_as_of), "), ", model, " (forecasts)")
+    } else {
+      caption <- paste0("source: ", truth_source," (observed data), ",
+        model," (forecasts)")
+    }
   } else {
-    caption <- paste0("source: ", truth_source," (observed data), ",
-                      model," (forecasts)")
+    caption <- NULL
   }
   
   if (target_variable == "cum death"){
@@ -175,6 +188,15 @@ plot_forecast <- function(forecast_data,
     full_target_variable = "Incident Hospitalizations"
   }
   
+  # generate title if specified as "default", otherwise leave as is
+  if(title == "default") {
+    title <- paste0("Weekly COVID-19 ", full_target_variable, " in ", 
+      location,": observed and forecasted")
+  }
+  if(title == "none") {
+    title <- NULL
+  }
+
   
   graph <- ggplot2::ggplot(data = plot_data)
     
@@ -208,8 +230,7 @@ plot_forecast <- function(forecast_data,
                                  values = c(tail(blues,1),"black")) +
     ggplot2::scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
     ggplot2::ylab(full_target_variable) +
-    ggplot2::labs(title = paste0("Weekly COVID-19 ", full_target_variable, " in ", 
-                                 location,": observed and forecasted") ,
+    ggplot2::labs(title = title ,
                   caption = caption)
   
   if (plot){
