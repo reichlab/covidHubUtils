@@ -1,7 +1,7 @@
 ---
 title: "demo_plot_forecast"
 author: "Serena Wang"
-date: "11/06/2020"
+date: "11/12/2020"
 output: html_document
 ---
 
@@ -20,10 +20,11 @@ forecasts <- covidHubUtils::load_latest_forecasts(models = "COVIDhub-ensemble",
                       last_forecast_date = Sys.Date(),
                       forecast_date_window_size = 8,
                       locations = "US",
-                      types = c("point", "quantile"),
+                      types = c("point","quantile"),
                       targets = c(inc_case_targets),
                       source = "zoltar",
                       hub_repo_path = "")
+
 
 ```
 
@@ -37,7 +38,9 @@ p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
                                    horizon = 4,
                                    truth_source = "JHU",
                                    plot = TRUE,
-                                   truth_as_of = NULL)
+                                   truth_as_of = NULL,
+                                   title = "default", 
+                                   show.caption = TRUE)
 
 ```
 
@@ -52,7 +55,9 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               horizon = 3,
                               truth_source = "JHU",
                               plot = TRUE,
-                              truth_as_of = NULL)
+                              truth_as_of = NULL,
+                              title = "default", 
+                              show.caption = TRUE)
 
 ```
 

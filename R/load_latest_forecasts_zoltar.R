@@ -108,7 +108,8 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
       dplyr::filter(timezero == max(timezero)) %>%
       dplyr::ungroup() %>%
       # change value and quantile back to double
-      dplyr::mutate(value = as.double(value)) %>%
+      dplyr::mutate(value = as.double(value),
+                    timezero = as.Date(timezero)) %>%
       # keep only required columns
       dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
       dplyr::rename(location = unit, forecast_date = timezero,

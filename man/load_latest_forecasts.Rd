@@ -22,8 +22,9 @@ load_latest_forecasts(
 If missing, forecasts for all models that submitted forecasts
 meeting the other criteria are returned.}
 
-\item{last_forecast_date}{The forecast date of forecasts to retrieve.
-Defaults to the most recent forecast date in Zoltar or the hub repo.}
+\item{last_forecast_date}{The forecast date of forecasts to retrieve
+in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in
+Zoltar or the hub repo.}
 
 \item{forecast_date_window_size}{The number of days across which to
 look for recent forecasts. Defaults to 1, which means to only look

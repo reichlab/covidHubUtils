@@ -8,7 +8,8 @@
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
-#' @param truth_end_date date to include the last available truth point. Default to system date.
+#' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 
+#' Default to system date.
 #' @param temporal_resolution character specifying temporal resolution
 #' to include: currently support "weekly" and "daily". Default to 'weekly'.
 #' @param local_repo_path path to local clone of the reichlab/covid19-forecast-hub
@@ -36,6 +37,15 @@ load_truth <- function (truth_source,
                                            "inc case",
                                            "inc death"), 
                                several.ok = FALSE)
+  
+  # validate truth end date
+  truth_end_date <- tryCatch({
+    as.Date(truth_end_date)}, 
+    error = function(err) {
+    stop("Error in load_truth: Please provide a valid date object or
+    string in format YYYY-MM-DD in truth_end_date")}
+    )
+  
 
   # validate temporal resolution
   temporal_resolution <- match.arg(temporal_resolution, 
@@ -102,7 +112,8 @@ load_truth <- function (truth_source,
       # add inc_cum and death_case columns and rename date column
       truth <- truth %>%
         dplyr::mutate(model = paste0("Observed Data (",source,")"), 
-                      target_variable = target_variable) %>%
+                      target_variable = target_variable,
+                      date = as.Date(date)) %>%
         dplyr::rename(target_end_date = date)
     }
   ) %>%

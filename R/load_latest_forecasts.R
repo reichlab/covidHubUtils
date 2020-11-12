@@ -5,8 +5,9 @@
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
-#' @param last_forecast_date The forecast date of forecasts to retrieve.
-#' Defaults to the most recent forecast date in Zoltar or the hub repo.
+#' @param last_forecast_date The forecast date of forecasts to retrieve 
+#' in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in 
+#' Zoltar or the hub repo.
 #' @param forecast_date_window_size The number of days across which to 
 #' look for recent forecasts. Defaults to 1, which means to only look 
 #' at the last_forecast_date. 
@@ -88,9 +89,15 @@ load_latest_forecasts <- function (
   }
   
   
-  # dates of forecasts to load
-  forecast_dates <- as.character(last_forecast_date +
-                                   seq(from = -forecast_date_window_size, to = 0, by = 1))
+  # check date format and generate dates of forecasts to load
+  forecast_dates <- tryCatch({
+    as.character(as.Date(last_forecast_date) +
+                   seq(from = -forecast_date_window_size, to = 0, by = 1))
+    }, error = function(err){
+      stop("Error in load_latest_forecasts: Please provide a valid date object or
+           string in format YYYY-MM-DD in latest_forrecast_date.")
+    }
+    )
 
   if (source == "local_hub_repo") {
     # path to data-processed folder in hub repo

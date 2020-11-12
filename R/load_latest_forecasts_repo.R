@@ -73,6 +73,8 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locati
     targets = all_valid_targets
   }
   
+  forecast_dates = as.Date(forecast_dates)
+  
   forecasts <- purrr::map_dfr(
     models,
     function(model) {
