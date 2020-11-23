@@ -1,7 +1,7 @@
 ---
 title: "demo_plot_forecast"
 author: "Serena Wang"
-date: "11/12/2020"
+date: "11/23/2020"
 output: html_document
 ---
 
@@ -40,7 +40,7 @@ p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
                                    plot = TRUE,
                                    truth_as_of = NULL,
                                    title = "default", 
-                                   show.caption = TRUE)
+                                   show_caption = TRUE)
 
 ```
 
@@ -57,7 +57,7 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               plot = TRUE,
                               truth_as_of = NULL,
                               title = "default", 
-                              show.caption = TRUE)
+                              show_caption = TRUE)
 
 ```
 

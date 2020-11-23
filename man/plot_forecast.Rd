@@ -16,7 +16,7 @@ plot_forecast(
   plot = TRUE,
   truth_as_of = NULL,
   title = "default",
-  show.caption = TRUE
+  show_caption = TRUE
 )
 }
 \arguments{
@@ -56,7 +56,7 @@ is from github repo)}
 \item{title}{optional text for the title of the plot. if left as "default",
 the title will be automatically generated. if "none", no title will be plotted.}
 
-\item{show.caption}{logical, if TRUE, caption will be included showing data sources}
+\item{show_caption}{logical, if TRUE, caption will be included showing data sources}
 }
 \value{
 invisible ggplot object

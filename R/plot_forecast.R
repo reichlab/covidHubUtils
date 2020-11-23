@@ -25,7 +25,7 @@
 #' is from github repo)
 #' @param title optional text for the title of the plot. if left as "default",
 #' the title will be automatically generated. if "none", no title will be plotted. 
-#' @param show.caption logical, if TRUE, caption will be included showing data sources
+#' @param show_caption logical, if TRUE, caption will be included showing data sources
 
 #' 
 #' @return invisible ggplot object
@@ -42,7 +42,7 @@ plot_forecast <- function(forecast_data,
                           plot = TRUE,
                           truth_as_of = NULL, 
                           title = "default", 
-                          show.caption = TRUE){
+                          show_caption = TRUE){
  
   # title format
   if(is.na(title))
@@ -177,7 +177,7 @@ plot_forecast <- function(forecast_data,
                                       target_variable = target_variable)
  
   # generate caption and full target variable
-  if(show.caption){
+  if(show_caption){
     if(!is.null(truth_as_of)){
       caption <- paste0("source: ", truth_source," (observed data as of ",
         as.Date(truth_as_of), "), ", model, " (forecasts)")
