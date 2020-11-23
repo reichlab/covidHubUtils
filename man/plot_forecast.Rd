@@ -10,7 +10,7 @@ plot_forecast(
   model,
   target_variable,
   location,
-  intervals = c(0.5, 0.8, 0.95),
+  intervals,
   horizon,
   truth_source = "JHU",
   plot = TRUE,
@@ -35,8 +35,8 @@ one model available in forecast data.}
 location available in forecast data.}
 
 \item{intervals}{values indicating which central prediction interval levels
-to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
-If not provided, it will default to all available intervals in forecast data.}
+to plot. NULL means only plotting point forecasts.
+If not provided, it will default to c(.5, .8, .95).}
 
 \item{horizon}{forecasts are plotted for the horizon time steps after the
 forecast date. Default to all available horizons in forecast data.}

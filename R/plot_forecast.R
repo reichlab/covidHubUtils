@@ -10,8 +10,8 @@
 #' @param location string for fips code or 'US'. Optional if there is only one
 #' location available in forecast data.
 #' @param intervals values indicating which central prediction interval levels 
-#' to plot, defaults to c(.5, .8, .95). NULL means only plotting point forecasts.
-#' If not provided, it will default to all available intervals in forecast data.
+#' to plot. NULL means only plotting point forecasts.
+#' If not provided, it will default to c(.5, .8, .95).
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date. Default to all available horizons in forecast data. 
 #' @param truth_source character specifying where the truth data will
@@ -36,7 +36,7 @@ plot_forecast <- function(forecast_data,
                           model,
                           target_variable,
                           location,
-                          intervals = c(.5, .8, .95),
+                          intervals,
                           horizon,
                           truth_source = "JHU",
                           plot = TRUE,
@@ -126,16 +126,24 @@ plot_forecast <- function(forecast_data,
     }
   }
   
-  # if interval is missing, default to all available intervals in forecast data
+  
+  # if interval is missing, default to a reduced set of intervals available in forecast data
   if (missing(intervals)){
-    lower_bounds <- unique(forecast_data[forecast_data$quantile < 0.5,]$quantile)
+    lower_bounds <- unique(forecast_data[forecast_data$type == 'quantile' &
+                                           forecast_data$quantile < 0.5,]$quantile)
+    
     # if quantile forecasts are not available, plot point forecasts only
-    if (is.na(lower_bounds)){
+    if ('NA' %in% lower_bounds){
       intervals = NULL
     } else {
       intervals <- lapply(lower_bounds, function(l){
         1-as.numeric(2*l)
       })
+      
+      # for readability
+      if (all(c(.5, .8, .95) %in% intervals)){
+        intervals <- c(.5, .8, .95)
+      }
     }
   }
   
@@ -148,7 +156,10 @@ plot_forecast <- function(forecast_data,
   
   # prediction interval shades
   if (!is.null(intervals)){
-    blues <- RColorBrewer::brewer.pal(n=length(quantiles_to_plot)/2+1, "Blues")
+    
+    colourCount = length(quantiles_to_plot)/2+1
+    getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
+    blues = getPalette(colourCount)
   } else {
     blues <- RColorBrewer::brewer.pal(n=4, "Blues")
   }
