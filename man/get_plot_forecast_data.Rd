@@ -7,10 +7,10 @@
 get_plot_forecast_data(
   forecast_data,
   truth_data = NULL,
-  model_to_plot,
+  models_to_plot,
   horizons_to_plot,
   quantiles_to_plot,
-  location_to_plot,
+  locations_to_plot,
   plot_truth = TRUE,
   truth_source,
   target_variable,
@@ -25,14 +25,14 @@ value, horizon and target_end_date.}
 \item{truth_data}{optional data frame with forecasts in the format returned
 by load_truth().}
 
-\item{model_to_plot}{characters of model abbreviations}
+\item{models_to_plot}{characters of model abbreviations}
 
 \item{horizons_to_plot}{forecasts are plotted for the horizon time steps after
 the forecast date.}
 
 \item{quantiles_to_plot}{vector of quanitles to include in the plot}
 
-\item{location_to_plot}{character vector of one location.}
+\item{locations_to_plot}{character vector of one location.}
 
 \item{plot_truth}{boolean to indicate whether truth data should be plotted.
 Default to TRUE.}

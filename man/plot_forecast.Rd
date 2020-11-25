@@ -7,9 +7,9 @@
 plot_forecast(
   forecast_data,
   truth_data = NULL,
-  model,
+  models,
   target_variable,
-  location,
+  locations,
   intervals,
   horizon,
   truth_source = "JHU",
@@ -25,13 +25,13 @@ plot_forecast(
 \item{truth_data}{optional data frame with forecasts in the format returned
 by load_truth().}
 
-\item{model}{model_abbr specifying model to plot. Optional if there is only
+\item{models}{model_abbr specifying models to plot. Optional if there is only
 one model available in forecast data.}
 
 \item{target_variable}{string specifying target type. It should be one of
 "cum death", "inc case", "inc death"}
 
-\item{location}{string for fips code or 'US'. Optional if there is only one
+\item{locations}{string for fips code or 'US'. Optional if there is only one
 location available in forecast data.}
 
 \item{intervals}{values indicating which central prediction interval levels
