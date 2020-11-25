@@ -7,47 +7,69 @@
 #'  either "local_hub_repo" or "zoltar"
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
+#' @param as_of optional date specifying the version. Only support versioned
+#' model designations in "local_hub_repo"
 #' 
 #' @return data frame with columns `model` and `designation`
 #' 
 #' @export
-get_model_designations <- function(models, source, hub_repo_path) {
+get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Date()) {
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
+
+  
+  if (as_of!= Sys.Date() & source != "local_hub_repo"){
+    stop("Error in get_model_designations: Currently only support versioned model designation in remote hub repo.")
+  }
 
   if(source == "local_hub_repo") {
     if (missing(hub_repo_path)){
       stop ("Error in get_model_designations: Please provide a hub_repo_path")
     } else {
- 
-      data_processed <- file.path(hub_repo_path, "data-processed")
-      # list of directories within the data_processed directory
-      model_dirs <- list.dirs(data_processed)
-  
-      # drop first result, which is the data-processed directory itself
-      model_dirs <- model_dirs[-1]
-  
-      # data frame with model abbreviation and designation for each model
-      model_info <- purrr::map_dfr(
-        model_dirs,
-        function(model_dir) {
-          metadata_path <- Sys.glob(paste0(model_dir, "/metadata*"))
-          return(as.data.frame(
-            yaml::read_yaml(metadata_path)[
-              c("model_abbr", "team_model_designation")],
-            stringsAsFactors = FALSE
-          ))
-        }
-      ) %>%
-        dplyr::select(model = model_abbr, designation = team_model_designation)
-  
-      # filter to requested models
-      if(!missing(models)) {
-        model_info <- model_info %>%
-          dplyr::filter(model %in% models)
+      
+      # validate models
+      all_valid_models <- get_all_models(source = "local_hub_repo", 
+                                         hub_repo_path = hub_repo_path)
+      
+      if (!missing(models)){
+        models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
+      } else {
+        models <- all_valid_models
       }
       
+      # construct path to metadata file from the root of hub repo
+      model_metadata_paths = paste0('data-processed/',models,'/metadata-',models,'.txt')
+        
+      model_info <- purrr::map_dfr(
+        model_metadata_paths,
+        function (model_metadata_path){
+          # search day is one day later than as_of date
+          search_day <- as.Date(as_of) + 1 
+          
+          # find git commits related to a specified metadata file before search_day
+          commits_command <- paste0("cd ",hub_repo_path,
+                                    "; git log --date=short --pretty=format:'%H %ad' --before='",as.character(search_day),"' --follow -- ",
+                                    model_metadata_path
+                                    ) 
+          # invoke command and parse result
+          all_commits <- system(commits_command,intern = TRUE) %>% 
+            stringr::str_split_fixed(" ", 2) %>%
+            as.data.frame()%>%
+            dplyr::rename(sha = V1, date = V2)
+          
+          recent_commit_sha <- all_commits$sha[1]
+          
+          # construct git command to read metadata file
+          read_command <- paste0("cd ",hub_repo_path,"; git show ", 
+                            recent_commit_sha,":",model_metadata_path)
+          
+          as.data.frame(yaml::yaml.load(system(read_command, intern = TRUE))[
+            c("model_abbr", "team_model_designation")],
+            stringsAsFactors = FALSE
+          )
+        }) %>%
+        dplyr::select(model = model_abbr, designation = team_model_designation)
     }
-  } else {
+  } else if (source == "zoltar") {
     # set up Zoltar connection
     zoltar_connection <- zoltr::new_connection()
     
