@@ -18,7 +18,7 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
 
   
   if (as_of!= Sys.Date() & source != "local_hub_repo"){
-    stop("Error in get_model_designations: Currently only support versioned model designation in remote hub repo.")
+    stop("Error in get_model_designations: Currently only support versioned model designation in local hub repo.")
   }
 
   if(source == "local_hub_repo") {
