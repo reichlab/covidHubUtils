@@ -5,11 +5,11 @@
 #' value, horizon and target_end_date.
 #' @param truth_data optional data frame with forecasts in the format returned 
 #' by load_truth().
-#' @param model_to_plot characters of model abbreviations 
+#' @param models_to_plot characters of model abbreviations 
 #' @param horizons_to_plot forecasts are plotted for the horizon time steps after 
 #' the forecast date.
 #' @param quantiles_to_plot vector of quanitles to include in the plot
-#' @param location_to_plot character vector of one location. 
+#' @param locations_to_plot character vector of one location. 
 #' @param plot_truth boolean to indicate whether truth data should be plotted.
 #' Default to TRUE.
 #' @param truth_source character specifying where the truth data will
@@ -28,10 +28,10 @@
 #' @export
 get_plot_forecast_data <- function(forecast_data, 
                                    truth_data = NULL,
-                                   model_to_plot,
+                                   models_to_plot,
                                    horizons_to_plot,
                                    quantiles_to_plot,
-                                   location_to_plot,
+                                   locations_to_plot,
                                    plot_truth = TRUE,
                                    truth_source,
                                    target_variable,
@@ -45,12 +45,12 @@ get_plot_forecast_data <- function(forecast_data,
   all_valid_fips <- covidHubUtils::hub_locations$fips
   
   
-  if (!missing(location_to_plot)){
-    location_to_plot <- match.arg(location_to_plot, 
+  if (!missing(locations_to_plot)){
+    locations_to_plot <- match.arg(locations_to_plot, 
                                   choices = all_valid_fips, 
-                                  several.ok = FALSE)
+                                  several.ok = TRUE)
   } else {
-    stop("Error in get_plot_forecast_data: Please provide a location_to_plot parameter.")
+    stop("Error in get_plot_forecast_data: Please provide locations_to_plot parameter.")
   }
 
   # validate truth data if provided
@@ -68,8 +68,8 @@ get_plot_forecast_data <- function(forecast_data,
         stop("Error in get_plot_forecast_data: Please provide a valid truth_source to plot.")
       }
       # check if truth_data has data from specified location
-      if (!(location_to_plot %in% truth_data$location)){
-        stop("Error in get_plot_forecast_data: Please provide a valid location_to_plot.")
+      if (!all(locations_to_plot %in% truth_data$location)){
+        stop("Error in get_plot_forecast_data: Please provide a valid locations_to_plot.")
       }
       # check if truth_data has specified target variable
       if (!(target_variable %in% truth_data$target_variable)){
@@ -85,8 +85,8 @@ get_plot_forecast_data <- function(forecast_data,
   
   # filter horizons and locations. Only plot one location now.
   forecast_data <- forecast_data %>%
-    dplyr::filter(model == model_to_plot,
-                  location == location_to_plot,
+    dplyr::filter(model %in% models_to_plot,
+                  location %in% locations_to_plot,
                   target_variable == target_variable)
   
   if (!missing(horizons_to_plot)){
@@ -101,7 +101,7 @@ get_plot_forecast_data <- function(forecast_data,
     # call load_truth if the user did not provide truth_data
     truth <- load_truth(truth_source,
                         target_variable,
-                        locations = location_to_plot) %>%
+                        locations = locations_to_plot) %>%
       dplyr::rename(point = value) %>%
       dplyr::mutate(truth_forecast = "truth")
     
@@ -109,7 +109,7 @@ get_plot_forecast_data <- function(forecast_data,
     # process truth_data for plotting
     truth <- truth_data %>%
       dplyr::filter(model == paste0("Observed Data (",truth_source,")"), 
-                    location == location_to_plot,
+                    location %in% locations_to_plot,
                     target_variable == target_variable) %>%
       dplyr::rename(point = value) %>%
       dplyr::mutate(truth_forecast = "truth",
