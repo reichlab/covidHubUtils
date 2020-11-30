@@ -10,7 +10,7 @@ Authors@R:
 Description: What the package does (one paragraph).
 License: MIT
 Imports:
-  dplyr (>= 0.8.4), tibble (>= 2.1.3), tidyr (>= 1.0.2), MMWRweek (>= 0.1.1), lubridate (>= 1.7.4), purrr (>= 0.3.3), ggplot2, magrittr, forcats, RcppRoll
+  dplyr (>= 0.8.4), tibble (>= 2.1.3), tidyr (>= 1.0.2), MMWRweek (>= 0.1.1), lubridate (>= 1.7.4), purrr (>= 0.3.3), ggplot2, magrittr, forcats, RcppRoll, zoltr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
