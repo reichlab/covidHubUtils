@@ -6,6 +6,7 @@
 #' @param truth_data optional data frame with forecasts in the format returned 
 #' by load_truth().
 #' @param models_to_plot characters of model abbreviations 
+#' @param forecast_dates_to_plot date string vectors for forecast dates to plot.
 #' @param horizons_to_plot forecasts are plotted for the horizon time steps after 
 #' the forecast date.
 #' @param quantiles_to_plot vector of quanitles to include in the plot
@@ -21,7 +22,7 @@
 #' @param  truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date.
 #' 
-#' @return data frame with columns model, 
+#' @return data frame with columns model, truth_model, 
 #' forecast_date, location, target_variable, type, quantile, value, horizon and 
 #' target_end_date.
 #' 
@@ -29,6 +30,7 @@
 get_plot_forecast_data <- function(forecast_data, 
                                    truth_data = NULL,
                                    models_to_plot,
+                                   forecast_dates_to_plot,
                                    horizons_to_plot,
                                    quantiles_to_plot,
                                    locations_to_plot,
@@ -43,7 +45,6 @@ get_plot_forecast_data <- function(forecast_data,
                             several.ok = FALSE)
   # validate location
   all_valid_fips <- covidHubUtils::hub_locations$fips
-  
   
   if (!missing(locations_to_plot)){
     locations_to_plot <- match.arg(locations_to_plot, 
@@ -83,9 +84,10 @@ get_plot_forecast_data <- function(forecast_data,
     warning("Warning in get_plot_forecast_data: Currently versioned truth data is not supported.")
   }
   
-  # filter horizons and locations. Only plot one location now.
+  # filter to include selected models, forecast dates, locattions and target variable
   forecast_data <- forecast_data %>%
     dplyr::filter(model %in% models_to_plot,
+                  forecast_date %in% forecast_dates_to_plot,
                   location %in% locations_to_plot,
                   target_variable == target_variable)
   

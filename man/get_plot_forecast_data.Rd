@@ -8,6 +8,7 @@ get_plot_forecast_data(
   forecast_data,
   truth_data = NULL,
   models_to_plot,
+  forecast_dates_to_plot,
   horizons_to_plot,
   quantiles_to_plot,
   locations_to_plot,
@@ -26,6 +27,8 @@ value, horizon and target_end_date.}
 by load_truth().}
 
 \item{models_to_plot}{characters of model abbreviations}
+
+\item{forecast_dates_to_plot}{date string vectors for forecast dates to plot.}
 
 \item{horizons_to_plot}{forecasts are plotted for the horizon time steps after
 the forecast date.}
@@ -49,7 +52,7 @@ Currently support "JHU","USAFacts" and "NYTimes".}
 in real time as of the truth_as_of date.}
 }
 \value{
-data frame with columns model,
+data frame with columns model, truth_model,
 forecast_date, location, target_variable, type, quantile, value, horizon and
 target_end_date.
 }

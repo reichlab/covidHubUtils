@@ -1,7 +1,7 @@
 ---
 title: "demo_plot_forecast"
 author: "Serena Wang"
-date: "11/23/2020"
+date: "12/02/2020"
 output: html_document
 ---
 
@@ -17,7 +17,7 @@ library(covidHubUtils)
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 forecasts <- covidHubUtils::load_latest_forecasts(models = "COVIDhub-ensemble",
-                      last_forecast_date = Sys.Date(),
+                      last_forecast_date = Sys.Date()-3,
                       forecast_date_window_size = 8,
                       locations = "US",
                       types = c("point","quantile"),
@@ -31,9 +31,9 @@ forecasts <- covidHubUtils::load_latest_forecasts(models = "COVIDhub-ensemble",
 ```{r message=FALSE}
 # Plot point forecasts with prediction intervals and without user-provided truth data
 p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
-                                   model = "COVIDhub-ensemble",
+                                   models = "COVIDhub-ensemble",
                                    target_variable = "inc case",
-                                   location = "US",
+                                   locations = "US",
                                    intervals = c(.5, .8, .95),
                                    horizon = 4,
                                    truth_source = "JHU",
@@ -48,9 +48,9 @@ p <- covidHubUtils::plot_forecast (forecast_data = forecasts,
 ```{r message=FALSE}
 # Plot point forecasts only and without user-provided truth data
 covidHubUtils::plot_forecast (forecast_data = forecasts,
-                              model = "COVIDhub-ensemble",
+                              models = "COVIDhub-ensemble",
                               target_variable = "inc case",
-                              location = "US",
+                              locations = "US",
                               intervals = NULL,
                               horizon = 3,
                               truth_source = "JHU",
@@ -69,9 +69,9 @@ truth_data <- covidHubUtils::load_truth(truth_source = "NYTimes",
 
 covidHubUtils::plot_forecast (forecast_data = forecasts,
                               truth_data = truth_data,
-                              model = "COVIDhub-ensemble",
+                              models = "COVIDhub-ensemble",
                               target_variable = "inc case",
-                              location = "US",
+                              locations = "US",
                               intervals = c(.5, .8, .95),
                               horizon = 3,
                               truth_source = "NYTimes",
@@ -82,3 +82,107 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
 
 ```
 
+```{r message=FALSE}
+# Load the latest forecasts that were submitted in a time window from zoltar
+inc_case_targets <- paste(1:4, "wk ahead inc case")
+forecasts <- covidHubUtils::load_latest_forecasts(
+                      models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                      last_forecast_date = Sys.Date()-4,
+                      forecast_date_window_size = 8,
+                      locations = c("US","01"),
+                      types = c("point","quantile"),
+                      targets = c(inc_case_targets),
+                      source = "zoltar",
+                      hub_repo_path = "")
+
+
+```
+
+```{r message=FALSE}
+# facet by location
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              models = c("COVIDhub-ensemble"),
+                              target_variable = "inc case",
+                              locations = c("US","01"),
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              facet = ~location,
+                              # to make all predictions interval readable
+                              facet_scales = "free_y",
+                              title = "none",
+                              show_caption = FALSE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+```
+
+```{r message=FALSE}
+# facet by model
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                              target_variable = "inc case",
+                              locations = c("US"),
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              facet = ~model,
+                              facet_scales = "fixed",
+                              title = "none",
+                              show_caption = FALSE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+```
+```{r message=FALSE}
+# facet by model and locations
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                              target_variable = "inc case",
+                              locations = c("US","01"),
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              facet = ~model+location,
+                              # to make all predictions interval readable
+                              facet_scales = "free_y",
+                              title = "none",
+                              show_caption = FALSE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+```
+
+```{r message=FALSE}
+# Load forecasts that were submitted on selected forecast dates
+inc_case_targets <- paste(1:4, "wk ahead inc case")
+forecasts <- covidHubUtils::load_forecasts(
+                      models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                      forecast_dates = c("2020-11-23", "2020-11-16"),
+                      locations = c("US"),
+                      types = c("point","quantile"),
+                      targets = c(inc_case_targets))
+```
+
+```{r message=FALSE}
+# facet by model and forecast dates
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                              target_variable = "inc case",
+                              locations = c("US"),
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              facet = ~model+forecast_date,
+                              # to make all predictions interval readable
+                              facet_scales = "free_y",
+                              title = "none",
+                              show_caption = FALSE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+```

@@ -10,6 +10,9 @@ plot_forecast(
   models,
   target_variable,
   locations,
+  facet = NULL,
+  facet_scales = "fixed",
+  forecast_dates,
   intervals,
   horizon,
   truth_source = "JHU",
@@ -33,6 +36,13 @@ one model available in forecast data.}
 
 \item{locations}{string for fips code or 'US'. Optional if there is only one
 location available in forecast data.}
+
+\item{facet}{interpretable facet option for ggplot}
+
+\item{facet_scales}{argument for scales in ggplot2::facet_wrap. Default to "fixed".}
+
+\item{forecast_dates}{date string vectors for forecast dates to plot.
+Default to forecast_dates present in the data.}
 
 \item{intervals}{values indicating which central prediction interval levels
 to plot. NULL means only plotting point forecasts.
