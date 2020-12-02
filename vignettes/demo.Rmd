@@ -17,7 +17,7 @@ library(covidHubUtils)
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 forecasts <- covidHubUtils::load_latest_forecasts(models = "COVIDhub-ensemble",
-                      last_forecast_date = Sys.Date()-3,
+                      last_forecast_date = Sys.Date(),
                       forecast_date_window_size = 8,
                       locations = "US",
                       types = c("point","quantile"),
@@ -86,10 +86,14 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
 # Load the latest forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 forecasts <- covidHubUtils::load_latest_forecasts(
-                      models = c("COVIDhub-ensemble","COVIDhub-baseline"),
-                      last_forecast_date = Sys.Date()-4,
-                      forecast_date_window_size = 8,
-                      locations = c("US","01"),
+                      #models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                      models =c("COVIDhub-ensemble","COVIDhub-baseline",
+                                       "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
+                                       "LANL-GrowthRate", "MSRA-DeepST"),
+                      last_forecast_date = Sys.Date(),
+                      forecast_date_window_size = 20,
+                      #locations = c("US","01"),
+                      locations = "US",
                       types = c("point","quantile"),
                       targets = c(inc_case_targets),
                       source = "zoltar",
@@ -136,16 +140,67 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               truth_as_of = Sys.Date())
 
 ```
+
+```{r message=FALSE}
+# facet by model, fill_by_model
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              models = c("COVIDhub-ensemble","COVIDhub-baseline",
+                                       "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
+                                       "LANL-GrowthRate", "MSRA-DeepST"),
+                              target_variable = "inc case",
+                              locations = c("US"),
+                              # only .95 prediction interval will be shown 
+                              # when more than 5 models are selected
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              fill_by_model = TRUE,
+                              facet = ~model,
+                              facet_scales = "fixed",
+                              title = "none",
+                              show_caption = FALSE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+```
+
+```{r message=FALSE}
+# facet by model, fill_by_model
+covidHubUtils::plot_forecast (forecast_data = forecasts,
+                              models = c("COVIDhub-ensemble","COVIDhub-baseline",
+                                       "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
+                                       "LANL-GrowthRate"),
+                              target_variable = "inc case",
+                              locations = c("US"),
+                              intervals = c(.5, .8, .95),
+                              horizon = 4,
+                              truth_source = "JHU",
+                              plot = TRUE,
+                              fill_by_model = TRUE,
+                              facet = ~model,
+                              facet_scales = "fixed",
+                              title = "default",
+                              show_caption = FALSE,
+                              # only adding more info in the plot caption now
+                              truth_as_of = Sys.Date())
+
+```
+
 ```{r message=FALSE}
 # facet by model and locations
 covidHubUtils::plot_forecast (forecast_data = forecasts,
-                              models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                              #models = c("COVIDhub-ensemble","COVIDhub-baseline"),
+                              models = c("COVIDhub-ensemble","COVIDhub-baseline",
+                                       "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
+                                       "LANL-GrowthRate"),
                               target_variable = "inc case",
                               locations = c("US","01"),
                               intervals = c(.5, .8, .95),
                               horizon = 4,
                               truth_source = "JHU",
                               plot = TRUE,
+                              fill_by_model = FALSE,
                               facet = ~model+location,
                               # to make all predictions interval readable
                               facet_scales = "free_y",
