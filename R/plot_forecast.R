@@ -24,6 +24,9 @@
 #' Currently support "JHU","USAFacts" and "NYTimes".
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
+#' @param fill_by_model boolean for specifying colors in plot.
+#' If TRUE, separate colors will be used for each model.
+#' If FALSE, only blues will be used for all models. Default to FALSE. 
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)
@@ -47,6 +50,7 @@ plot_forecast <- function(forecast_data,
                           horizon,
                           truth_source = "JHU",
                           plot = TRUE,
+                          fill_by_model = FALSE,
                           truth_as_of = NULL, 
                           title = "default", 
                           show_caption = TRUE){
@@ -154,15 +158,25 @@ plot_forecast <- function(forecast_data,
     if ('NA' %in% lower_bounds){
       intervals = NULL
     } else {
-      intervals <- lapply(lower_bounds, function(l){
-        1-as.numeric(2*l)
-      })
-      
-      # for readability
-      if (all(c(.5, .8, .95) %in% intervals)){
-        intervals <- c(.5, .8, .95)
+      # only plot .95 interval if more than 5 models are selected
+      if (length(unique(models)) > 5){
+        intervals <- c(.95)
+      } else {
+        # generate intervals from lower bounds
+        intervals <- lapply(lower_bounds, function(l){
+          1-as.numeric(2*l)
+        })
+        
+        # for readability
+        if (all(c(.5, .8, .95) %in% intervals)){
+          intervals <- c(.5, .8, .95)
+        }
       }
     }
+  }
+  
+  if (length(unique(models)) > 5){
+    intervals <- c(.95)
   }
   
   # generate quantiles based on given intervals
@@ -172,14 +186,42 @@ plot_forecast <- function(forecast_data,
   }))
   
   
-  # prediction interval shades
-  if (!is.null(intervals)){
-    
-    colourCount = length(quantiles_to_plot)/2+length(models)
+  # set colors
+  if (fill_by_model){
+    if (length(unique(models)) <= 5){
+      color_families <- c("Blues", "Oranges", "Purples", "Reds", "Greens")
+      colourCount <- length(quantiles_to_plot)/2+1
+      model_colors <- purrr::map(
+        color_families[1:length(unique(models))],
+        function(color_family){
+          getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, color_family))
+          getPalette(colourCount)
+          }
+        )
+        
+      forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
+      interval_colors <- unlist(lapply(model_colors, head, n = colourCount-1))
+    } else {
+      # interpolate color pallets to more than 5 colors
+      colourCount <- length(quantiles_to_plot)/2
+      modelCount <- length(unique(models))
+      # use 8 instead of 9 to avoid black and grey shades
+      getPalette = colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
+      model_colors <- getPalette(modelCount)
+        
+      forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
+      interval_colors <- unlist(lapply(model_colors, function(color){
+        colorspace::lighten(color, 0.7)}
+        ))
+    }
+  } else {
+    # only use blue
+    colourCount = length(quantiles_to_plot)/2+length(unique(models))
     getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
     blues = getPalette(colourCount)
-  } else {
-    blues <- RColorBrewer::brewer.pal(n=4, "Blues")
+    forecast_colors <- tail(blues,length(unique(models)))
+    interval_colors <- rep(blues[1:(length(blues)-length(unique(models)))],
+                           length(unique(models)))
   }
   
   # include truth from remote git hub repo by default
@@ -187,7 +229,7 @@ plot_forecast <- function(forecast_data,
   plot_data = get_plot_forecast_data (forecast_data = forecast_data, 
                                       truth_data = truth_data,
                                       models_to_plot = models,
-                                      forecast_dates_to_plot = forecast_dates,
+                                      forecast_dates_to_plot = as.Date(forecast_dates),
                                       horizons_to_plot = horizon,
                                       quantiles_to_plot = quantiles_to_plot,
                                       locations_to_plot = locations,
@@ -233,7 +275,6 @@ plot_forecast <- function(forecast_data,
     title <- NULL
   }
   
-  
   plot_data_forecast <- plot_data %>%
     dplyr::filter(truth_forecast == "forecast")
   
@@ -253,11 +294,14 @@ plot_forecast <- function(forecast_data,
                               ymax=upper,
                               group = interaction(`Prediction Interval`,model, 
                                                   location, forecast_date),
-                              fill=`Prediction Interval`)) +
-      
-      
-      ggplot2::scale_fill_manual(values = blues[1:(length(blues)-length(models))])
-      
+                              fill = interaction(`Prediction Interval`, model))) +
+      ggplot2::scale_fill_manual(name = "Prediction Interval", 
+                                 #labels = rep(c("95%", "80%", "50%"), length(unique(models))),
+                                 #labels = `Prediction Interval`,
+                                 values = interval_colors) +
+      ggplot2::guides(fill = guide_legend(
+        ncol=ceiling(length(unique(models))*length(intervals)/6), 
+        nrow = 6)) 
   }
   
   # plot point forecasts and truth 
@@ -275,8 +319,7 @@ plot_forecast <- function(forecast_data,
                              color = model)) +
     
     ggplot2::scale_color_manual(name = "Model", 
-                                #label = unique(plot_data$model),
-                                values = tail(blues,length(models))) +
+                                values = forecast_colors) +
     #truth
     ggnewscale::new_scale_color() +
     ggplot2::geom_line(data = plot_data_truth %>%
@@ -295,7 +338,8 @@ plot_forecast <- function(forecast_data,
   if(!is.null(facet)){
     # add scales
     graph <- graph + 
-      ggplot2::facet_wrap(facets = facet, scales = facet_scales, labeller = label_wrap_gen(multi_line=FALSE))
+      ggplot2::facet_wrap(facets = facet, scales = facet_scales, 
+                          labeller = label_wrap_gen(multi_line=FALSE))
   
   }
   

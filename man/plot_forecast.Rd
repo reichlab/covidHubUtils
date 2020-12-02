@@ -17,6 +17,7 @@ plot_forecast(
   horizon,
   truth_source = "JHU",
   plot = TRUE,
+  fill_by_model = FALSE,
   truth_as_of = NULL,
   title = "default",
   show_caption = TRUE
@@ -58,6 +59,10 @@ Currently support "JHU","USAFacts" and "NYTimes".}
 
 \item{plot}{boolean for showing the plot. Default to TRUE.
 Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
+
+\item{fill_by_model}{boolean for specifying colors in plot.
+If TRUE, separate colors will be used for each model.
+If FALSE, only blues will be used for all models. Default to FALSE.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date (not using this parameter when truth data
