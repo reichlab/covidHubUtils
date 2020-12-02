@@ -216,11 +216,11 @@ plot_forecast <- function(forecast_data,
     }
   } else {
     # only use blue
-    colourCount = length(quantiles_to_plot)/2+length(unique(models))
+    colourCount = length(quantiles_to_plot)/2+1
     getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
     blues = getPalette(colourCount)
-    forecast_colors <- tail(blues,length(unique(models)))
-    interval_colors <- rep(blues[1:(length(blues)-length(unique(models)))],
+    forecast_colors <- rep(tail(blues,1), length(unique(models)))
+    interval_colors <- rep(blues[1:(length(blues)-1)],
                            length(unique(models)))
   }
   
