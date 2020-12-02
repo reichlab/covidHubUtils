@@ -18,6 +18,7 @@
 #' be loaded from if truth_data is not provided. 
 #' Otherwise, this character specifies the data source to plot. 
 #' Currently support "JHU","USAFacts" and "NYTimes".
+#' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param truth_as_of the plot includes the truth data that would have been 
@@ -39,6 +40,7 @@ plot_forecast <- function(forecast_data,
                           intervals,
                           horizon,
                           truth_source = "JHU",
+                          plot_truth = TRUE,
                           plot = TRUE,
                           truth_as_of = NULL, 
                           title = "default", 
@@ -172,7 +174,7 @@ plot_forecast <- function(forecast_data,
                                       horizons_to_plot = horizon,
                                       quantiles_to_plot = quantiles_to_plot,
                                       location_to_plot = location,
-                                      plot_truth = TRUE,
+                                      plot_truth = plot_truth,
                                       truth_source = truth_source,
                                       target_variable = target_variable)
  
@@ -216,9 +218,9 @@ plot_forecast <- function(forecast_data,
     graph <- graph  +
       ggplot2::geom_ribbon(data = plot_data %>%
                   dplyr::filter(type == "quantile"),
-                mapping = aes(x = target_end_date,
-                              ymin=lower, ymax=upper,
-                              fill=`Prediction Interval`)) +
+                mapping = ggplot2::aes(x = target_end_date,
+                                       ymin=lower, ymax=upper,
+                                       fill=`Prediction Interval`)) +
       
       ggplot2::scale_fill_manual(values = blues[1:(length(blues)-1)])
       
@@ -228,14 +230,14 @@ plot_forecast <- function(forecast_data,
   graph <- graph +
     ggplot2::geom_line(data = plot_data %>%
                 dplyr::filter(!is.na(point)),
-              mapping = aes(x = target_end_date, 
-                            y = point, 
-                            color = truth_forecast)) +
+              mapping = ggplot2::aes(x = target_end_date,
+                                     y = point, 
+                                     color = truth_forecast)) +
     ggplot2::geom_point(data = plot_data %>%
                  dplyr::filter(!is.na(point)),
-               mapping = aes(x = target_end_date, 
-                             y = point, 
-                             color = truth_forecast)) +
+               mapping = ggplot2::aes(x = target_end_date, 
+                                      y = point, 
+                                      color = truth_forecast)) +
     ggplot2::scale_color_manual(name = "Model", 
                                 label = unique(plot_data$model),
                                 values = c("truth" = "black",

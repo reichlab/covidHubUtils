@@ -13,6 +13,7 @@ plot_forecast(
   intervals,
   horizon,
   truth_source = "JHU",
+  plot_truth = TRUE,
   plot = TRUE,
   truth_as_of = NULL,
   title = "default",
@@ -45,6 +46,8 @@ forecast date. Default to all available horizons in forecast data.}
 be loaded from if truth_data is not provided.
 Otherwise, this character specifies the data source to plot.
 Currently support "JHU","USAFacts" and "NYTimes".}
+
+\item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}
 
 \item{plot}{boolean for showing the plot. Default to TRUE.
 Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}

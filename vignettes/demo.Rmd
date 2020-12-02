@@ -6,10 +6,6 @@ output: html_document
 ---
 
 ```{r message=FALSE}
-library(zoltr)
-#library(dplyr)
-library(ggplot2)
-#library(tidyverse)
 library(covidHubUtils)
 ```
 
