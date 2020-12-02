@@ -14,6 +14,13 @@ Currently available:
 **Plotting Forecasts**
  * `plot_forecast(forecast_data, truth_data, model, target_variable, location, intervals, horizon, truth_source, plot, truth_as_of)`: Plot forecast with optional truth data for only one combination of model, target and location.
 
+**Download and pre-process "Truth" Data**
+ * `download_raw_nytimes(save_location)`: Download raw truth data from NYTimes and write to CSV files.
+ * `download_raw_usafacts(save_location)`: Download raw truth data from USAFacts and write to CSV files.
+ * `preprocess_nytimes(save_location)`: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
+ * `preprocess_usafacts(save_location)`: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs
+ * `preprocess_jhu(save_location)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
+
 Coming next: 
 
 **Scoring Forecasts**
