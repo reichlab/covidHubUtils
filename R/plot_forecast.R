@@ -198,7 +198,8 @@ plot_forecast <- function(forecast_data,
           getPalette(colourCount)
           }
         )
-        
+      
+      ribbon_colors <- RColorBrewer::brewer.pal(4, "Greys")[1:3]
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
       interval_colors <- unlist(lapply(model_colors, head, n = colourCount-1))
     } else {
@@ -208,7 +209,8 @@ plot_forecast <- function(forecast_data,
       # use 8 instead of 9 to avoid black and grey shades
       getPalette = colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
       model_colors <- getPalette(modelCount)
-        
+      
+      ribbon_colors <- RColorBrewer::brewer.pal(4, "Greys")[1:3]
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
       interval_colors <- unlist(lapply(model_colors, function(color){
         colorspace::lighten(color, 0.7)}
@@ -222,6 +224,7 @@ plot_forecast <- function(forecast_data,
     forecast_colors <- rep(tail(blues,1), length(unique(models)))
     interval_colors <- rep(blues[1:(length(blues)-1)],
                            length(unique(models)))
+    ribbon_colors <- blues[1:(length(blues)-1)]
   }
   
   # include truth from remote git hub repo by default
@@ -294,14 +297,22 @@ plot_forecast <- function(forecast_data,
                               ymax=upper,
                               group = interaction(`Prediction Interval`,model, 
                                                   location, forecast_date),
-                              fill = interaction(`Prediction Interval`, model))) +
+                              fill = interaction(`Prediction Interval`, model)),
+                show.legend=FALSE) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
-                                 #labels = rep(c("95%", "80%", "50%"), length(unique(models))),
-                                 #labels = `Prediction Interval`,
                                  values = interval_colors) +
-      ggplot2::guides(fill = guide_legend(
-        ncol=ceiling(length(unique(models))*length(intervals)/6), 
-        nrow = 6)) 
+      # grey layer
+      ggnewscale::new_scale_fill() +
+      ggplot2::geom_ribbon(data = plot_data_forecast %>%
+                             dplyr::filter(type == "quantile"),
+                           mapping = aes(ymin=lower, 
+                                         ymax=upper,
+                                         fill = `Prediction Interval`), alpha=0) +
+      ggplot2::scale_fill_manual(name = "Prediction Interval", 
+                                 values = ribbon_colors) +
+      # reset alpha in legend fill
+      ggplot2::guides(
+        fill = guide_legend(override.aes = list(alpha = 1)))
   }
   
   # plot point forecasts and truth 
