@@ -68,36 +68,23 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
   we encourage users to download a local copy of the COVID-19 Forecast Hub repository 
   so queries can be run locally: https://github.com/reichlab/covid19-forecast-hub/")
   
-  # if do_zoltar_query throws an error, skip that error and return
-  # an empty dataframe
-  zoltar_query_skip_error = purrr::possibly(zoltr::do_zoltar_query, 
-                                            otherwise = data.frame(),
-                                            # not show error messages from zoltar
-                                            quiet = TRUE)
-
-
-  # get forecasts that were submitted in the time window
-  forecast <- purrr::map_dfr(
-    forecast_dates,
-    function (forecast_date) {
-      f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
-                              project_url = project_url,
-                              query_type = "forecasts",
-                              units = locations, 
-                              timezeros = forecast_date,
-                              models = models,
-                              targets = targets,
-                              types = types, 
-                              verbose = FALSE)
-      # cast value to characters for now so that it binds
-      if (nrow(f) > 0){
-        f <- dplyr::mutate(f, value = as.character(value))
-      }
-      
-      return (f)
-    }
-  ) 
-
+  # get all valid timezeros in project
+  all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
+                                          project_url = project_url)$timezero_date
+  
+  # take intersection of forecast_dates and all_valid_timezeros
+  valid_forecast_dates <- intersect(as.character(forecast_dates), 
+                                    as.character(all_valid_timezeros))
+  
+  forecast <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
+                                      project_url = project_url,
+                                      query_type = "forecasts",
+                                      units = locations, 
+                                      timezeros = valid_forecast_dates,
+                                      models = models,
+                                      targets = targets,
+                                      types = types,
+                                      verbose = FALSE)
 
   if (nrow(forecast) ==0){
     warning("Warning in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")

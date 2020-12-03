@@ -34,13 +34,20 @@ load_forecasts <- function (
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-
+  
+  # get all valid timezeros in project
+  all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
+                                          project_url = project_url)$timezero_date
+  
+  # take intersection of forecast_dates and all_valid_timezeros
+  valid_forecast_dates <- intersect(as.character(forecast_dates), 
+                                    as.character(all_valid_timezeros))
 
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
                                       query_type = "forecasts",
                                       units = locations, 
-                                      timezeros = forecast_dates,
+                                      timezeros = valid_forecast_dates,
                                       models = models,
                                       targets = targets,
                                       types = types,
