@@ -297,7 +297,7 @@ plot_forecast <- function(forecast_data,
                   dplyr::filter(type == "quantile"),
                 mapping = aes(ymin=lower, 
                               ymax=upper,
-                              group = interaction(`Prediction Interval`,model, 
+                              group = interaction(`Prediction Interval`, model, 
                                                   location, forecast_date),
                               fill = interaction(`Prediction Interval`, model)),
                 show.legend=FALSE) +
@@ -324,6 +324,7 @@ plot_forecast <- function(forecast_data,
                 dplyr::filter(!is.na(point)),
               mapping = aes(x = target_end_date, 
                             y = point, 
+                            group = interaction(model, location, forecast_date),
                             color = model)) +
     ggplot2::geom_point(data = plot_data_forecast %>%
                  dplyr::filter(!is.na(point)),
@@ -348,7 +349,6 @@ plot_forecast <- function(forecast_data,
   
   # add facets
   if(!is.null(facet)){
-    # add scales
     graph <- graph + 
       ggplot2::facet_wrap(facets = facet, scales = facet_scales, 
                           labeller = label_wrap_gen(multi_line=FALSE))
