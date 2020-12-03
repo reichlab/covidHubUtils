@@ -88,7 +88,7 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
                               models = models,
                               targets = targets,
                               types = types, 
-                              verbose = TRUE)
+                              verbose = FALSE)
       # cast value to characters for now so that it binds
       if (nrow(f) > 0){
         f <- dplyr::mutate(f, value = as.character(value))

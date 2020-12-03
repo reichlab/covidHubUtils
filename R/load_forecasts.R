@@ -43,7 +43,8 @@ load_forecasts <- function (
                                       timezeros = forecast_dates,
                                       models = models,
                                       targets = targets,
-                                      types = types)
+                                      types = types,
+                                      verbose = FALSE)
   if (nrow(forecasts) ==0){
     warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
   } else {
