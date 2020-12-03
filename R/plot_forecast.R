@@ -22,6 +22,7 @@
 #' be loaded from if truth_data is not provided. 
 #' Otherwise, this character specifies the data source to plot. 
 #' Currently support "JHU","USAFacts" and "NYTimes".
+#' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param fill_by_model boolean for specifying colors in plot.
@@ -49,6 +50,7 @@ plot_forecast <- function(forecast_data,
                           intervals,
                           horizon,
                           truth_source = "JHU",
+                          plot_truth = TRUE,
                           plot = TRUE,
                           fill_by_model = FALSE,
                           truth_as_of = NULL, 
@@ -235,8 +237,8 @@ plot_forecast <- function(forecast_data,
                                       forecast_dates_to_plot = as.Date(forecast_dates),
                                       horizons_to_plot = horizon,
                                       quantiles_to_plot = quantiles_to_plot,
-                                      locations_to_plot = locations,
-                                      plot_truth = TRUE,
+                                      location_to_plot = locations,
+                                      plot_truth = plot_truth,
                                       truth_source = truth_source,
                                       target_variable = target_variable)
  
@@ -328,7 +330,6 @@ plot_forecast <- function(forecast_data,
                mapping = aes(x = target_end_date, 
                              y = point, 
                              color = model)) +
-    
     ggplot2::scale_color_manual(name = "Model", 
                                 values = forecast_colors) +
     #truth

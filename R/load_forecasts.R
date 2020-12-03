@@ -38,7 +38,7 @@ load_forecasts <- function (
 
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
-                                      is_forecast_query = TRUE,
+                                      query_type = "forecasts",
                                       units = locations, 
                                       timezeros = forecast_dates,
                                       models = models,
