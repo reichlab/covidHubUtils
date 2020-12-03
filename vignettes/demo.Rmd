@@ -199,7 +199,7 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               fill_by_model = FALSE,
                               facet = ~model+location,
                               # to make all predictions interval readable
-                              facet_scales = "free_y",
+                              facet_scales = "fixed",
                               title = "none",
                               show_caption = FALSE,
                               # only adding more info in the plot caption now
@@ -228,9 +228,10 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               horizon = 4,
                               truth_source = "JHU",
                               plot = TRUE,
-                              facet = ~model+forecast_date,
+                              fill_by_model = TRUE,
+                              #facet = ~forecast_date,
                               # to make all predictions interval readable
-                              facet_scales = "free_y",
+                              #facet_scales = "fixed",
                               title = "none",
                               show_caption = FALSE,
                               # only adding more info in the plot caption now
