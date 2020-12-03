@@ -237,7 +237,7 @@ plot_forecast <- function(forecast_data,
                                       forecast_dates_to_plot = as.Date(forecast_dates),
                                       horizons_to_plot = horizon,
                                       quantiles_to_plot = quantiles_to_plot,
-                                      location_to_plot = locations,
+                                      locations_to_plot = locations,
                                       plot_truth = plot_truth,
                                       truth_source = truth_source,
                                       target_variable = target_variable)

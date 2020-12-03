@@ -104,7 +104,7 @@ get_plot_forecast_data <- function(forecast_data,
       # call load_truth if the user did not provide truth_data
       truth <- load_truth(truth_source,
                           target_variable,
-                          locations = location_to_plot) %>%
+                          locations = locations_to_plot) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth")
       
@@ -112,7 +112,7 @@ get_plot_forecast_data <- function(forecast_data,
       # process truth_data for plotting
       truth <- truth_data %>%
         dplyr::filter(model == paste0("Observed Data (",truth_source,")"), 
-                      location == location_to_plot,
+                      location %in% locations_to_plot,
                       target_variable == target_variable) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth",
