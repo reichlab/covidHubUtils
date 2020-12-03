@@ -82,7 +82,7 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
     function (forecast_date) {
       f <- zoltar_query_skip_error(zoltar_connection = zoltar_connection,
                               project_url = project_url,
-                              is_forecast_query = TRUE,
+                              query_type = "forecasts",
                               units = locations, 
                               timezeros = forecast_date,
                               models = models,
