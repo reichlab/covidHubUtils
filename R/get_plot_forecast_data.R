@@ -84,7 +84,7 @@ get_plot_forecast_data <- function(forecast_data,
     warning("Warning in get_plot_forecast_data: Currently versioned truth data is not supported.")
   }
   
-  # filter to include selected models, forecast dates, locattions and target variable
+  # filter to include selected models, forecast dates, locations and target variable
   forecast_data <- forecast_data %>%
     dplyr::filter(model %in% models_to_plot,
                   forecast_date %in% forecast_dates_to_plot,
@@ -97,7 +97,16 @@ get_plot_forecast_data <- function(forecast_data,
   }
   
   forecasts<- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
-    dplyr::mutate(truth_forecast = "forecast")
+    dplyr::mutate(truth_forecast = "forecast") %>%
+    dplyr::left_join(y = covidHubUtils::hub_locations %>%
+                       dplyr::select(fips, location_name, geo_type, abbreviation), 
+                      by = c("location" = "fips")) %>%
+    dplyr::mutate(full_location_name = 
+                    ifelse(geo_type == "county",
+                           paste(location_name,abbreviation, sep = ", "),
+                           location_name)) %>%
+    dplyr::select(-location_name, -geo_type, -abbreviation) %>%
+    dplyr::rename(fips = location, location = full_location_name)
   
   if (plot_truth){
     if (is.null(truth_data)){
@@ -118,6 +127,18 @@ get_plot_forecast_data <- function(forecast_data,
         dplyr::mutate(truth_forecast = "truth",
                       point = as.numeric(point))
     }
+    
+    # add location name
+    truth <- truth %>%
+      dplyr::left_join(y = covidHubUtils::hub_locations %>%
+                         dplyr::select(fips, location_name, geo_type, abbreviation), 
+                       by = c("location" = "fips")) %>%
+      dplyr::mutate(full_location_name = 
+                      ifelse(geo_type == "county",
+                             paste(location_name,abbreviation, sep = ", "),
+                             location_name)) %>%
+      dplyr::select(-location_name, -geo_type, -abbreviation) %>%
+      dplyr::rename(fips = location, location = full_location_name)
     
     plot_data <- dplyr::bind_rows(forecasts, truth)
     return (plot_data)

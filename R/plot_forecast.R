@@ -177,7 +177,7 @@ plot_forecast <- function(forecast_data,
     }
   }
   
-  if (length(unique(models)) > 5){
+  if (!is.null(intervals) & length(unique(models)) > 5){
     intervals <- c(.95)
   }
   
@@ -191,7 +191,7 @@ plot_forecast <- function(forecast_data,
   # set colors
   if (fill_by_model){
     if (length(unique(models)) <= 5){
-      color_families <- c("Blues", "Oranges", "Purples", "Reds", "Greens")
+      color_families <- c("Blues", "Oranges", "Greens", "Purples", "Reds")
       colourCount <- length(quantiles_to_plot)/2+1
       model_colors <- purrr::map(
         color_families[1:length(unique(models))],
@@ -220,7 +220,7 @@ plot_forecast <- function(forecast_data,
     }
   } else {
     # only use blue
-    colourCount = length(quantiles_to_plot)/2+1
+    colourCount = max(length(quantiles_to_plot)/2+1, 2)
     getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
     blues = getPalette(colourCount)
     forecast_colors <- rep(tail(blues,1), length(unique(models)))
@@ -248,10 +248,14 @@ plot_forecast <- function(forecast_data,
     if(!is.null(truth_as_of)){
       caption <- paste0("source: ", truth_source," (observed data as of ",
                         as.Date(truth_as_of), "), ", 
-                        paste(models, collapse = ','), " (forecasts)")
+                        paste(models, collapse = ', '), " (forecasts)")
+      
+      caption <- paste(strwrap(caption, dev.size("px")[1]), collapse="\n")
     } else {
       caption <- paste0("source: ", truth_source," (observed data), ",
-                        paste(models, collapse = ',')," (forecasts)")
+                        paste(models, collapse = ', ')," (forecasts)")
+      
+      caption <- paste(strwrap(caption, dev.size("px")[1]), collapse="\n")
     }
   } else {
     caption <- NULL
@@ -267,19 +271,7 @@ plot_forecast <- function(forecast_data,
     full_target_variable = "Incident Hospitalizations"
   }
   
-  # generate title if specified as "default", otherwise leave as is
-  if(title == "default") {
-    full_location_names <- covidHubUtils::hub_locations %>%
-      dplyr::filter(fips %in% locations) %>%
-      dplyr::pull(location_name)
-    title <- paste0("Weekly COVID-19 ", full_target_variable, " in ", 
-                    paste(full_location_names, collapse = ','),
-                    ": observed and forecasted")
-  }
-  if(title == "none") {
-    title <- NULL
-  }
-  
+  # split plot data
   plot_data_forecast <- plot_data %>%
     dplyr::filter(truth_forecast == "forecast")
   
@@ -288,18 +280,32 @@ plot_forecast <- function(forecast_data,
     dplyr::rename(truth_model = model) %>%
     dplyr::select(-forecast_date)
   
-  graph <- ggplot2::ggplot(data = plot_data_forecast, aes(x= target_end_date))
+  # generate title if specified as "default", otherwise leave as is
+  if(title == "default") {
+    title <- paste0("Weekly COVID-19 ", full_target_variable, 
+                    ": observed and forecasted")
+    subtitle <- paste0("Selected locations: ", 
+                       paste(unique(plot_data_forecast$location), collapse = ', ') )
+  }
+  if(title == "none") {
+    title <- NULL
+    subtitle <- NULL
+  }
+  
+
+  # generate plot
+  graph <- ggplot2::ggplot(data = plot_data_forecast, ggplot2::aes(x= target_end_date))
   
   # plot selected prediction intervals
   if (!is.null(intervals)){
     graph <- graph  +
       ggplot2::geom_ribbon(data = plot_data_forecast %>%
                   dplyr::filter(type == "quantile"),
-                mapping = aes(ymin=lower, 
-                              ymax=upper,
-                              group = interaction(`Prediction Interval`, model, 
-                                                  location, forecast_date),
-                              fill = interaction(`Prediction Interval`, model)),
+                mapping = ggplot2::aes(ymin=lower, 
+                                       ymax=upper,
+                                       group = interaction(`Prediction Interval`, model, 
+                                                           location, forecast_date),
+                                       fill = interaction(`Prediction Interval`, model)),
                 show.legend=FALSE) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
                                  values = interval_colors) +
@@ -307,14 +313,15 @@ plot_forecast <- function(forecast_data,
       ggnewscale::new_scale_fill() +
       ggplot2::geom_ribbon(data = plot_data_forecast %>%
                              dplyr::filter(type == "quantile"),
-                           mapping = aes(ymin=lower, 
-                                         ymax=upper,
-                                         fill = `Prediction Interval`), alpha=0) +
+                           mapping = ggplot2::aes(ymin=lower, 
+                                                  ymax=upper, 
+                                                  fill = `Prediction Interval`), 
+                           alpha=0) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
                                  values = ribbon_colors) +
       # reset alpha in legend fill
       ggplot2::guides(
-        fill = guide_legend(override.aes = list(alpha = 1)))
+        fill = ggplot2::guide_legend(override.aes = list(alpha = 1)))
   }
   
   # plot point forecasts and truth 
@@ -322,36 +329,36 @@ plot_forecast <- function(forecast_data,
     #forecast
     ggplot2::geom_line(data = plot_data_forecast %>%
                 dplyr::filter(!is.na(point)),
-              mapping = aes(x = target_end_date, 
-                            y = point, 
-                            group = interaction(model, location, forecast_date),
-                            color = model)) +
+              mapping = ggplot2::aes(x = target_end_date, 
+                                     y = point, 
+                                     group = interaction(model, location, forecast_date),
+                                     color = model)) +
     ggplot2::geom_point(data = plot_data_forecast %>%
                  dplyr::filter(!is.na(point)),
-               mapping = aes(x = target_end_date, 
-                             y = point, 
-                             color = model)) +
+               mapping = ggplot2::aes(x = target_end_date, 
+                                      y = point, 
+                                      color = model)) +
     ggplot2::scale_color_manual(name = "Model", 
                                 values = forecast_colors) +
     #truth
     ggnewscale::new_scale_color() +
     ggplot2::geom_line(data = plot_data_truth %>%
                          dplyr::filter(!is.na(point)),
-                       mapping = aes(x = target_end_date, 
-                                     y = point, 
-                                     color = truth_model)) +
+                       mapping = ggplot2::aes(x = target_end_date, 
+                                              y = point, 
+                                              color = truth_model)) +
     ggplot2::geom_point(data = plot_data_truth %>%
                           dplyr::filter(!is.na(point)),
-                        mapping = aes(x = target_end_date, 
-                                      y = point, 
-                                      color = truth_model)) +
+                        mapping = ggplot2::aes(x = target_end_date, 
+                                               y = point, 
+                                               color = truth_model)) +
     ggplot2::scale_color_manual(name = "Truth", values = "black")
   
   # add facets
   if(!is.null(facet)){
     graph <- graph + 
       ggplot2::facet_wrap(facets = facet, scales = facet_scales, 
-                          labeller = label_wrap_gen(multi_line=FALSE))
+                          labeller = ggplot2::label_wrap_gen(multi_line=FALSE))
   
   }
   
@@ -359,7 +366,8 @@ plot_forecast <- function(forecast_data,
   graph <- graph + 
     ggplot2::scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
     ggplot2::ylab(full_target_variable) +
-    ggplot2::labs(title = title ,
+    ggplot2::labs(title = title,
+                  subtitle = subtitle,
                   caption = caption)
   
   if (plot){
