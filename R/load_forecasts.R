@@ -39,9 +39,13 @@ load_forecasts <- function (
   all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
                                           project_url = project_url)$timezero_date
   
-  # take intersection of forecast_dates and all_valid_timezeros
-  valid_forecast_dates <- intersect(as.character(forecast_dates), 
-                                    as.character(all_valid_timezeros))
+  if (!missing(forecast_dates)){
+    # take intersection of forecast_dates and all_valid_timezeros
+    valid_forecast_dates <- intersect(as.character(forecast_dates), 
+                                      as.character(all_valid_timezeros))
+  } else {
+    valid_forecast_dates <- all_valid_timezeros
+  }
 
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
