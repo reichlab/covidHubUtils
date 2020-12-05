@@ -37,7 +37,8 @@ Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remo
 repository. Only used when data_location is "local_hub_repo"}
 }
 \value{
-data frame with columns model, inc_cum, death_case, target_end_date, location and value
+data frame with columns model, inc_cum, death_case, target_end_date,
+location, value, location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
 Load truth data for specified target variable and locations
