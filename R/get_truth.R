@@ -227,70 +227,51 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
 #' Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs
 #' 
 #' @param save_location character specifying the location of to save raw truth data.
-#' Default to "./data-truth/"
+#' Default to "./data-truth"
 #' 
 #' @export
-preprocess_jhu <- function (save_location="./data-truth/"){
+preprocess_jhu <- function (save_location="./data-truth"){
   # Location name
   location_names <- covidData::fips_codes[, c("location", "location_name")]
   
-  # National data
-  national_cases_dframes <- covidData::load_jhu_data(spatial_resolution = "national",
-                                                     temporal_resolution = "daily",
-                                                     measure = "cases")
-  national_deaths_dframes <- covidData::load_jhu_data(spatial_resolution = "national",
-                                                      temporal_resolution = "daily",
-                                                      measure = "deaths")
-
-  # State data
-  state_cases_dframes <- covidData::load_jhu_data(spatial_resolution = "state",
-                                                     temporal_resolution = "daily",
-                                                     measure = "cases")
-  state_deaths_dframes <- covidData::load_jhu_data(spatial_resolution = "state",
-                                                      temporal_resolution = "daily",
-                                                      measure = "deaths")
-  
-  # County data
-  county_cases_dframes <- covidData::load_jhu_data(spatial_resolution = "county",
-                                                     temporal_resolution = "daily",
-                                                     measure = "cases")
-  county_deaths_dframes <- covidData::load_jhu_data(spatial_resolution = "county",
-                                                      temporal_resolution = "daily",
-                                                      measure = "deaths")
+  # Spatial resolutions
+  spatial_resolutions <- c("national", "state", "county")
   
   # Combine to get cases data
-  cases_dframes <- dplyr::bind_rows(national_cases_dframes, state_cases_dframes, county_cases_dframes)
+  cases_dframes <- covidData::load_jhu_data(spatial_resolution = spatial_resolutions,
+                                            temporal_resolution = "daily",
+                                            measure = "cases")
   cases_dframes <- dplyr::left_join(cases_dframes, location_names, by = "location")
-  cases_dframes$inc[cases_dframes$inc < 0] <- 0
-  cases_dframes<-cases_dframes[!(cases_dframes$location==11001),]
+  cases_dframes<-cases_dframes[!(cases_dframes$location=="11001"),]
   
   # Combine to get death data
-  deaths_dframes <- dplyr::bind_rows(national_deaths_dframes, state_deaths_dframes, county_deaths_dframes)
+  deaths_dframes <- covidData::load_jhu_data(spatial_resolution = spatial_resolutions,
+                                             temporal_resolution = "daily",
+                                             measure = "deaths")
   deaths_dframes <- dplyr::left_join(deaths_dframes, location_names, by = "location")
-  deaths_dframes$inc[deaths_dframes$inc < 0] <- 0
-  deaths_dframes<-deaths_dframes[!(deaths_dframes$location==11001),]
+  deaths_dframes<-deaths_dframes[!(deaths_dframes$location=="11001"),]
   
   # Get cumulative deaths
   cumulative_deaths <- deaths_dframes[, c("date", "location", "location_name", "cum")]
   colnames(cumulative_deaths)[colnames(cumulative_deaths) == 'cum'] <- 'value'
   cumulative_deaths <- cumulative_deaths[!rowSums(is.na(cumulative_deaths[c("location_name","value")])), ]
-  readr::write_csv(cumulative_deaths, path = paste0(save_location,"truth-Cumulative Deaths.csv"))
+  readr::write_csv(cumulative_deaths, path = file.path(save_location,"truth-Cumulative Deaths.csv"))
   
   # Get incident deaths
   incident_deaths <- deaths_dframes[, c("date", "location", "location_name", "inc")]
   colnames(incident_deaths)[colnames(incident_deaths) == 'inc'] <- 'value'
   incident_deaths <- incident_deaths[!rowSums(is.na(incident_deaths[c("location_name","value")])), ]
-  readr::write_csv(incident_deaths, path = paste0(save_location,"truth-Incident Deaths.csv"))
+  readr::write_csv(incident_deaths, path = file.path(save_location,"truth-Incident Deaths.csv"))
   
   # Get cumulative cases
   cumulative_cases <- cases_dframes[, c("date", "location", "location_name", "cum")]
   colnames(cumulative_cases)[colnames(cumulative_cases) == 'cum'] <- 'value'
   cumulative_cases <- cumulative_cases[!rowSums(is.na(cumulative_cases[c("location_name","value")])), ]
-  readr::write_csv(cumulative_cases, path = paste0(save_location,"truth-Cumulative Cases.csv"))
+  readr::write_csv(cumulative_cases, path = file.path(save_location,"truth-Cumulative Cases.csv"))
   
   # Get incident cases
   incident_cases <- cases_dframes[, c("date", "location", "location_name", "inc")]
   colnames(incident_cases)[colnames(incident_cases) == 'inc'] <- 'value'
   incident_cases <- incident_cases[!rowSums(is.na(incident_cases[c("location_name","value")])), ]
-  readr::write_csv(incident_cases, path = paste0(save_location,"truth-Incident Cases.csv"))
+  readr::write_csv(incident_cases, path = file.path(save_location,"truth-Incident Cases.csv"))
 }
