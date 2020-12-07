@@ -17,13 +17,13 @@
 #' be loaded from if truth_data is not provided. 
 #' Otherwise, this character specifies the data source to plot. 
 #' Currently support "JHU","USAFacts" and "NYTimes".
-#' @param target_variable string specifying target type. It should be one of 
+#' @param  target_variable_to_plot string specifying target type. It should be one of 
 #' "cum death", "inc case", "inc death" and "inc hosp"
 #' @param  truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date.
 #' 
-#' @return data frame with columns model, truth_model, 
-#' forecast_date, location, target_variable, type, quantile, value, horizon and 
+#' @return data frame with columns model, 
+#' forecast_date, location,  target_variable, type, quantile, value, horizon and 
 #' target_end_date.
 #' 
 #' @export
@@ -36,7 +36,7 @@ get_plot_forecast_data <- function(forecast_data,
                                    locations_to_plot,
                                    plot_truth = TRUE,
                                    truth_source,
-                                   target_variable,
+                                   target_variable_to_plot,
                                    truth_as_of = NULL){
   
   # validate truth_source
@@ -73,7 +73,7 @@ get_plot_forecast_data <- function(forecast_data,
         stop("Error in get_plot_forecast_data: Please provide a valid locations_to_plot.")
       }
       # check if truth_data has specified target variable
-      if (!(target_variable %in% truth_data$target_variable)){
+      if (!( target_variable_to_plot %in% truth_data$target_variable)){
         stop("Error in get_plot_forecast_data: Please provide a valid target variable.")
       }
     }
@@ -89,7 +89,7 @@ get_plot_forecast_data <- function(forecast_data,
     dplyr::filter(model %in% models_to_plot,
                   forecast_date %in% forecast_dates_to_plot,
                   location %in% locations_to_plot,
-                  target_variable == target_variable)
+                  target_variable == target_variable_to_plot)
   
   if (!missing(horizons_to_plot)){
     forecast_data <- forecast_data %>%
@@ -108,11 +108,12 @@ get_plot_forecast_data <- function(forecast_data,
     dplyr::select(-location_name, -geo_type, -abbreviation) %>%
     dplyr::rename(fips = location, location = full_location_name)
   
+  
   if (plot_truth){
     if (is.null(truth_data)){
       # call load_truth if the user did not provide truth_data
-      truth <- load_truth(truth_source,
-                          target_variable,
+      truth <- load_truth(truth_source = truth_source,
+                          target_variable = target_variable_to_plot,
                           locations = locations_to_plot) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth")
@@ -122,7 +123,7 @@ get_plot_forecast_data <- function(forecast_data,
       truth <- truth_data %>%
         dplyr::filter(model == paste0("Observed Data (",truth_source,")"), 
                       location %in% locations_to_plot,
-                      target_variable == target_variable) %>%
+                      target_variable == target_variable_to_plot) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth",
                       point = as.numeric(point))

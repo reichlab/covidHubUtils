@@ -241,7 +241,7 @@ plot_forecast <- function(forecast_data,
                                       locations_to_plot = locations,
                                       plot_truth = plot_truth,
                                       truth_source = truth_source,
-                                      target_variable = target_variable)
+                                      target_variable_to_plot = target_variable)
  
 
   # generate caption and full target variable

@@ -1,16 +1,28 @@
 Package: covidHubUtils
 Title: Utility functions for the COVID-19 forecast hub
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
+Version: 0.1
+Authors@R: c(
+    person(given = "Serena",
+           family = "Wang",
+           role = c("aut")),
+    person(given = "Evan L",
+           family = "Ray",
+           role = c("aut")),
+    person(given = "Khoa",
+           family = "Le",
+           role = c("ctb")),
+    person(given = "Nicholas G.",
+           family = "Reich",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "nick@umass.edu",
+           comment = c(ORCID = "0000-0003-3503-9899")))
+Description: 
+    A set of utility functions for downloading, plotting, and scoring
+    forecast and truth data from the COVID-19 Forecast Hub: 
+    https://covid19forecasthub.org/.
 License: MIT
 Imports:
-  dplyr (>= 0.8.4), tibble (>= 2.1.3), tidyr (>= 1.0.2), MMWRweek (>= 0.1.1), lubridate (>= 1.7.4), purrr (>= 0.3.3), ggplot2, magrittr, forcats, RcppRoll, zoltr
+  dplyr (>= 0.8.4), tibble (>= 2.1.3), tidyr (>= 1.0.2), MMWRweek (>= 0.1.1), lubridate (>= 1.7.4), purrr (>= 0.3.3), ggplot2, magrittr, forcats, RcppRoll, zoltr (>= 0.6.5)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
