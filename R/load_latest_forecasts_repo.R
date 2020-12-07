@@ -48,7 +48,7 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locati
   if (!missing(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
   } else {
-    types = c("point", "quantile")
+    types <- c("point", "quantile")
   }
   
   # validate targets
@@ -70,10 +70,11 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locati
   if (!missing(targets)){
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
   } else {
-    targets = all_valid_targets
+    targets <- all_valid_targets
   }
   
-  forecast_dates = as.Date(forecast_dates)
+  
+  forecast_dates <- as.Date(forecast_dates)
   
   forecasts <- purrr::map_dfr(
     models,
@@ -111,6 +112,7 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locati
           forecast_date = forecast_date,
           location = location,
           target = tolower(target),
+          target_end_date = target_end_date,
           type = type,
           quantile = quantile,
           value = value
@@ -119,9 +121,6 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates, locati
   ) %>%
     tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
                     remove = FALSE, extra = "merge") %>%
-    dplyr::mutate(target_end_date = as.Date(
-      calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
-      )) %>%
     dplyr::select(model, forecast_date, location, horizon, temporal_resolution, 
                   target_variable, target_end_date, type, quantile, value)
 

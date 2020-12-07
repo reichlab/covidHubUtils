@@ -62,7 +62,7 @@ load_latest_forecasts <- function (
   if (!missing(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
   } else {
-    types = c("point", "quantile")
+    types <- c("point", "quantile")
   }
   
   # validate targets
@@ -85,7 +85,7 @@ load_latest_forecasts <- function (
   if (!missing(targets)){
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
   } else {
-    targets = all_valid_targets
+    targets <- all_valid_targets
   }
   
   
@@ -96,7 +96,7 @@ load_latest_forecasts <- function (
     }, error = function(err){
       stop("Error in load_latest_forecasts: Please provide a valid date object or
            string in format YYYY-MM-DD in latest_forrecast_date.")
-    }
+      }
     )
 
   if (source == "local_hub_repo") {
