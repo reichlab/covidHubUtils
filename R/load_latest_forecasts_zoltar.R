@@ -12,7 +12,9 @@
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
+#' location_name, population, geo_type, geo_value, abbreviation
+#' 
 
 load_latest_forecasts_zoltar <- function(models, forecast_dates, locations, 
                                   types, targets){
@@ -108,7 +110,8 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
         calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
         )) %>%
       dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
-                    target_variable, target_end_date, type, quantile, value)
+                    target_variable, target_end_date, type, quantile, value) %>%
+      dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
   }
   
   return(forecast)

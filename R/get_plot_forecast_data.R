@@ -98,14 +98,10 @@ get_plot_forecast_data <- function(forecast_data,
   
   forecasts<- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast") %>%
-    dplyr::left_join(y = covidHubUtils::hub_locations %>%
-                       dplyr::select(fips, location_name, geo_type, abbreviation), 
-                      by = c("location" = "fips")) %>%
     dplyr::mutate(full_location_name = 
                     ifelse(geo_type == "county",
                            paste(location_name,abbreviation, sep = ", "),
                            location_name)) %>%
-    dplyr::select(-location_name, -geo_type, -abbreviation) %>%
     dplyr::rename(fips = location, location = full_location_name)
   
   
@@ -131,14 +127,10 @@ get_plot_forecast_data <- function(forecast_data,
     
     # add location name
     truth <- truth %>%
-      dplyr::left_join(y = covidHubUtils::hub_locations %>%
-                         dplyr::select(fips, location_name, geo_type, abbreviation), 
-                       by = c("location" = "fips")) %>%
       dplyr::mutate(full_location_name = 
                       ifelse(geo_type == "county",
                              paste(location_name,abbreviation, sep = ", "),
                              location_name)) %>%
-      dplyr::select(-location_name, -geo_type, -abbreviation) %>%
       dplyr::rename(fips = location, location = full_location_name)
     
     plot_data <- dplyr::bind_rows(forecasts, truth)
