@@ -15,7 +15,8 @@
 #' @param local_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository. Only used when data_location is "local_hub_repo"
 #' 
-#' @return data frame with columns model, inc_cum, death_case, target_end_date, location and value
+#' @return data frame with columns model, inc_cum, death_case, target_end_date, 
+#' location, value, location_name, population, geo_type, geo_value, abbreviation
 #' 
 #' @export
 load_truth <- function (truth_source,
@@ -148,5 +149,8 @@ load_truth <- function (truth_source,
     }
   }
   
+  truth <- truth %>%
+    dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
+    
   return (truth)
 }
