@@ -13,7 +13,7 @@ get_plot_forecast_data(
   location_to_plot,
   plot_truth = TRUE,
   truth_source,
-  target_variable,
+  target_variable_to_plot,
   truth_as_of = NULL
 )
 }
@@ -42,7 +42,7 @@ be loaded from if truth_data is not provided.
 Otherwise, this character specifies the data source to plot.
 Currently support "JHU","USAFacts" and "NYTimes".}
 
-\item{target_variable}{string specifying target type. It should be one of
+\item{target_variable_to_plot}{string specifying target type. It should be one of
 "cum death", "inc case", "inc death" and "inc hosp"}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
@@ -50,7 +50,7 @@ in real time as of the truth_as_of date.}
 }
 \value{
 data frame with columns model,
-forecast_date, location, target_variable, type, quantile, value, horizon and
+forecast_date, location,  target_variable, type, quantile, value, horizon and
 target_end_date.
 }
 \description{
