@@ -214,8 +214,9 @@ plot_forecast <- function(forecast_data,
       
       ribbon_colors <- RColorBrewer::brewer.pal(4, "Greys")[1:3]
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
+      # create 95% PI color
       interval_colors <- unlist(lapply(model_colors, function(color){
-        colorspace::lighten(color, 0.7)}
+        colorspace::adjust_transparency(color, 0.3)}
         ))
     }
   } else {
@@ -309,7 +310,7 @@ plot_forecast <- function(forecast_data,
                 show.legend=FALSE) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
                                  values = interval_colors) +
-      # grey layer
+      # create a transparent layer with grey colors to get prediction interval legend
       ggnewscale::new_scale_fill() +
       ggplot2::geom_ribbon(data = plot_data_forecast %>%
                              dplyr::filter(type == "quantile"),
