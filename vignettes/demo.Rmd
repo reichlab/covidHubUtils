@@ -1,7 +1,7 @@
 ---
 title: "demo_plot_forecast"
 author: "Serena Wang"
-date: "12/02/2020"
+date: "12/07/2020"
 output: html_document
 ---
 
@@ -82,14 +82,13 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
 # Load the latest forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 forecasts <- covidHubUtils::load_latest_forecasts(
-                      #models = c("COVIDhub-ensemble","COVIDhub-baseline"),
                       models =c("COVIDhub-ensemble","COVIDhub-baseline",
                                        "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
                                        "LANL-GrowthRate", "MSRA-DeepST"),
                       last_forecast_date = Sys.Date(),
                       forecast_date_window_size = 20,
-                      #locations = c("US","01"),
-                      locations = "US",
+                      locations = c("US","01","06059"),
+                      #locations = "US",
                       types = c("point","quantile"),
                       targets = c(inc_case_targets),
                       source = "zoltar",
@@ -103,35 +102,15 @@ forecasts <- covidHubUtils::load_latest_forecasts(
 covidHubUtils::plot_forecast (forecast_data = forecasts,
                               models = c("COVIDhub-ensemble"),
                               target_variable = "inc case",
-                              locations = c("US","01"),
-                              intervals = c(.5, .8, .95),
+                              locations = c("US","06059"),
+                              intervals = c(.5, 0.8, .95),
                               horizon = 4,
                               truth_source = "JHU",
                               plot = TRUE,
                               facet = ~location,
-                              # to make all predictions interval readable
-                              facet_scales = "free_y",
-                              title = "none",
-                              show_caption = FALSE,
-                              # only adding more info in the plot caption now
-                              truth_as_of = Sys.Date())
-
-```
-
-```{r message=FALSE}
-# facet by model
-covidHubUtils::plot_forecast (forecast_data = forecasts,
-                              models = c("COVIDhub-ensemble","COVIDhub-baseline"),
-                              target_variable = "inc case",
-                              locations = c("US"),
-                              intervals = c(.5, .8, .95),
-                              horizon = 4,
-                              truth_source = "JHU",
-                              plot = TRUE,
-                              facet = ~model,
                               facet_scales = "fixed",
-                              title = "none",
-                              show_caption = FALSE,
+                              title = "default",
+                              show_caption = TRUE,
                               # only adding more info in the plot caption now
                               truth_as_of = Sys.Date())
 
@@ -154,8 +133,8 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               fill_by_model = TRUE,
                               facet = ~model,
                               facet_scales = "fixed",
-                              title = "none",
-                              show_caption = FALSE,
+                              title = "default",
+                              show_caption = TRUE,
                               # only adding more info in the plot caption now
                               truth_as_of = Sys.Date())
 
@@ -177,31 +156,30 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               facet = ~model,
                               facet_scales = "fixed",
                               title = "default",
-                              show_caption = FALSE,
+                              show_caption = TRUE,
                               # only adding more info in the plot caption now
                               truth_as_of = Sys.Date())
 
 ```
 
 ```{r message=FALSE}
-# facet by model and locations
+# facet by model
 covidHubUtils::plot_forecast (forecast_data = forecasts,
-                              #models = c("COVIDhub-ensemble","COVIDhub-baseline"),
                               models = c("COVIDhub-ensemble","COVIDhub-baseline",
                                        "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
                                        "LANL-GrowthRate"),
                               target_variable = "inc case",
-                              locations = c("US","01"),
+                              locations = c("US"),
                               intervals = c(.5, .8, .95),
                               horizon = 4,
                               truth_source = "JHU",
                               plot = TRUE,
                               fill_by_model = FALSE,
-                              facet = ~model+location,
+                              facet = ~ model,
                               # to make all predictions interval readable
                               facet_scales = "fixed",
-                              title = "none",
-                              show_caption = FALSE,
+                              title = "default",
+                              show_caption = TRUE,
                               # only adding more info in the plot caption now
                               truth_as_of = Sys.Date())
 
@@ -229,11 +207,11 @@ covidHubUtils::plot_forecast (forecast_data = forecasts,
                               truth_source = "JHU",
                               plot = TRUE,
                               fill_by_model = TRUE,
-                              #facet = ~forecast_date,
+                              facet = model ~ forecast_date,
                               # to make all predictions interval readable
-                              #facet_scales = "fixed",
-                              title = "none",
-                              show_caption = FALSE,
+                              facet_scales = "fixed",
+                              title = "default",
+                              show_caption = TRUE,
                               # only adding more info in the plot caption now
                               truth_as_of = Sys.Date())
 
