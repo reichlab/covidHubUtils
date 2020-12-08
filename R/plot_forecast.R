@@ -71,18 +71,9 @@ plot_forecast <- function(forecast_data,
   }
   
   # optional locations parameter. Default to all locations in forecast_data
-  if (!missing(locations)){
-    if (!all(locations %in% forecast_data$location)) {
-      stop("Error in plot_forecast: Not all locations are available in forecast data.")
-    }
-  } else {
+  if (missing(locations)){
     locations <- unique(forecast_data$location)
   }
-  
-  # validate truth_source
-  truth_source <- match.arg(truth_source, 
-                            choices = c("JHU","USAFacts", "NYTimes"), 
-                            several.ok = FALSE)
   
   # validate location fips code
   all_valid_fips <- covidHubUtils::hub_locations$fips
@@ -94,6 +85,12 @@ plot_forecast <- function(forecast_data,
   if (!all(locations %in% forecast_data$location)){
     stop("Error in plot_forecast: Not all locations are available in forecast_data.")
   }
+  
+  
+  # validate truth_source
+  truth_source <- match.arg(truth_source, 
+                            choices = c("JHU","USAFacts", "NYTimes"), 
+                            several.ok = FALSE)
   
   # validate target_variable
   target_variable <- match.arg(target_variable, 
