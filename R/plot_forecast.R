@@ -3,12 +3,12 @@
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
 #' @param truth_data optional data frame with forecasts in the format returned 
 #' by load_truth().
-#' @param models model_abbr specifying models to plot. Optional if there is only
-#' one model available in forecast data.
+#' @param models vector of strings specifying models to plot. 
+#' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
 #' "cum death", "inc case", "inc death"
-#' @param locations string for fips code or 'US'. Optional if there is only one
-#' location available in forecast data.
+#' @param locations string for fips code or 'US'. 
+#' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot
 #' @param facet_scales argument for scales in ggplot2::facet_wrap. Default to "fixed".
 #' @param forecast_dates date string vectors for forecast dates to plot. 
@@ -61,29 +61,22 @@ plot_forecast <- function(forecast_data,
   if(is.na(title))
     stop("title argument interpretable as a character.")
   
-  # optional models and locations
-  if (length(unique(forecast_data$model)) == 1){
-    models = unique(forecast_data$model)
-  } else {
-    if (!missing(models)){
-      if (!all(models %in% forecast_data$model)) {
-        stop("Error in plot_forecast: Not all models are available in forecast data.")
-      }
-    } else {
-      stop("Error in plot_forecast: Please select a model to plot.")
+  # optional models parameter. Default to all models in forecast_data
+  if (!missing(models)){
+    if (!all(models %in% forecast_data$model)) {
+      stop("Error in plot_forecast: Not all models are available in forecast data.")
     }
+  } else {
+    models <- unique(forecast_data$model)
   }
   
-  if (length(unique(forecast_data$location)) == 1){
-    locations = unique(forecast_data$location)
-  } else {
-    if (!missing(locations)){
-      if (!all(locations %in% forecast_data$location)) {
-        stop("Error in plot_forecast: Not all locations are available in forecast data.")
-      }
-    } else {
-      stop("Error in plot_forecast: Please select a location to plot.")
+  # optional locations parameter. Default to all locations in forecast_data
+  if (!missing(locations)){
+    if (!all(locations %in% forecast_data$location)) {
+      stop("Error in plot_forecast: Not all locations are available in forecast data.")
     }
+  } else {
+    locations <- unique(forecast_data$location)
   }
   
   # validate truth_source
@@ -228,6 +221,11 @@ plot_forecast <- function(forecast_data,
     interval_colors <- rep(blues[1:(length(blues)-1)],
                            length(unique(models)))
     ribbon_colors <- blues[1:(length(blues)-1)]
+  }
+  
+  if (!is.null(truth_as_of)){
+    warning("Warning in plot_forecast: truth_as_of is not used to load versioned truth data.
+            Will be available soon.")
   }
   
   # include truth from remote git hub repo by default

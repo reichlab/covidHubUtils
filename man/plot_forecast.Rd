@@ -30,14 +30,14 @@ plot_forecast(
 \item{truth_data}{optional data frame with forecasts in the format returned
 by load_truth().}
 
-\item{models}{model_abbr specifying models to plot. Optional if there is only
-one model available in forecast data.}
+\item{models}{vector of strings specifying models to plot.
+Default to all models in forecast_data.}
 
 \item{target_variable}{string specifying target type. It should be one of
 "cum death", "inc case", "inc death"}
 
-\item{locations}{string for fips code or 'US'. Optional if there is only one
-location available in forecast data.}
+\item{locations}{string for fips code or 'US'.
+Default to all locations in forecast_data.}
 
 \item{facet}{interpretable facet option for ggplot}
 

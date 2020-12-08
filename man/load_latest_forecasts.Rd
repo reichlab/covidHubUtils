@@ -46,7 +46,8 @@ repository}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value
+temporal_resolution, target_variable, target_end_date, type, quantile, value,
+location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
 Load covid forecasts from local hub repo or Zoltar.
