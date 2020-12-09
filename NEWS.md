@@ -9,3 +9,7 @@ This is the first version of the package with a 0.x release.
 ### package updates
 - details on other changes will be listed here for future updates
 - added initial author/contributor list
+
+## v 0.1
+ - initial release: big plotting changes
+ - v0.1.1 : in load_latest_forecasts, use provided source for calls to lower level functions
