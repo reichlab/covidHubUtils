@@ -22,7 +22,8 @@
 #' repository
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
+#' location_name, population, geo_type, geo_value, abbreviation
 #' 
 #' @export
 load_latest_forecasts <- function (

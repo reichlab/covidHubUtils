@@ -5,11 +5,12 @@
 #' value, horizon and target_end_date.
 #' @param truth_data optional data frame with forecasts in the format returned 
 #' by load_truth().
-#' @param model_to_plot characters of model abbreviations 
+#' @param models_to_plot characters of model abbreviations 
+#' @param forecast_dates_to_plot date string vectors for forecast dates to plot.
 #' @param horizons_to_plot forecasts are plotted for the horizon time steps after 
 #' the forecast date.
 #' @param quantiles_to_plot vector of quanitles to include in the plot
-#' @param location_to_plot character vector of one location. 
+#' @param locations_to_plot character vector of one location. 
 #' @param plot_truth boolean to indicate whether truth data should be plotted.
 #' Default to TRUE.
 #' @param truth_source character specifying where the truth data will
@@ -28,10 +29,11 @@
 #' @export
 get_plot_forecast_data <- function(forecast_data, 
                                    truth_data = NULL,
-                                   model_to_plot,
+                                   models_to_plot,
+                                   forecast_dates_to_plot,
                                    horizons_to_plot,
                                    quantiles_to_plot,
-                                   location_to_plot,
+                                   locations_to_plot,
                                    plot_truth = TRUE,
                                    truth_source,
                                    target_variable_to_plot,
@@ -44,13 +46,12 @@ get_plot_forecast_data <- function(forecast_data,
   # validate location
   all_valid_fips <- covidHubUtils::hub_locations$fips
   
-  
-  if (!missing(location_to_plot)){
-    location_to_plot <- match.arg(location_to_plot, 
+  if (!missing(locations_to_plot)){
+    locations_to_plot <- match.arg(locations_to_plot, 
                                   choices = all_valid_fips, 
-                                  several.ok = FALSE)
+                                  several.ok = TRUE)
   } else {
-    stop("Error in get_plot_forecast_data: Please provide a location_to_plot parameter.")
+    stop("Error in get_plot_forecast_data: Please provide locations_to_plot parameter.")
   }
 
   # validate truth data if provided
@@ -68,8 +69,8 @@ get_plot_forecast_data <- function(forecast_data,
         stop("Error in get_plot_forecast_data: Please provide a valid truth_source to plot.")
       }
       # check if truth_data has data from specified location
-      if (!(location_to_plot %in% truth_data$location)){
-        stop("Error in get_plot_forecast_data: Please provide a valid location_to_plot.")
+      if (!all(locations_to_plot %in% truth_data$location)){
+        stop("Error in get_plot_forecast_data: Please provide a valid locations_to_plot.")
       }
       # check if truth_data has specified target variable
       if (!( target_variable_to_plot %in% truth_data$target_variable)){
@@ -83,11 +84,12 @@ get_plot_forecast_data <- function(forecast_data,
     warning("Warning in get_plot_forecast_data: Currently versioned truth data is not supported.")
   }
   
-  # filter horizons and locations. Only plot one location now.
+  # filter to include selected models, forecast dates, locations and target variable
   forecast_data <- forecast_data %>%
-    dplyr::filter(model == model_to_plot,
-                  location == location_to_plot,
-                  target_variable ==  target_variable_to_plot)
+    dplyr::filter(model %in% models_to_plot,
+                  forecast_date %in% forecast_dates_to_plot,
+                  location %in% locations_to_plot,
+                  target_variable == target_variable_to_plot)
   
   if (!missing(horizons_to_plot)){
     forecast_data <- forecast_data %>%
@@ -95,7 +97,12 @@ get_plot_forecast_data <- function(forecast_data,
   }
   
   forecasts<- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
-    dplyr::mutate(truth_forecast = "forecast")
+    dplyr::mutate(truth_forecast = "forecast") %>%
+    dplyr::mutate(full_location_name = 
+                    ifelse(geo_type == "county",
+                           paste(location_name,abbreviation, sep = ", "),
+                           location_name)) %>%
+    dplyr::rename(fips = location, location = full_location_name)
   
   
   if (plot_truth){
@@ -103,7 +110,7 @@ get_plot_forecast_data <- function(forecast_data,
       # call load_truth if the user did not provide truth_data
       truth <- load_truth(truth_source = truth_source,
                           target_variable = target_variable_to_plot,
-                          locations = location_to_plot) %>%
+                          locations = locations_to_plot) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth")
       
@@ -111,12 +118,20 @@ get_plot_forecast_data <- function(forecast_data,
       # process truth_data for plotting
       truth <- truth_data %>%
         dplyr::filter(model == paste0("Observed Data (",truth_source,")"), 
-                      location == location_to_plot,
-                      target_variable ==  target_variable_to_plot) %>%
+                      location %in% locations_to_plot,
+                      target_variable == target_variable_to_plot) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth",
                       point = as.numeric(point))
     }
+    
+    # add location name
+    truth <- truth %>%
+      dplyr::mutate(full_location_name = 
+                      ifelse(geo_type == "county",
+                             paste(location_name,abbreviation, sep = ", "),
+                             location_name)) %>%
+      dplyr::rename(fips = location, location = full_location_name)
     
     plot_data <- dplyr::bind_rows(forecasts, truth)
     return (plot_data)

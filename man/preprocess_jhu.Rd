@@ -4,11 +4,11 @@
 \alias{preprocess_jhu}
 \title{Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs}
 \usage{
-preprocess_jhu(save_location = "./data-truth/")
+preprocess_jhu(save_location = "./data-truth")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./data-truth/"}
+Default to "./data-truth"}
 }
 \description{
 Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs
