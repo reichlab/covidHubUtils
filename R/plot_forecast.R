@@ -144,6 +144,7 @@ plot_forecast <- function(forecast_data,
   if (missing(forecast_dates)){
     forecast_dates <- unique(forecast_data$forecast_date)
   } else {
+    forecast_dates <- as.Date(forecast_dates)
     if (!all(forecast_dates %in% forecast_data$forecast_date)){
       stop ("Error in plot_forecast: Not all forecast_dates are available in forecast data.")
     }

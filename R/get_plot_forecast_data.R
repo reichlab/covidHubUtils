@@ -7,10 +7,12 @@
 #' by load_truth().
 #' @param models_to_plot characters of model abbreviations 
 #' @param forecast_dates_to_plot date string vectors for forecast dates to plot.
+#' Default to all forecast dates available in forecast_data.
 #' @param horizons_to_plot forecasts are plotted for the horizon time steps after 
 #' the forecast date.
 #' @param quantiles_to_plot vector of quanitles to include in the plot
-#' @param locations_to_plot character vector of one location. 
+#' @param locations_to_plot  optional character vector of location fips codes.
+#' Default to all locations available in forecast_data.
 #' @param plot_truth boolean to indicate whether truth data should be plotted.
 #' Default to TRUE.
 #' @param truth_source character specifying where the truth data will
@@ -43,17 +45,27 @@ get_plot_forecast_data <- function(forecast_data,
   truth_source <- match.arg(truth_source, 
                             choices = c("JHU","USAFacts", "NYTimes"), 
                             several.ok = FALSE)
-  # validate location
+  
+  # validate locations_to_plot
+  if (missing(locations_to_plot)){
+    locations_to_plot <- unique(forecast_data$location)
+  }
+  
   all_valid_fips <- covidHubUtils::hub_locations$fips
   
-  if (!missing(locations_to_plot)){
-    locations_to_plot <- match.arg(locations_to_plot, 
-                                  choices = all_valid_fips, 
-                                  several.ok = TRUE)
+  locations_to_plot <- intersect(as.character(locations_to_plot), 
+                                 as.character(all_valid_fips))
+  
+  # validate forecast_dates_to_plot
+  if (missing(forecast_dates_to_plot)){
+    forecast_dates_to_plot <- unique(forecast_data$forecast_date)
   } else {
-    stop("Error in get_plot_forecast_data: Please provide locations_to_plot parameter.")
+    forecast_dates_to_plot <- as.Date(forecast_dates_to_plot)
+    if (!all(forecast_dates_to_plot %in% forecast_data$forecast_date)){
+      stop ("Error in get_plot_forecast_data: Not all forecast_dates are available in forecast data.")
+    }
   }
-
+  
   # validate truth data if provided
   if (!is.null(truth_data)){
     # check if truth_data has all needed columns

@@ -28,14 +28,16 @@ by load_truth().}
 
 \item{models_to_plot}{characters of model abbreviations}
 
-\item{forecast_dates_to_plot}{date string vectors for forecast dates to plot.}
+\item{forecast_dates_to_plot}{date string vectors for forecast dates to plot.
+Default to all forecast dates available in forecast_data.}
 
 \item{horizons_to_plot}{forecasts are plotted for the horizon time steps after
 the forecast date.}
 
 \item{quantiles_to_plot}{vector of quanitles to include in the plot}
 
-\item{locations_to_plot}{character vector of one location.}
+\item{locations_to_plot}{optional character vector of location fips codes.
+Default to all locations available in forecast_data.}
 
 \item{plot_truth}{boolean to indicate whether truth data should be plotted.
 Default to TRUE.}
