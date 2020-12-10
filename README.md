@@ -12,7 +12,7 @@ Currently available:
 * `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository.
 
 **Plotting Forecasts**
- * `plot_forecast(forecast_data, truth_data, model, target_variable, location, intervals, horizon, truth_source, plot, truth_as_of)`: Plot forecast with optional truth data for only one combination of model, target and location.
+ * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
 
 **Download and pre-process "Truth" Data**
  * `download_raw_nytimes(save_location)`: Download raw truth data from NYTimes and write to CSV files.
