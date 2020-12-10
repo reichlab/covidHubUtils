@@ -21,6 +21,7 @@ plot_forecast(
   fill_by_model = FALSE,
   truth_as_of = NULL,
   title = "default",
+  subtitle = "default",
   show_caption = TRUE
 )
 }
@@ -71,8 +72,11 @@ If FALSE, only blues will be used for all models. Default to FALSE.}
 in real time as of the truth_as_of date (not using this parameter when truth data
 is from github repo)}
 
-\item{title}{optional text for the title of the plot. if left as "default",
-the title will be automatically generated. if "none", no title will be plotted.}
+\item{title}{optional text for the title of the plot. If left as "default",
+the title will be automatically generated. If "none", no title will be plotted.}
+
+\item{subtitle}{optional text for the subtitle of the plot. If left as "default",
+the subtitle will be automatically generated. If "none", no subtitle will be plotted.}
 
 \item{show_caption}{logical, if TRUE, caption will be included showing data sources}
 }

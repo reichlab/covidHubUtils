@@ -31,8 +31,10 @@
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)
-#' @param title optional text for the title of the plot. if left as "default",
-#' the title will be automatically generated. if "none", no title will be plotted. 
+#' @param title optional text for the title of the plot. If left as "default",
+#' the title will be automatically generated. If "none", no title will be plotted. 
+#' @param subtitle optional text for the subtitle of the plot. If left as "default",
+#' the subtitle will be automatically generated. If "none", no subtitle will be plotted. 
 #' @param show_caption logical, if TRUE, caption will be included showing data sources
 
 #' 
@@ -55,6 +57,7 @@ plot_forecast <- function(forecast_data,
                           fill_by_model = FALSE,
                           truth_as_of = NULL, 
                           title = "default", 
+                          subtitle = "default",
                           show_caption = TRUE){
  
   # title format
@@ -280,13 +283,25 @@ plot_forecast <- function(forecast_data,
   if(title == "default") {
     title <- paste0("Weekly COVID-19 ", full_target_variable, 
                     ": observed and forecasted")
-    subtitle <- paste0("Selected locations: ", 
-                       paste(unique(plot_data_forecast$location), collapse = ', ') )
   }
+  
   if(title == "none") {
     title <- NULL
+  }
+  
+  # generate subtitle if specified as "default", otherwise leave as is
+  if (subtitle == "default"){
+    subtitle <- paste0("Selected location(s): ", 
+                      paste(unique(plot_data_forecast$location), collapse = ', '),
+                      "\nSelected forecast date(s): ",
+                      paste(unique(plot_data_forecast$forecast_date), collapse = ', ')
+                      )
+  }
+  
+  if (subtitle == "none"){
     subtitle <- NULL
   }
+  
   
 
   # generate plot
