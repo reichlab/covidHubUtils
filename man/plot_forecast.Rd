@@ -2,7 +2,9 @@
 % Please edit documentation in R/plot_forecast.R
 \name{plot_forecast}
 \alias{plot_forecast}
-\title{Plot forecasts with truth for only one model, one target and one location}
+\title{Plot forecasts and optional truth for only one selected target variable.
+Faceted plots for multiple models, locations and forecast dates are
+supported with specified facet formula.}
 \usage{
 plot_forecast(
   forecast_data,
@@ -84,5 +86,7 @@ the subtitle will be automatically generated. If "none", no subtitle will be plo
 invisible ggplot object
 }
 \description{
-Plot forecasts with truth for only one model, one target and one location
+Plot forecasts and optional truth for only one selected target variable.
+Faceted plots for multiple models, locations and forecast dates are
+supported with specified facet formula.
 }

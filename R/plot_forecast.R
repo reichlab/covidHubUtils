@@ -1,5 +1,7 @@
-#' Plot forecasts with truth for only one model, one target and one location
-#'
+#' Plot forecasts and optional truth for only one selected target variable.
+#' Faceted plots for multiple models, locations and forecast dates are 
+#' supported with specified facet formula. 
+#' 
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
 #' @param truth_data optional data frame with forecasts in the format returned 
 #' by load_truth().
