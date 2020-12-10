@@ -62,7 +62,11 @@ plot_forecast <- function(forecast_data,
  
   # title format
   if(is.na(title))
-    stop("title argument interpretable as a character.")
+    stop("Error in plot_forecast: title argument interpretable as a character.")
+  
+  # subtitle format
+  if(is.na(subtitle))
+    stop("Error in plot_forecast: subtitle argument interpretable as a character.")
   
   # optional models parameter. Default to all models in forecast_data
   if (!missing(models)){
@@ -373,7 +377,7 @@ plot_forecast <- function(forecast_data,
   
   }
   
-  # add labels, title and caption
+  # add labels, title, subtitle and caption
   graph <- graph + 
     ggplot2::scale_x_date(name = NULL, date_breaks="1 month", date_labels = "%b %d") +
     ggplot2::ylab(full_target_variable) +
