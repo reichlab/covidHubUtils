@@ -20,7 +20,8 @@
 #' Otherwise, this character specifies the data source to plot. 
 #' Currently support "JHU","USAFacts" and "NYTimes".
 #' @param  target_variable_to_plot string specifying target type. It should be one of 
-#' "cum death", "inc case", "inc death" and "inc hosp"
+#' "cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
+#' in load_truth() now.
 #' @param  truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date.
 #' 
@@ -42,9 +43,17 @@ get_plot_forecast_data <- function(forecast_data,
                                    truth_as_of = NULL){
   
   # validate truth_source
-  truth_source <- match.arg(truth_source, 
-                            choices = c("JHU","USAFacts", "NYTimes"), 
-                            several.ok = FALSE)
+  if (target_variable_to_plot != "inc hosp"){
+    truth_source <- match.arg(truth_source, 
+                              choices = c("JHU","USAFacts", "NYTimes"), 
+                              several.ok = FALSE)
+  } else {
+    if (missing(truth_source) | is.na(truth_source)){
+      stop("Error in get_plot_forecast_data: Please provide truth_source when target_variable is inc hosp.")
+    } else {
+      truth_source <- truth_source
+    }
+  }
   
   # validate locations_to_plot
   if (missing(locations_to_plot)){
@@ -80,12 +89,16 @@ get_plot_forecast_data <- function(forecast_data,
       if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)){
         stop("Error in get_plot_forecast_data: Please provide a valid truth_source to plot.")
       }
+      # check if all fips code in location column are valid
+      if (!all(truth_data$location %in% all_valid_fips)){
+        stop("Error in get_plot_forecast_data: Please make sure all fips code in location column are valid.")
+      }
       # check if truth_data has data from specified location
       if (!all(locations_to_plot %in% truth_data$location)){
         stop("Error in get_plot_forecast_data: Please provide a valid locations_to_plot.")
       }
       # check if truth_data has specified target variable
-      if (!( target_variable_to_plot %in% truth_data$target_variable)){
+      if (!(target_variable_to_plot %in% truth_data$target_variable)){
         stop("Error in get_plot_forecast_data: Please provide a valid target variable.")
       }
     }
@@ -119,19 +132,24 @@ get_plot_forecast_data <- function(forecast_data,
   
   if (plot_truth){
     if (is.null(truth_data)){
-      # call load_truth if the user did not provide truth_data
-      truth <- load_truth(truth_source = truth_source,
-                          target_variable = target_variable_to_plot,
-                          locations = locations_to_plot) %>%
-        dplyr::rename(point = value) %>%
-        dplyr::mutate(truth_forecast = "truth")
-      
+      if (target_variable_to_plot == "inc hosp"){
+        stop("Error in get_plot_forecast_data: inc hosp target is not supported in load_truth.
+             Please provide truth_data.")
+      } else {
+        # call load_truth if the user did not provide truth_data
+        truth <- load_truth(truth_source = truth_source,
+                            target_variable = target_variable_to_plot,
+                            locations = locations_to_plot) %>%
+          dplyr::rename(point = value) %>%
+          dplyr::mutate(truth_forecast = "truth")
+      }
     } else {
       # process truth_data for plotting
       truth <- truth_data %>%
         dplyr::filter(model == paste0("Observed Data (",truth_source,")"), 
                       location %in% locations_to_plot,
                       target_variable == target_variable_to_plot) %>%
+        dplyr::left_join(covidHubUtils::hub_locations, by = c("location" = "fips")) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth",
                       point = as.numeric(point))

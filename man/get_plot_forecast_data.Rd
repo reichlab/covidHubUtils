@@ -48,7 +48,8 @@ Otherwise, this character specifies the data source to plot.
 Currently support "JHU","USAFacts" and "NYTimes".}
 
 \item{target_variable_to_plot}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp"}
+"cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
+in load_truth() now.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date.}
