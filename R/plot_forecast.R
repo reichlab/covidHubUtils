@@ -137,9 +137,9 @@ plot_forecast <- function(forecast_data,
       if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)) {
         stop("Error in plot_forecast: Please provide a valid truth_source to plot.")
       }
-      # check if all fips code in location column are valid
+      # check if all fips codes in location column are valid
       if (!all(truth_data$location %in% all_valid_fips)){
-        stop("Error in get_plot_forecast_data: Please make sure all fips code in location column are valid.")
+        stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
       }
       # check if truth_data has data from specified location
       if (!all(locations %in% truth_data$location)){
