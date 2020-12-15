@@ -1,14 +1,15 @@
-#' Generate the most up to date truth data for zoltar for a specified target
+#' Generate versioned truth data for zoltar for a specified target
 #' It only includes national and state-level truth data.
 #' 
 #' @param target string specifying target. 
-#' Currently only support "Cumulative Deaths" and "Incident Deaths"
+#' Currently only support "Cumulative Deaths" and "Incident Deaths".
+#' @param issue_date optional date specifying issue date of truth data.
+#' Default to NULL which will load the latest truth data from covidData. 
 #' 
 #' @return data frame with timezero, unit, target and value
 #'
 #' @export
-#'
-configure_zoltar_truth <- function(target){
+configure_zoltar_truth <- function(target, issue_date = NULL){
   
   # validate target 
   target <- match.arg(target, 
@@ -16,7 +17,7 @@ configure_zoltar_truth <- function(target){
                       several.ok = FALSE)
   
   # load the most up to date weeky truth data from JHU CSSE
-  df <- covidData::load_jhu_data(issue_date = NULL, 
+  df <- covidData::load_jhu_data(issue_date = issue_date, 
                                  spatial_resolution = c('national', 'state'),
                                  temporal_resolution = 'weekly', 
                                  measure = 'deaths',

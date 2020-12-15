@@ -2,19 +2,22 @@
 % Please edit documentation in R/get_zoltar_truth.R
 \name{configure_zoltar_truth}
 \alias{configure_zoltar_truth}
-\title{Generate the most up to date truth data for zoltar for a specified target
+\title{Generate versioned truth data for zoltar for a specified target
 It only includes national and state-level truth data.}
 \usage{
-configure_zoltar_truth(target)
+configure_zoltar_truth(target, issue_date = NULL)
 }
 \arguments{
 \item{target}{string specifying target.
-Currently only support "Cumulative Deaths" and "Incident Deaths"}
+Currently only support "Cumulative Deaths" and "Incident Deaths".}
+
+\item{issue_date}{optional date specifying issue date of truth data.
+Default to NULL which will load the latest truth data from covidData.}
 }
 \value{
 data frame with timezero, unit, target and value
 }
 \description{
-Generate the most up to date truth data for zoltar for a specified target
+Generate versioned truth data for zoltar for a specified target
 It only includes national and state-level truth data.
 }

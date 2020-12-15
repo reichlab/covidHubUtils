@@ -5,11 +5,20 @@ library(dplyr)
 
 test_that("configure_zoltar_truth works: get exactly all combinations of locations, 
           target and week", {
-  actual <- covidHubUtils::configure_zoltar_truth(
+  cum_deaths <- covidHubUtils::configure_zoltar_truth(
     target = "Cumulative Deaths"
   )
   
-  actual <- actual %>%
+  inc_deaths <- covidHubUtils::configure_zoltar_truth(
+    target = "Incident Deaths"
+  )
+  
+  cum_deaths <- cum_deaths %>%
+    tidyr::separate(target, into=c("horizon","other"), remove = FALSE, extra = "merge") %>%
+    dplyr::mutate(horizon = as.integer(horizon)) %>%
+    dplyr::select(timezero, unit, horizon)
+  
+  inc_deaths <- inc_deaths %>%
     tidyr::separate(target, into=c("horizon","other"), remove = FALSE, extra = "merge") %>%
     dplyr::mutate(horizon = as.integer(horizon)) %>%
     dplyr::select(timezero, unit, horizon)
@@ -46,16 +55,17 @@ test_that("configure_zoltar_truth works: get exactly all combinations of locatio
     dplyr::select(-target_end_date)
 
   
-  expect_true(dplyr::all_equal(actual, expected))
+  expect_true(dplyr::all_equal(cum_deaths, expected))
+  expect_true(dplyr::all_equal(inc_deaths, expected))
 })
 
 test_that("configure_zoltar_truth works: truth values for all duplicated locations 
           and targets are identical in the same week span", {
-  actual <- covidHubUtils::configure_zoltar_truth(
+  cum_deaths <- covidHubUtils::configure_zoltar_truth(
     target = "Cumulative Deaths"
   )
   
-  actual <- actual %>%
+  cum_deaths <- cum_deaths %>%
     tidyr::separate(target, into = c("horizon","other"), 
                     remove = FALSE, extra = "merge") %>%
     dplyr::mutate(target_end_date = 
@@ -64,7 +74,23 @@ test_that("configure_zoltar_truth works: truth values for all duplicated locatio
     dplyr::group_by(target_end_date, unit, target) %>%
     dplyr::summarise(num_unique_values = length(unique(value)))
   
-  expect_true(all(actual$num_unique_values == 1))
+  inc_deaths <- covidHubUtils::configure_zoltar_truth(
+    target = "Incident Deaths"
+  )
+  
+  inc_deaths <- inc_deaths %>%
+    tidyr::separate(target, into = c("horizon","other"), 
+                    remove = FALSE, extra = "merge") %>%
+    dplyr::mutate(target_end_date = 
+                    covidHubUtils::calc_target_week_end_date(
+                      timezero, as.numeric(horizon))) %>%
+    dplyr::group_by(target_end_date, unit, target) %>%
+    dplyr::summarise(num_unique_values = length(unique(value)))
+  
+  
+  
+  expect_true(all(cum_deaths$num_unique_values == 1))
+  expect_true(all(inc_deaths$num_unique_values == 1))
 })
 
 
