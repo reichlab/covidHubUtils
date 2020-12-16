@@ -20,7 +20,7 @@ This is the first version of the package with a 0.x release.
 
 ### Feature updates
 - details on new features will be listed here for future updates
-- current key features include loading and plotting forecast and truth data
+- add `facet_nrow`, `facet_ncol`, and `fill_transparency` to `plot_forecast` function
 
 ### Package updates
 - details on other changes will be listed here for future updates

@@ -13,6 +13,8 @@
 #' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot
 #' @param facet_scales argument for scales in ggplot2::facet_wrap. Default to "fixed".
+#' @param facet_nrow number of rows for facetting; optional.
+#' @param facet_ncol number of columns for facetting; optional.
 #' @param forecast_dates date string vectors for forecast dates to plot. 
 #' Default to forecast_dates present in the data.
 #' @param intervals values indicating which central prediction interval levels 
@@ -29,7 +31,9 @@
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param fill_by_model boolean for specifying colors in plot.
 #' If TRUE, separate colors will be used for each model.
-#' If FALSE, only blues will be used for all models. Default to FALSE. 
+#' If FALSE, only blues will be used for all models. Default to FALSE.
+#' @param fill_transparency numeric value used to set transparency of intervals.
+#' 0 means fully transparent, 1 means opaque.
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)
@@ -50,6 +54,8 @@ plot_forecast <- function(forecast_data,
                           locations,
                           facet = NULL,
                           facet_scales = "fixed",
+                          facet_nrow = NULL,
+                          facet_ncol = NULL,
                           forecast_dates,
                           intervals,
                           horizon,
@@ -57,6 +63,7 @@ plot_forecast <- function(forecast_data,
                           plot_truth = TRUE,
                           plot = TRUE,
                           fill_by_model = FALSE,
+                          fill_transparency = 1.0,
                           truth_as_of = NULL, 
                           title = "default", 
                           subtitle = "default",
@@ -324,6 +331,7 @@ plot_forecast <- function(forecast_data,
                                        group = interaction(`Prediction Interval`, model, 
                                                            location, forecast_date),
                                        fill = interaction(`Prediction Interval`, model)),
+                alpha = fill_transparency,
                 show.legend=FALSE) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
                                  values = interval_colors) +
@@ -375,7 +383,8 @@ plot_forecast <- function(forecast_data,
   # add facets
   if(!is.null(facet)){
     graph <- graph + 
-      ggplot2::facet_wrap(facets = facet, scales = facet_scales, 
+      ggplot2::facet_wrap(facets = facet, scales = facet_scales,
+                          nrow = facet_nrow, ncol = facet_ncol,
                           labeller = ggplot2::label_wrap_gen(multi_line=FALSE))
   
   }
