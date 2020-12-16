@@ -91,7 +91,7 @@ get_plot_forecast_data <- function(forecast_data,
       }
       # check if all dips codes in location column are valid
       if (!all(truth_data$location %in% all_valid_fips)){
-        stop("Error in get_plot_forecast_data: Please make sure all dips codes in location column are valid.")
+        stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
       }
       # check if truth_data has data from specified location
       if (!all(locations_to_plot %in% truth_data$location)){
