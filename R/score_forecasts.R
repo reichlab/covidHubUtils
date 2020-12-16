@@ -4,25 +4,24 @@
 #' by load_forecasts
 #' @param truths required data.frame with forecasts in the format returned
 #' by load_truth
-#' @param scores character vector of scores to calculate
+#' @param desired_score_types character vector of scores to calculate; defaults to returning
+#' all available scores
 #' @param return_format string: "long" returns long format with a column for
 #' "score_name" and a column for "score_value"; "wide" returns wide format with
-#' a separate column for each score.
+#' a separate column for each score. Defaults to "wide".
 #'
-#' @return data.frame with columns model, forecast_date, location,
-#' target_variable, horizon, target_end_date
+#' @return data.frame with columns model, forecast_date, location, horizon,
+#' temporal_resolution, target_variable, horizon, target_end_date, and scores:
 #' If return_format is "long", also contains columns score_name and score_value
-#' where score_name is one of wis, wis_width, wis_penalty_low, wis_penalty_high,
-#' interval_coverage_ where level is 0.95 for a 95% confidence interval, or
-#' quantile_coverage_ where level is 0.975 for a quantile level 0.975
-#' score_value has the numeric value of the score.
+#' where score_name is the type of score calculated and score_value has the numeric
+#' value of the score.
 #' If return_format is "wide", each calculated score is in its own column.
 #'
 #' @export
 score_forecasts <- function(
   forecasts,
   truth,
-  scores = vector(),
+  desired_score_types,
   return_format = "wide"
 ) {
   
@@ -35,9 +34,10 @@ score_forecasts <- function(
   )
   
   # validate forecasts
+  # as long as forecasts contains the columns above, it will pass the check
   if (missing(forecasts) || is.null(forecasts)) {
     stop("Forecast dataframe missing", call. = TRUE)
-  } else if (!setequal(colnames(forecasts), forecasts_colnames)) {
+  } else if (!any(is.element(colnames(forecasts), forecasts_colnames))) {
     stop("Forecast dataframe columns malformed", call. = TRUE)
   }
   
@@ -48,19 +48,19 @@ score_forecasts <- function(
   )
   
   # validate truth
+  # as long as forecasts contains the columns above, it will pass the check
   if (missing(truth) || is.null(truth)) {
     stop("Truth dataframe missing", call. = TRUE)
-  } else if (!setequal(colnames(truth), truth_colnames)) {
+  } else if (!any(is.element(colnames(truth), truth_colnames))) {
     stop("Truth dataframe columns malformed", call. = TRUE)
   }
   
   # validate return_format
-  if (return_format != "long" || return_format != "wide") {
+  # match.arg returns error if arg does not match choice
+  # which is a bit more complicated to deal with
+  if (!is.element(return_format, c("long", "wide"))) {
     return_format <- "wide"
   }
-  
-  # make sure forecast_data has the truth_data it needs to score properly
-  # score the minimally-viable subset of forecast_data
   
   # get dataframe into scoringutil format
   joint_df <- dplyr::left_join(x = forecasts, y = truth, 
@@ -75,23 +75,36 @@ score_forecasts <- function(
     "horizon", "temporal_resolution", "target_variable",
     "forecast_date", "target_end_date"
   )
-  scores_df <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, by = observation_cols))
+  scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, by = observation_cols))
   
   # mangle the data for output
-  if (length(scores) != 0) {
-    extra_na_colnames <- setdiff(scores, colnames(scores_df))
+  # if users didn't provide score types
+  if (!missing(desired_score_types)) {
+    extra_na_colnames <- setdiff(desired_score_types, colnames(scores))
     extra_na_cols <- matrix(
       NA_real_,
-      nrow = nrow(scores_df),
+      nrow = nrow(scores),
       ncol = length(extra_na_colnames),
       dimnames = list(NULL, extra_na_colnames)
     )
     
-    scores_df <- scores_df %>%
-      dplyr::select(c(observation_cols, scores)) %>%
+    scores <- scores %>%
+      dplyr::select(c(observation_cols, desired_score_types)) %>%
       dplyr::bind_cols(as.data.frame(extra_na_cols))
   }
   
-  scores_df
+  # manipulate return format:
+  #   eval_forecasts(), by default, returns in wide format
+  #   only change if user specifies long return format
+  if (return_format == "long") {
+    scores <- scores %>% 
+      tidyr::pivot_longer(
+        cols = !any_of(observation_cols),
+        names_to = "score_name",
+        values_to = "score_value"
+      )
+  }
   
+  
+  scores
 }

@@ -1,3 +1,10 @@
+## Changes since the last version
+
+- `score_forecasts()` is now implemented.
+
+  Minimally one should have the `forecasts` dataframe produced by `load_forecasts()` and the truth dataframe produced by `load_truth()` to calculate scores. If one desires to specify a subset of all available scores, one should consult [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
+  
+
 ## covidHubUtils 0.1.1
 
 This is a release focusing on new features in plotting functions. 
