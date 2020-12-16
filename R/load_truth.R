@@ -4,7 +4,7 @@
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support "JHU","USAFacts", "NYTimes"
 #' @param target_variable string specifying target type It should be one of 
-#' "cum death", "inc case", "inc death"
+#' "cum death", "inc case", "inc death". "inc hosp" will be available soon. 
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
@@ -33,6 +33,9 @@ load_truth <- function (truth_source,
                             several.ok = TRUE)
   
   # validate target variable 
+  if (target_variable == "inc hosp"){
+    stop("Error in load_truth: Hospitalization truth data will be available soon.")
+  }
   target_variable <- match.arg(target_variable, 
                                choices = c("cum death",
                                            "inc case",
