@@ -20,7 +20,7 @@ This is the first version of the package with a 0.x release.
 
 ### Feature updates
 - details on new features will be listed here for future updates
-- add `facet_nrow`, `facet_ncol`, and `fill_transparency` to `plot_forecast` function
+- current key features include loading and plotting forecast and truth data
 
 ### Package updates
 - details on other changes will be listed here for future updates
@@ -28,4 +28,6 @@ This is the first version of the package with a 0.x release.
 
 ## v 0.1
  - initial release: big plotting changes
- - v0.1.1 : in load_latest_forecasts, use provided source for calls to lower level functions
+ - v0.1.1 :
+    - in load_latest_forecasts, use provided source for calls to lower level functions
+    - add `facet_nrow`, `facet_ncol`, and `fill_transparency` to `plot_forecast` function
