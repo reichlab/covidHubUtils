@@ -119,7 +119,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # read in JHU time series data
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
-    paste0("test-data/test-configure_zoltar_truth/",
+    paste0("test-data/test-preprocess_truth_for_zoltar/",
            as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
@@ -180,7 +180,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # read in JHU time series data
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
-    paste0("test-data/test-configure_zoltar_truth/",
+    paste0("test-data/test-preprocess_truth_for_zoltar/",
            as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
@@ -248,7 +248,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # read in JHU time series data
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
-    paste0("test-data/test-configure_zoltar_truth/",
+    paste0("test-data/test-preprocess_truth_for_zoltar/",
            as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
@@ -315,7 +315,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # read in JHU time series data
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
-    paste0("test-data/test-configure_zoltar_truth/",
+    paste0("test-data/test-preprocess_truth_for_zoltar/",
            as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
