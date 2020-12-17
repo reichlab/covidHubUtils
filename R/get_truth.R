@@ -275,3 +275,40 @@ preprocess_jhu <- function (save_location="./data-truth"){
   incident_cases <- incident_cases[!rowSums(is.na(incident_cases[c("location_name","value")])), ]
   readr::write_csv(incident_cases, path = file.path(save_location,"truth-Incident Cases.csv"))
 }
+
+
+#' Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs
+#' 
+#' @param save_location character specifying the location of to save raw truth data.
+#' Default to "./data-truth"
+#' 
+#' @return data frame of cumulative and incident hospitalization data
+#' 
+#' @export
+preprocess_hospitalization <- function (save_location="./data-truth"){
+  # Location name
+  location_names <- covidData::fips_codes[, c("location", "location_name")]
+  
+  # Spatial resolutions
+  spatial_resolutions <- c("national", "state")
+  
+  # Combine to get cases data
+  hospitalization_dframes <- covidData::load_healthdata_data(spatial_resolution = spatial_resolutions,
+                                                             temporal_resolution = "daily",
+                                                             measure = "hospitalizations")
+  hospitalization_dframes <- dplyr::left_join(hospitalization_dframes, location_names, by = "location")
+
+  # Get cumulative hospitalizations
+  cumulative_hosp <- hospitalization_dframes[, c("date", "location", "location_name", "cum")]
+  colnames(cumulative_hosp)[colnames(cumulative_hosp) == 'cum'] <- 'value'
+  cumulative_hosp <- cumulative_hosp[!rowSums(is.na(cumulative_hosp[c("location_name","value")])), ]
+  readr::write_csv(cumulative_hosp, path = file.path(save_location,"truth-Cumulative Hospitalizations.csv"))
+  
+  # Get incident hospitalizations
+  incident_hosp <- hospitalization_dframes[, c("date", "location", "location_name", "inc")]
+  colnames(incident_hosp)[colnames(incident_hosp) == 'inc'] <- 'value'
+  incident_hosp <- incident_hosp[!rowSums(is.na(incident_hosp[c("location_name","value")])), ]
+  readr::write_csv(incident_hosp, path = file.path(save_location,"truth-Incident Hospitalizations.csv"))
+  
+  return(list("cumulative_hosp" = cumulative_hosp, "incident_hosp" = incident_hosp))
+}

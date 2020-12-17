@@ -1,3 +1,7 @@
+## Changes since the last version
+
+- `preprocess_hospitalization()` is now implemented. This method creates standard cumulative and incident truth csv files for hospitalization.
+
 ## covidHubUtils 0.1.1
 
 This is a release focusing on new features in plotting functions. 
