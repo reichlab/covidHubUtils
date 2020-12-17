@@ -2,10 +2,20 @@
 Utility functions for the COVID-19 forecast hub
 
 # Installation
+
+The `covidHubUtils` package relies on a small number of packages, including many from the `tidyverse` and, importantly, [the `zoltr` package](http://reichlab.io/zoltr/) that is used to access the Zoltar API for downloading forecasts. Please install `zoltr` from GitHub, as this development version often has important features not yet on the CRAN version:
+```r
+devtools::install_github("reichlab/zoltr")
+```
+The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `devtools` package:
 ``` r
-# install.packages("devtools")
 devtools::install_github("reichlab/covidHubUtils")
 ```
+
+# Getting Started
+
+For those starting out we recommend you begin with the [Getting Started vignette](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/covidHubUtils-overview.html).
+
 # Features
 
 ## Currently available:
