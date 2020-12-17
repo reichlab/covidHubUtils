@@ -2,10 +2,20 @@
 Utility functions for the COVID-19 forecast hub
 
 # Installation
+
+The `covidHubUtils` package relies on a small number of packages, including many from the `tidyverse` and, importantly, [the `zoltr` package](http://reichlab.io/zoltr/) that is used to access the Zoltar API for downloading forecasts. Please install `zoltr` from GitHub, as this development version often has important features not yet on the CRAN version:
+```r
+devtools::install_github("reichlab/zoltr")
+```
+The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `devtools` package:
 ``` r
-# install.packages("devtools")
 devtools::install_github("reichlab/covidHubUtils")
 ```
+
+# Getting Started
+
+For those starting out we recommend you begin with the [Getting Started vignette](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/covidHubUtils-overview.html).
+
 # Features
 
 ## Currently available:
@@ -19,7 +29,7 @@ devtools::install_github("reichlab/covidHubUtils")
 * `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Truth data for `"inc hosp"` is not available now.
 
 **Plotting Forecasts**
- * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
+ * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`.
 
 **Download and pre-process "Truth" Data**
  * `download_raw_nytimes(save_location)`: Download raw truth data from NYTimes and write to CSV files.
