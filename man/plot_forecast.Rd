@@ -37,7 +37,8 @@ by load_truth().}
 Default to all models in forecast_data.}
 
 \item{target_variable}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death"}
+"cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
+please provide truth_data.}
 
 \item{locations}{string for fips code or 'US'.
 Default to all locations in forecast_data.}

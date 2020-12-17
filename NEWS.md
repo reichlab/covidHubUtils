@@ -1,6 +1,12 @@
 ## Changes since the last version
 
-  - Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar
+- Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar
+
+- `score_forecasts()` is now implemented.
+
+  Minimally one should have the `forecasts` dataframe produced by `load_forecasts()` and the truth dataframe produced by `load_truth()` to calculate scores. If one desires to specify a subset of all available scores, one should consult [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
+  
+
 
 ## covidHubUtils 0.1.1
 
@@ -30,6 +36,7 @@ This is the first version of the package with a 0.x release.
 - details on other changes will be listed here for future updates
 - added initial author/contributor list
 
-## v 0.1
+### v 0.1
  - initial release: big plotting changes
  - v0.1.1 : in load_latest_forecasts, use provided source for calls to lower level functions
+ - v0.1.2: support daily hospitalization plot in plot_forecast

@@ -1,0 +1,230 @@
+---
+title: "Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package"
+author: "Serena Wang, Evan L Ray, Nicholas G Reich"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+---
+
+<!-- code to run rmarkdown::render(input="./vignettes/covidHubUtils-overview.Rmd") -->
+
+<!-- Code for adding logo at the top -->
+
+<style>
+#TOC {
+  background: url("https://github.com/reichlab/covid19-forecast-hub-web/raw/master/images/forecast-hub-logo_DARKBLUE-20px-padding.png");
+  background-size: contain;
+  padding-top: 80px !important;
+  background-repeat: no-repeat;
+}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 10)
+library(DT)
+```
+
+
+# Introduction and background
+
+The [COVID-19 Forecast Hub](https://covid19forecasthub.org/) is a central repository for modeler-contributed short-term forecasts of COVID-19 trends in the US. The US Centers for Disease Control and Prevention (CDC) displays forecasts from the Forecast Hub on its [modeling and forecasting webpages](https://www.cdc.gov/coronavirus/2019-ncov/covid-data/mathematical-modeling.html).
+
+The Forecast Hub has been curating forecast data since April 2020, and has collected over 150 million unique rows of forecast data. These data are stored in our [public GitHub repository](https://github.com/reichlab/covid19-forecast-hub) and in the [Zoltar forecast archive](https://zoltardata.com/). 
+
+The goal of the `covidHubUtils` R package is to create a set of basic utility functions for accessing, visualizing, and scoring forecasts from the COVID-19 Forecast Hub. 
+
+
+# Installation and set-up
+
+The `covidHubUtils` package relies on a small number of packages, including many from the `tidyverse` and, importantly, [the `zoltr` package](http://reichlab.io/zoltr/) that is used to access the Zoltar API for downloading forecasts. Please install `zoltr` from GitHub, as this development version often has important features not yet on the CRAN version:
+```{r message=FALSE, eval=FALSE}
+devtools::install_github("reichlab/zoltr")
+```
+
+The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `devtools` package:
+
+```{r message=FALSE, eval=FALSE}
+devtools::install_github("reichlab/covidHubUtils")
+```
+
+
+# Working with forecast data
+
+One of the key features of the COVID-19 Forecast Hub is making millions of rows of forecast data available in a standard format for easy analysis and visualization. The `covidHubUtils` package allows for users to download data into an R session either by reading files from a local clone of [the COVID-19 Forecast Hub repository](https://github.com/reichlab/covid19-forecast-hub) or by downloading data from the Zoltar API. (While Zoltar currently requires a user account to download data via the API, we have created a specific user account for `covidHubUtils` so that a user account is not needed.) 
+
+We have identified two central use cases for downloading data:
+
+1. Downloading the "latest" forecasts for a particular model or models as of a given date. This is achieved by using the `load_latest_forecasts()` function.
+2. Downloading all available forecasts for a particular model or models for a set of dates. This is achieved by using the `load_forecasts()` function.
+
+Below are some examples of reading in data. We start by loading the `covidHubUtils` package and the `tidyverse`.
+
+```{r message=FALSE}
+library(covidHubUtils)
+library(tidyverse)
+theme_set(theme_bw())
+```
+
+## Load and plot single forecast
+
+The following code loads 1 through 4 week ahead incident case forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `forecast_date_window_size` option specifies the range of days to look at for a forecast. So the query below is looking for the most recent forecast from COVIDhub-ensemble in the span of 2020-12-01 through 2020-12-07.
+
+```{r message=FALSE}
+# Load forecasts that were submitted in a time window from zoltar
+inc_case_targets <- paste(1:4, "wk ahead inc case")
+forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
+                      last_forecast_date = "2020-12-07",
+                      forecast_date_window_size = 7, 
+                      locations = "US",
+                      types = c("point","quantile"),
+                      targets = inc_case_targets,
+                      source = "zoltar")
+```
+
+And here is the data that is returned from this query, note that in addition to the essential forecast data itself, some additional columns with information about the locations are returned.
+
+```{r}
+datatable(forecasts)
+```
+
+This data can then be plotted directly with a call to `plot_forecast()`.
+```{r}
+p <- plot_forecast (forecast_data = forecasts, 
+  target_variable = "inc case",  
+  intervals = c(.5, .8, .95))
+```
+
+Note that many additional arguments may need to be passed to this function to have a reasonable plot returned if your dataset has multiple locations, forecast dates or models.
+
+Additionally the resulting plot object can be modified. For example, if you want to change the way the x-axis handles dates, you could add a custom `ggplot` `scale_x_date()` specification:
+```{r}
+p + scale_x_date(name=NULL, date_breaks = "1 month", date_labels = "%b") + 
+  theme(axis.ticks.length.x = unit(0.5, "cm"),  axis.text.x = element_text(vjust = 7, hjust = -0.2))
+```
+
+  
+Additionally, `plot_forecast()` can handle plotting multiple models or locations or forecast dates at the same time as the following examples show.
+
+
+## Plot multiple models
+
+The following code looks at three models' forecasts of incident deaths at one time point for one location. Note the use of the `fill_by_model` option which allows colors to vary by model and the `facet` command which is passed to ggplot.
+
+```{r}
+fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
+  last_forecast_date = "2020-12-14",
+  source = "zoltar",
+  forecast_date_window_size = 7,
+  locations = "US",
+  types = c("quantile", "point"), 
+  targets = paste(1:4, "wk ahead inc death"))
+
+p <- plot_forecast(fdat, 
+  target_variable = "inc death", 
+  intervals = c(.5, .95), 
+  facet = .~model,
+  fill_by_model = TRUE, 
+  plot=FALSE) 
+
+p +
+  scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
+  theme(axis.ticks.length.x = unit(0.5, "cm"),
+    axis.text.x = element_text(vjust = 7, hjust = -0.2))
+```
+
+
+## Plot multiple models and locations
+
+The following code looks at three models' forecasts of incident deaths at one time point for multiple locations. Note the use of the `facet_scales` option which is passed to ggplot and allows the y-axes to be on different scales.
+
+```{r}
+fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
+  last_forecast_date = "2020-12-14",
+  source = "zoltar",
+  forecast_date_window_size = 7,
+  locations = c("19", "48", "46"),
+  types = c("quantile", "point"), 
+  targets = paste(1:4, "wk ahead inc death"))
+
+p <- plot_forecast(fdat, 
+  target_variable = "inc death", 
+  intervals = c(.5, .95), 
+  facet = location_name~model,
+  facet_scales = "free_y",
+  fill_by_model = TRUE, 
+  plot=FALSE)
+
+p +
+  scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
+  theme(axis.ticks.length.x = unit(0.5, "cm"),
+    axis.text.x = element_text(vjust = 7, hjust = -0.2))
+```
+
+
+## Plot multiple forecast dates
+
+The following code looks at three models' forecasts of incident deaths at one time point for multiple locations. Note the use of the `facet_scales` option which is passed to ggplot and allows the y-axes to be on different scales.
+
+```{r}
+fdat <- load_forecasts(models = c("Karlen-pypm", "UMass-MechBayes"),
+  forecast_dates = seq.Date(as.Date("2020-09-06"), as.Date("2020-12-13"), by = "28 days"),
+  locations = "US",
+  types = c("quantile", "point"), 
+  targets = paste(1:4, "wk ahead inc death"))
+
+p <- plot_forecast(fdat, 
+  target_variable = "inc death", 
+  intervals = c(.5, .95), 
+  facet = .~model,
+  fill_by_model = TRUE,
+  plot = FALSE) 
+
+p + scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
+  theme(axis.ticks.length.x = unit(0.5, "cm"),
+    axis.text.x = element_text(vjust = 7, hjust = -0.2))
+```
+
+# Working with truth data
+
+By default `plot_forecast()` uses JHU CSSE data as the "Observed Data" in the above plots. However, users can specify custom "ground truth" data that either they provide themselves or that is loaded in from the package. 
+
+Here is an example of a call to `plot_forecast()` that simply specifies an alternate truth source, which must be one of "JHU", "USAFacts", or "NYTimes".
+
+```{r}
+plot_forecast (forecast_data = forecasts, 
+  target_variable = "inc case",  
+  truth_source = "NYTimes",
+  intervals = c(.5, .8, .95))
+```
+
+Alternatively, truth data can be loaded in from one of those sources independently and stored in your active R session and passed to the `plot_forecast()` function.
+```{r}
+truth_data <- load_truth(truth_source = "USAFacts",
+  target_variable = "inc case",
+  locations = "US")
+```
+
+
+Truth data comes in the following tabular format.
+```{r}
+datatable(truth_data)
+```
+
+And can be used in conjunction with a call to plot_forecast
+```{r}
+plot_forecast(forecast_data = forecasts, 
+  target_variable = "inc case",  
+  truth_data = truth_data,
+  truth_source = "USAFacts",
+  intervals = c(.5, .8, .95))
+
+```
+
+
+
+

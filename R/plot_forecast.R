@@ -8,7 +8,8 @@
 #' @param models vector of strings specifying models to plot. 
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
-#' "cum death", "inc case", "inc death"
+#' "cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
+#' please provide truth_data. 
 #' @param locations string for fips code or 'US'. 
 #' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot
@@ -96,20 +97,29 @@ plot_forecast <- function(forecast_data,
   }
   
   
-  # validate truth_source
-  truth_source <- match.arg(truth_source, 
-                            choices = c("JHU","USAFacts", "NYTimes"), 
-                            several.ok = FALSE)
-  
   # validate target_variable
   target_variable <- match.arg(target_variable, 
                                choices = c("cum death",
                                            "inc case",
-                                           "inc death"), 
+                                           "inc death",
+                                           "inc hosp"), 
                                several.ok = FALSE)
   
   if (!(target_variable %in% forecast_data$target_variable)){
     stop("Error in plot_forecast: Please provide a valid target variable.")
+  }
+  
+  # validate truth_source
+  if (target_variable != "inc hosp"){
+    truth_source <- match.arg(truth_source, 
+                              choices = c("JHU","USAFacts", "NYTimes"), 
+                              several.ok = FALSE)
+  } else {
+    if (missing(truth_source) | is.na(truth_source)){
+      stop("Error in plot_forecast: Please provide truth_source when target_variable is inc hosp.")
+    } else {
+      truth_source <- truth_source
+    }
   }
   
   
@@ -126,6 +136,10 @@ plot_forecast <- function(forecast_data,
       # check if truth_data has data from specified source
       if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)) {
         stop("Error in plot_forecast: Please provide a valid truth_source to plot.")
+      }
+      # check if all fips codes in location column are valid
+      if (!all(truth_data$location %in% all_valid_fips)){
+        stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
       }
       # check if truth_data has data from specified location
       if (!all(locations %in% truth_data$location)){
