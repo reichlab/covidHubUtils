@@ -38,7 +38,7 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
       dplyr::rename(value = inc, unit = location)
   }
   
-  df$horizon = 20
+  df$horizon <- 20
   df <- df[rep(row.names(df), df$horizon),]
   df <- df %>%
     dplyr::group_by(unit, date, value) %>%

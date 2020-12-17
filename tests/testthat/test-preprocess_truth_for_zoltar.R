@@ -4,7 +4,7 @@ library(covidData)
 library(dplyr)
 
 test_that("preprocess_truth_for_zoltar works: get exactly all combinations of locations, 
-          target and week", {
+          targets and timezeros", {
   
   cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Cumulative Deaths")  %>%
@@ -23,9 +23,10 @@ test_that("preprocess_truth_for_zoltar works: get exactly all combinations of lo
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
   if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo", "Dq65&aP0nIlG")
   } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+    zoltr::zoltar_authenticate(zoltar_connection, 
+                               Sys.getenv("Z_USERNAME"), Sys.getenv("Z_PASSWORD"))
   }
   
   # construct Zoltar project url
@@ -36,7 +37,7 @@ test_that("preprocess_truth_for_zoltar works: get exactly all combinations of lo
   zoltar_timezeros<- zoltr::timezeros(zoltar_connection, project_url)$timezero_date
   
   all_valid_fips <- covidHubUtils::hub_locations %>%
-    dplyr::filter(geo_type == 'state', fips!=74) %>%
+    dplyr::filter(geo_type == 'state', fips != 74) %>%
     dplyr::pull(fips)
   
   # create a data frame with all combination of timezeros, units and horizons
@@ -46,8 +47,7 @@ test_that("preprocess_truth_for_zoltar works: get exactly all combinations of lo
     dplyr::mutate(unit = as.character(unit), 
                   timezero = as.Date(timezero),
                   target_end_date = 
-                    covidHubUtils::calc_target_week_end_date(
-                      timezero, horizon)) %>%
+                    covidHubUtils::calc_target_week_end_date(timezero, horizon)) %>%
     # filter dates
     dplyr::filter(timezero <= Sys.Date(), 
                   target_end_date <= Sys.Date(), 
@@ -80,7 +80,7 @@ test_that("preprocess_truth_for_zoltar works: truth values for all duplicated lo
   inc_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Incident Deaths") %>%
     # get horizon number
-    tidyr::separate(target, into = c("horizon","other"), 
+    tidyr::separate(target, into = c("horizon", "other"), 
                     remove = FALSE, extra = "merge") %>%
     # calculate target_end_date
     dplyr::mutate(target_end_date = 
@@ -109,7 +109,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
     target = "Cumulative Deaths",
     issue_date = issue_date) %>% 
     # get horizon number
-    tidyr::separate(target, into = c("horizon","other"),
+    tidyr::separate(target, into = c("horizon", "other"),
                     remove = FALSE, extra = "merge") %>%
     # calculate target_end_date
     dplyr::mutate(target_end_date = covidHubUtils::calc_target_week_end_date(
@@ -120,7 +120,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
     paste0("test-data/test-configure_zoltar_truth/",
-           as.character(issue_date),"/", as.character(issue_date), 
+           as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
       matches("^\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}$"),
@@ -133,7 +133,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
     dplyr::ungroup() %>%
     dplyr::left_join(covidHubUtils::hub_locations, 
                      by = c("Province_State" = "location_name")) %>%
-    dplyr::filter(geo_type == 'state', fips!=74) %>%
+    dplyr::filter(geo_type == 'state', fips != 74) %>%
     dplyr::select(-population, -geo_type, -geo_value, -abbreviation)
   
   # aggregate state-level counts to get national cumulative deaths
@@ -154,8 +154,8 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # the only possible values for difference should be  0, 1, 3
   expect_true(all(unique(cum_deaths$diff) == c(0,1,3)))
   # differences should only occur at national level
-  expect_true(all(cum_deaths[cum_deaths$diff==3,]$unit == 'US'))
-  expect_true(all(cum_deaths[cum_deaths$diff==1,]$unit == 'US'))
+  expect_true(all(cum_deaths[cum_deaths$diff==3, ]$unit == 'US'))
+  expect_true(all(cum_deaths[cum_deaths$diff==1, ]$unit == 'US'))
 })
 
 test_that("preprocess_truth_for_zoltar works: could construct cumulative values in JHU time
@@ -170,7 +170,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
     target = "Cumulative Deaths",
     issue_date = issue_date) %>% 
     # get horizon number
-    tidyr::separate(target, into = c("horizon","other"),
+    tidyr::separate(target, into = c("horizon", "other"),
                     remove = FALSE, extra = "merge") %>%
     # calculate target_end_date
     dplyr::mutate(target_end_date = covidHubUtils::calc_target_week_end_date(
@@ -181,7 +181,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
     paste0("test-data/test-configure_zoltar_truth/",
-           as.character(issue_date),"/", as.character(issue_date), 
+           as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
       matches("^\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}$"),
@@ -194,7 +194,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
     dplyr::ungroup() %>%
     dplyr::left_join(covidHubUtils::hub_locations, 
                      by = c("Province_State" = "location_name")) %>%
-    dplyr::filter(geo_type == 'state', fips!=74) %>%
+    dplyr::filter(geo_type == 'state', fips != 74) %>%
     dplyr::select(-population, -geo_type, -geo_value, -abbreviation)
   
   # aggregate state-level counts to get national cumulative deaths
@@ -249,7 +249,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
     paste0("test-data/test-configure_zoltar_truth/",
-           as.character(issue_date),"/", as.character(issue_date), 
+           as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
       matches("^\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}$"),
@@ -262,7 +262,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
     dplyr::ungroup() %>%
     dplyr::left_join(covidHubUtils::hub_locations, 
                      by = c("Province_State" = "location_name")) %>%
-    dplyr::filter(geo_type == 'state', fips!=74) %>%
+    dplyr::filter(geo_type == 'state', fips != 74) %>%
     dplyr::select(-population, -geo_type, -geo_value, -abbreviation)
   
   # aggregate state-level counts to get national cumulative deaths
@@ -283,8 +283,8 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # the only possible values for difference should be  0, 1, 3
   expect_true(all(unique(inc_to_cum_deaths$diff) == c(0,1,3)))
   # differences should only occur at national level
-  expect_true(all(inc_to_cum_deaths[inc_to_cum_deaths$diff==3,]$unit == 'US'))
-  expect_true(all(inc_to_cum_deaths[inc_to_cum_deaths$diff==1,]$unit == 'US'))
+  expect_true(all(inc_to_cum_deaths[inc_to_cum_deaths$diff==3, ]$unit == 'US'))
+  expect_true(all(inc_to_cum_deaths[inc_to_cum_deaths$diff==1, ]$unit == 'US'))
 })
 
 
@@ -316,7 +316,7 @@ test_that("preprocess_truth_for_zoltar works: could construct cumulative values 
   # aggregate county-level counts to get cumulative deaths for each state
   expected_state_cum_deaths <- readr::read_csv(
     paste0("test-data/test-configure_zoltar_truth/",
-           as.character(issue_date),"/", as.character(issue_date), 
+           as.character(issue_date), "/", as.character(issue_date), 
            "_time_series_covid19_deaths_US.csv"))%>%
     tidyr::pivot_longer(
       matches("^\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}$"),
