@@ -9,7 +9,7 @@
 #' @return data frame with timezero, unit, target and value
 #'
 #' @export
-configure_zoltar_truth <- function(target, issue_date = NULL){
+preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
   
   # validate target 
   target <- match.arg(target, 
@@ -107,10 +107,10 @@ configure_zoltar_truth <- function(target, issue_date = NULL){
 #'
 #' @export
 #'
-zoltar_truth_data <- function(save_location="./data-truth"){
+save_truth_for_zoltar <- function(save_location="./data-truth"){
   
-  df_cum_death <- covidData::configure_zoltar_truth("Cumulative Deaths")
-  df_inc_death <- covidData::configure_zoltar_truth("Incident Deaths")
+  df_cum_death <- covidData::preprocess_truth_for_zoltar("Cumulative Deaths")
+  df_inc_death <- covidData::preprocess_truth_for_zoltar("Incident Deaths")
   
   zoltar_truth <- rbind(df_cum_death, df_inc_death)
   

@@ -1,19 +1,19 @@
-context("configure_zoltar_truth")
+context("preprocess_truth_for_zoltar")
 library(covidHubUtils)
 library(covidData)
 library(dplyr)
 
-test_that("configure_zoltar_truth works: get exactly all combinations of locations, 
+test_that("preprocess_truth_for_zoltar works: get exactly all combinations of locations, 
           target and week", {
   
-  cum_deaths <- covidHubUtils::configure_zoltar_truth(
+  cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Cumulative Deaths")  %>%
     # get horizon number
     tidyr::separate(target, into=c("horizon","other"), remove = FALSE, extra = "merge") %>%
     dplyr::mutate(horizon = as.integer(horizon)) %>%
     dplyr::select(timezero, unit, horizon)
   
-  inc_deaths <- covidHubUtils::configure_zoltar_truth(
+  inc_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Incident Deaths") %>%
     # get horizon number
     tidyr::separate(target, into=c("horizon","other"), remove = FALSE, extra = "merge") %>%
@@ -59,10 +59,10 @@ test_that("configure_zoltar_truth works: get exactly all combinations of locatio
   expect_true(dplyr::all_equal(inc_deaths, expected))
 })
 
-test_that("configure_zoltar_truth works: truth values for all duplicated locations 
+test_that("preprocess_truth_for_zoltar works: truth values for all duplicated locations 
           and targets are identical for all timezeros in the same week span", {
             
-  cum_deaths <- covidHubUtils::configure_zoltar_truth(
+  cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Cumulative Deaths") %>%
     # get horizon number
     tidyr::separate(target, into = c("horizon","other"), 
@@ -77,7 +77,7 @@ test_that("configure_zoltar_truth works: truth values for all duplicated locatio
     dplyr::group_by(target_end_date, unit, target) %>%
     dplyr::summarise(num_unique_values = length(unique(value)))
   
-  inc_deaths <- covidHubUtils::configure_zoltar_truth(
+  inc_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Incident Deaths") %>%
     # get horizon number
     tidyr::separate(target, into = c("horizon","other"), 
@@ -97,7 +97,7 @@ test_that("configure_zoltar_truth works: truth values for all duplicated locatio
   expect_true(all(inc_deaths$num_unique_values == 1))
 })
 
-test_that("configure_zoltar_truth works: could construct cumulative values in JHU time
+test_that("preprocess_truth_for_zoltar works: could construct cumulative values in JHU time
           series data from cumulative values in function output 
           with a date in an earlier week as issue date", {
             
@@ -105,7 +105,7 @@ test_that("configure_zoltar_truth works: could construct cumulative values in JH
   
   # load function output from configure zoltar_truth 
   # and calculate target end date 
-  cum_deaths <- covidHubUtils::configure_zoltar_truth(
+  cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Cumulative Deaths",
     issue_date = issue_date) %>% 
     # get horizon number
@@ -158,7 +158,7 @@ test_that("configure_zoltar_truth works: could construct cumulative values in JH
   expect_true(all(cum_deaths[cum_deaths$diff==1,]$unit == 'US'))
 })
 
-test_that("configure_zoltar_truth works: could construct cumulative values in JHU time
+test_that("preprocess_truth_for_zoltar works: could construct cumulative values in JHU time
           series data from cumulative values in function output 
           with a date in a later week as issue date", {
   
@@ -166,7 +166,7 @@ test_that("configure_zoltar_truth works: could construct cumulative values in JH
   
   # load function output from configure zoltar_truth 
   # and calculate target end date 
-  cum_deaths <- covidHubUtils::configure_zoltar_truth(
+  cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Cumulative Deaths",
     issue_date = issue_date) %>% 
     # get horizon number
@@ -221,13 +221,13 @@ test_that("configure_zoltar_truth works: could construct cumulative values in JH
 })
 
 
-test_that("configure_zoltar_truth works: could construct cumulative values in JHU time
+test_that("preprocess_truth_for_zoltar works: could construct cumulative values in JHU time
           series data from incident values in function output 
           with a date in an earlier week as issue date", {
 
   issue_date<- as.Date("2020-12-12")
   
-  inc_to_cum_deaths <- covidHubUtils::configure_zoltar_truth(
+  inc_to_cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Incident Deaths",
     issue_date = issue_date) %>% 
     # get horizon number
@@ -288,13 +288,13 @@ test_that("configure_zoltar_truth works: could construct cumulative values in JH
 })
 
 
-test_that("configure_zoltar_truth works: could construct cumulative values in JHU time
+test_that("preprocess_truth_for_zoltar works: could construct cumulative values in JHU time
           series data from incident values in function output 
           with a date in an later week as issue date", {
             
   issue_date<- as.Date("2020-12-14")
   
-  inc_to_cum_deaths <- covidHubUtils::configure_zoltar_truth(
+  inc_to_cum_deaths <- covidHubUtils::preprocess_truth_for_zoltar(
     target = "Incident Deaths",
     issue_date = issue_date) %>% 
     # get horizon number
