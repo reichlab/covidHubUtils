@@ -22,7 +22,8 @@
 #' repository
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
+#' location_name, population, geo_type, geo_value, abbreviation
 #' 
 #' @export
 load_latest_forecasts <- function (
@@ -36,7 +37,13 @@ load_latest_forecasts <- function (
   hub_repo_path) {
   
   # validate models
-  all_valid_models <- get_all_models(source = "remote_hub_repo")
+  if (missing(hub_repo_path)) {
+    all_valid_models <- get_all_models(source = source)
+  } else {
+    all_valid_models <- get_all_models(
+      source = source,
+      hub_repo_path = hub_repo_path)
+  }
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)

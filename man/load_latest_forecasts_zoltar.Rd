@@ -24,7 +24,8 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value
+temporal_resolution, target_variable, target_end_date, type, quantile, value,
+location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
 Load the most recent forecasts submitted in a time window from zoltar.
