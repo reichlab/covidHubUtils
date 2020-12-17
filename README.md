@@ -29,7 +29,10 @@ For those starting out we recommend you begin with the [Getting Started vignette
 * `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Truth data for `"inc hosp"` is not available now.
 
 **Plotting Forecasts**
- * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`.
+ * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
+ 
+**Scoring Forecasts**
+ * `score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))` Calculate specified scores for each combination of `model`, `forecast_date`, `location`, `horizon`, `temporal_resolution`, `target_variable`, and `target_end_date` in the `forecasts` data frame. Please see [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
 
 **Download and pre-process "Truth" Data**
  * `download_raw_nytimes(save_location)`: Download raw truth data from NYTimes and write to CSV files.
@@ -37,8 +40,3 @@ For those starting out we recommend you begin with the [Getting Started vignette
  * `preprocess_nytimes(save_location)`: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
  * `preprocess_usafacts(save_location)`: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs
  * `preprocess_jhu(save_location)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
-
-## Coming next: 
-
-**Scoring Forecasts**
- * `score_forecasts(forecasts, truth, scores = c("WIS", "PIT", "interval coverage", "quantile coverage", ...))` Calculate specified scores for each combination of `timezero`, `unit`, and `target` in the `forecasts` data frame.
