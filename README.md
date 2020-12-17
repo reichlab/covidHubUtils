@@ -20,6 +20,8 @@ Currently available:
  * `preprocess_nytimes(save_location)`: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
  * `preprocess_usafacts(save_location)`: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs
  * `preprocess_jhu(save_location)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
+ * `preprocess_truth_for_zoltar(target, issue_date)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
+ * `save_truth_for_zoltar(save_location)`: Write results from `preprocess_truth_for_zoltar()` to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
 
 Coming next: 
 

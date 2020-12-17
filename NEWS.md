@@ -1,3 +1,7 @@
+## Changes since the last version
+
+  - Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar
+
 ## covidHubUtils 0.1.1
 
 This is a release focusing on new features in plotting functions. 
