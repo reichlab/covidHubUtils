@@ -35,5 +35,8 @@ This is the first version of the package with a 0.x release.
 
 ### v 0.1
  - initial release: big plotting changes
- - v0.1.1 : in load_latest_forecasts, use provided source for calls to lower level functions
- - v0.1.2: support daily hospitalization plot in plot_forecast
+ - v0.1.1 :
+    - in load_latest_forecasts, use provided source for calls to lower level functions
+ - v0.1.2:
+    - support daily hospitalization plot in plot_forecast
+    - add `facet_nrow`, `facet_ncol`, and `fill_transparency` to `plot_forecast` function

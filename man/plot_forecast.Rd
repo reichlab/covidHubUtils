@@ -14,6 +14,8 @@ plot_forecast(
   locations,
   facet = NULL,
   facet_scales = "fixed",
+  facet_nrow = NULL,
+  facet_ncol = NULL,
   forecast_dates,
   intervals,
   horizon,
@@ -21,6 +23,7 @@ plot_forecast(
   plot_truth = TRUE,
   plot = TRUE,
   fill_by_model = FALSE,
+  fill_transparency = 1,
   truth_as_of = NULL,
   title = "default",
   subtitle = "default",
@@ -47,6 +50,10 @@ Default to all locations in forecast_data.}
 
 \item{facet_scales}{argument for scales in ggplot2::facet_wrap. Default to "fixed".}
 
+\item{facet_nrow}{number of rows for facetting; optional.}
+
+\item{facet_ncol}{number of columns for facetting; optional.}
+
 \item{forecast_dates}{date string vectors for forecast dates to plot.
 Default to forecast_dates present in the data.}
 
@@ -70,6 +77,9 @@ Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
 \item{fill_by_model}{boolean for specifying colors in plot.
 If TRUE, separate colors will be used for each model.
 If FALSE, only blues will be used for all models. Default to FALSE.}
+
+\item{fill_transparency}{numeric value used to set transparency of intervals.
+0 means fully transparent, 1 means opaque.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date (not using this parameter when truth data
