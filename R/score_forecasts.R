@@ -4,14 +4,18 @@
 #' by load_forecasts
 #' @param truths required data.frame with forecasts in the format returned
 #' by load_truth
-#' @param desired_score_types character vector of scores to calculate; defaults to returning
-#' all available scores
 #' @param return_format string: "long" returns long format with a column for
 #' "score_name" and a column for "score_value"; "wide" returns wide format with
 #' a separate column for each score. Defaults to "wide".
 #'
-#' @return data.frame with columns model, forecast_date, location, horizon,
-#' temporal_resolution, target_variable, horizon, target_end_date, and scores:
+#' @return data.frame with scores. The result will have some columns that
+#' define the observation, namely, `model`, `forecast_date`, `location`, 
+#' `horizon`, `temporal_resolution`, `target_variable`, `horizon`, and 
+#' `target_end_date`.
+#' Other columns will contain scores: 
+#'  - `abs_error` is the absolute error based on median estimate,
+#'  - `wis` is the weighted interval score
+#'  - `coverage_X` are prediction interval coverage at alpha level X
 #' If return_format is "long", also contains columns score_name and score_value
 #' where score_name is the type of score calculated and score_value has the numeric
 #' value of the score.
@@ -21,7 +25,6 @@
 score_forecasts <- function(
   forecasts,
   truth,
-  desired_score_types,
   return_format = "wide"
 ) {
   
@@ -71,27 +74,24 @@ score_forecasts <- function(
   
   # score using scoringutil
   observation_cols <- c(
-    "model", "location",
+    "model", 
+    "location", 
     "horizon", "temporal_resolution", "target_variable",
     "forecast_date", "target_end_date"
   )
-  scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, by = observation_cols))
-  
-  # mangle the data for output
-  # if users didn't provide score types
-  if (!missing(desired_score_types)) {
-    extra_na_colnames <- setdiff(desired_score_types, colnames(scores))
-    extra_na_cols <- matrix(
-      NA_real_,
-      nrow = nrow(scores),
-      ncol = length(extra_na_colnames),
-      dimnames = list(NULL, extra_na_colnames)
-    )
-    
-    scores <- scores %>%
-      dplyr::select(c(observation_cols, desired_score_types)) %>%
-      dplyr::bind_cols(as.data.frame(extra_na_cols))
-  }
+
+  scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, 
+    by = observation_cols,
+    summarise_by = c(observation_cols, "range")),
+    interval_score_arguments = list(weigh = TRUE)) %>%
+    tidyr::pivot_wider(id_cols = observation_cols,
+      names_from = c("range"), 
+      values_from = c("coverage", "interval_score", "aem")) %>%
+    ## before next line: do we need to check to ensure aem_0 is a valid column name
+    dplyr::rename(abs_error = aem_0) %>% 
+    ## before next line: do we need to check to ensure interval_score columns exist?
+    dplyr::mutate(wis = rowMeans(dplyr::select(., dplyr::starts_with("interval_score")))) %>%
+    dplyr::select(-dplyr::starts_with("aem_"), -dplyr::starts_with("interval_score")) 
   
   # manipulate return format:
   #   eval_forecasts(), by default, returns in wide format

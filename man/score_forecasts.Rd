@@ -4,14 +4,11 @@
 \alias{score_forecasts}
 \title{Score forecasts}
 \usage{
-score_forecasts(forecasts, truth, desired_score_types, return_format = "wide")
+score_forecasts(forecasts, truth, return_format = "wide")
 }
 \arguments{
 \item{forecasts}{required data.frame with forecasts in the format returned
 by load_forecasts}
-
-\item{desired_score_types}{character vector of scores to calculate; defaults to returning
-all available scores}
 
 \item{return_format}{string: "long" returns long format with a column for
 "score_name" and a column for "score_value"; "wide" returns wide format with
@@ -21,12 +18,20 @@ a separate column for each score. Defaults to "wide".}
 by load_truth}
 }
 \value{
-data.frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, horizon, target_end_date, and scores:
+data.frame with scores. The result will have some columns that
+define the observation, namely, \code{model}, \code{forecast_date}, \code{location},
+\code{horizon}, \code{temporal_resolution}, \code{target_variable}, \code{horizon}, and
+\code{target_end_date}.
+Other columns will contain scores:
+\itemize{
+\item \code{abs_error} is the absolute error based on median estimate,
+\item \code{wis} is the weighted interval score
+\item \code{coverage_X} are prediction interval coverage at alpha level X
 If return_format is "long", also contains columns score_name and score_value
 where score_name is the type of score calculated and score_value has the numeric
 value of the score.
 If return_format is "wide", each calculated score is in its own column.
+}
 }
 \description{
 Score forecasts
