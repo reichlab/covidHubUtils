@@ -3,8 +3,10 @@
 #' supported with specified facet formula. 
 #' 
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
-#' @param truth_data optional data frame with forecasts in the format returned 
-#' by load_truth().
+#' @param truth_data optional data frame from one truth source in the format returned 
+#' by load_truth(). It needs to have columns model, target_variable, 
+#' target_end_date, location and value. 
+#' Model column can be "Observed Data (a truth source)".
 #' @param models vector of strings specifying models to plot. 
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
@@ -24,9 +26,9 @@
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date. Default to all available horizons in forecast data. 
 #' @param truth_source character specifying where the truth data will
-#' be loaded from if truth_data is not provided. 
-#' Otherwise, this character specifies the data source to plot. 
-#' Currently support "JHU","USAFacts" and "NYTimes".
+#' be loaded from if truth_data is not provided. Currently support "JHU",
+#' "USAFacts" and "NYTimes". 
+#' Optional if truth_data is provided. 
 #' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
@@ -60,7 +62,7 @@ plot_forecast <- function(forecast_data,
                           forecast_dates,
                           intervals,
                           horizon,
-                          truth_source = "JHU",
+                          truth_source,
                           plot_truth = TRUE,
                           plot = TRUE,
                           fill_by_model = FALSE,
@@ -116,19 +118,12 @@ plot_forecast <- function(forecast_data,
     stop("Error in plot_forecast: Please provide a valid target variable.")
   }
   
-  # validate truth_source
-  if (target_variable != "inc hosp"){
-    truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","USAFacts", "NYTimes"), 
-                              several.ok = FALSE)
-  } else {
-    if (missing(truth_source) | is.na(truth_source)){
-      stop("Error in plot_forecast: Please provide truth_source when target_variable is inc hosp.")
-    } else {
-      truth_source <- truth_source
+  # look for truth data when target variable is "inc hosp"
+  if (target_variable == "inc hosp"){
+    if (is.null(truth_data)){
+      stop("Error in plot_forecast: Please provide truth_data when target_variable is inc hosp.")
     }
   }
-  
   
   # validate truth data if provided
   if (!is.null(truth_data)){
@@ -140,10 +135,6 @@ plot_forecast <- function(forecast_data,
       stop("Error in plot_forecast: Please provide columns model, 
            target_variable, target_end_date, location and value in truth_data.")
     } else {
-      # check if truth_data has data from specified source
-      if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)) {
-        stop("Error in plot_forecast: Please provide a valid truth_source to plot.")
-      }
       # check if all fips codes in location column are valid
       if (!all(truth_data$location %in% all_valid_fips)){
         stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
@@ -157,7 +148,19 @@ plot_forecast <- function(forecast_data,
         stop("Error in plot_forecast: Please provide a valid target variable.")
       }
     }
+  } else {
+    # validate truth_source if no truth_data is provided
+    truth_source <- match.arg(truth_source, 
+                              choices = c("JHU","USAFacts", "NYTimes"), 
+                              several.ok = FALSE)
   }
+  
+  if (show_caption){
+    if (missing(truth_source)){
+      stop("Error in plot_forecast: Please provide truth_source for caption.")
+    }
+  }
+  
   
   
   # validate forecast_dates
