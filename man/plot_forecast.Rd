@@ -19,7 +19,7 @@ plot_forecast(
   forecast_dates,
   intervals,
   horizon,
-  truth_source = "JHU",
+  truth_source,
   plot_truth = TRUE,
   plot = TRUE,
   fill_by_model = FALSE,
@@ -33,8 +33,10 @@ plot_forecast(
 \arguments{
 \item{forecast_data}{data frame with truth and forecasts from load_forecasts()}
 
-\item{truth_data}{optional data frame with forecasts in the format returned
-by load_truth().}
+\item{truth_data}{optional data frame from one truth source in the format returned
+by load_truth(). It needs to have columns model, target_variable,
+target_end_date, location and value.
+Model column can be "Observed Data (a truth source)".}
 
 \item{models}{vector of strings specifying models to plot.
 Default to all models in forecast_data.}
@@ -65,9 +67,9 @@ If not provided, it will default to c(.5, .8, .95).}
 forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided.
-Otherwise, this character specifies the data source to plot.
-Currently support "JHU","USAFacts" and "NYTimes".}
+be loaded from if truth_data is not provided. Currently support "JHU",
+"USAFacts" and "NYTimes".
+Optional if truth_data is provided.}
 
 \item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}
 

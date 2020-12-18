@@ -23,8 +23,10 @@ get_plot_forecast_data(
 It has columns model, forecast_date,location, target, type, quantile,
 value, horizon and target_end_date.}
 
-\item{truth_data}{optional data frame with forecasts in the format returned
-by load_truth().}
+\item{truth_data}{optional data frame from one truth source in the format returned
+by load_truth(). It needs to have columns model, target_variable,
+target_end_date, location and value.
+Model column can be "Observed Data (a truth source)".}
 
 \item{models_to_plot}{characters of model abbreviations}
 
@@ -43,9 +45,8 @@ Default to all locations available in forecast_data.}
 Default to TRUE.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided.
-Otherwise, this character specifies the data source to plot.
-Currently support "JHU","USAFacts" and "NYTimes".}
+be loaded from if truth_data is not provided. Currently support "JHU",
+"USAFacts" and "NYTimes".}
 
 \item{target_variable_to_plot}{string specifying target type. It should be one of
 "cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
