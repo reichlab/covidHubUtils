@@ -6,7 +6,7 @@
 
 - Update `plot_forecast()`
   
-  Set `truth_source` to be optional when user provides `truth_data`. However, it is still needed when `show_caption = TRUE`.
+  Set `truth_source` to be optional when the user provides `truth_data`. However, it is still needed when `show_caption = TRUE`.
   
   Remove validation for `model` column in user-proveded `truth_data`.
 

@@ -20,6 +20,7 @@
 #' @param truth_source character specifying where the truth data will
 #' be loaded from if truth_data is not provided. Currently support "JHU",
 #' "USAFacts" and "NYTimes". 
+#' Optional if truth_data is provided. 
 #' @param  target_variable_to_plot string specifying target type. It should be one of 
 #' "cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
 #' in load_truth() now.
