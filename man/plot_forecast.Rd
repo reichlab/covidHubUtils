@@ -14,13 +14,16 @@ plot_forecast(
   locations,
   facet = NULL,
   facet_scales = "fixed",
+  facet_nrow = NULL,
+  facet_ncol = NULL,
   forecast_dates,
   intervals,
   horizon,
-  truth_source = "JHU",
+  truth_source,
   plot_truth = TRUE,
   plot = TRUE,
   fill_by_model = FALSE,
+  fill_transparency = 1,
   truth_as_of = NULL,
   title = "default",
   subtitle = "default",
@@ -30,8 +33,10 @@ plot_forecast(
 \arguments{
 \item{forecast_data}{data frame with truth and forecasts from load_forecasts()}
 
-\item{truth_data}{optional data frame with forecasts in the format returned
-by load_truth().}
+\item{truth_data}{optional data frame from one truth source in the format returned
+by load_truth(). It needs to have columns model, target_variable,
+target_end_date, location and value.
+Model column can be "Observed Data (a truth source)".}
 
 \item{models}{vector of strings specifying models to plot.
 Default to all models in forecast_data.}
@@ -47,6 +52,10 @@ Default to all locations in forecast_data.}
 
 \item{facet_scales}{argument for scales in ggplot2::facet_wrap. Default to "fixed".}
 
+\item{facet_nrow}{number of rows for facetting; optional.}
+
+\item{facet_ncol}{number of columns for facetting; optional.}
+
 \item{forecast_dates}{date string vectors for forecast dates to plot.
 Default to forecast_dates present in the data.}
 
@@ -58,9 +67,9 @@ If not provided, it will default to c(.5, .8, .95).}
 forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided.
-Otherwise, this character specifies the data source to plot.
-Currently support "JHU","USAFacts" and "NYTimes".}
+be loaded from if truth_data is not provided. Currently support "JHU",
+"USAFacts" and "NYTimes".
+Optional if truth_data is provided.}
 
 \item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}
 
@@ -70,6 +79,9 @@ Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
 \item{fill_by_model}{boolean for specifying colors in plot.
 If TRUE, separate colors will be used for each model.
 If FALSE, only blues will be used for all models. Default to FALSE.}
+
+\item{fill_transparency}{numeric value used to set transparency of intervals.
+0 means fully transparent, 1 means opaque.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date (not using this parameter when truth data

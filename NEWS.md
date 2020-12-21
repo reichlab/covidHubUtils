@@ -1,11 +1,36 @@
 ## Changes since the last version
 
-- Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar
+- Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar.
+ 
+## covidHubUtils 0.1.2
+  
+This is a release focusing on new features in scoring functions and plotting functions. 
 
-- `score_forecasts()` is now implemented.
+### Feature updates
+- `score_forecasts()` is now implemented for quantile-format forecasts to compute absolute error, weighted interval score, sharpness, overprediction, underprediction, and prediction interval coverage at any specified quantile.
 
   Minimally one should have the `forecasts` dataframe produced by `load_forecasts()` and the truth dataframe produced by `load_truth()` to calculate scores. If one desires to specify a subset of all available scores, one should consult [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
+
+- Update `plot_forecast()`
   
+  Set `truth_source` to be optional when the user provides `truth_data`. However, it is still needed when `show_caption = TRUE`.
+  
+  Remove format validation for `model` column in user-provided `truth_data`.
+  
+  Support daily hospitalization plot. When `target_variable = "inc hosp"`, the user needs to provided `truth_data`. Otherwise, an error will be thrown. 
+  
+  Add `facet_nrow`, `facet_ncol`, `fill_transparency`, `title` and `subtitle`.
+
+- Update `get_plot_forecast_data()`
+  
+  Remove format validation for `model` column in user-provided `truth_data`.
+  
+  When `target_variable = "inc hosp"`, the user needs to provided `truth_data`. Otherwise, an error will be thrown. 
+
+### Package updates
+- There is no backwards compatibility.
+- Add Khoa Le and Yuxin David Huang to author/contributor list
+- Create covidHubUtils-overview vignette
 
 
 ## covidHubUtils 0.1.1
@@ -35,8 +60,3 @@ This is the first version of the package with a 0.x release.
 ### Package updates
 - details on other changes will be listed here for future updates
 - added initial author/contributor list
-
-### v 0.1
- - initial release: big plotting changes
- - v0.1.1 : in load_latest_forecasts, use provided source for calls to lower level functions
- - v0.1.2: support daily hospitalization plot in plot_forecast
