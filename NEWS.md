@@ -26,6 +26,7 @@ This is a release focusing on new features in scoring functions and plotting fun
 ### Package updates
 - There is no backwards compatibility.
 - Add Khoa Le and Yuxin David Huang to author/contributor list
+- Create covidHubUtils-overview vignette
 
 ## covidHubUtils 0.1.1
 
