@@ -2,7 +2,7 @@
 #'
 #' @param forecasts required data.frame with forecasts in the format returned
 #' by load_forecasts
-#' @param truths required data.frame with forecasts in the format returned
+#' @param truth required data.frame with forecasts in the format returned
 #' by load_truth
 #' @param return_format string: "long" returns long format with a column for
 #' "score_name" and a column for "score_value"; "wide" returns wide format with
