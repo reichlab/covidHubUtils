@@ -88,13 +88,20 @@ forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
 
 And here is the data that is returned from this query, note that in addition to the essential forecast data itself, some additional columns with information about the locations are returned.
 
-```{r}
-datatable(forecasts)
+```{r, echo=FALSE}
+datatable(forecasts,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
 ```
 
 This data can then be plotted directly with a call to `plot_forecast()`.
 ```{r}
-p <- plot_forecast (forecast_data = forecasts, 
+p <- plot_forecast(forecast_data = forecasts, 
+  truth_source = "JHU",
   target_variable = "inc case",  
   intervals = c(.5, .8, .95))
 ```
@@ -126,6 +133,7 @@ fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-s
 
 p <- plot_forecast(fdat, 
   target_variable = "inc death", 
+  truth_source = "JHU",
   intervals = c(.5, .95), 
   facet = .~model,
   fill_by_model = TRUE, 
@@ -154,6 +162,7 @@ fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-s
 p <- plot_forecast(fdat, 
   target_variable = "inc death", 
   intervals = c(.5, .95), 
+  truth_source = "JHU",
   facet = location_name~model,
   facet_scales = "free_y",
   fill_by_model = TRUE, 
@@ -179,6 +188,7 @@ fdat <- load_forecasts(models = c("Karlen-pypm", "UMass-MechBayes"),
 
 p <- plot_forecast(fdat, 
   target_variable = "inc death", 
+  truth_source = "JHU",
   intervals = c(.5, .95), 
   facet = .~model,
   fill_by_model = TRUE,
@@ -198,7 +208,7 @@ Here is an example of a call to `plot_forecast()` that simply specifies an alter
 ```{r}
 plot_forecast (forecast_data = forecasts, 
   target_variable = "inc case",  
-  truth_source = "NYTimes",
+  truth_source = "USAFacts",
   intervals = c(.5, .8, .95))
 ```
 
@@ -211,8 +221,14 @@ truth_data <- load_truth(truth_source = "USAFacts",
 
 
 Truth data comes in the following tabular format.
-```{r}
-datatable(truth_data)
+```{r, echo=FALSE}
+datatable(truth_data,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 3)
+))
 ```
 
 And can be used in conjunction with a call to plot_forecast
@@ -226,18 +242,29 @@ plot_forecast(forecast_data = forecasts,
 
 
 
-#Working with scored forecasts 
+# Working with scored forecasts 
 
-In addition to downloading forecasts, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at alpha levels: 0, 0.50, 0.80, and 0.95, the absolute error based on a median estimate, and the weighted interval score of the forecast. 
+In addition to downloading forecasts, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at any provided quantiles, the absolute error based on a median estimate, the weighted interval score (WIS) of the forecast, and a component-wise breakdown of WIS into sharpness, overprediction and underprediction. 
 
 The inputs to the `scored_forecasts()` include a dataframe created using `load_forecasts()` and a dataframe created using `truth_data()`. 
 
 The following code creates a dataframe of scored data based on the forecasts and truth data loaded earlier in this vignette in long format. 
 ```{r}
-score_forecasts(forecasts = forecasts,
-                return_format = "long",
-                truth = truth_data)
+scores <- score_forecasts(forecasts = forecasts,
+  return_format = "long",
+  truth = truth_data)
 ```
+
+```{r, echo=FALSE}
+datatable(scores,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+```
+
 
 The scores calculated using this functionality can be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. 
 
