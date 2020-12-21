@@ -26,6 +26,9 @@ Other columns will contain scores:
 \itemize{
 \item \code{abs_error} is the absolute error based on median estimate,
 \item \code{wis} is the weighted interval score
+\item \code{sharpness} the component of WIS made up of interval widths
+\item \code{overprediction} the component of WIS made up of overprediction of intervals
+\item \code{underprediction} the component of WIS made up of underprediction of intervals
 \item \code{coverage_X} are prediction interval coverage at alpha level X
 If return_format is "long", also contains columns score_name and score_value
 where score_name is the type of score calculated and score_value has the numeric
@@ -35,4 +38,17 @@ If return_format is "wide", each calculated score is in its own column.
 }
 \description{
 Score forecasts
+}
+\examples{
+\dontrun{
+forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBayes"), 
+  last_forecast_date = "2020-12-14", 
+  forecast_date_window_size = 7, 
+  locations = c("US"), 
+  targets = paste(1:4, "wk ahead inc death"), 
+  source = "zoltar")
+truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
+scores <- score_forecasts(forecasts, truth)
+}
+
 }
