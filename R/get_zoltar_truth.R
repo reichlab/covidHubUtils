@@ -38,22 +38,12 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
       dplyr::rename(value = inc, unit = location)
   }
   
-  df$horizon <- 20
-  df <- df[rep(row.names(df), df$horizon),]
-  df <- df %>%
-    dplyr::group_by(unit, date, value) %>%
-    # going backward in time
-    dplyr::mutate(horizon = seq(-1,-20)) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      # generate the Saturday target end date in a number of weeks behind
-      target_end_date = calc_target_week_end_date(date, horizon),
-      # get the next Monday relative to Saturday target end date
-      timezero = lubridate::ceiling_date(as.Date(target_end_date), 'week') + 1,
-      horizon = abs(horizon),
-      target = paste0(horizon,target_var)) %>%
-    dplyr::select(unit, date, value, timezero, horizon,target)
-  
+  # expand the data frame where for each observed value at time t, 
+  # that observation is the observed value at each horizon 1 through 20 
+  # relative to the corresponding past forecast timezeros from times t-1 through t-20
+  df <- tidyr::expand_grid(df, horizon = seq_len(20)) %>%
+    dplyr::mutate(target = paste0(horizon,target_var))
+    
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
   if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
@@ -69,17 +59,12 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
   # get all valid timezeros from zoltar
   zoltar_timezeros<- zoltr::timezeros(zoltar_connection, project_url)$timezero_date
   
-  
   # generate target end date with horzion 1 to 20 for all zoltar_timezeros
-  df_zoltar <- data.frame(zoltar_timezeros = zoltar_timezeros, horizon = 20)
-  df_zoltar <- df_zoltar[rep(row.names(df_zoltar), df_zoltar$horizon),]
-  df_zoltar <- df_zoltar %>%
-    dplyr::group_by(zoltar_timezeros) %>%
-    dplyr::mutate(horizon = seq(1,20),
-                  target_end_date = 
+  df_zoltar <- tidyr::expand_grid(
+    zoltar_timezeros = zoltar_timezeros, horizon = seq_len(20)) %>%
+    dplyr::mutate(target_end_date = 
                     covidHubUtils::calc_target_week_end_date(
-                      zoltar_timezeros, horizon)) %>%
-    dplyr::ungroup()
+                      zoltar_timezeros, horizon))
   
   # merge zoltar timezeros with truth values and targets
   df_final <- merge(x = df, 
