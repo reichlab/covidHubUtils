@@ -102,8 +102,7 @@ score_forecasts <- function(
     tidyr::pivot_wider(id_cols = observation_cols,
       names_from = c("range"), 
       values_from = c("coverage", "interval_score", "aem", "sharpness", "overprediction", "underprediction")) %>%
-    ## before next line: do we need to check to ensure aem_0 is a valid column name
-    dplyr::rename(abs_error = aem_0) %>% 
+    dplyr::mutate(abs_error = rowMeans(dplyr::select(., dplyr::starts_with("aem_")), na.rm = TRUE)) %>%
     ## before next line: do we need to check to ensure interval_score columns exist?
     dplyr::mutate(
       wis = rowMeans(dplyr::select(., dplyr::starts_with("interval_score"))),
