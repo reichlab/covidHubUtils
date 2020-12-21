@@ -9,6 +9,10 @@
   Set `truth_source` to be optional when the user provides `truth_data`. However, it is still needed when `show_caption = TRUE`.
   
   Remove format validation for `model` column in user-provided `truth_data`.
+  
+  Support daily hospitalization plot.
+  
+  Add `facet_nrow`, `facet_ncol`, and `fill_transparency`.
 
 ## covidHubUtils 0.1.1
 
@@ -37,12 +41,3 @@ This is the first version of the package with a 0.x release.
 ### Package updates
 - details on other changes will be listed here for future updates
 - added initial author/contributor list
-
-### v 0.1
- - initial release: big plotting changes
- - v0.1.1:
-    - in load_latest_forecasts, use provided source for calls to lower level functions
- - v0.1.2:
-    - support daily hospitalization plot in plot_forecast
-    - add `facet_nrow`, `facet_ncol`, and `fill_transparency` to `plot_forecast` function
-    
