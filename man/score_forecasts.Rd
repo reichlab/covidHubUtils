@@ -10,12 +10,12 @@ score_forecasts(forecasts, truth, return_format = "wide")
 \item{forecasts}{required data.frame with forecasts in the format returned
 by load_forecasts}
 
+\item{truth}{required data.frame with forecasts in the format returned
+by load_truth}
+
 \item{return_format}{string: "long" returns long format with a column for
 "score_name" and a column for "score_value"; "wide" returns wide format with
 a separate column for each score. Defaults to "wide".}
-
-\item{truths}{required data.frame with forecasts in the format returned
-by load_truth}
 }
 \value{
 data.frame with scores. The result will have some columns that
