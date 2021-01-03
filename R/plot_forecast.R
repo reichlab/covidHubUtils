@@ -216,16 +216,22 @@ plot_forecast <- function(forecast_data,
   if (fill_by_model){
     if (length(unique(models)) <= 5){
       color_families <- c("Blues", "Oranges", "Greens", "Purples", "Reds")
-      colourCount <- length(quantiles_to_plot)/2+1
+      colourCount <- length(quantiles_to_plot) / 2 + 1
       model_colors <- purrr::map(
         color_families[1:length(unique(models))],
         function(color_family){
           getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, color_family))
-          getPalette(colourCount)
+          if (colourCount < 4) {
+            # choose the first few from a larger set of colors, to keep higher saturation
+            getPalette(4) %>% tail(colourCount)
+          } else {
+            getPalette(colourCount)
           }
-        )
+        })
       
-      ribbon_colors <- RColorBrewer::brewer.pal(4, "Greys")[1:3]
+      ribbon_colors <- RColorBrewer::brewer.pal(max(4, colourCount), "Greys")
+      ribbon_colors <- ribbon_colors[seq_len(length(ribbon_colors) - 1)] %>%
+        tail(colourCount)
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
       interval_colors <- unlist(lapply(model_colors, head, n = colourCount-1))
     } else {
