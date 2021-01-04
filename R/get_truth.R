@@ -301,12 +301,16 @@ preprocess_hospitalization <- function (save_location="./data-truth"){
   # Get cumulative hospitalizations
   cumulative_hosp <- hospitalization_dframes[, c("date", "location", "location_name", "cum")]
   colnames(cumulative_hosp)[colnames(cumulative_hosp) == 'cum'] <- 'value'
+  
+  # Filter out rows with NA values in 'location_name' and 'value' columns, else the visualization might break
   cumulative_hosp <- cumulative_hosp[!rowSums(is.na(cumulative_hosp[c("location_name","value")])), ]
   readr::write_csv(cumulative_hosp, path = file.path(save_location,"truth-Cumulative Hospitalizations.csv"))
   
   # Get incident hospitalizations
   incident_hosp <- hospitalization_dframes[, c("date", "location", "location_name", "inc")]
   colnames(incident_hosp)[colnames(incident_hosp) == 'inc'] <- 'value'
+  
+  # Filter out rows with NA values in 'location_name' and 'value' columns, else the visualization might break
   incident_hosp <- incident_hosp[!rowSums(is.na(incident_hosp[c("location_name","value")])), ]
   readr::write_csv(incident_hosp, path = file.path(save_location,"truth-Incident Hospitalizations.csv"))
   
