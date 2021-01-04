@@ -3,7 +3,8 @@
 - minor updates to overview vignette.
 - `score_forecasts()` is now implemented for quantile-format forecasts to compute absolute error, weighted interval score, sharpness, overprediction, underprediction, and prediction interval coverage at any specified quantile.  Minimally one should have the `forecasts` dataframe produced by `load_forecasts()` and the truth dataframe produced by `load_truth()` to calculate scores. If one desires to specify a subset of all available scores, one should consult [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
 - refactor `load_latest_forecasts_repo`, splitting out functionality for reading in forecasts into a new exported function `load_forecast_files_repo` that loads specific forecast files.
-- more user friendly color palettes when plotting a small number of intervals
+- more user friendly color palettes when plotting a small number of intervals.
+- Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar.
 
 ## covidHubUtils 0.1.2
   
@@ -31,6 +32,7 @@ This is a release focusing on new features in scoring functions and plotting fun
 - There is no backwards compatibility.
 - Add Khoa Le and Yuxin David Huang to author/contributor list
 - Create covidHubUtils-overview vignette
+
 
 ## covidHubUtils 0.1.1
 
