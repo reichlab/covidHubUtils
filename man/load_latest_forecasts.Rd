@@ -9,7 +9,7 @@ forecast_date_window_size days of the last_forecast_date}
 load_latest_forecasts(
   models,
   last_forecast_date,
-  forecast_date_window_size = 1,
+  forecast_date_window_size = 0,
   locations,
   types,
   targets,
@@ -27,8 +27,8 @@ in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in
 Zoltar or the hub repo.}
 
 \item{forecast_date_window_size}{The number of days across which to
-look for recent forecasts. Defaults to 1, which means to only look
-at the last_forecast_date.}
+look for recent forecasts. Defaults to 0, which means to only look
+at the last_forecast_date only.}
 
 \item{locations}{list of fips. Defaults to all locations with available forecasts.}
 

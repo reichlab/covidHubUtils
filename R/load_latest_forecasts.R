@@ -9,8 +9,8 @@
 #' in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in 
 #' Zoltar or the hub repo.
 #' @param forecast_date_window_size The number of days across which to 
-#' look for recent forecasts. Defaults to 1, which means to only look 
-#' at the last_forecast_date. 
+#' look for recent forecasts. Defaults to 0, which means to only look 
+#' at the last_forecast_date only. 
 #' @param locations list of fips. Defaults to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to c(“quantile”, “point”)
@@ -29,7 +29,7 @@
 load_latest_forecasts <- function (
   models,
   last_forecast_date,
-  forecast_date_window_size = 1,
+  forecast_date_window_size = 0,
   locations,
   types,
   targets,

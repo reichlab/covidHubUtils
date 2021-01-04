@@ -6,6 +6,7 @@
 - More user friendly color palettes when plotting a small number of intervals.
 - Add `preprocess_truth_for_zoltar()` and `save_truth_for_zoltar()` for generating truth file for zoltar.
 - Update `get_model_designations()` to return `NA` when model designations for outdated models are not available on Zoltar.
+- Update default value of `forecast_date_window_size` to 0 in`load_latest_forecasts()` so that it looks for forecasts on the `latest_forecast_date` only.
 
 ## covidHubUtils 0.1.2
   
