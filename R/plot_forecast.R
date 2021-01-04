@@ -3,8 +3,10 @@
 #' supported with specified facet formula. 
 #' 
 #' @param forecast_data data frame with truth and forecasts from load_forecasts()
-#' @param truth_data optional data frame with forecasts in the format returned 
-#' by load_truth().
+#' @param truth_data optional data frame from one truth source in the format returned 
+#' by load_truth(). It needs to have columns model, target_variable, 
+#' target_end_date, location and value. 
+#' Model column can be "Observed Data (a truth source)".
 #' @param models vector of strings specifying models to plot. 
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
@@ -14,6 +16,8 @@
 #' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot
 #' @param facet_scales argument for scales in ggplot2::facet_wrap. Default to "fixed".
+#' @param facet_nrow number of rows for facetting; optional.
+#' @param facet_ncol number of columns for facetting; optional.
 #' @param forecast_dates date string vectors for forecast dates to plot. 
 #' Default to forecast_dates present in the data.
 #' @param intervals values indicating which central prediction interval levels 
@@ -22,15 +26,17 @@
 #' @param horizon forecasts are plotted for the horizon time steps after the 
 #' forecast date. Default to all available horizons in forecast data. 
 #' @param truth_source character specifying where the truth data will
-#' be loaded from if truth_data is not provided. 
-#' Otherwise, this character specifies the data source to plot. 
-#' Currently support "JHU","USAFacts" and "NYTimes".
+#' be loaded from if truth_data is not provided. Currently support "JHU",
+#' "USAFacts" and "NYTimes". 
+#' Optional if truth_data is provided. 
 #' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
 #' @param fill_by_model boolean for specifying colors in plot.
 #' If TRUE, separate colors will be used for each model.
-#' If FALSE, only blues will be used for all models. Default to FALSE. 
+#' If FALSE, only blues will be used for all models. Default to FALSE.
+#' @param fill_transparency numeric value used to set transparency of intervals.
+#' 0 means fully transparent, 1 means opaque.
 #' @param truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date (not using this parameter when truth data 
 #' is from github repo)
@@ -51,13 +57,16 @@ plot_forecast <- function(forecast_data,
                           locations,
                           facet = NULL,
                           facet_scales = "fixed",
+                          facet_nrow = NULL,
+                          facet_ncol = NULL,
                           forecast_dates,
                           intervals,
                           horizon,
-                          truth_source = "JHU",
+                          truth_source,
                           plot_truth = TRUE,
                           plot = TRUE,
                           fill_by_model = FALSE,
+                          fill_transparency = 1.0,
                           truth_as_of = NULL, 
                           title = "default", 
                           subtitle = "default",
@@ -109,19 +118,12 @@ plot_forecast <- function(forecast_data,
     stop("Error in plot_forecast: Please provide a valid target variable.")
   }
   
-  # validate truth_source
-  if (target_variable != "inc hosp"){
-    truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","USAFacts", "NYTimes"), 
-                              several.ok = FALSE)
-  } else {
-    if (missing(truth_source) | is.na(truth_source)){
-      stop("Error in plot_forecast: Please provide truth_source when target_variable is inc hosp.")
-    } else {
-      truth_source <- truth_source
+  # look for truth data when target variable is "inc hosp"
+  if (target_variable == "inc hosp"){
+    if (is.null(truth_data)){
+      stop("Error in plot_forecast: Please provide truth_data when target_variable is inc hosp.")
     }
   }
-  
   
   # validate truth data if provided
   if (!is.null(truth_data)){
@@ -133,10 +135,6 @@ plot_forecast <- function(forecast_data,
       stop("Error in plot_forecast: Please provide columns model, 
            target_variable, target_end_date, location and value in truth_data.")
     } else {
-      # check if truth_data has data from specified source
-      if (!(paste0("Observed Data (",truth_source,")") %in% truth_data$model)) {
-        stop("Error in plot_forecast: Please provide a valid truth_source to plot.")
-      }
       # check if all fips codes in location column are valid
       if (!all(truth_data$location %in% all_valid_fips)){
         stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
@@ -150,7 +148,19 @@ plot_forecast <- function(forecast_data,
         stop("Error in plot_forecast: Please provide a valid target variable.")
       }
     }
+  } else {
+    # validate truth_source if no truth_data is provided
+    truth_source <- match.arg(truth_source, 
+                              choices = c("JHU","USAFacts", "NYTimes"), 
+                              several.ok = FALSE)
   }
+  
+  if (show_caption){
+    if (missing(truth_source)){
+      stop("Error in plot_forecast: Please provide truth_source for caption.")
+    }
+  }
+  
   
   
   # validate forecast_dates
@@ -206,16 +216,22 @@ plot_forecast <- function(forecast_data,
   if (fill_by_model){
     if (length(unique(models)) <= 5){
       color_families <- c("Blues", "Oranges", "Greens", "Purples", "Reds")
-      colourCount <- length(quantiles_to_plot)/2+1
+      colourCount <- length(quantiles_to_plot) / 2 + 1
       model_colors <- purrr::map(
         color_families[1:length(unique(models))],
         function(color_family){
           getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, color_family))
-          getPalette(colourCount)
+          if (colourCount < 4) {
+            # choose the first few from a larger set of colors, to keep higher saturation
+            getPalette(4) %>% tail(colourCount)
+          } else {
+            getPalette(colourCount)
           }
-        )
+        })
       
-      ribbon_colors <- RColorBrewer::brewer.pal(4, "Greys")[1:3]
+      ribbon_colors <- RColorBrewer::brewer.pal(max(4, colourCount), "Greys")
+      ribbon_colors <- ribbon_colors[seq_len(length(ribbon_colors) - 1)] %>%
+        tail(colourCount)
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
       interval_colors <- unlist(lapply(model_colors, head, n = colourCount-1))
     } else {
@@ -338,6 +354,7 @@ plot_forecast <- function(forecast_data,
                                        group = interaction(`Prediction Interval`, model, 
                                                            location, forecast_date),
                                        fill = interaction(`Prediction Interval`, model)),
+                alpha = fill_transparency,
                 show.legend=FALSE) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
                                  values = interval_colors) +
@@ -389,7 +406,8 @@ plot_forecast <- function(forecast_data,
   # add facets
   if(!is.null(facet)){
     graph <- graph + 
-      ggplot2::facet_wrap(facets = facet, scales = facet_scales, 
+      ggplot2::facet_wrap(facets = facet, scales = facet_scales,
+                          nrow = facet_nrow, ncol = facet_ncol,
                           labeller = ggplot2::label_wrap_gen(multi_line=FALSE))
   
   }

@@ -67,12 +67,11 @@ get_model_designations <- function(models, source, hub_repo_path) {
         dplyr::filter(model_abbr %in% models)
     }
     
-    model_info <- as.data.frame(purrr::map_dfr(
-      primary_models$url,
-      zoltr::model_info,
-      zoltar_connection = zoltar_connection)  %>%
-      dplyr::select(abbreviation,notes) %>%
-      dplyr::rename(model = abbreviation, designation = notes))
+    model_info <- primary_models %>%
+      dplyr::mutate(model = model_abbr, 
+                    designation = ifelse(notes == '', "NA", notes)) %>%
+      dplyr::select(model, designation)
+      
   }
 
   return(model_info)
