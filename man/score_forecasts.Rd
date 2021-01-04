@@ -52,3 +52,8 @@ scores <- score_forecasts(forecasts, truth)
 }
 
 }
+\references{
+Bracher J, Ray EL, Gneiting T, Reich NG. (2020) Evaluating epidemic forecasts
+in an interval format. arXiv:2005.12881.
+\url{https://arxiv.org/abs/2005.12881}.
+}
