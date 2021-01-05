@@ -38,29 +38,33 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
       
       # construct path to metadata file from the root of hub repo
       model_metadata_paths = paste0('data-processed/',models,'/metadata-',models,'.txt')
-        
+      
       model_info <- purrr::map_dfr(
         model_metadata_paths,
         function (model_metadata_path){
-          # search day is one day later than as_of date
-          search_day <- as.Date(as_of) + 1 
+          # create search time based on as_of date
+          search_time <- paste0(as.Date(as_of) + 1, " 00:00:00")
           
-          # find git commits related to a specified metadata file before search_day
+          # find git commits related to a specified metadata file before search_time
           commits_command <- paste0("cd ",hub_repo_path,
-                                    "; git log --date=short --pretty=format:'%H %ad' --before='",as.character(search_day),"' --follow -- ",
+                                    "; git log --date=short --pretty=format:'%H %ad' --before='",as.character(search_time),"' --follow -- ",
                                     model_metadata_path
                                     ) 
           # invoke command and parse result
           all_commits <- system(commits_command,intern = TRUE) %>% 
             stringr::str_split_fixed(" ", 2) %>%
-            as.data.frame()%>%
+            as.data.frame() %>%
             dplyr::rename(sha = V1, date = V2)
+          
+          if (nrow(all_commits) == 0){
+            stop("Error in get_model_designations: Commits to model metadata are not available by as_of date.\n Please check your parameters.")
+          }
           
           recent_commit_sha <- all_commits$sha[1]
           
           # construct git command to read metadata file
           read_command <- paste0("cd ",hub_repo_path,"; git show ", 
-                            recent_commit_sha,":",model_metadata_path)
+                            recent_commit_sha,":./",model_metadata_path)
           
           as.data.frame(yaml::yaml.load(system(read_command, intern = TRUE))[
             c("model_abbr", "team_model_designation")],

@@ -21,8 +21,8 @@ For those starting out we recommend you begin with the [Getting Started vignette
 ## Currently available:
 
 **Reading Forecast Data**
- * `get_model_designations(models, source, hub_repo_path)`: Assemble a data frame with columns model and designation.
- * `load_latest_forecasts(models, last_forecast_date, forecast_date_window_size = 1, locations, types, targets, source, hub_repo_path)`: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.
+ * `get_model_designations(models, source, hub_repo_path, as_of)`: Assemble a data frame with columns model and designation. **Note:** Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository.
+ * `load_latest_forecasts(models, last_forecast_date, forecast_date_window_size, locations, types, targets, source, hub_repo_path)`: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.
  * `load_forecasts(models, forecast_dates, locations, types, targets)`: Load all available forecasts from Zoltar.
  
 **Reading Observed "Truth" Data**
