@@ -9,8 +9,8 @@
 #' in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in 
 #' Zoltar or the hub repo.
 #' @param forecast_date_window_size The number of days across which to 
-#' look for recent forecasts. Defaults to 1, which means to only look 
-#' at the last_forecast_date. 
+#' look for recent forecasts. Defaults to 0, which means to only look 
+#' at the last_forecast_date only. 
 #' @param locations list of fips. Defaults to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to c(“quantile”, “point”)
@@ -22,13 +22,14 @@
 #' repository
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
+#' location_name, population, geo_type, geo_value, abbreviation
 #' 
 #' @export
 load_latest_forecasts <- function (
   models,
   last_forecast_date,
-  forecast_date_window_size = 1,
+  forecast_date_window_size = 0,
   locations,
   types,
   targets,
@@ -36,7 +37,13 @@ load_latest_forecasts <- function (
   hub_repo_path) {
   
   # validate models
-  all_valid_models <- get_all_models(source = "remote_hub_repo")
+  if (missing(hub_repo_path)) {
+    all_valid_models <- get_all_models(source = source)
+  } else {
+    all_valid_models <- get_all_models(
+      source = source,
+      hub_repo_path = hub_repo_path)
+  }
   
   if (!missing(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
@@ -62,7 +69,7 @@ load_latest_forecasts <- function (
   if (!missing(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
   } else {
-    types = c("point", "quantile")
+    types <- c("point", "quantile")
   }
   
   # validate targets
@@ -85,7 +92,7 @@ load_latest_forecasts <- function (
   if (!missing(targets)){
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
   } else {
-    targets = all_valid_targets
+    targets <- all_valid_targets
   }
   
   
@@ -96,7 +103,7 @@ load_latest_forecasts <- function (
     }, error = function(err){
       stop("Error in load_latest_forecasts: Please provide a valid date object or
            string in format YYYY-MM-DD in latest_forrecast_date.")
-    }
+      }
     )
 
   if (source == "local_hub_repo") {

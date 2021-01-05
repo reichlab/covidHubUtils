@@ -7,13 +7,14 @@
 get_plot_forecast_data(
   forecast_data,
   truth_data = NULL,
-  model_to_plot,
+  models_to_plot,
+  forecast_dates_to_plot,
   horizons_to_plot,
   quantiles_to_plot,
-  location_to_plot,
+  locations_to_plot,
   plot_truth = TRUE,
   truth_source,
-  target_variable,
+  target_variable_to_plot,
   truth_as_of = NULL
 )
 }
@@ -22,35 +23,42 @@ get_plot_forecast_data(
 It has columns model, forecast_date,location, target, type, quantile,
 value, horizon and target_end_date.}
 
-\item{truth_data}{optional data frame with forecasts in the format returned
-by load_truth().}
+\item{truth_data}{optional data frame from one truth source in the format returned
+by load_truth(). It needs to have columns model, target_variable,
+target_end_date, location and value.
+Model column can be "Observed Data (a truth source)".}
 
-\item{model_to_plot}{characters of model abbreviations}
+\item{models_to_plot}{characters of model abbreviations}
+
+\item{forecast_dates_to_plot}{date string vectors for forecast dates to plot.
+Default to all forecast dates available in forecast_data.}
 
 \item{horizons_to_plot}{forecasts are plotted for the horizon time steps after
 the forecast date.}
 
 \item{quantiles_to_plot}{vector of quanitles to include in the plot}
 
-\item{location_to_plot}{character vector of one location.}
+\item{locations_to_plot}{optional character vector of location fips codes.
+Default to all locations available in forecast_data.}
 
 \item{plot_truth}{boolean to indicate whether truth data should be plotted.
 Default to TRUE.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided.
-Otherwise, this character specifies the data source to plot.
-Currently support "JHU","USAFacts" and "NYTimes".}
+be loaded from if truth_data is not provided. Currently support "JHU",
+"USAFacts" and "NYTimes".
+Optional if truth_data is provided.}
 
-\item{target_variable}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp"}
+\item{target_variable_to_plot}{string specifying target type. It should be one of
+"cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
+in load_truth() now.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date.}
 }
 \value{
 data frame with columns model,
-forecast_date, location, target_variable, type, quantile, value, horizon and
+forecast_date, location,  target_variable, type, quantile, value, horizon and
 target_end_date.
 }
 \description{

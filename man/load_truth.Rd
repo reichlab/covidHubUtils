@@ -20,7 +20,7 @@ load_truth(
 be loaded from: currently support "JHU","USAFacts", "NYTimes"}
 
 \item{target_variable}{string specifying target type It should be one of
-"cum death", "inc case", "inc death"}
+"cum death", "inc case", "inc death". "inc hosp" will be available soon.}
 
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
 Default to system date.}
@@ -37,7 +37,8 @@ Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remo
 repository. Only used when data_location is "local_hub_repo"}
 }
 \value{
-data frame with columns model, inc_cum, death_case, target_end_date, location and value
+data frame with columns model, inc_cum, death_case, target_end_date,
+location, value, location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
 Load truth data for specified target variable and locations

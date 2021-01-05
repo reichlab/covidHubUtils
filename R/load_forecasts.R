@@ -13,7 +13,8 @@
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
+#' location_name, population, geo_type, geo_value, abbreviation
 #' 
 #' @export
 load_forecasts <- function (
@@ -34,16 +35,28 @@ load_forecasts <- function (
   # construct Zoltar project url
   the_projects <- zoltr::projects(zoltar_connection)
   project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-
+  
+  # get all valid timezeros in project
+  all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
+                                          project_url = project_url)$timezero_date
+  
+  if (!missing(forecast_dates)){
+    # take intersection of forecast_dates and all_valid_timezeros
+    valid_forecast_dates <- intersect(as.character(forecast_dates), 
+                                      as.character(all_valid_timezeros))
+  } else {
+    valid_forecast_dates <- all_valid_timezeros
+  }
 
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
-                                      is_forecast_query = TRUE,
+                                      query_type = "forecasts",
                                       units = locations, 
-                                      timezeros = forecast_dates,
+                                      timezeros = valid_forecast_dates,
                                       models = models,
                                       targets = targets,
-                                      types = types)
+                                      types = types,
+                                      verbose = FALSE)
   if (nrow(forecasts) ==0){
     warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
   } else {
@@ -59,7 +72,8 @@ load_forecasts <- function (
         calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
       )) %>%
       dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
-                    target_variable, target_end_date, type, quantile, value)
+                    target_variable, target_end_date, type, quantile, value) %>%
+      dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
   }
   
   return(forecasts)

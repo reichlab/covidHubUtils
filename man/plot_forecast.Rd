@@ -2,37 +2,62 @@
 % Please edit documentation in R/plot_forecast.R
 \name{plot_forecast}
 \alias{plot_forecast}
-\title{Plot forecasts with truth for only one model, one target and one location}
+\title{Plot forecasts and optional truth for only one selected target variable.
+Faceted plots for multiple models, locations and forecast dates are
+supported with specified facet formula.}
 \usage{
 plot_forecast(
   forecast_data,
   truth_data = NULL,
-  model,
+  models,
   target_variable,
-  location,
+  locations,
+  facet = NULL,
+  facet_scales = "fixed",
+  facet_nrow = NULL,
+  facet_ncol = NULL,
+  forecast_dates,
   intervals,
   horizon,
-  truth_source = "JHU",
+  truth_source,
+  plot_truth = TRUE,
   plot = TRUE,
+  fill_by_model = FALSE,
+  fill_transparency = 1,
   truth_as_of = NULL,
   title = "default",
+  subtitle = "default",
   show_caption = TRUE
 )
 }
 \arguments{
 \item{forecast_data}{data frame with truth and forecasts from load_forecasts()}
 
-\item{truth_data}{optional data frame with forecasts in the format returned
-by load_truth().}
+\item{truth_data}{optional data frame from one truth source in the format returned
+by load_truth(). It needs to have columns model, target_variable,
+target_end_date, location and value.
+Model column can be "Observed Data (a truth source)".}
 
-\item{model}{model_abbr specifying model to plot. Optional if there is only
-one model available in forecast data.}
+\item{models}{vector of strings specifying models to plot.
+Default to all models in forecast_data.}
 
 \item{target_variable}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death"}
+"cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
+please provide truth_data.}
 
-\item{location}{string for fips code or 'US'. Optional if there is only one
-location available in forecast data.}
+\item{locations}{string for fips code or 'US'.
+Default to all locations in forecast_data.}
+
+\item{facet}{interpretable facet option for ggplot}
+
+\item{facet_scales}{argument for scales in ggplot2::facet_wrap. Default to "fixed".}
+
+\item{facet_nrow}{number of rows for facetting; optional.}
+
+\item{facet_ncol}{number of columns for facetting; optional.}
+
+\item{forecast_dates}{date string vectors for forecast dates to plot.
+Default to forecast_dates present in the data.}
 
 \item{intervals}{values indicating which central prediction interval levels
 to plot. NULL means only plotting point forecasts.
@@ -42,19 +67,31 @@ If not provided, it will default to c(.5, .8, .95).}
 forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided.
-Otherwise, this character specifies the data source to plot.
-Currently support "JHU","USAFacts" and "NYTimes".}
+be loaded from if truth_data is not provided. Currently support "JHU",
+"USAFacts" and "NYTimes".
+Optional if truth_data is provided.}
+
+\item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}
 
 \item{plot}{boolean for showing the plot. Default to TRUE.
 Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
+
+\item{fill_by_model}{boolean for specifying colors in plot.
+If TRUE, separate colors will be used for each model.
+If FALSE, only blues will be used for all models. Default to FALSE.}
+
+\item{fill_transparency}{numeric value used to set transparency of intervals.
+0 means fully transparent, 1 means opaque.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date (not using this parameter when truth data
 is from github repo)}
 
-\item{title}{optional text for the title of the plot. if left as "default",
-the title will be automatically generated. if "none", no title will be plotted.}
+\item{title}{optional text for the title of the plot. If left as "default",
+the title will be automatically generated. If "none", no title will be plotted.}
+
+\item{subtitle}{optional text for the subtitle of the plot. If left as "default",
+the subtitle will be automatically generated. If "none", no subtitle will be plotted.}
 
 \item{show_caption}{logical, if TRUE, caption will be included showing data sources}
 }
@@ -62,5 +99,7 @@ the title will be automatically generated. if "none", no title will be plotted.}
 invisible ggplot object
 }
 \description{
-Plot forecasts with truth for only one model, one target and one location
+Plot forecasts and optional truth for only one selected target variable.
+Faceted plots for multiple models, locations and forecast dates are
+supported with specified facet formula.
 }
