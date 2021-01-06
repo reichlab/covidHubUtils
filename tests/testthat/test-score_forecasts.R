@@ -207,7 +207,7 @@ test_that("wis is correct, median only", {
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
 
-  expect_identical(actual$wis, expected)
+  expect_equal(actual$wis, expected)
 })
 
 
@@ -266,7 +266,7 @@ test_that("wis is correct, 1 interval only", {
   expected <- (forecast_quantiles_matrix[, 2] - forecast_quantiles_matrix[, 1]) * (alpha1 / 2) +
     c(0, (-2) - (-15), 22 - 4)
 
-  expect_identical(actual$wis, expected)
+  expect_equal(actual$wis, expected)
 })
 
 
@@ -327,5 +327,5 @@ test_that("wis is correct, 2 intervals and median", {
     (forecast_quantiles_matrix[, 4] - forecast_quantiles_matrix[, 2])*(alpha2/2) + c(0, 1-(-15), 22-3)
   )
 
-  expect_identical(actual$wis, expected)
+  expect_equal(actual$wis, expected)
 })
