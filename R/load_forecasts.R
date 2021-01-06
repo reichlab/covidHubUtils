@@ -1,11 +1,16 @@
 #' Load covid forecasts from Zoltar.  
 #' Return all available forecasts submitted on forecast_dates
 #' 
+#' The function will throw a warning and return an empty data frame when 
+#' no forecasts are submitted on any dates in forecast_dates for selected models, 
+#' locations, types and target.
+#' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
 #' @param forecast_dates The forecast date of forecasts to retrieve.
 #' Defaults to all valid forecast dates in Zoltar.
+#' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
 #' @param locations list of fips. Defaults to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to c(“quantile”, “point”)
@@ -44,6 +49,9 @@ load_forecasts <- function (
     # take intersection of forecast_dates and all_valid_timezeros
     valid_forecast_dates <- intersect(as.character(forecast_dates), 
                                       as.character(all_valid_timezeros))
+    if (length(valid_forecast_dates) == 0) {
+      stop("Error in load_forecasts: All forecast_dates are invalid.")
+    }
   } else {
     valid_forecast_dates <- all_valid_timezeros
   }
@@ -57,8 +65,17 @@ load_forecasts <- function (
                                       targets = targets,
                                       types = types,
                                       verbose = FALSE)
-  if (nrow(forecasts) ==0){
+  if (nrow(forecasts) == 0){
     warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
+    # convert value column to double and select columns
+    forecasts <- forecasts %>%
+      dplyr::mutate(value = as.double(value)) %>%
+      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead",
+                                     "target_variable"),
+                      remove = FALSE, extra = "merge") %>%
+      dplyr::rename(location = unit, forecast_date = timezero, type = class) %>%
+      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
+                    target_variable, type, quantile, value)
   } else {
     forecasts <- forecasts %>%
       # keep only required columns

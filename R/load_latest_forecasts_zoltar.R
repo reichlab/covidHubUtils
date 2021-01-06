@@ -1,9 +1,14 @@
 #' Load the most recent forecasts submitted in a time window from zoltar.
 #' 
+#' The function will throw a warning and return an empty data frame when 
+#' no forecasts are submitted on any dates in forecast_dates for selected models, 
+#' locations, types and target.
+#' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
-#' @param forecast_dates date vector to load the most recent forecast from
+#' @param forecast_dates date vector to load the most recent forecast from.
+#' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
 #' @param locations list of valid fips code. Defaults to all locations with 
 #' available forecasts.
 #' @param types character vector specifying type of forecasts to load: “quantile” 
@@ -74,9 +79,16 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
   all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
                                           project_url = project_url)$timezero_date
   
-  # take intersection of forecast_dates and all_valid_timezeros
-  valid_forecast_dates <- intersect(as.character(forecast_dates), 
-                                    as.character(all_valid_timezeros))
+  if (!missing(forecast_dates)){
+    # take intersection of forecast_dates and all_valid_timezeros
+    valid_forecast_dates <- intersect(as.character(forecast_dates), 
+                                      as.character(all_valid_timezeros))
+    if (length(valid_forecast_dates) == 0) {
+      stop("Error in load_forecasts: All forecast_dates are invalid.")
+    }
+  } else {
+    valid_forecast_dates <- all_valid_timezeros
+  }
   
   forecast <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
@@ -88,15 +100,24 @@ load_latest_forecasts_zoltar <- function(models, forecast_dates, locations,
                                       types = types,
                                       verbose = FALSE)
 
-  if (nrow(forecast) ==0){
+  if (nrow(forecast) == 0){
     warning("Warning in do_zotar_query: Forecasts are not available in the given time window.\n Please check your parameters.")
+    # convert value column to double and select columns
+    forecast <- forecast %>%
+      dplyr::mutate(value = as.double(value)) %>%
+      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead",
+                                     "target_variable"),
+                      remove = FALSE, extra = "merge") %>%
+      dplyr::rename(location = unit, forecast_date = timezero, type = class) %>%
+      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
+                    target_variable, type, quantile, value)
   } else {
     forecast <- forecast %>%
       # only include the most recent forecast submitted in the time window
       dplyr::group_by(model) %>%
       dplyr::filter(timezero == max(timezero)) %>%
       dplyr::ungroup() %>%
-      # change value and quantile back to double
+      # change value back to double
       dplyr::mutate(value = as.double(value),
                     timezero = as.Date(timezero)) %>%
       # keep only required columns
