@@ -9,6 +9,8 @@
 - Update `get_model_designations()` to return `NA` when model designations for outdated models are not available on Zoltar.
 - Update default value of `forecast_date_window_size` to 0 in`load_latest_forecasts()` so that it looks for forecasts on the `latest_forecast_date` only.
 - `preprocess_hospitalization()` is now implemented. This method creates standard cumulative and incident truth csv files for hospitalization.
+- Standardize data format and columns types of the output from loading functions. 
+- Fix validation bug for `forecast_dates` when loading forecasts from zoltar. Loading functions will throw an error if all dates in `forecast_dates` are invalid forecast dates in Zoltar.
 
 ## covidHubUtils 0.1.2
   

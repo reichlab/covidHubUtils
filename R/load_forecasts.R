@@ -1,11 +1,16 @@
 #' Load covid forecasts from Zoltar.  
 #' Return all available forecasts submitted on forecast_dates
 #' 
+#' The function will throw a warning and return an empty data frame when 
+#' no forecasts are submitted on any dates in forecast_dates for selected models, 
+#' locations, types and target.
+#' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
 #' @param forecast_dates The forecast date of forecasts to retrieve.
 #' Defaults to all valid forecast dates in Zoltar.
+#' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
 #' @param locations list of fips. Defaults to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to c(“quantile”, “point”)

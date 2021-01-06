@@ -1,9 +1,14 @@
 #' Load the most recent forecasts submitted in a time window from zoltar.
 #' 
+#' The function will throw a warning and return an empty data frame when 
+#' no forecasts are submitted on any dates in forecast_dates for selected models, 
+#' locations, types and target.
+#' 
 #' @param models Character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
-#' @param forecast_dates date vector to load the most recent forecast from
+#' @param forecast_dates date vector to load the most recent forecast from.
+#' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
 #' @param locations list of valid fips code. Defaults to all locations with 
 #' available forecasts.
 #' @param types character vector specifying type of forecasts to load: “quantile” 
