@@ -211,6 +211,15 @@ plot_forecast <- function(forecast_data,
      0.5 + as.numeric(interval)/2)
   }))
   
+  # if point forecasts are not available in forecast, check if medians are available
+  # ? add a boolean parameter 
+  if (!"point" %in% forecast_data$type) {
+    if (0.5 %in% forecast_data$quantile) {
+      # plot medians instead
+      quantiles_to_plot <- append(quantiles_to_plot, 0.5)
+      warning("Warning in plot_forecast: There are no point forecasts available in forecast_data. \nThe function is plotting medians instead.")
+    }
+  }
   
   # set colors
   if (fill_by_model){
@@ -354,6 +363,7 @@ plot_forecast <- function(forecast_data,
                                        group = interaction(`Prediction Interval`, model, 
                                                            location, forecast_date),
                                        fill = interaction(`Prediction Interval`, model)),
+                # ? it rewrite transparency setting when only plotting 95% pi
                 alpha = fill_transparency,
                 show.legend=FALSE) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
@@ -368,6 +378,12 @@ plot_forecast <- function(forecast_data,
                            alpha=0) +
       ggplot2::scale_fill_manual(name = "Prediction Interval", 
                                  values = ribbon_colors) +
+      # create a transparent layer for models legend when point forecasts are not plotted
+      # models legend will be covered if point forecasts are plotted
+      ggplot2::geom_line(data = plot_data_forecast %>%
+                           dplyr::filter(type == "quantile"),
+                         mapping = ggplot2::aes(y = upper, colour = model), alpha = 0) +
+      ggplot2::scale_color_manual(name = "Model", values = forecast_colors) +
       # reset alpha in legend fill
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(alpha = 1)))
