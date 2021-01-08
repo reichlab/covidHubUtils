@@ -14,7 +14,8 @@
 #' please provide truth_data. 
 #' @param locations string for fips code or 'US'. 
 #' Default to all locations in forecast_data.
-#' @param facet interpretable facet option for ggplot
+#' @param facet interpretable facet option for ggplot. Function will error 
+#' if multiple locations are passed in without location in the facet formula.
 #' @param facet_scales argument for scales in ggplot2::facet_wrap. Default to "fixed".
 #' @param facet_nrow number of rows for facetting; optional.
 #' @param facet_ncol number of columns for facetting; optional.
@@ -105,6 +106,14 @@ plot_forecast <- function(forecast_data,
     stop("Error in plot_forecast: Not all locations are available in forecast_data.")
   }
   
+  if (length(locations) > 1) {
+    if(is.null(facet)) {
+      stop("Error in plot_forecast: Passed in multiple locations without a facet command")
+    } else if (!("location" %in% as.character(facet))){
+      stop("Error in plot_forecast: Passed in multiple locations without a facet command using location")
+    }
+  }
+
   
   # validate target_variable
   target_variable <- match.arg(target_variable, 
