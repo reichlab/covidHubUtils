@@ -1,6 +1,8 @@
 ## Changes since last release
 
-- `plot_forecast` now errors when trying to plot multiple locations without location in the facet formula.
+- `plot_forecast()` now errors when trying to plot multiple locations without location in the facet formula.
+- Fix bug that model legend is missing when the user is only plotting quantile forecasts in `plot_forecast()`. If `forecast_data` doesn't contain point forecasts, the function will look for all available medians in `forecast_data` and plot them as point forecasts. 
+- Update quantile forecast color so that color transparency will not be overwritten by `fill_transparency` in `plot_forecast()` when plotting more than five models.
 
 ## covidHubUtils 0.1.3
 
