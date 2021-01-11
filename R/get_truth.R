@@ -274,6 +274,11 @@ preprocess_jhu <- function (save_location="./data-truth"){
   colnames(incident_cases)[colnames(incident_cases) == 'inc'] <- 'value'
   incident_cases <- incident_cases[!rowSums(is.na(incident_cases[c("location_name","value")])), ]
   readr::write_csv(incident_cases, path = file.path(save_location,"truth-Incident Cases.csv"))
+  
+  return(list("cumulative_deaths" = cumulative_deaths, 
+              "incident_deaths" = incident_deaths,
+              "cumulative_cases" = cumulative_cases, 
+              "incident_cases" = incident_cases))
 }
 
 
