@@ -220,6 +220,13 @@ plot_forecast <- function(forecast_data,
      0.5 + as.numeric(interval)/2)
   }))
   
+  # if point forecasts are not available in forecast, check if medians are available
+  if (!"point" %in% forecast_data$type) {
+    if (0.5 %in% forecast_data$quantile) {
+      # plot medians instead
+      quantiles_to_plot <- append(quantiles_to_plot, 0.5)
+    }
+  }
   
   # set colors
   if (fill_by_model){
@@ -229,7 +236,7 @@ plot_forecast <- function(forecast_data,
       model_colors <- purrr::map(
         color_families[1:length(unique(models))],
         function(color_family){
-          getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, color_family))
+          getPalette = grDevices::colorRampPalette(RColorBrewer::brewer.pal(4, color_family))
           if (colourCount < 4) {
             # choose the first few from a larger set of colors, to keep higher saturation
             getPalette(4) %>% tail(colourCount)
@@ -248,20 +255,20 @@ plot_forecast <- function(forecast_data,
       colourCount <- length(quantiles_to_plot)/2
       modelCount <- length(unique(models))
       # use 8 instead of 9 to avoid black and grey shades
-      getPalette = colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
+      getPalette = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
       model_colors <- getPalette(modelCount)
       
       ribbon_colors <- RColorBrewer::brewer.pal(4, "Greys")[1:3]
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
       # create 95% PI color
       interval_colors <- unlist(lapply(model_colors, function(color){
-        colorspace::adjust_transparency(color, 0.3)}
+        colorspace::lighten(color, 0.4)}
         ))
     }
   } else {
     # only use blue
     colourCount = max(length(quantiles_to_plot)/2+1, 2)
-    getPalette = colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
+    getPalette = grDevices::colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
     blues = getPalette(colourCount)
     forecast_colors <- rep(tail(blues,1), length(unique(models)))
     interval_colors <- rep(blues[1:(length(blues)-1)],
@@ -363,10 +370,8 @@ plot_forecast <- function(forecast_data,
                                        group = interaction(`Prediction Interval`, model, 
                                                            location, forecast_date),
                                        fill = interaction(`Prediction Interval`, model)),
-                alpha = fill_transparency,
-                show.legend=FALSE) +
-      ggplot2::scale_fill_manual(name = "Prediction Interval", 
-                                 values = interval_colors) +
+                alpha = fill_transparency, show.legend=FALSE) +
+      ggplot2::scale_fill_manual(name = "Prediction Interval", values = interval_colors) +
       # create a transparent layer with grey colors to get prediction interval legend
       ggnewscale::new_scale_fill() +
       ggplot2::geom_ribbon(data = plot_data_forecast %>%
@@ -374,9 +379,14 @@ plot_forecast <- function(forecast_data,
                            mapping = ggplot2::aes(ymin=lower, 
                                                   ymax=upper, 
                                                   fill = `Prediction Interval`), 
-                           alpha=0) +
-      ggplot2::scale_fill_manual(name = "Prediction Interval", 
-                                 values = ribbon_colors) +
+                           alpha = 0) +
+      ggplot2::scale_fill_manual(name = "Prediction Interval", values = ribbon_colors) +
+      # create a transparent layer for models legend when point forecasts are not plotted
+      # models legend will be covered if point forecasts are plotted
+      ggplot2::geom_line(data = plot_data_forecast %>%
+                           dplyr::filter(type == "quantile"),
+                         mapping = ggplot2::aes(y = upper, colour = model), alpha = 0) +
+      ggplot2::scale_color_manual(name = "Model", values = forecast_colors) +
       # reset alpha in legend fill
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(alpha = 1)))
