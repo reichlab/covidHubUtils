@@ -1,3 +1,7 @@
+## Changes since last release
+
+- `plot_forecast` now errors when trying to plot multiple locations without location in the facet formula.
+
 ## covidHubUtils 0.1.3
 
 This is a release focusing on new scoring function and truth-processing functions. The release also contains new feature updates and bug fixes in other util functions. 

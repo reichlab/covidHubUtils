@@ -48,7 +48,8 @@ please provide truth_data.}
 \item{locations}{string for fips code or 'US'.
 Default to all locations in forecast_data.}
 
-\item{facet}{interpretable facet option for ggplot}
+\item{facet}{interpretable facet option for ggplot. Function will error
+if multiple locations are passed in without location in the facet formula.}
 
 \item{facet_scales}{argument for scales in ggplot2::facet_wrap. Default to "fixed".}
 
