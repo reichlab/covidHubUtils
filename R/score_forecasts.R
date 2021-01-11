@@ -102,26 +102,22 @@ score_forecasts <- function(
 
   scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, 
     by = observation_cols,
-    summarise_by = c(observation_cols, "range")),
-    interval_score_arguments = list(weigh = TRUE)) %>%
+    summarise_by = c(observation_cols, "range"),
+    ## the below interval_score_arguments should ensure that WIS is computed correctly
+    interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))) %>%
     tidyr::pivot_wider(id_cols = observation_cols,
       names_from = c("range"), 
       values_from = c("coverage", "interval_score", "aem", "sharpness", "overprediction", "underprediction")) %>%
-    ## before next line: do we need to check to ensure aem_0 is a valid column name
-    dplyr::rename(abs_error = aem_0) %>% 
+    purrr::set_names(~sub("aem_0", "abs_error", .x)) %>% 
     ## before next lines: do we need to check to ensure interval_score columns exist?
-    ## note that the following lines are a work-around to ensure that the updated
-    ## WIS calculation is being performed, which is no longer a straight mean
-    ## of interval scores, but rather (a) includes only 1/2*absolute_error for 
-    ## the k=0 interval_score (this weight is not factored in the weights in scoringutils)
-    ## and (b) has a denominator for the wis of 
+    ## the following lines ensure that we use denominator for the wis of 
     ## (# of interval_scores)-0.5
     ## which is written in the paper and elsewhere as
     ## (# of interval_scores at level >0 ) + 0.5 or (K + 1/2)
     dplyr::mutate(
       n_interval_scores = rowSums(!is.na(dplyr::select(., dplyr::starts_with("interval_score")))),
-      interval_score_0 = interval_score_0/2,
-      wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")))/(n_interval_scores-0.5),
+      interval_score_0_exists = "interval_score_0" %in% names(.),
+      wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")))/(n_interval_scores-0.5*(interval_score_0_exists)),
     ) %>%
     dplyr::mutate(
       sharpness = rowMeans(dplyr::select(., dplyr::starts_with("sharpness"))),

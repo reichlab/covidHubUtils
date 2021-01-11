@@ -4,7 +4,12 @@
 \alias{load_forecast_files_repo}
 \title{Read in a set of forecast files from a repository}
 \usage{
-load_forecast_files_repo(file_paths, locations, types, targets)
+load_forecast_files_repo(
+  file_paths,
+  locations = NULL,
+  types = NULL,
+  targets = NULL
+)
 }
 \arguments{
 \item{file_paths}{paths to csv forecast files to read in.  It is expected that
