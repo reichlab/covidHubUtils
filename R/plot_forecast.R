@@ -53,7 +53,7 @@
 plot_forecast <- function(forecast_data,
                           truth_data = NULL, 
                           models,
-                          target_variable,
+                          target_variable = NULL,
                           locations,
                           facet = NULL,
                           facet_scales = "fixed",
@@ -107,6 +107,15 @@ plot_forecast <- function(forecast_data,
   
   
   # validate target_variable
+  
+  if (is.null(target_variable)) {
+    if (length(unique(forecast_data$target_variable)) == 1) {
+      target_variable <- unique(forecast_data$target_variable)
+    } else {
+      stop("Error in plot_forecast: Target variable unspecified and more than one target_variable in data.")
+    }
+  }
+  
   target_variable <- match.arg(target_variable, 
                                choices = c("cum death",
                                            "inc case",
