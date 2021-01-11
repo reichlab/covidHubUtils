@@ -11,7 +11,8 @@
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
 #' "cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
-#' please provide truth_data. 
+#' please provide truth_data. If there is only one target_variable in 
+#' your data frame this parameter is optional. 
 #' @param locations string for fips code or 'US'. 
 #' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot. Function will error 
