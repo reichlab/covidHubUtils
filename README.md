@@ -26,7 +26,7 @@ For those starting out we recommend you begin with the [Getting Started vignette
  * `load_forecasts(models, forecast_dates, locations, types, targets)`: Load all available forecasts from Zoltar.
  
 **Reading Observed "Truth" Data**
-* `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Truth data for `"inc hosp"` is not available now.
+* `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Truth data for `"inc hosp"` is not available through this function now. However, hospitalization truth is available through `preprocess_hospitalization(save_location)`.
 
 **Plotting Forecasts**
  * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
@@ -40,5 +40,6 @@ For those starting out we recommend you begin with the [Getting Started vignette
  * `preprocess_nytimes(save_location)`: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
  * `preprocess_usafacts(save_location)`: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs
  * `preprocess_jhu(save_location)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
+ * `preprocess_hospitalization(save_location)`: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
  * `preprocess_truth_for_zoltar(target, issue_date)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
  * `save_truth_for_zoltar(save_location)`: Write results from `preprocess_truth_for_zoltar()` to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 

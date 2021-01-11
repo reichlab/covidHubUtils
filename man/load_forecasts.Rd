@@ -19,7 +19,8 @@ If missing, forecasts for all models that submitted forecasts
 meeting the other criteria are returned.}
 
 \item{forecast_dates}{The forecast date of forecasts to retrieve.
-Defaults to all valid forecast dates in Zoltar.}
+Defaults to all valid forecast dates in Zoltar.
+The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
 \item{locations}{list of fips. Defaults to all locations with available forecasts.}
 
@@ -35,6 +36,7 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-Load covid forecasts from Zoltar.
-Return all available forecasts submitted on forecast_dates
+The function will throw a warning and return an empty data frame when
+no forecasts are submitted on any dates in forecast_dates for selected models,
+locations, types and target.
 }
