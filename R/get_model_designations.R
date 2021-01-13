@@ -47,7 +47,7 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
           
           # find git commits related to a specified metadata file before search_time
           commits_command <- paste0("cd ",hub_repo_path,
-                                    "; git log --date=short --pretty=format:'%H %ad' --before='",as.character(search_time),"' --follow -- ",
+                                    "; git log --date=short-local --pretty=format:'%H %ad' --before='",as.character(search_time),"' --follow -- ",
                                     model_metadata_path
                                     ) 
           # invoke command and parse result

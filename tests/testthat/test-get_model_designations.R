@@ -12,7 +12,7 @@ test_that("get_model_designations works: local directory, all models", {
     model = c("COVIDhub-baseline", "COVIDhub-ensemble", "teamA-modelA",
       "teamB-modelB", "teamC-modelC", "teamD-modelD", "teamE-modelE"),
     designation = c("proposed", "primary", "primary", "secondary", "proposed",
-      "other","primary")
+      "other","other")
   )
 
   expect_equal(actual, expected)
@@ -54,12 +54,12 @@ test_that("get_model_designations work: local hub repo, specified models, versio
     source = "local_hub_repo",
     hub_repo_path = "test-data/test-get_model_designations",
     models = c("teamD-modelD", "teamE-modelE"),
-    as_of = as.Date('2021-01-05')
+    as_of = as.Date('2021-01-06')
   )
   
   expected <- data.frame(
     model = c("teamD-modelD", "teamE-modelE"),
-    designation = c("other", "other")
+    designation = c("other", "primary")
   )
   
   expect_true(dplyr::all_equal(actual, expected))
@@ -75,7 +75,7 @@ test_that("get_model_designations work: local hub repo, specified models, versio
   
   expected <- data.frame(
     model = c("teamD-modelD", "teamE-modelE"),
-    designation = c("other", "primary")
+    designation = c("other", "other")
   )
   
   expect_true(dplyr::all_equal(actual, expected))
