@@ -55,7 +55,7 @@
 plot_forecast <- function(forecast_data,
                           truth_data = NULL, 
                           models,
-                          target_variable = NULL,
+                          target_variable,
                           locations,
                           facet = NULL,
                           facet_scales = "fixed",
@@ -118,7 +118,7 @@ plot_forecast <- function(forecast_data,
   
   # validate target_variable
   
-  if (is.null(target_variable)) {
+  if (missing(target_variable)) {
     if (length(unique(forecast_data$target_variable)) == 1) {
       target_variable <- unique(forecast_data$target_variable)
     } else {
