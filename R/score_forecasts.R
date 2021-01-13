@@ -7,6 +7,9 @@
 #' @param return_format string: "long" returns long format with a column for
 #' "score_name" and a column for "score_value"; "wide" returns wide format with
 #' a separate column for each score. Defaults to "wide".
+#' @param use_median_as_point logical: "TRUE" uses the median as the point 
+#' forecast when scoring; "FALSE" uses the point forecasts from the data when 
+#' scoring. Defaults to "FALSE"
 #'
 #' @return data.frame with scores. The result will have some columns that
 #' define the observation, namely, `model`, `forecast_date`, `location`, 
@@ -45,7 +48,8 @@
 score_forecasts <- function(
   forecasts,
   truth,
-  return_format = "wide"
+  return_format = "wide",
+  use_median_as_point = FALSE
 ) {
   
   # forecasts data.frame format
@@ -83,6 +87,17 @@ score_forecasts <- function(
   # which is a bit more complicated to deal with
   if (!is.element(return_format, c("long", "wide"))) {
     return_format <- "wide"
+  }
+  
+  # validate use_median_as_point
+  # match.arg returns error if arg does not match choice
+  # which is a bit more complicated to deal with
+  if (!is.element(use_median_as_point, c(FALSE, TRUE))) {
+    use_median_as_point <- FALSE
+  }
+
+  if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
+    stop("Want to use point forecast when scoring but no point forecast in forecast data")
   }
   
   # get dataframe into scoringutil format
@@ -131,6 +146,18 @@ score_forecasts <- function(
       -dplyr::starts_with("underprediction_"), 
       -dplyr::starts_with("overprediction_")
     ) 
+  
+  if (!use_median_as_point) {
+    abs_error <- joint_df %>% 
+      dplyr::filter(type=="point") %>% 
+      dplyr::mutate(abs_error_using_point=abs(prediction-true_value)) %>% 
+      dplyr::select(c(observation_cols,abs_error_using_point))
+    scores <- dplyr::left_join(scores, abs_error, by=observation_cols)
+    scores$abs_error <- scores$abs_error_using_point
+    scores <- scores %>% 
+      dplyr::select(-c(abs_error_using_point))
+  }
+  
   
   # manipulate return format:
   #   eval_forecasts(), by default, returns in wide format
