@@ -10,6 +10,9 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("devtools","roxygen2","dplyr","tibble", "tidyr", "MMWRweek", "lubridate", "purrr", "ggplot2", "magrittr", "forcats", "RcppRoll", "colorspace", "ggnewscale", "grDevices", "RColorBrewer"))
+        shell: Rscript -e {0}
+      - name: Install zoltr and scoringutils
+        run: |
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
