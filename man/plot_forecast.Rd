@@ -10,7 +10,7 @@ plot_forecast(
   forecast_data,
   truth_data = NULL,
   models,
-  target_variable = NULL,
+  target_variable,
   locations,
   facet = NULL,
   facet_scales = "fixed",
