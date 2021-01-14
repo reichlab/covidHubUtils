@@ -1,0 +1,25 @@
+name: run unit tests
+on: pull_request
+jobs:
+  run-unit-tests:
+    name: run unit tests
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+      - name: Install dependencies
+        run: |
+          install.packages(c("remotes","devtools","roxygen2","dplyr" "tibble", "tidyr", "MMWRweek", "lubridate", "purrr", "ggplot2", "magrittr", "forcats", "RcppRoll", "colorspace", "ggnewscale","grDevices", "RColorBrewer"))
+          remotes::install_deps(dependencies = TRUE)
+          devtools::install_github("reichlab/zoltr")
+          devtools::install_github("epiforecasts/scoringutils")
+          devtools::install()
+        shell: Rscript -e {0}
+      - name: Run unit tests
+        run: |
+          devtools::test_file("test-date_management.R")
+          devtools::test_file("test-score_forecasts.R")
+          devtools::test_file("test-load_forecast_files_repo.R")
+          devtools::test_file("test-get_model_designations.R")
+        shell: Rscript -e {0}
+
+
