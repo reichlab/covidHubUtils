@@ -9,7 +9,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools","roxygen2","dplyr", "tibble", "tidyr", "MMWRweek", "lubridate", "purrr", "ggplot2", "magrittr", "forcats", "RcppRoll", "colorspace", "ggnewscale","grDevices", "RColorBrewer"))
+          install.packages(c("remotes","devtools","roxygen2","dplyr","tibble", "tidyr", "MMWRweek", "lubridate", "purrr", "ggplot2", "magrittr", "forcats", "RcppRoll", "colorspace", "ggnewscale","grDevices", "RColorBrewer"))
           remotes::install_deps(dependencies = TRUE)
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
