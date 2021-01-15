@@ -57,6 +57,7 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
             dplyr::rename(sha = V1, date = V2)
           
           if (nrow(all_commits) == 0){
+            print(paste0("Currently checking commits for: ",model_metadata_path," before ", search_time))
             stop("Error in get_model_designations: Commits to model metadata are not available by as_of date.\n Please check your parameters.")
           }
           
