@@ -208,11 +208,12 @@ test_that("abs error is correct, point forecast only", {
     stringsAsFactors = FALSE
   )
   
-  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+  expect_error(actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth))
   
-  expected <- abs(y - point_forecast)
-  
-  expect_equal(actual$abs_error, expected)
+  #If score forecast can be run with only point forecast input check this
+  # expected <- abs(y - point_forecast)
+  # 
+  # expect_equal(actual$abs_error, expected)
   
 })
 
