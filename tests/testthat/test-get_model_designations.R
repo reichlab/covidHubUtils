@@ -42,7 +42,7 @@ test_that("get_model_designations works: zoltar, specified models", {
   
   expected <- data.frame(
     model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-    designation = c("secondary", "primary")
+    designation = c("secondary", "secondary")
   )
   
   expect_true(dplyr::all_equal(actual, expected))
