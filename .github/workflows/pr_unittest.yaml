@@ -6,13 +6,6 @@ jobs:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install system dependencies on macOS
-        if: runner.os == 'macOS'
-        run: |
-          # XQuartz is needed by vdiffr
-          brew cask install xquartz
-          # Use only binary packages
-          echo 'options(pkgType = "binary")' >> ~/.Rprofile
       - uses: r-lib/actions/setup-r@v1
       - name: Install dependencies
         run: |
