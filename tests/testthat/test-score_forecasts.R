@@ -154,6 +154,17 @@ test_that("(wide version) calculated scores that are in scores vector should hav
   
 })
 
+test_that("WIS calcultaion with point forecast use_median_as_point FALSE",{
+  
+})
+
+test_that("WIS calcultaion with point forecast use_median_as_point TRUE",{
+  
+})
+test_that("WIS calcultaion without point forecast use_median_as_point FALSE",{
+  # should error
+})
+
 test_that("wis is correct, median only", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
@@ -203,7 +214,8 @@ test_that("wis is correct, median only", {
     stringsAsFactors = FALSE
   )
 
-  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = TRUE)
 
   expected <- abs(y - forecast_quantiles_matrix[, 1])
 
@@ -260,7 +272,8 @@ test_that("wis is correct, 1 interval only", {
     stringsAsFactors = FALSE
   )
 
-  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = TRUE)
 
   alpha1 <- 0.2
   expected <- (forecast_quantiles_matrix[, 2] - forecast_quantiles_matrix[, 1]) * (alpha1 / 2) +
@@ -317,8 +330,8 @@ test_that("wis is correct, 2 intervals and median", {
     stringsAsFactors = FALSE
   )
 
-  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
-
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = TRUE)
   alpha1 <- 0.2
   alpha2 <- 0.5
   expected <- (1 / 2.5) * (
