@@ -46,8 +46,8 @@ load_latest_forecasts <- function (
   }
   
   if (!missing(models)){
-    models <- purrr::map(models, function(model)
-      match.arg(model, choices = all_valid_models) )
+    models <- unlist(purrr::map(models, function(model)
+      match.arg(model, choices = all_valid_models)))
   } else {
     models <- all_valid_models
   }
