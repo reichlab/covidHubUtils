@@ -196,11 +196,11 @@ test_that("abs error is correct, point forecast only", {
     stringsAsFactors = FALSE
   )
   
-  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
+  expect_error(actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth))
   
-  expected <- abs(y - point_forecast)
-  
-  expect_equal(actual$abs_error, expected)
+  # expected <- abs(y - point_forecast)
+  # 
+  # expect_equal(actual$abs_error, expected)
   
 })
 
@@ -257,7 +257,7 @@ test_that("abs error is correct, point and median forecasts different", {
   
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
   
-  expected <- abs(y - point_forecast)
+  expected <- abs(y - c(1,2,3))
   
   expect_equal(actual$abs_error, expected)
 })
