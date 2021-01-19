@@ -101,7 +101,10 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
   ) %>% unlist()
 
   # read in the forecast files
-  forecasts <- load_forecast_files_repo(forecast_files)
+  forecasts <- load_forecast_files_repo(forecast_files,
+    locations = locations,
+    types = types,
+    targets = targets)
 
   return(forecasts)
   
