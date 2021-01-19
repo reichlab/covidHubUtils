@@ -18,9 +18,13 @@
 #' location_name, population, geo_type, geo_value, abbreviation
 #'
 #' @export
-load_latest_forecasts_repo <- function(file_path, models, forecast_dates, 
-                                       locations, types, targets){
-  
+load_latest_forecasts_repo <- function(
+  file_path, models, 
+  forecast_dates, 
+  locations, 
+  types, 
+  targets
+) {
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
     stop("Error in load_forecasts_repo: data-processed folder does not 
@@ -101,7 +105,10 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
   ) %>% unlist()
 
   # read in the forecast files
-  forecasts <- load_forecast_files_repo(forecast_files)
+  forecasts <- load_forecast_files_repo(forecast_files,
+    locations = locations,
+    types = types,
+    targets = targets)
 
   return(forecasts)
   
@@ -127,10 +134,12 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
 #' model column in the return result.
 #'
 #' @export
-load_forecast_files_repo <- function(file_paths,
-                                     locations = NULL,
-                                     types = NULL,
-                                     targets = NULL) {
+load_forecast_files_repo <- function(
+  file_paths,
+  locations = NULL,
+  types = NULL,
+  targets = NULL
+) {
   # validate file_paths exist
   files_exist <- file.exists(file_paths)
   if (!any(files_exist)) {
