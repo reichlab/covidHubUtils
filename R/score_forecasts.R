@@ -149,9 +149,9 @@ score_forecasts <- function(
       wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")))/(n_interval_scores-0.5*(interval_score_0_exists)),
     ) %>%
     dplyr::mutate(
-      sharpness = rowMeans(dplyr::select(., dplyr::starts_with("sharpness"))),
-      overprediction = rowMeans(dplyr::select(., dplyr::starts_with("overprediction"))),
-      underprediction = rowMeans(dplyr::select(., dplyr::starts_with("underprediction")))
+      sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")))/(n_interval_scores-0.5*(interval_score_0_exists)),
+      overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")))/(n_interval_scores-0.5*(interval_score_0_exists)),
+      underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")))/(n_interval_scores-0.5*(interval_score_0_exists))
     ) %>%
     dplyr::select(
       -dplyr::starts_with("aem_"),
