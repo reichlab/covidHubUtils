@@ -162,6 +162,7 @@ test_that("WIS calcultaion with point forecast use_median_as_point FALSE",{
 test_that("WIS calcultaion with point forecast use_median_as_point TRUE",{
   
 })
+
 test_that("WIS calcultaion without point forecast use_median_as_point FALSE",{
   # should error
 })
@@ -208,12 +209,11 @@ test_that("abs error is correct, point forecast only", {
     stringsAsFactors = FALSE
   )
   
-  expect_error(actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth))
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth)
   
-  #If score forecast can be run with only point forecast input check this
-  # expected <- abs(y - point_forecast)
-  # 
-  # expect_equal(actual$abs_error, expected)
+  expected <- abs(y - point_forecast)
+
+  expect_equal(actual$abs_error, expected)
   
 })
 

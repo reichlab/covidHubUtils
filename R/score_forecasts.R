@@ -116,6 +116,14 @@ score_forecasts <- function(
     "horizon", "temporal_resolution", "target_variable",
     "forecast_date", "target_end_date"
   )
+  
+  if (use_median_as_point) {
+    abs_var <- "aem"
+    abs_var_rename <- "aem_0"
+  } else {
+    abs_var <- "ae_point"
+    abs_var_rename <- "ae_point_NA"
+  }
 
   scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, 
     by = observation_cols,
@@ -124,8 +132,12 @@ score_forecasts <- function(
     interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))) %>%
     tidyr::pivot_wider(id_cols = observation_cols,
       names_from = c("range"), 
-      values_from = c("coverage", "interval_score", "aem", "sharpness", "overprediction", "underprediction")) %>%
-    purrr::set_names(~sub("aem_0", "abs_error", .x)) %>% 
+      values_from = c("coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
+    purrr::set_names(~sub(abs_var_rename, "abs_error", .x)) %>% 
+    ## need to remove all columns ending with NA to not affect WIS calculations 
+    dplyr::select(
+      -dplyr::ends_with("_NA")
+    ) %>% 
     ## before next lines: do we need to check to ensure interval_score columns exist?
     ## the following lines ensure that we use denominator for the wis of 
     ## (# of interval_scores)-0.5
@@ -142,23 +154,14 @@ score_forecasts <- function(
       underprediction = rowMeans(dplyr::select(., dplyr::starts_with("underprediction")))
     ) %>%
     dplyr::select(
-      -dplyr::starts_with("aem_"), 
+      -dplyr::starts_with("aem_"),
+      -dplyr::starts_with("ae_point_"),
       -dplyr::starts_with("interval_score"), 
       -dplyr::starts_with("sharpness_"), 
       -dplyr::starts_with("underprediction_"), 
       -dplyr::starts_with("overprediction_")
     ) 
   
-  if (!use_median_as_point) {
-    abs_error <- joint_df %>% 
-      dplyr::filter(type=="point") %>% 
-      dplyr::mutate(abs_error_using_point=abs(prediction-true_value)) %>% 
-      dplyr::select(c(observation_cols,abs_error_using_point))
-    scores <- dplyr::left_join(scores, abs_error, by=observation_cols)
-    scores$abs_error <- scores$abs_error_using_point
-    scores <- scores %>% 
-      dplyr::select(-c(abs_error_using_point))
-  }
   
   
   # manipulate return format:
