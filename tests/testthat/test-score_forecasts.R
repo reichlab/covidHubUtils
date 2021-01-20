@@ -214,7 +214,6 @@ test_that("abs error is correct, point forecast only", {
   expected <- abs(y - point_forecast)
 
   expect_equal(actual$abs_error, expected)
-  
 })
 
 test_that("abs error is correct, point and median forecasts different", {

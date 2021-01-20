@@ -4,6 +4,7 @@
 - Fix bug that model legend is missing when the user is only plotting quantile forecasts in `plot_forecast()`. If `forecast_data` doesn't contain point forecasts, the function will look for all available medians in `forecast_data` and plot them as point forecasts. 
 - Update quantile forecast color so that color transparency will not be overwritten by `fill_transparency` in `plot_forecast()` when plotting more than five models.
 - target_variable in `plot_forecast` now optional when forecast_data only has one target variable
+- all models inputed into `load_latest_forecasts` must be available in the source
 
 ## covidHubUtils 0.1.3
 

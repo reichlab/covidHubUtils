@@ -46,10 +46,13 @@ load_latest_forecasts <- function (
   }
   
   if (!missing(models)){
-    models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
+    models <- unlist(purrr::map(models, function(model)
+      match.arg(model, choices = all_valid_models)))
   } else {
     models <- all_valid_models
   }
+  
+  
   
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
