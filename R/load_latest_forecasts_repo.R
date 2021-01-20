@@ -79,7 +79,7 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
   forecast_dates <- as.Date(forecast_dates)
   
   # get paths to all forecast files
-  forecast_files <- purrr::map_chr(
+  forecast_files <- purrr::map(
     models,
     function(model) {
       if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
@@ -98,10 +98,13 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
         return(results_path)
       }
     }
-  )
+  ) %>% unlist()
 
   # read in the forecast files
-  forecasts <- load_forecast_files_repo(forecast_files)
+  forecasts <- load_forecast_files_repo(forecast_files,
+    locations = locations,
+    types = types,
+    targets = targets)
 
   return(forecasts)
   

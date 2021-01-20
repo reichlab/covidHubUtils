@@ -5,7 +5,8 @@
 - Update quantile forecast color so that color transparency will not be overwritten by `fill_transparency` in `plot_forecast()` when plotting more than five models.
 - target_variable in `plot_forecast` now optional when forecast_data only has one target variable.
 - Add optional `as_of` parameter in `get_model_designations()`. Currently only support versioned model designation in local hub repo.
-
+- target_variable in `plot_forecast` now optional when forecast_data only has one target variable
+- all models inputed into `load_latest_forecasts` must be available in the source
 
 ## covidHubUtils 0.1.3
 
