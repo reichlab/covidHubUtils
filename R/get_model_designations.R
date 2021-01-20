@@ -42,14 +42,19 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
       model_info <- purrr::map_dfr(
         model_metadata_paths,
         function (model_metadata_path){
-          # create search time based on as_of date
+          # create search time in EST based on as_of date
           search_time <- paste0(as.Date(as_of) + 1, " 00:00:00")
+          search_time <- as.POSIXct(search_time, format = "%Y-%m-%d %H:%M:%S", tz = "EST")
+          # convert search time to UTC timestamp
+          attr(search_time, "tzone") <- "UTC"
+          search_time_timestamp <- as.numeric(search_time)
           
           # find git commits related to a specified metadata file before search_time
           commits_command <- paste0("cd ",hub_repo_path,
-                                    "; git log --date=short-local --pretty=format:'%H %ad' --before='",as.character(search_time),"' --follow -- ",
-                                    model_metadata_path
-                                    ) 
+                                    "; git log --date=unix --pretty=format:'%H %ad' --before='",
+                                    as.character(search_time), "' --follow -- ",
+                                    model_metadata_path) 
+          
           # invoke command and parse result
           all_commits <- system(commits_command,intern = TRUE) %>% 
             stringr::str_split_fixed(" ", 2) %>%
