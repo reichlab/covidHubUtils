@@ -6,14 +6,13 @@
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
 #' @param last_forecast_date The forecast date of forecasts to retrieve 
-#' in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in 
-#' Zoltar or the hub repo.
+#' in 'yyyy-mm-dd' format.
 #' @param forecast_date_window_size The number of days across which to 
-#' look for recent forecasts. Defaults to 0, which means to only look 
+#' look for recent forecasts. Default to 0, which means to only look 
 #' at the last_forecast_date only. 
 #' @param locations list of fips. Defaults to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
-#' or “point”. Defaults to c(“quantile”, “point”)
+#' or “point”. Defaults to all types  with available forecasts
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' @param source string specifying where forecasts will be loaded from: either 
@@ -27,74 +26,17 @@
 #' 
 #' @export
 load_latest_forecasts <- function (
-  models,
+  models = NULL,
   last_forecast_date,
   forecast_date_window_size = 0,
-  locations,
-  types,
-  targets,
+  locations = NULL,
+  types = NULL,
+  targets = NULL,
   source = "local_hub_repo",
   hub_repo_path) {
   
-  # validate models
-  if (missing(hub_repo_path)) {
-    all_valid_models <- get_all_models(source = source)
-  } else {
-    all_valid_models <- get_all_models(
-      source = source,
-      hub_repo_path = hub_repo_path)
-  }
-  
-  if (!missing(models)){
-    models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
-  } else {
-    models <- all_valid_models
-  }
-  
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
-  
-  # validate locations
-  all_valid_fips <- covidHubUtils::hub_locations$fips
-  
-  if (!missing(locations)){
-    locations <- match.arg(locations, 
-                           choices = all_valid_fips, 
-                           several.ok = TRUE)
-  } else{
-    locations <- all_valid_fips
-  }
-  
-  # validate types
-  if (!missing(types)){
-    types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } else {
-    types <- c("point", "quantile")
-  }
-  
-  # validate targets
-  # set up Zoltar connection
-  zoltar_connection <- zoltr::new_connection()
-  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-  } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-  }
-  
-  # construct Zoltar project url
-  the_projects <- zoltr::projects(zoltar_connection)
-  project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-  
-  # validate targets 
-  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
-  
-  
-  if (!missing(targets)){
-    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
-  } else {
-    targets <- all_valid_targets
-  }
-  
   
   # check date format and generate dates of forecasts to load
   forecast_dates <- tryCatch({
@@ -107,6 +49,11 @@ load_latest_forecasts <- function (
     )
 
   if (source == "local_hub_repo") {
+    # validate hub repo path
+    if (missing(hub_repo_path) | !dir.exists(hub_repo_path)) {
+      stop("Error in load_latest_forecasts: Please provide a vaid path to hub repo.")
+    } 
+    
     # path to data-processed folder in hub repo
     data_processed <- file.path(hub_repo_path, "data-processed/")
     

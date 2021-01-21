@@ -6,16 +6,16 @@
 #' locations, types and target.
 #' 
 #' @param models Character vector of model abbreviations.
-#' If missing, forecasts for all models that submitted forecasts 
-#' meeting the other criteria are returned.
+#' Default all models that submitted forecasts meeting the other criteria.
 #' @param forecast_dates The forecast date of forecasts to retrieve.
-#' Defaults to all valid forecast dates in Zoltar.
+#' Default to all valid forecast dates in Zoltar.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
-#' @param locations list of fips. Defaults to all locations with available forecasts.
+#' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
-#' or “point”. Defaults to c(“quantile”, “point”)
+#' or “point”. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
+#' c('1 wk ahead cum death', '2 wk ahead cum death'). 
+#' Default to NULL which stands for all valid targets in Zoltar.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,

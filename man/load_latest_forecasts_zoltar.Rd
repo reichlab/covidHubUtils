@@ -4,24 +4,32 @@
 \alias{load_latest_forecasts_zoltar}
 \title{Load the most recent forecasts submitted in a time window from zoltar.}
 \usage{
-load_latest_forecasts_zoltar(models, forecast_dates, locations, types, targets)
+load_latest_forecasts_zoltar(
+  models = NULL,
+  forecast_dates = NULL,
+  locations = NULL,
+  types = NULL,
+  targets = NULL
+)
 }
 \arguments{
 \item{models}{Character vector of model abbreviations.
-If missing, forecasts for all models that submitted forecasts
+Default to NULL so that forecasts for all models that submitted forecasts
 meeting the other criteria are returned.}
 
 \item{forecast_dates}{date vector to load the most recent forecast from.
+Default to NULL which stands for all valid forecast dates in Zoltar.
 The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
-\item{locations}{list of valid fips code. Defaults to all locations with
-available forecasts.}
+\item{locations}{list of valid fips code. Default to NULL which stands for
+all locations with available forecasts in Zoltar.}
 
 \item{types}{character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to c(“quantile”, “point”)}
+or “point”. Default to NULL which stands for all valid forecast types in Zoltar.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
+c('1 wk ahead cum death', '2 wk ahead cum death').
+Default to NULL which stands for all valid targets in Zoltar.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
