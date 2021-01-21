@@ -5,6 +5,7 @@
 - Update quantile forecast color so that color transparency will not be overwritten by `fill_transparency` in `plot_forecast()` when plotting more than five models.
 - target_variable in `plot_forecast` now optional when forecast_data only has one target variable
 - all models inputed into `load_latest_forecasts` must be available in the source
+- `score_forecasts()` has new parameter `use_median_as_point` that defaults to FALSE. "TRUE" uses the median quantile when calculating absolute error and "FALSE" uses the point forecasts for absolute error.
 
 ## covidHubUtils 0.1.3
 

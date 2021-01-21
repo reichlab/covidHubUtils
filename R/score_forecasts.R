@@ -92,11 +92,7 @@ score_forecasts <- function(
   }
   
   # validate use_median_as_point
-  # match.arg returns error if arg does not match choice
-  # which is a bit more complicated to deal with
-  if (!is.element(use_median_as_point, c(FALSE, TRUE))) {
-    use_median_as_point <- FALSE
-  }
+  use_median_as_point <- match.arg(use_median_as_point, choices = c(FALSE,TRUE), several.ok = FALSE )
 
   if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
     stop("Want to use point forecast when scoring but no point forecast in forecast data")
@@ -117,6 +113,8 @@ score_forecasts <- function(
     "forecast_date", "target_end_date"
   )
   
+  # creates placeholder variables to store the name of the column from scoringutils::eval_forecasts() to 
+  # take values from (`abs_var`) and the column name to rename as "abs_error" (`abs_var_rename`)
   if (use_median_as_point) {
     abs_var <- "aem"
     abs_var_rename <- "aem_0"
