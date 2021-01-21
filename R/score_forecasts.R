@@ -17,7 +17,7 @@
 #' `target_end_date`.
 #' Other columns will contain scores: 
 #'  - `abs_error` is the absolute error based on median estimate if 
-#'  use_median_as_point is TRUE, and absolute error based on point estimate
+#'  use_median_as_point is TRUE, and absolute error based on point forecast
 #'  if use_median_as_point is FALSE
 #'  - `wis` is the weighted interval score
 #'  - `sharpness` the component of WIS made up of interval widths
