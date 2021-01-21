@@ -97,6 +97,10 @@ score_forecasts <- function(
     stop("use_median_as_point should be one of (TRUE,FALSE)")
   }
   
+  if (is.null(use_median_as_point)) {
+    stop("use_median_as_point is NULL and should be one of (TRUE,FALSE)")
+  }
+  
   if (length(use_median_as_point) != 1) {
     stop("use_median_as_point should only have a length of 1")
   }
