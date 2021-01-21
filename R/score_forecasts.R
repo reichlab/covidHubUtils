@@ -93,9 +93,14 @@ score_forecasts <- function(
   
   # validate use_median_as_point
   # match.arg does not like logical input
-  if (!is.element(use_median_as_point, c(FALSE, TRUE))) {
-    use_median_as_point <- "wide"
+  if (!(use_median_as_point %in% c(FALSE,TRUE))) {
+    stop("use_median_as_point should be one of (TRUE,FALSE)")
   }
+  
+  if (length(use_median_as_point) != 1) {
+    stop("use_median_as_point should only have a length of 1")
+  }
+  
   if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
     stop("Want to use point forecast when scoring but no point forecast in forecast data")
   }
