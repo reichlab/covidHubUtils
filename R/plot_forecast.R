@@ -31,6 +31,8 @@
 #' be loaded from if truth_data is not provided. Currently support "JHU",
 #' "USAFacts" and "NYTimes". 
 #' Optional if truth_data is provided. 
+#' @param use_median_as_point boolean for using medians as point forecast in plot. 
+#' Default to FALSE.
 #' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
@@ -65,6 +67,7 @@ plot_forecast <- function(forecast_data,
                           intervals,
                           horizon,
                           truth_source,
+                          use_median_as_point = FALSE,
                           plot_truth = TRUE,
                           plot = TRUE,
                           fill_by_model = FALSE,
