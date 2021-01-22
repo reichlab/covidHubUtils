@@ -7,13 +7,18 @@
 #' @param return_format string: "long" returns long format with a column for
 #' "score_name" and a column for "score_value"; "wide" returns wide format with
 #' a separate column for each score. Defaults to "wide".
+#' @param use_median_as_point logical: "TRUE" uses the median as the point 
+#' forecast when scoring; "FALSE" uses the point forecasts from the data when 
+#' scoring. Defaults to "FALSE"
 #'
 #' @return data.frame with scores. The result will have some columns that
 #' define the observation, namely, `model`, `forecast_date`, `location`, 
 #' `horizon`, `temporal_resolution`, `target_variable`, `horizon`, and 
 #' `target_end_date`.
 #' Other columns will contain scores: 
-#'  - `abs_error` is the absolute error based on median estimate,
+#'  - `abs_error` is the absolute error based on median estimate if 
+#'  use_median_as_point is TRUE, and absolute error based on point forecast
+#'  if use_median_as_point is FALSE
 #'  - `wis` is the weighted interval score
 #'  - `sharpness` the component of WIS made up of interval widths
 #'  - `overprediction` the component of WIS made up of overprediction of intervals
@@ -45,7 +50,8 @@
 score_forecasts <- function(
   forecasts,
   truth,
-  return_format = "wide"
+  return_format = "wide",
+  use_median_as_point = FALSE
 ) {
   
   # forecasts data.frame format
@@ -85,6 +91,20 @@ score_forecasts <- function(
     return_format <- "wide"
   }
   
+  # validate use_median_as_point
+  # match.arg does not like logical input
+  if (!(use_median_as_point %in% c(FALSE,TRUE))) {
+    stop("use_median_as_point should be one of (TRUE,FALSE)")
+  }
+  
+  if (length(use_median_as_point) != 1) {
+    stop("use_median_as_point should only have a length of 1")
+  }
+  
+  if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
+    stop("Want to use point forecast when scoring but no point forecast in forecast data")
+  }
+  
   # get dataframe into scoringutil format
   joint_df <- dplyr::left_join(x = forecasts, y = truth, 
                                by = c("location", "target_variable", "target_end_date")) %>%
@@ -99,6 +119,16 @@ score_forecasts <- function(
     "horizon", "temporal_resolution", "target_variable",
     "forecast_date", "target_end_date"
   )
+  
+  # creates placeholder variables to store the name of the column from scoringutils::eval_forecasts() to 
+  # take values from (`abs_var`) and the column name to rename as "abs_error" (`abs_var_rename`)
+  if (use_median_as_point) {
+    abs_var <- "aem"
+    abs_var_rename <- "aem_0"
+  } else {
+    abs_var <- "ae_point"
+    abs_var_rename <- "ae_point_NA"
+  }
 
   scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df, 
     by = observation_cols,
@@ -107,8 +137,12 @@ score_forecasts <- function(
     interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))) %>%
     tidyr::pivot_wider(id_cols = observation_cols,
       names_from = c("range"), 
-      values_from = c("coverage", "interval_score", "aem", "sharpness", "overprediction", "underprediction")) %>%
-    purrr::set_names(~sub("aem_0", "abs_error", .x)) %>% 
+      values_from = c("coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
+    purrr::set_names(~sub(abs_var_rename, "abs_error", .x)) %>% 
+    ## need to remove all columns ending with NA to not affect WIS calculations 
+    dplyr::select(
+      -dplyr::ends_with("_NA")
+    ) %>% 
     ## before next lines: do we need to check to ensure interval_score columns exist?
     ## the following lines ensure that we use denominator for the wis of 
     ## (# of interval_scores)-0.5
@@ -120,17 +154,20 @@ score_forecasts <- function(
       wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")))/(n_interval_scores-0.5*(interval_score_0_exists)),
     ) %>%
     dplyr::mutate(
-      sharpness = rowMeans(dplyr::select(., dplyr::starts_with("sharpness"))),
-      overprediction = rowMeans(dplyr::select(., dplyr::starts_with("overprediction"))),
-      underprediction = rowMeans(dplyr::select(., dplyr::starts_with("underprediction")))
+      sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")))/(n_interval_scores-0.5*(interval_score_0_exists)),
+      overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")))/(n_interval_scores-0.5*(interval_score_0_exists)),
+      underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")))/(n_interval_scores-0.5*(interval_score_0_exists))
     ) %>%
     dplyr::select(
-      -dplyr::starts_with("aem_"), 
+      -dplyr::starts_with("aem_"),
+      -dplyr::starts_with("ae_point_"),
       -dplyr::starts_with("interval_score"), 
       -dplyr::starts_with("sharpness_"), 
       -dplyr::starts_with("underprediction_"), 
       -dplyr::starts_with("overprediction_")
     ) 
+  
+  
   
   # manipulate return format:
   #   eval_forecasts(), by default, returns in wide format
