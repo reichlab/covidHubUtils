@@ -92,6 +92,10 @@ score_forecasts <- function(
   }
   
   # validate use_median_as_point
+  if (is.null(use_median_as_point)) {
+    stop("use_median_as_point is NULL and should be one of (TRUE,FALSE)")
+  }
+  
   # match.arg does not like logical input
   if (!(use_median_as_point %in% c(FALSE,TRUE))) {
     stop("use_median_as_point should be one of (TRUE,FALSE)")
