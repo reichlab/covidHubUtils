@@ -4,7 +4,14 @@
 \alias{load_latest_forecasts_zoltar}
 \title{Load the most recent forecasts submitted in a time window from zoltar.}
 \usage{
-load_latest_forecasts_zoltar(models, forecast_dates, locations, types, targets)
+load_latest_forecasts_zoltar(
+  models,
+  forecast_dates,
+  locations,
+  types,
+  targets,
+  as_of = NULL
+)
 }
 \arguments{
 \item{models}{Character vector of model abbreviations.
@@ -22,6 +29,9 @@ or “point”. Defaults to c(“quantile”, “point”)}
 
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
+
+\item{as_of}{A date in YYYY-MM-DD format to load forecasts submitted as of this date.
+Defaults to NULL to load the latest version.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
