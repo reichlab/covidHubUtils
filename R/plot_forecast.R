@@ -11,7 +11,8 @@
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
 #' "cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
-#' please provide truth_data. 
+#' please provide truth_data. If there is only one target_variable in 
+#' your data frame this parameter is optional. 
 #' @param locations string for fips code or 'US'. 
 #' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot. Function will error 
@@ -116,6 +117,15 @@ plot_forecast <- function(forecast_data,
 
   
   # validate target_variable
+  
+  if (missing(target_variable)) {
+    if (length(unique(forecast_data$target_variable)) == 1) {
+      target_variable <- unique(forecast_data$target_variable)
+    } else {
+      stop("Error in plot_forecast: Target variable unspecified and more than one target_variable in data.")
+    }
+  }
+  
   target_variable <- match.arg(target_variable, 
                                choices = c("cum death",
                                            "inc case",

@@ -4,7 +4,12 @@
 \alias{score_forecasts}
 \title{Score forecasts}
 \usage{
-score_forecasts(forecasts, truth, return_format = "wide")
+score_forecasts(
+  forecasts,
+  truth,
+  return_format = "wide",
+  use_median_as_point = FALSE
+)
 }
 \arguments{
 \item{forecasts}{required data.frame with forecasts in the format returned
@@ -16,6 +21,10 @@ by load_truth}
 \item{return_format}{string: "long" returns long format with a column for
 "score_name" and a column for "score_value"; "wide" returns wide format with
 a separate column for each score. Defaults to "wide".}
+
+\item{use_median_as_point}{logical: "TRUE" uses the median as the point
+forecast when scoring; "FALSE" uses the point forecasts from the data when
+scoring. Defaults to "FALSE"}
 }
 \value{
 data.frame with scores. The result will have some columns that
@@ -24,7 +33,9 @@ define the observation, namely, \code{model}, \code{forecast_date}, \code{locati
 \code{target_end_date}.
 Other columns will contain scores:
 \itemize{
-\item \code{abs_error} is the absolute error based on median estimate,
+\item \code{abs_error} is the absolute error based on median estimate if
+use_median_as_point is TRUE, and absolute error based on point forecast
+if use_median_as_point is FALSE
 \item \code{wis} is the weighted interval score
 \item \code{sharpness} the component of WIS made up of interval widths
 \item \code{overprediction} the component of WIS made up of overprediction of intervals

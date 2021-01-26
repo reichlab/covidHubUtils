@@ -66,14 +66,14 @@ load_latest_forecasts <- function (
                                      forecast_dates = forecast_dates, 
                                      locations = locations, 
                                      types = types, 
-                                     targets = targets,
-                                     as_of = as_of)
+                                     targets = targets)
   } else {
     forecasts <- load_latest_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 
                                        locations = locations, 
                                        types = types,
-                                       targets = targets)
+                                       targets = targets,
+                                       as_of = as_of)
   }
   
   return(forecasts)

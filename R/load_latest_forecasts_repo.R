@@ -97,7 +97,6 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
                                         locations = locations, 
                                         types = types, 
                                         targets = targets)
-
   return(forecasts)
   
 }
