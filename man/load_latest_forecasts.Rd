@@ -14,7 +14,8 @@ load_latest_forecasts(
   types = NULL,
   targets = NULL,
   source = "local_hub_repo",
-  hub_repo_path
+  hub_repo_path,
+  as_of = NULL
 )
 }
 \arguments{
@@ -42,6 +43,10 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
+
+\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
+Default to NULL to load the latest version. This parameter is only supported
+when loading forecasts from Zoltar.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

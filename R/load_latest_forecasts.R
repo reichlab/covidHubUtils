@@ -19,6 +19,9 @@
 #' "local_hub_repo" or "zoltar"
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
+#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
+#' Default to NULL to load the latest version. This parameter is only supported 
+#' when loading forecasts from Zoltar.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -33,7 +36,8 @@ load_latest_forecasts <- function (
   types = NULL,
   targets = NULL,
   source = "local_hub_repo",
-  hub_repo_path) {
+  hub_repo_path,
+  as_of = NULL) {
   
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
@@ -62,7 +66,8 @@ load_latest_forecasts <- function (
                                      forecast_dates = forecast_dates, 
                                      locations = locations, 
                                      types = types, 
-                                     targets = targets)
+                                     targets = targets,
+                                     as_of = as_of)
   } else {
     forecasts <- load_latest_forecasts_zoltar(models = models, 
                                        forecast_dates = forecast_dates, 

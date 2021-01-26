@@ -9,7 +9,8 @@ load_latest_forecasts_zoltar(
   forecast_dates = NULL,
   locations = NULL,
   types = NULL,
-  targets = NULL
+  targets = NULL,
+  as_of = NULL
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ or “point”. Default to NULL which stands for all valid forecast types in Zol
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death').
 Default to NULL which stands for all valid targets in Zoltar.}
+
+\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
+Default to NULL to load the latest version.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
