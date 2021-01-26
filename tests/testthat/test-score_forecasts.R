@@ -391,7 +391,7 @@ test_that("abs error is correct, point and median forecasts same", {
 
 })
 
-test_that("sharpness is correct, point forecast only, use_median_as_point FALSE", {
+test_that("sharpness is NaN, point forecast only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
 
   target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
@@ -440,7 +440,7 @@ test_that("sharpness is correct, point forecast only, use_median_as_point FALSE"
   expect_equal(actual$sharpness, expected)
 })
 
-test_that("sharpness is correct, median only, use_median_as_point TRUE", {
+test_that("sharpness is zero, median only, use_median_as_point TRUE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -493,7 +493,7 @@ test_that("sharpness is correct, median only, use_median_as_point TRUE", {
   expect_equal(actual$sharpness, expected)
 })
 
-test_that("sharpness is correct, median only, use_median_as_point FALSE", {
+test_that("sharpness errors, median only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -603,7 +603,7 @@ test_that("sharpness is correct, 1 interval only, use_median_as_point TRUE", {
   expect_equal(actual$sharpness, expected)
 })
 
-test_that("sharpness is correct, 2 intervals and median no point, use_median_as_point FALSE", {
+test_that("sharpness errors, 2 intervals and median no point, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -842,7 +842,7 @@ test_that("sharpness is correct, 2 intervals, median and point, use_median_as_po
   expect_equal(actual$sharpness, expected)
 })
 
-test_that("overprediction is correct, point forecast only, use_median_as_point FALSE", {
+test_that("overprediction is NaN, point forecast only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
 
   target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
@@ -944,7 +944,7 @@ test_that("overprediction is correct, median only, use_median_as_point TRUE", {
   expect_equal(actual$overprediction, expected)
 })
 
-test_that("overprediction is correct, median only, use_median_as_point FALSE", {
+test_that("overprediction errors, median only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -1049,12 +1049,12 @@ test_that("overprediction is correct, 1 interval only, use_median_as_point TRUE"
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  alpha1 <- 0.2
+  
   expected <- (forecast_quantiles_matrix[, 1] - y) * (y < forecast_quantiles_matrix[, 1])
   expect_equal(actual$overprediction, expected)
 })
 
-test_that("overprediction is correct, 2 intervals and median no point, use_median_as_point FALSE", {
+test_that("overprediction errors, 2 intervals and median no point, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -1155,8 +1155,7 @@ test_that("overprediction is correct, 2 intervals and median no point, use_media
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  alpha1 <- 0.2
-  alpha2 <- 0.5
+
   expected <- (1 / 2.5) * (
     (1 / 2) * (forecast_quantiles_matrix[, 3] - y) * (y < forecast_quantiles_matrix[, 3]) +
       (forecast_quantiles_matrix[, 1] - y) * (y < forecast_quantiles_matrix[, 1]) +
@@ -1220,8 +1219,7 @@ test_that("overprediction is correct, 2 intervals, median and point, use_median_
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = FALSE
   )
-  alpha1 <- 0.2
-  alpha2 <- 0.5
+
   expected <- (1 / 2.5) * (
     (1 / 2) * (forecast_quantiles_matrix[, 3] - y) * (y < forecast_quantiles_matrix[, 3]) +
       (forecast_quantiles_matrix[, 1] - y) * (y < forecast_quantiles_matrix[, 1]) +
@@ -1285,8 +1283,7 @@ test_that("overprediction is correct, 2 intervals, median and point, use_median_
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  alpha1 <- 0.2
-  alpha2 <- 0.5
+
   expected <- (1 / 2.5) * (
     (1 / 2) * (forecast_quantiles_matrix[, 3] - y) * (y < forecast_quantiles_matrix[, 3]) +
       (forecast_quantiles_matrix[, 1] - y) * (y < forecast_quantiles_matrix[, 1]) +
@@ -1296,7 +1293,7 @@ test_that("overprediction is correct, 2 intervals, median and point, use_median_
   expect_equal(actual$overprediction, expected)
 })
 
-test_that("underprediction is correct, point forecast only, use_median_as_point FALSE", {
+test_that("underprediction is NaN, point forecast only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
 
   target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
@@ -1398,7 +1395,7 @@ test_that("underprediction is correct, median only, use_median_as_point TRUE", {
   expect_equal(actual$underprediction, expected)
 })
 
-test_that("underprediction is correct, median only, use_median_as_point FALSE", {
+test_that("underprediction errors, median only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -1503,12 +1500,12 @@ test_that("underprediction is correct, 1 interval only, use_median_as_point TRUE
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  alpha1 <- 0.2
+
   expected <- (y - forecast_quantiles_matrix[, 2]) * (y > forecast_quantiles_matrix[, 2])
   expect_equal(actual$underprediction, expected)
 })
 
-test_that("underprediction is correct, 2 intervals and median no point, use_median_as_point FALSE", {
+test_that("underprediction errors, 2 intervals and median no point, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -1609,8 +1606,7 @@ test_that("underprediction is correct, 2 intervals and median no point, use_medi
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  alpha1 <- 0.2
-  alpha2 <- 0.5
+
   expected <- (1 / 2.5) * (
     (1 / 2) * (y - forecast_quantiles_matrix[, 3]) * (y > forecast_quantiles_matrix[, 3]) +
       (y - forecast_quantiles_matrix[, 5]) * (y > forecast_quantiles_matrix[, 5]) +
@@ -1674,8 +1670,7 @@ test_that("underprediction is correct, 2 intervals, median and point, use_median
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = FALSE
   )
-  alpha1 <- 0.2
-  alpha2 <- 0.5
+
   expected <- (1 / 2.5) * (
     (1 / 2) * (y - forecast_quantiles_matrix[, 3]) * (y > forecast_quantiles_matrix[, 3]) +
       (y - forecast_quantiles_matrix[, 5]) * (y > forecast_quantiles_matrix[, 5]) +
@@ -1739,8 +1734,7 @@ test_that("underprediction is correct, 2 intervals, median and point, use_median
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  alpha1 <- 0.2
-  alpha2 <- 0.5
+
   expected <- (1 / 2.5) * (
     (1 / 2) * (y - forecast_quantiles_matrix[, 3]) * (y > forecast_quantiles_matrix[, 3]) +
       (y - forecast_quantiles_matrix[, 5]) * (y > forecast_quantiles_matrix[, 5]) +
