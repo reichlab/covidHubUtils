@@ -378,7 +378,7 @@ test_that("abs error is correct, point and median forecasts same", {
 
 })
 
-test_that("wis is correct, point forecast only, use_median_as_point FALSE",{
+test_that("wis is NaN, point forecast only, use_median_as_point FALSE",{
   y <- c(1, -15, 22)
   
   target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
@@ -484,7 +484,7 @@ test_that("wis is correct, median only, use_median_as_point TRUE", {
   expect_equal(actual$wis, expected)
 })
 
-test_that("wis is correct, median only, use_median_as_point FALSE", {
+test_that("wis errors, median only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -656,7 +656,7 @@ test_that("wis is correct, 2 intervals and median no point, use_median_as_point 
   expect_equal(actual$wis, expected)
 })
 
-test_that("wis is correct, 2 intervals and median no point, use_median_as_point FALSE",{
+test_that("wis errors, 2 intervals and median no point, use_median_as_point FALSE",{
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
