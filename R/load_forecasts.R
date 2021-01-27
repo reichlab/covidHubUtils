@@ -40,24 +40,22 @@ load_forecasts <- function (
     zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
   }
   
-  # construct Zoltar project url
-  the_projects <- zoltr::projects(zoltar_connection)
-  project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-  
-  # get all valid timezeros in project
-  all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
-                                          project_url = project_url)$timezero_date
-  
-  if (!missing(forecast_dates)){
+  if (!is.null(forecast_dates)){
+    # construct Zoltar project url
+    the_projects <- zoltr::projects(zoltar_connection)
+    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+    
+    # get all valid timezeros in project
+    all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
+                                            project_url = project_url)$timezero_date
+    
     # take intersection of forecast_dates and all_valid_timezeros
     valid_forecast_dates <- intersect(as.character(forecast_dates), 
                                       as.character(all_valid_timezeros))
     if (length(valid_forecast_dates) == 0) {
       stop("Error in load_forecasts: All forecast_dates are invalid.")
     }
-  } else {
-    valid_forecast_dates <- all_valid_timezeros
-  }
+  } 
 
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
