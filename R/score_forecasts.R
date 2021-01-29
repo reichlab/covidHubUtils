@@ -176,7 +176,8 @@ score_forecasts <- function(
       -dplyr::starts_with("sharpness_"),
       -dplyr::starts_with("underprediction_"),
       -dplyr::starts_with("overprediction_")
-    )
+    ) %>% 
+    dplyr::select(-"coverage_0")
 
 
 

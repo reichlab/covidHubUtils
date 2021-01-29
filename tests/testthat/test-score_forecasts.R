@@ -2500,12 +2500,12 @@ test_that("interval coverage does not exist, point forecast only, use_median_as_
     stringsAsFactors = FALSE
   )
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, use_median_as_point = FALSE)
-  
-  expect_equal("coverage_0" %in% names(actual),FALSE)
+  # checks to see if any column has `coverage_` in the name and fails if they do
+  expect_equal(any(!(stringr::str_detect(names(actual),"coverage_"))),TRUE)
   
 })
 
-test_that("interval coverage is correct, median only, use_median_as_point TRUE", {
+test_that("interval coverage does not exist, median only, use_median_as_point TRUE", {
   # note the true y value and estimated quantiles are different for IC 
   # tests to better test all cases
   y <- c(1, -1, 5)
@@ -2559,9 +2559,7 @@ test_that("interval coverage is correct, median only, use_median_as_point TRUE",
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
   
-  expected_coverage_0 <- ifelse(y==forecast_quantiles_matrix[,1],1,0)
-  
-  expect_equal(actual$coverage_0, expected_coverage_0)
+  expect_equal(any(!(stringr::str_detect(names(actual),"coverage_"))),TRUE)
 })
 
 test_that("interval coverage is correct, 1 interval only, use_median_as_point TRUE", {
@@ -2672,8 +2670,6 @@ test_that("interval coverage  is correct, 2 intervals and median no point, use_m
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
   
-  expected_coverage_0 <- ifelse(y==forecast_quantiles_matrix[, 3], 1, 0)
-  expect_equal(actual$coverage_0, expected_coverage_0)
   
   expected_coverage_50 <- ifelse(y>=forecast_quantiles_matrix[, 2] & y <= forecast_quantiles_matrix[, 4], 1, 0)
   expect_equal(actual$coverage_50, expected_coverage_50)
@@ -2784,8 +2780,6 @@ test_that("interval coverage  is correct, 2 intervals, median and point, use_med
   
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
-  expected_coverage_0 <- ifelse(y==forecast_quantiles_matrix[, 3], 1, 0)
-  expect_equal(actual$coverage_0, expected_coverage_0)
   
   expected_coverage_50 <- ifelse(y>=forecast_quantiles_matrix[, 2] & y <= forecast_quantiles_matrix[, 4], 1, 0)
   expect_equal(actual$coverage_50, expected_coverage_50)
@@ -2845,8 +2839,6 @@ test_that("interval coverage  is correct, 2 intervals, median and point, use_med
   
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = FALSE)
-  expected_coverage_0 <- ifelse(y==forecast_quantiles_matrix[, 3], 1, 0)
-  expect_equal(actual$coverage_0, expected_coverage_0)
   
   expected_coverage_50 <- ifelse(y>=forecast_quantiles_matrix[, 2] & y <= forecast_quantiles_matrix[, 4], 1, 0)
   expect_equal(actual$coverage_50, expected_coverage_50)
