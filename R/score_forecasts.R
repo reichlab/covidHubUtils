@@ -176,8 +176,12 @@ score_forecasts <- function(
       -dplyr::starts_with("sharpness_"),
       -dplyr::starts_with("underprediction_"),
       -dplyr::starts_with("overprediction_")
-    )
-
+    ) 
+  
+  if ("coverage_0" %in% names(scores)) {
+    scores <- scores %>% 
+      dplyr::select(-c("coverage_0"))
+    }
 
 
   # manipulate return format:
