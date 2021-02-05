@@ -34,7 +34,7 @@ define the observation, namely, \code{model}, \code{forecast_date}, \code{locati
 Other columns will contain scores:
 \itemize{
 \item \code{abs_error} is the absolute error based on median estimate if
-use_median_as_point is TRUE, and absolute error based on point estimate
+use_median_as_point is TRUE, and absolute error based on point forecast
 if use_median_as_point is FALSE
 \item \code{wis} is the weighted interval score
 \item \code{sharpness} the component of WIS made up of interval widths

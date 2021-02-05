@@ -7,11 +7,11 @@ from reichlab/covid19-forecast-hub repo.}
 \usage{
 load_latest_forecasts_repo(
   file_path,
-  models,
+  models = NULL,
   forecast_dates,
-  locations,
-  types,
-  targets
+  locations = NULL,
+  types = NULL,
+  targets = NULL
 )
 }
 \arguments{
@@ -27,10 +27,11 @@ meeting the other criteria are returned.}
 available forecasts.}
 
 \item{types}{character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to c(“quantile”, “point”)}
+or “point”. Defaults to all types  with available forecasts}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
+c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
+with available forecasts.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

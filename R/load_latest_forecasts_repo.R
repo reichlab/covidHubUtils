@@ -9,17 +9,18 @@
 #' @param locations list of valid fips code. Defaults to all locations with 
 #' available forecasts.
 #' @param types character vector specifying type of forecasts to load: “quantile” 
-#' or “point”. Defaults to c(“quantile”, “point”)
+#' or “point”. Defaults to all types  with available forecasts
 #' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
+#' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
+#' with available forecasts.
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
 #'
 #' @export
-load_latest_forecasts_repo <- function(file_path, models, forecast_dates, 
-                                       locations, types, targets){
+load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates, 
+                                       locations = NULL, types = NULL, targets = NULL){
   
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
@@ -28,53 +29,44 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
   }
   
   # validate models
-  all_valid_models <- get_all_models(source = "remote_hub_repo")
-  
-  if (!missing(models)){
+  all_valid_models <- list.dirs(file_path, full.names = FALSE)
+  all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
+  if (!is.null(models)){
     models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
   } else {
     models <- all_valid_models
   }
   
-  
   # validate locations
-  all_valid_fips <- covidHubUtils::hub_locations$fips
-  
-  if (!missing(locations)){
+  if (!is.null(locations)){
+    all_valid_fips <- covidHubUtils::hub_locations$fips
     locations <- match.arg(locations, choices = all_valid_fips, several.ok = TRUE)
-  } else{
-    locations <- all_valid_fips
-  }
+  } 
   
   # validate types
-  if (!missing(types)){
+  if (!is.null(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } else {
-    types <- c("point", "quantile")
-  }
+  } 
   
   # validate targets
-  # set up Zoltar connection
-  zoltar_connection <- zoltr::new_connection()
-  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-  } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-  }
-  
-  # construct Zoltar project url
-  the_projects <- zoltr::projects(zoltar_connection)
-  project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-  
-  # validate targets 
-  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
-  
-  if (!missing(targets)){
+  if (!is.null(targets)){
+    # set up Zoltar connection
+    zoltar_connection <- zoltr::new_connection()
+    if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
+      zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
+    } else {
+      zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
+    }
+    
+    # construct Zoltar project url
+    the_projects <- zoltr::projects(zoltar_connection)
+    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+    
+    # validate targets 
+    all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
+    
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
-  } else {
-    targets <- all_valid_targets
   }
-  
   
   forecast_dates <- as.Date(forecast_dates)
   
@@ -101,11 +93,10 @@ load_latest_forecasts_repo <- function(file_path, models, forecast_dates,
   ) %>% unlist()
 
   # read in the forecast files
-  forecasts <- load_forecast_files_repo(forecast_files,
-    locations = locations,
-    types = types,
-    targets = targets)
-
+  forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
+                                        locations = locations, 
+                                        types = types, 
+                                        targets = targets)
   return(forecasts)
   
 }
@@ -168,33 +159,32 @@ load_forecast_files_repo <- function(file_paths,
             quantile = readr::col_double(),
             value = readr::col_double()
           ))
-        
-        if (!is.null(types)) {
-          single_forecast <- single_forecast %>%
-            dplyr::filter(tolower(type) %in% tolower(types))
-        }
-        if (!is.null(types)) {
-          single_forecast <- single_forecast %>%
-            dplyr::filter(tolower(location) %in% tolower(locations))
-        }
-        if (!is.null(types)) {
-          single_forecast <- single_forecast %>%
-            dplyr::filter(tolower(target) %in% tolower(targets))
-        }
-        
+      
+      if (!is.null(types)) {
         single_forecast <- single_forecast %>%
-          dplyr::transmute(
-            model = model,
-            forecast_date = forecast_date,
-            location = location,
-            target = tolower(target),
-            target_end_date = target_end_date,
-            type = type,
-            quantile = quantile,
-            value = value
-          )
-
-      return(single_forecast)
+          dplyr::filter(tolower(type) %in% tolower(types))
+      }
+      if (!is.null(locations)) {
+        single_forecast <- single_forecast %>%
+          dplyr::filter(tolower(location) %in% tolower(locations))
+      }
+      if (!is.null(targets)) {
+        single_forecast <- single_forecast %>%
+          dplyr::filter(tolower(target) %in% tolower(targets))
+      }
+        
+      single_forecast <- single_forecast %>%
+        dplyr::transmute(
+          model = model,
+          forecast_date = forecast_date,
+          location = location,
+          target = tolower(target),
+          target_end_date = target_end_date,
+          type = type,
+          quantile = quantile,
+          value = value)
+      
+    return(single_forecast)
     }) %>%
     tidyr::separate(target,
       into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
@@ -202,6 +192,6 @@ load_forecast_files_repo <- function(file_paths,
     dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
                   target_variable, target_end_date, type, quantile, value) %>%
     dplyr::left_join(covidHubUtils::hub_locations, by = c("location" = "fips"))
-
+  
   return(all_forecasts)
 }

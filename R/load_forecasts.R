@@ -6,19 +6,19 @@
 #' locations, types and target.
 #' 
 #' @param models Character vector of model abbreviations.
-#' If missing, forecasts for all models that submitted forecasts 
-#' meeting the other criteria are returned.
+#' Default all models that submitted forecasts meeting the other criteria.
 #' @param forecast_dates The forecast date of forecasts to retrieve.
-#' Defaults to all valid forecast dates in Zoltar.
+#' Default to all valid forecast dates in Zoltar.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
-#' @param locations list of fips. Defaults to all locations with available forecasts.
+#' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
-#' or “point”. Defaults to c(“quantile”, “point”)
+#' or “point”. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
-#'@param as_of A date in YYYY-MM-DD format to load forecasts submitted as of this date. 
-#' Defaults to NULL to load the latest version.
-#' 
+#' c('1 wk ahead cum death', '2 wk ahead cum death'). 
+#' Default to NULL which stands for all valid targets in Zoltar.
+#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
+#' Default to NULL to load the latest version.
+#'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
@@ -40,24 +40,22 @@ load_forecasts <- function (
     zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
   }
   
-  # construct Zoltar project url
-  the_projects <- zoltr::projects(zoltar_connection)
-  project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-  
-  # get all valid timezeros in project
-  all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
-                                          project_url = project_url)$timezero_date
-  
-  if (!missing(forecast_dates)){
+  if (!is.null(forecast_dates)){
+    # construct Zoltar project url
+    the_projects <- zoltr::projects(zoltar_connection)
+    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+    
+    # get all valid timezeros in project
+    all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
+                                            project_url = project_url)$timezero_date
+    
     # take intersection of forecast_dates and all_valid_timezeros
     valid_forecast_dates <- intersect(as.character(forecast_dates), 
                                       as.character(all_valid_timezeros))
     if (length(valid_forecast_dates) == 0) {
       stop("Error in load_forecasts: All forecast_dates are invalid.")
     }
-  } else {
-    valid_forecast_dates <- all_valid_timezeros
-  }
+  } 
 
   forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
                                       project_url = project_url,
