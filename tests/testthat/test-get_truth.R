@@ -4,6 +4,147 @@ library(covidData)
 library(zoltr)
 library(dplyr)
 
+test_that("preprocess_jhu files has expected columns", {
+  actual <- covidHubUtils::preprocess_jhu(
+    save_location = "."
+  )
+  
+  actual_cumulative_deaths_column_names <- colnames(actual$cumulative_deaths)
+  actual_incident_deaths_column_names <- colnames(actual$incident_deaths)
+  actual_cumulative_cases_column_names <- colnames(actual$cumulative_cases)
+  actual_incident_cases_column_names <- colnames(actual$incident_cases)
+  
+  expected_column_names <- c('date','location','location_name','value')
+  
+  expect_equal(actual_cumulative_deaths_column_names, expected_column_names)
+  expect_equal(actual_incident_deaths_column_names, expected_column_names)
+  expect_equal(actual_cumulative_cases_column_names, expected_column_names)
+  expect_equal(actual_incident_cases_column_names, expected_column_names)
+})
+
+
+test_that("preprocess_jhu files has expected combinations of location, week", {
+  # Location name
+  location_names <- covidData::fips_codes[, c("location", "location_name")]
+  
+  # Spatial resolutions
+  spatial_resolutions <- c("national", "state", "county")
+  
+  actual <- covidHubUtils::preprocess_jhu(
+    save_location = "."
+  )
+  
+  actual_cumulative_deaths <- actual$cumulative_deaths %>%
+    dplyr::select(date, location)
+  
+  actual_incident_deaths <- actual$incident_deaths %>%
+    dplyr::select(date, location)
+  
+  expected_deaths <- covidData::load_jhu_data(spatial_resolution = spatial_resolutions,
+                                              temporal_resolution = "daily",
+                                              measure = "deaths") %>% 
+                      dplyr::left_join(location_names, by = "location") %>% 
+                      dplyr::filter(location != "11001") 
+  
+  expected_cumulative_deaths <- expected_deaths[,c("date", "location", "location_name", "cum")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "cum"))) %>% 
+    dplyr::select(date, location)
+  
+  expected_incident_deaths <- expected_deaths[,c("date", "location", "location_name", "inc")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "inc"))) %>% 
+    dplyr::select(date, location)
+  
+  expect_equal(actual_cumulative_deaths, expected_cumulative_deaths)
+  expect_equal(actual_incident_deaths, expected_incident_deaths)
+  
+  actual_cumulative_cases <- actual$cumulative_cases %>%
+    dplyr::select(date, location)
+  
+  actual_incident_cases <- actual$incident_cases %>%
+    dplyr::select(date, location)
+  
+  expected_cases <- covidData::load_jhu_data(spatial_resolution = spatial_resolutions,
+                                              temporal_resolution = "daily",
+                                              measure = "cases") %>% 
+                      dplyr::left_join(location_names, by = "location") %>% 
+                      dplyr::filter(location != "11001") 
+  
+  expected_cumulative_cases <- expected_cases[,c("date", "location", "location_name", "cum")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "cum"))) %>% 
+    dplyr::select(date, location)
+  
+  expected_incident_cases <- expected_cases[,c("date", "location", "location_name", "inc")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "inc"))) %>% 
+    dplyr::select(date, location)
+  
+  expect_equal(actual_cumulative_cases, expected_cumulative_cases)
+  expect_equal(actual_incident_cases, expected_incident_cases)
+})
+
+
+test_that("preprocess_jhu files has the same cumulative and incident values as output from covidData", {
+  # Location name
+  location_names <- covidData::fips_codes[, c("location", "location_name")]
+  
+  # Spatial resolutions
+  spatial_resolutions <- c("national", "state", "county")
+  
+  actual <- covidHubUtils::preprocess_jhu(
+    save_location = "."
+  )
+  
+  actual_cumulative_deaths <- actual$cumulative_deaths %>%
+    dplyr::select(value)
+  
+  actual_incident_deaths <- actual$incident_deaths %>%
+    dplyr::select(value)
+  
+  expected_deaths <- covidData::load_jhu_data(spatial_resolution = spatial_resolutions,
+                                              temporal_resolution = "daily",
+                                              measure = "deaths") %>% 
+                      dplyr::left_join(location_names, by = "location") %>% 
+                      dplyr::filter(location != "11001") 
+  
+  expected_cumulative_deaths <- expected_deaths[,c("date", "location", "location_name", "cum")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "cum"))) %>% 
+    dplyr::rename(value = cum) %>% 
+    dplyr::select(value)
+  
+  expected_incident_deaths <- expected_deaths[,c("date", "location", "location_name", "inc")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "inc"))) %>% 
+    dplyr::rename(value = inc) %>% 
+    dplyr::select(value)
+  
+  expect_equal(actual_cumulative_deaths, expected_cumulative_deaths)
+  expect_equal(actual_incident_deaths, expected_incident_deaths)
+  
+  actual_cumulative_cases <- actual$cumulative_cases %>%
+    dplyr::select(value)
+  
+  actual_incident_cases <- actual$incident_cases %>%
+    dplyr::select(value)
+  
+  expected_cases <- covidData::load_jhu_data(spatial_resolution = spatial_resolutions,
+                                              temporal_resolution = "daily",
+                                              measure = "cases") %>% 
+                    dplyr::left_join(location_names, by = "location") %>% 
+                    dplyr::filter(location != "11001") 
+  
+  expected_cumulative_cases <- expected_cases[,c("date", "location", "location_name", "cum")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "cum"))) %>% 
+    dplyr::rename(value = cum) %>% 
+    dplyr::select(value)
+  
+  expected_incident_cases <- expected_cases[,c("date", "location", "location_name", "inc")] %>% 
+    tidyr::drop_na(any_of(c("location_name", "inc"))) %>% 
+    dplyr::rename(value = inc) %>% 
+    dplyr::select(value)
+  
+  expect_equal(actual_cumulative_cases, expected_cumulative_cases)
+  expect_equal(actual_incident_cases, expected_incident_cases)
+})
+
+
 test_that("preprocess_hospitalization files has expected combinations of location, week", {
   # Location name
   location_names <- covidData::fips_codes[, c("location", "location_name")]

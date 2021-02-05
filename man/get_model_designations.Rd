@@ -4,7 +4,7 @@
 \alias{get_model_designations}
 \title{Get models and their designations}
 \usage{
-get_model_designations(models, source, hub_repo_path)
+get_model_designations(models, source, hub_repo_path, as_of = Sys.Date())
 }
 \arguments{
 \item{models}{optional character vector of model abbreviations for
@@ -16,6 +16,9 @@ either "local_hub_repo" or "zoltar"}
 
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
+
+\item{as_of}{optional date specifying the version. Only support versioned
+model designations in "local_hub_repo"}
 }
 \value{
 data frame with columns \code{model} and \code{designation}
