@@ -32,7 +32,8 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
   all_valid_models <- list.dirs(file_path, full.names = FALSE)
   all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
   if (!is.null(models)){
-    models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
+    models <- unlist(purrr::map(models, function(model)
+      match.arg(model, choices = all_valid_models)))
   } else {
     models <- all_valid_models
   }
