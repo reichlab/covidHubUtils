@@ -32,7 +32,8 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
   all_valid_models <- list.dirs(file_path, full.names = FALSE)
   all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
   if (!is.null(models)){
-    models <- match.arg(models, choices = all_valid_models, several.ok = TRUE)
+    models <- unlist(purrr::map(models, function(model)
+      match.arg(model, choices = all_valid_models)))
   } else {
     models <- all_valid_models
   }
@@ -71,26 +72,7 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
   forecast_dates <- as.Date(forecast_dates)
   
   # get paths to all forecast files
-  forecast_files <- purrr::map(
-    models,
-    function(model) {
-      if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
-        file_path <- substr(file_path, 1, nchar(file_path) - 1)
-      }
-
-      results_path <- file.path(
-        file_path,
-        paste0(model, "/", forecast_dates, "-", model, ".csv"))
-      results_path <- results_path[file.exists(results_path)]
-      results_path <- tail(results_path, 1)
-      
-      if (length(results_path) == 0) {
-        return(NULL)
-      } else {
-        return(results_path)
-      }
-    }
-  ) %>% unlist()
+  forecast_files <- get_forecast_file_path(models, file_path, forecast_dates, latest = TRUE)
 
   # read in the forecast files
   forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
@@ -99,6 +81,44 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
                                         targets = targets)
   return(forecasts)
   
+}
+
+#' Generate forecast file paths with given data-processed folder path for selected models
+#' 
+#' @param models character vector of model abbreviations.
+#' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
+#' @param forecast_dates date vector to generate file paths
+#' @param latest boolean to generate path to the latest forecast file from each model
+#' 
+#' @return a list of paths to forecast files submitted on a range of forecast dates from selected models
+
+get_forecast_file_path <- function(models, file_path, forecast_dates, latest = FALSE){
+  
+  forecast_files <- purrr::map(
+    models,
+    function(model) {
+      if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
+        file_path <- substr(file_path, 1, nchar(file_path) - 1)
+      }
+      
+      results_path <- file.path(
+        file_path,
+        paste0(model, "/", forecast_dates, "-", model, ".csv"))
+      results_path <- results_path[file.exists(results_path)]
+      
+      if (latest){
+        results_path <- tail(results_path, 1)
+      }
+      
+      if (length(results_path) == 0) {
+        return(NULL)
+      } else {
+        return(results_path)
+      }
+    }
+  ) %>% unlist()
+  
+  return(forecast_files)
 }
 
 #' Read in a set of forecast files from a repository

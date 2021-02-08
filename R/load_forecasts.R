@@ -17,7 +17,11 @@
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). 
 #' Default to NULL which stands for all valid targets in Zoltar.
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
-#' Default to NULL to load the latest version.
+#' Default to NULL to load the latest version. Only available when source is "zoltar" now. 
+#' @param source string specifying where forecasts will be loaded from: either 
+#' "local_hub_repo" or "zoltar". Default to "zoltar"
+#' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
+#' repository
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -30,69 +34,40 @@ load_forecasts <- function (
   locations = NULL,
   types = NULL,
   targets = NULL,
-  as_of = NULL) {
+  as_of = NULL, 
+  source = "zoltar", 
+  hub_repo_path) {
   
-  # set up Zoltar connection
-  zoltar_connection <- zoltr::new_connection()
-  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-  } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-  }
+  # validate source
+  source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
   
-  if (!is.null(forecast_dates)){
-    # construct Zoltar project url
-    the_projects <- zoltr::projects(zoltar_connection)
-    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+  if (source == "local_hub_repo") {
+    # validate hub repo path
+    if (missing(hub_repo_path) | !dir.exists(hub_repo_path)) {
+      stop("Error in load_forecasts: Please provide a vaid path to hub repo.")
+    } 
     
-    # get all valid timezeros in project
-    all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
-                                            project_url = project_url)$timezero_date
-    
-    # take intersection of forecast_dates and all_valid_timezeros
-    valid_forecast_dates <- intersect(as.character(forecast_dates), 
-                                      as.character(all_valid_timezeros))
-    if (length(valid_forecast_dates) == 0) {
-      stop("Error in load_forecasts: All forecast_dates are invalid.")
+    if (!is.null(as_of) | as_of != Sys.Date()){
+      stop("Error in load_forecasts: as_of parameter is not available for loading forecasts from local hub repo now.")
     }
-  } 
-
-  forecasts <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection,
-                                      project_url = project_url,
-                                      query_type = "forecasts",
-                                      units = locations, 
-                                      timezeros = valid_forecast_dates,
-                                      models = models,
-                                      targets = targets,
-                                      types = types,
-                                      verbose = FALSE,
-                                      as_of = as_of)
-  if (nrow(forecasts) == 0){
-    warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
-    # convert value column to double and select columns
-    forecasts <- forecasts %>%
-      dplyr::mutate(value = as.double(value)) %>%
-      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead",
-                                     "target_variable"),
-                      remove = FALSE, extra = "merge") %>%
-      dplyr::rename(location = unit, forecast_date = timezero, type = class) %>%
-      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
-                    target_variable, type, quantile, value)
+    
+    # path to data-processed folder in hub repo
+    data_processed <- file.path(hub_repo_path, "data-processed/")
+    
+    forecasts <- load_forecasts_repo(file_path = data_processed, 
+                                     models = models, 
+                                     forecast_dates = forecast_dates, 
+                                     locations = locations, 
+                                     types = types, 
+                                     targets = targets)
+    
   } else {
-    forecasts <- forecasts %>%
-      # keep only required columns
-      dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
-      dplyr::rename(location = unit, forecast_date = timezero,
-                    type = class) %>%
-      # create horizon and target_end_date columns
-      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
-                      remove = FALSE, extra = "merge") %>%
-      dplyr::mutate(target_end_date = as.Date(
-        calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
-      )) %>%
-      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
-                    target_variable, target_end_date, type, quantile, value) %>%
-      dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
+    forecasts <- load_forecasts_zoltar(models = models,
+                                       forecast_dates = forecast_dates,
+                                       locations = locations,
+                                       types = types,
+                                       targets = targets,
+                                       as_of = as_of)
   }
   
   return(forecasts)
