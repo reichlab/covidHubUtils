@@ -418,8 +418,8 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
 #'
 save_truth_for_zoltar <- function(save_location = "./data-truth"){
   
-  df_cum_death <- covidData::preprocess_truth_for_zoltar("Cumulative Deaths")
-  df_inc_death <- covidData::preprocess_truth_for_zoltar("Incident Deaths")
+  df_cum_death <- preprocess_truth_for_zoltar("Cumulative Deaths")
+  df_inc_death <- preprocess_truth_for_zoltar("Incident Deaths")
   
   zoltar_truth <- rbind(df_cum_death, df_inc_death)
   
