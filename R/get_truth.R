@@ -425,6 +425,6 @@ save_truth_for_zoltar <- function(save_location = "./data-truth"){
   
   file_path <- file.path(save_location,"zoltar-truth.csv")
   
-  readr::write.csv(zoltar_truth, file_path)
+  readr::write_csv(zoltar_truth, file_path)
   
 }
