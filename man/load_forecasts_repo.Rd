@@ -6,6 +6,7 @@
 Return all available forecasts submitted on forecast_dates}
 \usage{
 load_forecasts_repo(
+  file_path,
   models = NULL,
   forecast_dates = NULL,
   locations = NULL,

@@ -74,7 +74,7 @@ be loaded from if truth_data is not provided. Currently support "JHU",
 "USAFacts" and "NYTimes".
 Optional if truth_data is provided.}
 
-\item{use_median_as_point}{boolean for using medians as point forecasts in plot.
+\item{use_median_as_point}{boolean for using median quantiles as point forecasts in plot.
 Default to FALSE.}
 
 \item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}

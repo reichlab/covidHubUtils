@@ -24,6 +24,7 @@
 #' 
 #' @export
 load_forecasts_repo <- function (
+  file_path,
   models = NULL,
   forecast_dates = NULL,
   locations = NULL,

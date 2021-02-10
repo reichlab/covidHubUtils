@@ -83,12 +83,12 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
   
 }
 
-#' Generate forecast file paths with given data-processed folder path for selected models
+#' Generate paths to forecast files submitted on a range of forecast dates from selected models
 #' 
 #' @param models character vector of model abbreviations.
 #' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
-#' @param forecast_dates date vector to generate file paths
-#' @param latest boolean to generate path to the latest forecast file from each model
+#' @param forecast_dates date vector to look for forecast files
+#' @param latest boolean to only generate path to the latest forecast file from each model
 #' 
 #' @return a list of paths to forecast files submitted on a range of forecast dates from selected models
 
@@ -111,6 +111,7 @@ get_forecast_file_path <- function(models, file_path, forecast_dates, latest = F
       }
       
       if (length(results_path) == 0) {
+        warning("Warning in get_forcast_file_path: No forecast files are submitted with the given parameters.")
         return(NULL)
       } else {
         return(results_path)
@@ -146,6 +147,10 @@ load_forecast_files_repo <- function(file_paths,
                                      types = NULL,
                                      targets = NULL) {
   # validate file_paths exist
+  if (is.null(file_paths)){
+    stop("In load_forecast_files_repo, file_paths are not provided.")
+  }
+  
   files_exist <- file.exists(file_paths)
   if (!any(files_exist)) {
     stop("In load_forecast_files_repo, no files exist at the provided file_paths.")

@@ -47,8 +47,10 @@ load_forecasts <- function (
       stop("Error in load_forecasts: Please provide a vaid path to hub repo.")
     } 
     
-    if (!is.null(as_of) | as_of != Sys.Date()){
-      stop("Error in load_forecasts: as_of parameter is not available for loading forecasts from local hub repo now.")
+    if (!is.null(as_of)){
+      if (as_of != Sys.Date()){
+        stop("Error in load_forecasts: as_of parameter is not available for `local_hub_repo` source now.")
+      } 
     }
     
     # path to data-processed folder in hub repo

@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_latest_forecasts_repo.R
 \name{get_forecast_file_path}
 \alias{get_forecast_file_path}
-\title{Generate forecast file paths with given data-processed folder path for selected models}
+\title{Generate paths to forecast files submitted on a range of forecast dates from selected models}
 \usage{
 get_forecast_file_path(models, file_path, forecast_dates, latest = FALSE)
 }
@@ -11,13 +11,13 @@ get_forecast_file_path(models, file_path, forecast_dates, latest = FALSE)
 
 \item{file_path}{path to local clone of the reichlab/covid19-forecast-hub/data-processed}
 
-\item{forecast_dates}{date vector to generate file paths}
+\item{forecast_dates}{date vector to look for forecast files}
 
-\item{latest}{boolean to generate path to the latest forecast file from each model}
+\item{latest}{boolean to only generate path to the latest forecast file from each model}
 }
 \value{
 a list of paths to forecast files submitted on a range of forecast dates from selected models
 }
 \description{
-Generate forecast file paths with given data-processed folder path for selected models
+Generate paths to forecast files submitted on a range of forecast dates from selected models
 }
