@@ -7,12 +7,12 @@ Return the most recent forecast from each model within
 forecast_date_window_size days of the last_forecast_date}
 \usage{
 load_latest_forecasts(
-  models,
+  models = NULL,
   last_forecast_date,
   forecast_date_window_size = 0,
-  locations,
-  types,
-  targets,
+  locations = NULL,
+  types = NULL,
+  targets = NULL,
   source = "local_hub_repo",
   hub_repo_path,
   as_of = NULL
@@ -24,17 +24,16 @@ If missing, forecasts for all models that submitted forecasts
 meeting the other criteria are returned.}
 
 \item{last_forecast_date}{The forecast date of forecasts to retrieve
-in 'yyyy-mm-dd' format. Defaults to the most recent forecast date in
-Zoltar or the hub repo.}
+in 'yyyy-mm-dd' format.}
 
 \item{forecast_date_window_size}{The number of days across which to
-look for recent forecasts. Defaults to 0, which means to only look
+look for recent forecasts. Default to 0, which means to only look
 at the last_forecast_date only.}
 
 \item{locations}{list of fips. Defaults to all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to c(“quantile”, “point”)}
+or “point”. Defaults to all types  with available forecasts}
 
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
@@ -45,8 +44,9 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
 
-\item{as_of}{A date in YYYY-MM-DD format to load forecasts submitted as of this date.
-Defaults to NULL to load the latest version.}
+\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
+Default to NULL to load the latest version. This parameter is only supported
+when loading forecasts from Zoltar.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

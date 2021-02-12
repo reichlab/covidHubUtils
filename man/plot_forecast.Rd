@@ -20,6 +20,7 @@ plot_forecast(
   intervals,
   horizon,
   truth_source,
+  use_median_as_point = FALSE,
   plot_truth = TRUE,
   plot = TRUE,
   fill_by_model = FALSE,
@@ -72,6 +73,9 @@ forecast date. Default to all available horizons in forecast data.}
 be loaded from if truth_data is not provided. Currently support "JHU",
 "USAFacts" and "NYTimes".
 Optional if truth_data is provided.}
+
+\item{use_median_as_point}{boolean for using median quantiles as point forecasts in plot.
+Default to FALSE.}
 
 \item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}
 

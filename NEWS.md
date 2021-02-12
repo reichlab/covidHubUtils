@@ -3,11 +3,15 @@
 - `plot_forecast()` now errors when trying to plot multiple locations without location in the facet formula.
 - Fix bug that model legend is missing when the user is only plotting quantile forecasts in `plot_forecast()`. If `forecast_data` doesn't contain point forecasts, the function will look for all available medians in `forecast_data` and plot them as point forecasts. 
 - Update quantile forecast color so that color transparency will not be overwritten by `fill_transparency` in `plot_forecast()` when plotting more than five models.
-- target_variable in `plot_forecast` now optional when forecast_data only has one target variable
-- all models inputed into `load_latest_forecasts` must be available in the source
-- added the as_of parameter to `load_forecasts()`, `load_latest_forecasts()` and `load_latest_forecasts_zoltar()` to improve interface with the Zoltar query.
+- Add optional `as_of` parameter in `get_model_designations()`. Currently only support versioned model designation in local hub repo.
+- `target_variable` in `plot_forecast()` now optional when `forecast_data` only has one target variable
+- All models inputed into `load_latest_forecasts()` must be available in the source
+- `plot_forecast()` has new parameter `use_median_as_point` that defaults to FALSE. "TRUE" uses the median quantile and "FALSE" uses the point forecasts.
+- Add the `as_of` parameter to `load_forecasts()`, `load_latest_forecasts()` and `load_latest_forecasts_zoltar()` to improve interface with the Zoltar query.
 - `score_forecasts()` has new parameter `use_median_as_point` that defaults to FALSE. "TRUE" uses the median quantile when calculating absolute error and "FALSE" uses the point forecasts for absolute error.
 - add verbose parameter to `load_forecasts()` and `load_latest_forecasts()`.
+- Refactor `load_latest_forecasts()` and `load_forecasts()` to improve efficiency.
+
 
 ## covidHubUtils 0.1.3
 
@@ -44,6 +48,7 @@ covidHubUtils now requires the `scoringutils` package version to be at least 0.1
 ### Package updates
 - There is no backwards compatibility.
 - Minor updates to overview vignette.
+
 
 ## covidHubUtils 0.1.2
   

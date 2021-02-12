@@ -21,15 +21,16 @@ For those starting out we recommend you begin with the [Getting Started vignette
 ## Currently available:
 
 **Reading Forecast Data**
+ * `get_model_designations(models, source, hub_repo_path, as_of)`: Assemble a data frame with columns model and designation. **Note:** Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository.
  * `get_model_designations(models, source, hub_repo_path)`: Assemble a data frame with columns model and designation.
- * `load_latest_forecasts(models, last_forecast_date, forecast_date_window_size = 0, locations, types, targets, source, hub_repo_path, as_of, verbose)`: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.
+ * `load_latest_forecasts(models, last_forecast_date, forecast_date_window_size, locations, types, targets, source, hub_repo_path, as_of, verbose)`: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.
  * `load_forecasts(models, forecast_dates, locations, types, targets, as_of, verbose)`: Load all available forecasts from Zoltar.
  
 **Reading Observed "Truth" Data**
 * `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Truth data for `"inc hosp"` is not available through this function now. However, hospitalization truth is available through `preprocess_hospitalization(save_location)`.
 
 **Plotting Forecasts**
- * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
+ * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
  
 **Scoring Forecasts**
  * `score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))` Calculate specified scores for each combination of `model`, `forecast_date`, `location`, `horizon`, `temporal_resolution`, `target_variable`, and `target_end_date` in the `forecasts` data frame. Please see [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.

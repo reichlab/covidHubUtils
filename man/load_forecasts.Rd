@@ -16,23 +16,23 @@ load_forecasts(
 }
 \arguments{
 \item{models}{Character vector of model abbreviations.
-If missing, forecasts for all models that submitted forecasts
-meeting the other criteria are returned.}
+Default all models that submitted forecasts meeting the other criteria.}
 
 \item{forecast_dates}{The forecast date of forecasts to retrieve.
-Defaults to all valid forecast dates in Zoltar.
+Default to all valid forecast dates in Zoltar.
 The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
-\item{locations}{list of fips. Defaults to all locations with available forecasts.}
+\item{locations}{list of fips. Default to all locations with available forecasts in Zoltar.}
 
 \item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to c(“quantile”, “point”)}
+or “point”. Default to all valid forecast types in Zoltar.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
+c('1 wk ahead cum death', '2 wk ahead cum death').
+Default to NULL which stands for all valid targets in Zoltar.}
 
-\item{as_of}{A date in YYYY-MM-DD format to load forecasts submitted as of this date.
-Defaults to NULL to load the latest version.}
+\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
+Default to NULL to load the latest version.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

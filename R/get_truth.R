@@ -274,6 +274,11 @@ preprocess_jhu <- function (save_location="./data-truth"){
   colnames(incident_cases)[colnames(incident_cases) == 'inc'] <- 'value'
   incident_cases <- incident_cases[!rowSums(is.na(incident_cases[c("location_name","value")])), ]
   readr::write_csv(incident_cases, path = file.path(save_location,"truth-Incident Cases.csv"))
+  
+  return(list("cumulative_deaths" = cumulative_deaths, 
+              "incident_deaths" = incident_deaths,
+              "cumulative_cases" = cumulative_cases, 
+              "incident_cases" = incident_cases))
 }
 
 
@@ -413,13 +418,13 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
 #'
 save_truth_for_zoltar <- function(save_location = "./data-truth"){
   
-  df_cum_death <- covidData::preprocess_truth_for_zoltar("Cumulative Deaths")
-  df_inc_death <- covidData::preprocess_truth_for_zoltar("Incident Deaths")
+  df_cum_death <- preprocess_truth_for_zoltar("Cumulative Deaths")
+  df_inc_death <- preprocess_truth_for_zoltar("Incident Deaths")
   
   zoltar_truth <- rbind(df_cum_death, df_inc_death)
   
   file_path <- file.path(save_location,"zoltar-truth.csv")
   
-  readr::write.csv(zoltar_truth, file_path)
+  readr::write_csv(zoltar_truth, file_path)
   
 }

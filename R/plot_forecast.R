@@ -31,6 +31,8 @@
 #' be loaded from if truth_data is not provided. Currently support "JHU",
 #' "USAFacts" and "NYTimes". 
 #' Optional if truth_data is provided. 
+#' @param use_median_as_point boolean for using median quantiles as point forecasts in plot. 
+#' Default to FALSE.
 #' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
 #' @param plot boolean for showing the plot. Default to TRUE.
 #' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
@@ -65,6 +67,7 @@ plot_forecast <- function(forecast_data,
                           intervals,
                           horizon,
                           truth_source,
+                          use_median_as_point = FALSE,
                           plot_truth = TRUE,
                           plot = TRUE,
                           fill_by_model = FALSE,
@@ -230,11 +233,12 @@ plot_forecast <- function(forecast_data,
      0.5 + as.numeric(interval)/2)
   }))
   
-  # if point forecasts are not available in forecast, check if medians are available
-  if (!"point" %in% forecast_data$type) {
+  if (use_median_as_point){
     if (0.5 %in% forecast_data$quantile) {
       # plot medians instead
       quantiles_to_plot <- append(quantiles_to_plot, 0.5)
+    } else {
+      stop("Error in plot_forecast: Median quantiles are not available in forecast_data.")
     }
   }
   
@@ -242,7 +246,11 @@ plot_forecast <- function(forecast_data,
   if (fill_by_model){
     if (length(unique(models)) <= 5){
       color_families <- c("Blues", "Oranges", "Greens", "Purples", "Reds")
-      colourCount <- length(quantiles_to_plot) / 2 + 1
+      if (use_median_as_point){
+        colourCount <- (length(quantiles_to_plot) -1)/ 2 + 1
+      } else {
+        colourCount <- length(quantiles_to_plot) / 2 + 1
+      }
       model_colors <- purrr::map(
         color_families[1:length(unique(models))],
         function(color_family){
@@ -262,7 +270,12 @@ plot_forecast <- function(forecast_data,
       interval_colors <- unlist(lapply(model_colors, head, n = colourCount-1))
     } else {
       # interpolate color pallets to more than 5 colors
-      colourCount <- length(quantiles_to_plot)/2
+      if (use_median_as_point) {
+        colourCount <- (length(quantiles_to_plot)-1)/2
+      } else {
+        colourCount <- length(quantiles_to_plot)/2
+      }
+        
       modelCount <- length(unique(models))
       # use 8 instead of 9 to avoid black and grey shades
       getPalette = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
@@ -277,7 +290,11 @@ plot_forecast <- function(forecast_data,
     }
   } else {
     # only use blue
-    colourCount = max(length(quantiles_to_plot)/2+1, 2)
+    if (use_median_as_point){
+      colourCount = max((length(quantiles_to_plot)-1)/2+1, 2)
+    } else {
+      colourCount = max(length(quantiles_to_plot)/2+1, 2)
+    }
     getPalette = grDevices::colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
     blues = getPalette(colourCount)
     forecast_colors <- rep(tail(blues,1), length(unique(models)))
