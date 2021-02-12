@@ -18,6 +18,7 @@
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #'@param as_of A date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Defaults to NULL to load the latest version.
+#'@param verbose a boolean for printing messages on zoltar job status poll
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -30,7 +31,8 @@ load_forecasts <- function (
   locations = NULL,
   types = NULL,
   targets = NULL,
-  as_of = NULL) {
+  as_of = NULL,
+  verbose = TRUE) {
   
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
@@ -67,7 +69,7 @@ load_forecasts <- function (
                                       models = models,
                                       targets = targets,
                                       types = types,
-                                      verbose = FALSE,
+                                      verbose = verbose,
                                       as_of = as_of)
   if (nrow(forecasts) == 0){
     warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
