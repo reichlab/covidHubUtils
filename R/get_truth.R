@@ -109,7 +109,7 @@ download_raw_usafacts <- function (save_location="./data-truth/usafacts/raw/"){
                              countyFIPS    = readr::col_integer(),
                              `County Name` = readr::col_character(),
                              State         = readr::col_character(),
-                             stateFIPS     = readr::col_integer(),
+                             StateFIPS     = readr::col_integer(),
                              .default      = readr::col_integer()
                            )) 
   
@@ -118,7 +118,7 @@ download_raw_usafacts <- function (save_location="./data-truth/usafacts/raw/"){
                               countyFIPS    = readr::col_integer(),
                               `County Name` = readr::col_character(),
                               State         = readr::col_character(),
-                              stateFIPS     = readr::col_integer(),
+                              StateFIPS     = readr::col_integer(),
                               .default      = readr::col_integer()
                             ))
   
@@ -142,7 +142,7 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
 
   counties <- cases %>% dplyr::mutate(cases_deaths = "case") %>%
     dplyr::bind_rows(deaths %>% dplyr::mutate(cases_deaths = "death")) %>%
-    dplyr::select(-`County Name`, -State, -stateFIPS) %>%
+    dplyr::select(-`County Name`, -State, -StateFIPS) %>%
     dplyr::rename(location = countyFIPS) %>%
     dplyr::filter(location >= 1000) %>%
     dplyr::mutate(location = sprintf("%05d", location)) %>%
@@ -163,7 +163,7 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
     dplyr::bind_rows(deaths %>% dplyr::mutate(cases_deaths = "death")) %>%
     
     dplyr::select(-countyFIPS, -`County Name`, -State) %>%
-    dplyr::rename(location = stateFIPS) %>%
+    dplyr::rename(location = StateFIPS) %>%
     dplyr::mutate(location = sprintf("%02d", location)) %>%
     tidyr::pivot_longer(
       -c(location, cases_deaths),
@@ -190,7 +190,7 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
     dplyr::ungroup() %>% 
     dplyr::mutate(location = "US")
   
-  d <- bind_rows(counties, states, us)
+  d <- dplyr::bind_rows(counties, states, us)
   
   
   
