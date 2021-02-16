@@ -18,7 +18,6 @@
 #' Default to NULL which stands for all valid targets in Zoltar.
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version.
-#' @param verbose a boolean for printing messages on zoltar job status poll
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -31,8 +30,7 @@ load_forecasts <- function (
   locations = NULL,
   types = NULL,
   targets = NULL,
-  as_of = NULL,
-  verbose = TRUE) {
+  as_of = NULL) {
   
   # set up Zoltar connection
   zoltar_connection <- zoltr::new_connection()
@@ -67,7 +65,7 @@ load_forecasts <- function (
                                       models = models,
                                       targets = targets,
                                       types = types,
-                                      verbose = verbose,
+                                      verbose = FALSE,
                                       as_of = as_of)
   if (nrow(forecasts) == 0){
     warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
