@@ -26,6 +26,7 @@ jobs:
           devtools::test_file("test-score_forecasts.R", stop_on_failure = TRUE)
           devtools::test_file("test-load_forecast_files_repo.R", stop_on_failure = TRUE)
           devtools::test_file("test-get_model_designations.R", stop_on_failure = TRUE)
+          devtools::test_file("test-load_as_of.R", stop_on_failure = TRUE)
         shell: Rscript {0}
 
 
