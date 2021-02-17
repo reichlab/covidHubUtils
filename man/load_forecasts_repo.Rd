@@ -2,8 +2,7 @@
 % Please edit documentation in R/load_forecasts_repo.R
 \name{load_forecasts_repo}
 \alias{load_forecasts_repo}
-\title{Load covid forecasts from local hub repo.
-Return all available forecasts submitted on forecast_dates}
+\title{Load all available forecasts submitted on forecast_dates from local hub repo.}
 \usage{
 load_forecasts_repo(
   file_path,
@@ -37,7 +36,6 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-The function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in forecast_dates for selected models,
-locations, types and target.
+The function will throw an error when no forecasts are submitted on
+any dates in forecast_dates for selected models, locations, types and target.
 }

@@ -1,9 +1,7 @@
-#' Load covid forecasts from local hub repo.  
-#' Return all available forecasts submitted on forecast_dates
+#' Load all available forecasts submitted on forecast_dates from local hub repo.
 #' 
-#' The function will throw a warning and return an empty data frame when 
-#' no forecasts are submitted on any dates in forecast_dates for selected models, 
-#' locations, types and target.
+#' The function will throw an error when no forecasts are submitted on 
+#' any dates in forecast_dates for selected models, locations, types and target.
 #' 
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
@@ -78,7 +76,12 @@ load_forecasts_repo <- function (
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
   }
   
-  forecast_dates <- as.Date(forecast_dates)
+  # validate forecast_dates
+  if(!is.null(forecast_dates)){
+    forecast_dates <- as.Date(forecast_dates)
+  } else {
+    forecast_dates <- seq(as.Date("2020-01-25"), Sys.Date(), by = "days")
+  }
   
   # get paths to all forecast files
   forecast_files <- get_forecast_file_path(models, file_path, forecast_dates, latest = FALSE)
