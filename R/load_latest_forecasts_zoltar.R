@@ -18,25 +18,28 @@
 #' Default to all valid targets in Zoltar.
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version.
+#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
 #' 
-
+  
 load_latest_forecasts_zoltar <- function(models = NULL,
                                          forecast_dates = NULL,
                                          locations = NULL, 
                                          types = NULL,
                                          targets = NULL,
-                                         as_of = NULL){
+                                         as_of = NULL,
+                                         verbose = TRUE){
   
   forecast <- load_forecasts(models = models,
                              forecast_dates = forecast_dates,
                              locations = locations,
                              types = types,
                              targets = targets,
-                             as_of = as_of)
+                             as_of = as_of,
+                             verbose = verbose)
   
   if(nrow(forecast) != 0) {
     # filter to get the latest forecast for each model

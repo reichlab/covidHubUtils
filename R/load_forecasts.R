@@ -12,12 +12,13 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). 
 #' Default to NULL which stands for all valid targets.
-#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
-#' Default to NULL to load the latest version. Only available when source is "zoltar" now. 
 #' @param source string specifying where forecasts will be loaded from: either 
 #' "local_hub_repo" or "zoltar". Default to "zoltar"
 #' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository
+#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
+#' Default to NULL to load the latest version. Only available when source is "zoltar" now. 
+#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -30,9 +31,10 @@ load_forecasts <- function (
   locations = NULL,
   types = NULL,
   targets = NULL,
-  as_of = NULL, 
   source = "zoltar", 
-  hub_repo_path) {
+  hub_repo_path,
+  as_of = NULL,
+  verbose = TRUE) {
   
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
@@ -58,14 +60,14 @@ load_forecasts <- function (
                                      locations = locations, 
                                      types = types, 
                                      targets = targets)
-    
   } else {
     forecasts <- load_forecasts_zoltar(models = models,
                                        forecast_dates = forecast_dates,
                                        locations = locations,
                                        types = types,
                                        targets = targets,
-                                       as_of = as_of)
+                                       as_of = as_of,
+                                       verbose = verbose)
   }
   
   return(forecasts)

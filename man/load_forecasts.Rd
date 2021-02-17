@@ -11,9 +11,10 @@ load_forecasts(
   locations = NULL,
   types = NULL,
   targets = NULL,
-  as_of = NULL,
   source = "zoltar",
-  hub_repo_path
+  hub_repo_path,
+  as_of = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -33,14 +34,16 @@ or “point”. Default to all valid forecast types.}
 c('1 wk ahead cum death', '2 wk ahead cum death').
 Default to NULL which stands for all valid targets.}
 
-\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
-Default to NULL to load the latest version. Only available when source is "zoltar" now.}
-
 \item{source}{string specifying where forecasts will be loaded from: either
 "local_hub_repo" or "zoltar". Default to "zoltar"}
 
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
+
+\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
+Default to NULL to load the latest version. Only available when source is "zoltar" now.}
+
+\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
