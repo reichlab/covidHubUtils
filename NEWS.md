@@ -9,7 +9,9 @@
 - `plot_forecast()` has new parameter `use_median_as_point` that defaults to FALSE. "TRUE" uses the median quantile and "FALSE" uses the point forecasts.
 - Add the `as_of` parameter to `load_forecasts()`, `load_latest_forecasts()` and `load_latest_forecasts_zoltar()` to improve interface with the Zoltar query.
 - `score_forecasts()` has new parameter `use_median_as_point` that defaults to FALSE. "TRUE" uses the median quantile when calculating absolute error and "FALSE" uses the point forecasts for absolute error.
+- add verbose parameter to `load_forecasts()` and `load_latest_forecasts()`.
 - Refactor `load_latest_forecasts()` and `load_forecasts()` to improve efficiency.
+
 
 ## covidHubUtils 0.1.3
 

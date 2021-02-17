@@ -22,6 +22,7 @@
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version. This parameter is only supported 
 #' when loading forecasts from Zoltar.
+#' @param verbose a boolean for printing messages on zoltar job status poll
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -37,7 +38,8 @@ load_latest_forecasts <- function (
   targets = NULL,
   source = "local_hub_repo",
   hub_repo_path,
-  as_of = NULL) {
+  as_of = NULL,
+  verbose = TRUE) {
   
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
@@ -73,7 +75,8 @@ load_latest_forecasts <- function (
                                        locations = locations, 
                                        types = types,
                                        targets = targets,
-                                       as_of = as_of)
+                                       as_of = as_of,
+                                       verbose = verbose)
   }
   
   return(forecasts)
