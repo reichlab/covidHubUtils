@@ -2,8 +2,7 @@
 % Please edit documentation in R/load_forecasts_zoltar.R
 \name{load_forecasts_zoltar}
 \alias{load_forecasts_zoltar}
-\title{Load covid forecasts from Zoltar.
-Return all available forecasts submitted on forecast_dates}
+\title{Load all available forecasts submitted on forecast_dates from Zoltar.}
 \usage{
 load_forecasts_zoltar(
   models = NULL,
@@ -29,7 +28,7 @@ or “point”. Default to all valid forecast types in Zoltar.}
 
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death').
-Default to NULL which stands for all valid targets in Zoltar.}
+Default to all valid targets in Zoltar.}
 
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version.}

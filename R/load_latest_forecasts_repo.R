@@ -19,8 +19,12 @@
 #' location_name, population, geo_type, geo_value, abbreviation
 #'
 #' @export
-load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates, 
-                                       locations = NULL, types = NULL, targets = NULL){
+load_latest_forecasts_repo <- function(file_path, 
+                                       models = NULL, 
+                                       forecast_dates, 
+                                       locations = NULL, 
+                                       types = NULL, 
+                                       targets = NULL){
   
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){

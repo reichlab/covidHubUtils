@@ -1,5 +1,4 @@
-#' Load covid forecasts from Zoltar.  
-#' Return all available forecasts submitted on forecast_dates
+#' Load all available forecasts submitted on forecast_dates from Zoltar.
 #' 
 #' The function will throw a warning and return an empty data frame when 
 #' no forecasts are submitted on any dates in forecast_dates for selected models, 
@@ -15,7 +14,7 @@
 #' or “point”. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). 
-#' Default to NULL which stands for all valid targets in Zoltar.
+#' Default to all valid targets in Zoltar.
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version.
 #'

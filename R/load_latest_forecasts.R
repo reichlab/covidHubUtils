@@ -62,18 +62,18 @@ load_latest_forecasts <- function (
     data_processed <- file.path(hub_repo_path, "data-processed/")
     
     forecasts <- load_latest_forecasts_repo(file_path = data_processed, 
-                                     models = models, 
-                                     forecast_dates = forecast_dates, 
-                                     locations = locations, 
-                                     types = types, 
-                                     targets = targets)
+                                            models = models, 
+                                            forecast_dates = forecast_dates, 
+                                            locations = locations, 
+                                            types = types, 
+                                            targets = targets)
   } else {
     forecasts <- load_latest_forecasts_zoltar(models = models, 
-                                       forecast_dates = forecast_dates, 
-                                       locations = locations, 
-                                       types = types,
-                                       targets = targets,
-                                       as_of = as_of)
+                                              forecast_dates = forecast_dates,
+                                              locations = locations, 
+                                              types = types,
+                                              targets = targets,
+                                              as_of = as_of)
   }
   
   return(forecasts)
