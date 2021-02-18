@@ -1,10 +1,16 @@
-#' Load truth data for specified target variable and locations
+#' Load truth data for a specified target variable, locations and temporal resolution
 #' from one or more truth sources using files in reichlab/covid19-forecast-hub.
 #' 
+#' "inc hosp" is only available from "HeatlthData" and this function is not loading
+#' data for other target variables from "HealthData".
+#' 
+#' When loading weekly data, if there are not enough observations for a week, the corresponding
+#' weekly count would be NA in resulting data frame.
+#' 
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support "JHU","USAFacts", "NYTimes"
+#' be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".
 #' @param target_variable string specifying target type It should be one of 
-#' "cum death", "inc case", "inc death". "inc hosp" will be available soon. 
+#' "cum death", "inc case", "inc death", "inc hosp". 
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
@@ -27,20 +33,30 @@ load_truth <- function (truth_source,
                         data_location = "remote_hub_repo",
                         local_repo_path = NULL){
   
-  # validate truth source
-  truth_source <- match.arg(truth_source, 
-                            choices = c("JHU","USAFacts", "NYTimes"), 
-                            several.ok = TRUE)
-  
   # validate target variable 
-  if (target_variable == "inc hosp"){
-    stop("Error in load_truth: Hospitalization truth data will be available soon.")
-  }
   target_variable <- match.arg(target_variable, 
                                choices = c("cum death",
                                            "inc case",
-                                           "inc death"), 
+                                           "inc death",
+                                           "inc hosp"), 
                                several.ok = FALSE)
+  
+  # validate truth source
+  truth_source <- match.arg(truth_source, 
+                            choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
+                            several.ok = TRUE)
+  
+  if(target_variable == "inc hosp"){
+    if (any(truth_source != "HealthData")){
+      warning("Warning in load_truth(): Incident hopsitalization data is only available from HealthData.gov now.
+              Will be loading data from HealthData instead.")
+      truth_source <- "HealthData"
+    }
+  } else {
+    if ("HealthData" %in% truth_source){
+      stop("Error in load_truth(): This function does not support selected target_variable from HealthData.")
+    }
+  }
   
   # validate truth end date
   truth_end_date <- tryCatch({
@@ -84,6 +100,8 @@ load_truth <- function (truth_source,
     full_target_variable = "Incident Cases"
   } else if (target_variable == "inc death"){
     full_target_variable = "Incident Deaths"
+  } else if (target_variable == "inc hosp"){
+    full_target_variable = "Incident Hospitalizations"
   }
   
   # create file path and file name based on data_location
@@ -105,7 +123,7 @@ load_truth <- function (truth_source,
     truth_source,
     function (source) {
       # read file from path
-      truth_folder_path <- ifelse(tolower(source) =="jhu", 
+      truth_folder_path <- ifelse((tolower(source) =="jhu" || tolower(source) == "healthdata"), 
                                   "/data-truth/truth-", 
                                   paste0("/data-truth/",tolower(source),"/truth_",
                                          tolower(source),"-"))
@@ -125,7 +143,14 @@ load_truth <- function (truth_source,
   
   # filter to only include specified locations
   if (!missing(locations)){
-    truth<- dplyr::filter(truth,location %in% locations) 
+    truth <- dplyr::filter(truth, location %in% locations) 
+    
+    if (nrow(truth) == 0){
+      warning("Warning in load_truth: Truth for selected locations are not available.\n Please check your parameters.")
+      if (target_variable == "inc hosp"){
+        warning("Warning in load_truth: Only national and state level of incident hospitalization data is available.")
+      }
+    }
   }
     
   

@@ -11,6 +11,7 @@
 - `score_forecasts()` has new parameter `use_median_as_point` that defaults to FALSE. "TRUE" uses the median quantile when calculating absolute error and "FALSE" uses the point forecasts for absolute error.
 - add verbose parameter to `load_forecasts()` and `load_latest_forecasts()`.
 - Refactor `load_latest_forecasts()` and `load_forecasts()` to improve efficiency.
+- Add `"inc hosp"` target variable and `"HealthData` source from `load_truth()`.
 
 
 ## covidHubUtils 0.1.3

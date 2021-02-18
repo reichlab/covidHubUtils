@@ -11,7 +11,8 @@ load_forecasts(
   locations = NULL,
   types = NULL,
   targets = NULL,
-  as_of = NULL
+  as_of = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ Default to NULL which stands for all valid targets in Zoltar.}
 
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version.}
+
+\item{verbose}{a boolean for printing messages on zoltar job status poll}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
