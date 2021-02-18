@@ -48,13 +48,13 @@ load_truth <- function (truth_source,
   
   if(target_variable == "inc hosp"){
     if (any(truth_source != "HealthData")){
-      warning("Warning in load_truth(): Incident hopsitalization data is only available from HealthData.gov now.
+      warning("Warning in load_truth: Incident hopsitalization data is only available from HealthData.gov now.
               Will be loading data from HealthData instead.")
       truth_source <- "HealthData"
     }
   } else {
     if ("HealthData" %in% truth_source){
-      stop("Error in load_truth(): This function does not support selected target_variable from HealthData.")
+      stop("Error in load_truth: This function does not support selected target_variable from HealthData.")
     }
   }
   
