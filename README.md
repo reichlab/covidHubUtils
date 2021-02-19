@@ -27,7 +27,7 @@ For those starting out we recommend you begin with the [Getting Started vignette
  * `load_forecasts(models, forecast_dates, locations, types, targets, as_of, verbose)`: Load all available forecasts from Zoltar.
  
 **Reading Observed "Truth" Data**
-* `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Truth data for `"inc hosp"` is not available through this function now. However, hospitalization truth is available through `preprocess_hospitalization(save_location)`.
+* `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Only support national level and state level truth data for `"inc hosp"` from `"HealthData"` source.
 
 **Plotting Forecasts**
  * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. **Note:** If `target_variable` is `"inc hosp"`, please provide `truth_data`and the corresponding `truth_source`. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
