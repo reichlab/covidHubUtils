@@ -46,12 +46,11 @@ Default to TRUE.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts" and "NYTimes".
+"USAFacts", "NYTimes" and "HealthData".
 Optional if truth_data is provided.}
 
 \item{target_variable_to_plot}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
-in load_truth() now.}
+"cum death", "inc case", "inc death" and "inc hosp".}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date.}

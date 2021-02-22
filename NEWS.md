@@ -12,6 +12,7 @@
 - add verbose parameter to `load_forecasts()` and `load_latest_forecasts()`.
 - Refactor `load_latest_forecasts()` and `load_forecasts()` to improve efficiency.
 - Add `"inc hosp"` target variable and `"HealthData"` source to `load_truth()`.
+- Load `"inc hosp"` truth data from remote hub repository in `plot_forecast()`. The user does not need to provide `truth_data` parameter to plot daily incident hospitalization forecasts. 
 
 
 ## covidHubUtils 0.1.3

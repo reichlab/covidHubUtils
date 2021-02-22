@@ -48,7 +48,7 @@ load_truth <- function (truth_source,
   
   if(target_variable == "inc hosp"){
     if (any(truth_source != "HealthData")){
-      warning("Warning in load_truth: Incident hopsitalization data is only available from HealthData.gov now.
+      warning("Warning in load_truth: Incident hopsitalization truth data is only available from HealthData.gov now.
               Will be loading data from HealthData instead.")
       truth_source <- "HealthData"
     }

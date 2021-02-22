@@ -10,9 +10,8 @@
 #' @param models vector of strings specifying models to plot. 
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
-#' "cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
-#' please provide truth_data. If there is only one target_variable in 
-#' your data frame this parameter is optional. 
+#' "cum death", "inc case", "inc death" and "inc hosp". 
+#' If there is only one target_variable in forecast_data, this parameter is optional. 
 #' @param locations string for fips code or 'US'. 
 #' Default to all locations in forecast_data.
 #' @param facet interpretable facet option for ggplot. Function will error 
@@ -29,7 +28,7 @@
 #' forecast date. Default to all available horizons in forecast data. 
 #' @param truth_source character specifying where the truth data will
 #' be loaded from if truth_data is not provided. Currently support "JHU",
-#' "USAFacts" and "NYTimes". 
+#' "USAFacts", "NYTimes" and "HealthData".
 #' Optional if truth_data is provided. 
 #' @param use_median_as_point boolean for using median quantiles as point forecasts in plot. 
 #' Default to FALSE.
@@ -139,14 +138,7 @@ plot_forecast <- function(forecast_data,
   if (!(target_variable %in% forecast_data$target_variable)){
     stop("Error in plot_forecast: Please provide a valid target variable.")
   }
-  
-  # look for truth data when target variable is "inc hosp"
-  if (target_variable == "inc hosp"){
-    if (is.null(truth_data)){
-      stop("Error in plot_forecast: Please provide truth_data when target_variable is inc hosp.")
-    }
-  }
-  
+
   # validate truth data if provided
   if (!is.null(truth_data)){
     # check if truth_data has all needed columns
@@ -173,8 +165,18 @@ plot_forecast <- function(forecast_data,
   } else {
     # validate truth_source if no truth_data is provided
     truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","USAFacts", "NYTimes"), 
+                              choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
                               several.ok = FALSE)
+    
+    if(target_variable == "inc hosp"){
+      if (truth_source != "HealthData"){
+        stop("Error in plot_forecast: Incident hopsitalization truth data is only available from HealthData.gov now.")
+      }
+    } else {
+      if (truth_source == "HealthData"){
+        stop("Error in plot_forecast: This function does not support selected target_variable from HealthData.")
+      }
+    }
   }
   
   if (show_caption){
@@ -183,10 +185,7 @@ plot_forecast <- function(forecast_data,
     }
   }
   
-  
-  
   # validate forecast_dates
-  
   if (missing(forecast_dates)){
     forecast_dates <- unique(forecast_data$forecast_date)
   } else {
@@ -361,8 +360,13 @@ plot_forecast <- function(forecast_data,
   
   # generate title if specified as "default", otherwise leave as is
   if(title == "default") {
-    title <- paste0("Weekly COVID-19 ", full_target_variable, 
-                    ": observed and forecasted")
+    if (target_variable == "inc hosp"){
+      title <- paste0("Daily COVID-19 ", full_target_variable, 
+                       ": observed and forecasted")
+    } else {
+      title <- paste0( "Weekly COVID-19 ", full_target_variable, 
+                       ": observed and forecasted")
+    }
   }
   
   if(title == "none") {

@@ -19,11 +19,10 @@
 #' Default to TRUE.
 #' @param truth_source character specifying where the truth data will
 #' be loaded from if truth_data is not provided. Currently support "JHU",
-#' "USAFacts" and "NYTimes". 
+#' "USAFacts", "NYTimes" and "HealthData".
 #' Optional if truth_data is provided. 
 #' @param  target_variable_to_plot string specifying target type. It should be one of 
-#' "cum death", "inc case", "inc death" and "inc hosp". Note, "inc hosp" is not supported
-#' in load_truth() now.
+#' "cum death", "inc case", "inc death" and "inc hosp". 
 #' @param  truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date.
 #' 
@@ -43,14 +42,6 @@ get_plot_forecast_data <- function(forecast_data,
                                    truth_source,
                                    target_variable_to_plot,
                                    truth_as_of = NULL){
-  
-  # look for truth data when target variable is "inc hosp"
-  if (target_variable_to_plot == "inc hosp"){
-    if (is.null(truth_data)){
-      stop("Error in plot_forecast: Please provide truth_data when target_variable is inc hosp.")
-    }
-  }
-  
   # validate locations_to_plot
   if (missing(locations_to_plot)){
     locations_to_plot <- unique(forecast_data$location)
@@ -97,9 +88,17 @@ get_plot_forecast_data <- function(forecast_data,
   } else {
     # validate truth_source
     truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","USAFacts", "NYTimes"), 
+                              choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
                               several.ok = FALSE)
   }
+  
+  # create temporal resolution for loading truth
+  if (target_variable_to_plot == "inc hosp"){
+    temporal_resolution = "daily"
+  } else {
+    temporal_resolution = "weekly"
+  }
+  
   
   # warning for truth_as_of
   if(!is.null(truth_as_of)){
@@ -129,17 +128,13 @@ get_plot_forecast_data <- function(forecast_data,
   
   if (plot_truth){
     if (is.null(truth_data)){
-      if (target_variable_to_plot == "inc hosp"){
-        stop("Error in get_plot_forecast_data: inc hosp target is not supported in load_truth.
-             Please provide truth_data.")
-      } else {
-        # call load_truth if the user did not provide truth_data
-        truth <- load_truth(truth_source = truth_source,
-                            target_variable = target_variable_to_plot,
-                            locations = locations_to_plot) %>%
-          dplyr::rename(point = value) %>%
-          dplyr::mutate(truth_forecast = "truth")
-      }
+      # call load_truth if the user did not provide truth_data
+      truth <- load_truth(truth_source = truth_source,
+                          target_variable = target_variable_to_plot,
+                          locations = locations_to_plot,
+                          temporal_resolution = temporal_resolution) %>%
+        dplyr::rename(point = value) %>%
+        dplyr::mutate(truth_forecast = "truth")
     } else {
       # process truth_data for plotting
       truth <- truth_data %>%
