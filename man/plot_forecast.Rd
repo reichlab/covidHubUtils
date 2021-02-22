@@ -43,9 +43,8 @@ Model column can be "Observed Data (a truth source)".}
 Default to all models in forecast_data.}
 
 \item{target_variable}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp". If you are using "inc hosp",
-please provide truth_data. If there is only one target_variable in
-your data frame this parameter is optional.}
+"cum death", "inc case", "inc death" and "inc hosp".
+If there is only one target_variable in forecast_data, this parameter is optional.}
 
 \item{locations}{string for fips code or 'US'.
 Default to all locations in forecast_data.}
@@ -71,7 +70,7 @@ forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts" and "NYTimes".
+"USAFacts", "NYTimes" and "HealthData".
 Optional if truth_data is provided.}
 
 \item{use_median_as_point}{boolean for using median quantiles as point forecasts in plot.
