@@ -17,7 +17,8 @@
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 
 #' Default to system date.
 #' @param temporal_resolution character specifying temporal resolution
-#' to include: currently support "weekly" and "daily". Default to 'weekly'.
+#' to include: currently support "weekly" and "daily". 
+#' Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
 #' @param local_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository. Only used when data_location is "local_hub_repo"
 #' 
@@ -28,7 +29,7 @@
 load_truth <- function (truth_source,
                         target_variable, 
                         truth_end_date = Sys.Date(),
-                        temporal_resolution = 'weekly',
+                        temporal_resolution,
                         locations,
                         data_location = "remote_hub_repo",
                         local_repo_path = NULL){
@@ -68,9 +69,17 @@ load_truth <- function (truth_source,
   
 
   # validate temporal resolution
-  temporal_resolution <- match.arg(temporal_resolution, 
-                            choices = c("daily","weekly"), 
-                            several.ok = FALSE)
+  if (missing(temporal_resolution)){
+    if (target_variable == "inc hosp"){
+      temporal_resolution = "daily"
+    } else {
+      temporal_resolution = "weekly"
+    }
+  } else {
+    temporal_resolution <- match.arg(temporal_resolution, 
+                                     choices = c("daily","weekly"), 
+                                     several.ok = FALSE)
+  }
   
   # validate data location
   # COVIDcast is not available now
