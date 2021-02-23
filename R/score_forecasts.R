@@ -114,7 +114,7 @@ score_forecasts <- function(
                                by = c("location", "target_variable", "target_end_date")) %>%
     dplyr::select(-c("model.y")) %>%
     dplyr::rename(model = model.x, prediction = value.x, true_value = value.y) %>%
-    dplyr::filter(!is.na(true_value))
+    dplyr::filter(!is.na(true_value)) 
 
   # score using scoringutil
   observation_cols <- c(
@@ -162,12 +162,12 @@ score_forecasts <- function(
       underprediction_0 = ifelse(exists_interval_score_0, 0.5 * underprediction_0, NA_real_),
       overprediction_0 = ifelse(exists_interval_score_0, 0.5 * overprediction_0, NA_real_)) %>%
     dplyr::mutate(
-      wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+      wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
     ) %>%
     dplyr::mutate(
-      sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-      overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-      underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0))
+      sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+      overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+      underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0))
     ) %>%
     dplyr::select(
       -dplyr::starts_with("aem_"),
