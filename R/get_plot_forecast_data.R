@@ -117,7 +117,7 @@ get_plot_forecast_data <- function(forecast_data,
       dplyr::filter(horizon <= horizons_to_plot)
   }
   
-  forecasts<- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
+  forecasts <- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
     dplyr::mutate(truth_forecast = "forecast") %>%
     dplyr::mutate(full_location_name = 
                     ifelse(geo_type == "county",
