@@ -115,7 +115,7 @@ get_forecast_file_path <- function(models, file_path, forecast_dates, latest = F
       }
       
       if (length(results_path) == 0) {
-        warning("Warning in get_forcast_file_path: No forecast files are submitted with the given parameters.")
+        warning("Warning in get_forecast_file_path: No forecast files are submitted with the given parameters.")
         return(NULL)
       } else {
         return(results_path)
