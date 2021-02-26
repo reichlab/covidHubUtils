@@ -228,7 +228,6 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
 #' 
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./data-truth"
-#' @importFrom covidData load_jhu_data
 #' @export
 preprocess_jhu <- function (save_location="./data-truth"){
   # Location name
@@ -288,7 +287,6 @@ preprocess_jhu <- function (save_location="./data-truth"){
 #' Default to "./data-truth"
 #' 
 #' @return data frame of cumulative and incident hospitalization data
-#' @importFrom covidData load_healthdata_data
 #' @export
 preprocess_hospitalization <- function (save_location="./data-truth"){
   # Location name
