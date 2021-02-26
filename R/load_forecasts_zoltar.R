@@ -69,7 +69,7 @@ load_forecasts_zoltar <- function (
                                       verbose = verbose,
                                       as_of = as_of)
   if (nrow(forecasts) == 0){
-    warning("Warning in do_zotar_query: Forecasts are not available.\n Please check your parameters.")
+    warning("Warning in do_zoltar_query: Forecasts are not available.\n Please check your parameters.")
     # convert value column to double and select columns
     forecasts <- forecasts %>%
       dplyr::mutate(value = as.double(value)) %>%
