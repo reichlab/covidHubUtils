@@ -3,6 +3,7 @@
 #' The function will throw an error when no forecasts are submitted on 
 #' any dates in forecast_dates for selected models, locations, types and target.
 #' 
+#' @param file_path path to the data-processed folder within a local clone of the hub repo
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
 #' @param forecast_dates The forecast date of forecasts to retrieve.
