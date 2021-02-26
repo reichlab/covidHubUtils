@@ -2,7 +2,7 @@
 #' 
 #' @param source string specifying where to get all valid model names
 #' Currently support "local_hub_repo", "remote_hub_repo" and "zoltar".
-#' 
+#' @importFrom httr GET stop_for_status content
 #' @return a list of valid model names
 #' 
 #' @export
