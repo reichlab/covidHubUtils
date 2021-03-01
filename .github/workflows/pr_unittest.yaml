@@ -12,7 +12,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes","devtools"))
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
         run: |
