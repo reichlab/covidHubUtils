@@ -12,7 +12,8 @@ load_truth(
   temporal_resolution,
   locations,
   data_location = "remote_hub_repo",
-  local_repo_path = NULL
+  local_repo_path = NULL,
+  hub = c("US", "ECDC")
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remo
 
 \item{local_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository. Only used when data_location is "local_hub_repo"}
+
+\item{hub}{character, which hub to use. Default is "US", other option is
+"ECDC"}
 }
 \value{
 data frame with columns model, inc_cum, death_case, target_end_date,
