@@ -8,4 +8,4 @@
 #'   \item{location}{Location abbreviation}
 #'   \item{population}{Location population}
 #' }
-"hub_location_ecdc"
+"hub_locations_ecdc"
