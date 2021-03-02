@@ -24,7 +24,8 @@
 #' when loading forecasts from Zoltar.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"
-#' @param verbose a boolean for printing messages on zoltar job status poll
+#' @param verbose a boolean for printing messages on zoltar job status Default to TRUE.
+#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -74,11 +75,12 @@ load_latest_forecasts <- function (
                                             targets = targets)
   } else {
     forecasts <- load_latest_forecasts_zoltar(models = models, 
-                                              forecast_dates = forecast_dates, 
+                                              forecast_dates = forecast_dates,
                                               locations = locations, 
                                               types = types,
                                               targets = targets,
                                               as_of = as_of,
+                                              hub = hub,
                                               verbose = verbose)
   }
   
