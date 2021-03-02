@@ -10,7 +10,8 @@
 #' @param use_median_as_point logical: "TRUE" uses the median as the point
 #' forecast when scoring; "FALSE" uses the point forecasts from the data when
 #' scoring. Defaults to "FALSE"
-#'
+#' 
+#' @importFrom dplyr any_of
 #' @return data.frame with scores. The result will have some columns that
 #' define the observation, namely, `model`, `forecast_date`, `location`,
 #' `horizon`, `temporal_resolution`, `target_variable`, `horizon`, and
@@ -190,7 +191,7 @@ score_forecasts <- function(
   if (return_format == "long") {
     scores <- scores %>%
       tidyr::pivot_longer(
-        cols = !any_of(observation_cols),
+        cols = !dplyr::any_of(observation_cols),
         names_to = "score_name",
         values_to = "score_value"
       )

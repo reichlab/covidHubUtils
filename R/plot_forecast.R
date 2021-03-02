@@ -49,7 +49,7 @@
 #' the subtitle will be automatically generated. If "none", no subtitle will be plotted. 
 #' @param show_caption logical, if TRUE, caption will be included showing data sources
 
-#' 
+#' @importFrom grDevices dev.size
 #' @return invisible ggplot object
 #' 
 #' @export
@@ -328,12 +328,12 @@ plot_forecast <- function(forecast_data,
                         as.Date(truth_as_of), "), ", 
                         paste(models, collapse = ', '), " (forecasts)")
       
-      caption <- paste(strwrap(caption, dev.size("px")[1]), collapse="\n")
+      caption <- paste(strwrap(caption, grDevices::dev.size("px")[1]), collapse="\n")
     } else {
       caption <- paste0("source: ", truth_source," (observed data), ",
                         paste(models, collapse = ', ')," (forecasts)")
       
-      caption <- paste(strwrap(caption, dev.size("px")[1]), collapse="\n")
+      caption <- paste(strwrap(caption, grDevices::dev.size("px")[1]), collapse="\n")
     }
   } else {
     caption <- NULL
