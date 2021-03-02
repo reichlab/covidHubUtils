@@ -1,6 +1,7 @@
 library(covidHubUtils)
 library(dplyr)
 library(lubridate)
+library(stringr)
 
 test_that("missing forecasts should throw error", {
   test_truth <- data.frame(
@@ -2501,7 +2502,7 @@ test_that("interval coverage does not exist, point forecast only, use_median_as_
   )
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, use_median_as_point = FALSE)
   # checks to see if any column has `coverage_` in the name and fails if they do
-  expect_equal(any(!(stringr::str_detect(names(actual),"coverage_"))),TRUE)
+  expect_equal(any(!(str_detect(names(actual),"coverage_"))),TRUE)
   
 })
 
@@ -2559,7 +2560,7 @@ test_that("interval coverage does not exist, median only, use_median_as_point TR
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
   
-  expect_equal(any(!(stringr::str_detect(names(actual),"coverage_"))),TRUE)
+  expect_equal(any(!(str_detect(names(actual),"coverage_"))),TRUE)
 })
 
 test_that("interval coverage is correct, 1 interval only, use_median_as_point TRUE", {
