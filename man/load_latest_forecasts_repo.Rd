@@ -25,7 +25,7 @@ meeting the other criteria are returned.}
 
 \item{forecast_dates}{date vector to load the most recent forecast from}
 
-\item{locations}{list of valid fips code. Defaults to all locations with
+\item{locations}{list of valid location codes. Defaults to all locations with
 available forecasts.}
 
 \item{types}{character vector specifying type of forecasts to load: “quantile”

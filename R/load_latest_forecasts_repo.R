@@ -7,7 +7,7 @@
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
 #' @param forecast_dates date vector to load the most recent forecast from
-#' @param locations list of valid fips code. Defaults to all locations with 
+#' @param locations list of valid location codes. Defaults to all locations with 
 #' available forecasts.
 #' @param types character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to all types  with available forecasts
@@ -107,7 +107,8 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
   forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
                                         locations = locations, 
                                         types = types, 
-                                        targets = targets)
+                                        targets = targets, 
+                                        hub = hub)
   return(forecasts)
   
 }
@@ -116,14 +117,7 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
 #'
 #' @param file_paths paths to csv forecast files to read in.  It is expected that
 #' the file names are in the format "*YYYY-MM-DD-<model_name>.csv".
-#' @param locations list of valid fips codes. Defaults to all locations with
-#' available forecasts.
-#' @param types character vector specifying type of forecasts to load: “quantile”
-#' or “point”. Defaults to all types in the forecast file
-#' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
-#' in the forecast file.
-#'
+#' @inheritParams load_latest_forecasts_repo
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
@@ -135,7 +129,8 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
 load_forecast_files_repo <- function(file_paths,
                                      locations = NULL,
                                      types = NULL,
-                                     targets = NULL) {
+                                     targets = NULL, 
+                                     hub = c("US", "ECDC")) {
   # validate file_paths exist
   files_exist <- file.exists(file_paths)
   if (!any(files_exist)) {
@@ -202,7 +197,6 @@ load_forecast_files_repo <- function(file_paths,
       remove = FALSE, extra = "merge") %>%
     dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
                   target_variable, target_end_date, type, quantile, value) %>%
-    dplyr::left_join(covidHubUtils::hub_locations, by = c("location" = "fips"))
-  
+    join_with_hub_locations(hub = hub)
   return(all_forecasts)
 }

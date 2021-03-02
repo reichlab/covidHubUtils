@@ -16,6 +16,7 @@ load_latest_forecasts(
   source = "local_hub_repo",
   hub_repo_path,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE
 )
 }
@@ -48,6 +49,9 @@ repository}
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version. This parameter is only supported
 when loading forecasts from Zoltar.}
+
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are "US" and "ECDC"}
 
 \item{verbose}{a boolean for printing messages on zoltar job status poll}
 }

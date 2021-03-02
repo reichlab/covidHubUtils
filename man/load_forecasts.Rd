@@ -12,7 +12,8 @@ load_forecasts(
   types = NULL,
   targets = NULL,
   as_of = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  hub = c("US", "ECDC")
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ Default to NULL which stands for all valid targets in Zoltar.}
 Default to NULL to load the latest version.}
 
 \item{verbose}{a boolean for printing messages on zoltar job status poll}
+
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are "US" and "ECDC"}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
