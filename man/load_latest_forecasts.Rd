@@ -49,7 +49,7 @@ repository}
 Default to NULL to load the latest version. This parameter is only supported
 when loading forecasts from Zoltar.}
 
-\item{verbose}{a boolean for printing messages on zoltar job status poll}
+\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
