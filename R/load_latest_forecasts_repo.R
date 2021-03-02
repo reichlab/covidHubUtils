@@ -16,17 +16,22 @@
 #' with available forecasts.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"
+#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
 #'
 #' @export
-load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates, 
-                                       locations = NULL, types = NULL, 
+load_latest_forecasts_repo <- function(file_path, 
+                                       models = NULL, 
+                                       forecast_dates, 
+                                       locations = NULL, 
+                                       types = NULL, 
                                        targets = NULL, 
-                                       hub = c("US", "ECDC")){
-  
+                                       hub = c("US", "ECDC"), 
+                                       verbose = TRUE){
+
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
     stop("Error in load_forecasts_repo: data-processed folder does not 
@@ -82,36 +87,68 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
   forecast_dates <- as.Date(forecast_dates)
   
   # get paths to all forecast files
+  forecast_files <- get_forecast_file_path(models, file_path, 
+                                           forecast_dates, 
+                                           latest = TRUE, 
+                                           verbose = verbose)
+
+  forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
+                                        locations = locations, 
+                                        types = types, 
+                                        targets = targets, 
+                                        hub = hub)
+  
+  return(forecasts)
+}
+
+#' Generate paths to forecast files submitted on a range of forecast dates from selected models
+#' 
+#' @param models character vector of model abbreviations.
+#' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
+#' @param forecast_dates date vector to look for forecast files
+#' @param latest boolean to only generate path to the latest forecast file from each model
+#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
+#' 
+#' @return a list of paths to forecast files submitted on a range of forecast dates from selected models
+
+get_forecast_file_path <- function(models, file_path, forecast_dates, 
+                                   latest = FALSE, 
+                                   verbose = TRUE){
+  
   forecast_files <- purrr::map(
     models,
     function(model) {
       if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
         file_path <- substr(file_path, 1, nchar(file_path) - 1)
       }
-
+      
       results_path <- file.path(
         file_path,
         paste0(model, "/", forecast_dates, "-", model, ".csv"))
       results_path <- results_path[file.exists(results_path)]
-      results_path <- tail(results_path, 1)
+      
+      if (latest){
+        results_path <- tail(results_path, 1)
+      }
       
       if (length(results_path) == 0) {
+        if (verbose) {
+          message <- paste("Warning in get_forecast_file_path: Couldn't find forecasts for model",
+                           model, "on the following forceast dates:", 
+                           forecast_dates)
+          warning(message)
+        }
         return(NULL)
       } else {
         return(results_path)
       }
     }
   ) %>% unlist()
-
-  # read in the forecast files
-  forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
-                                        locations = locations, 
-                                        types = types, 
-                                        targets = targets, 
-                                        hub = hub)
-  return(forecasts)
-  
+  return(forecast_files)
 }
+
+
+
 
 #' Read in a set of forecast files from a repository
 #'
@@ -131,7 +168,13 @@ load_forecast_files_repo <- function(file_paths,
                                      types = NULL,
                                      targets = NULL, 
                                      hub = c("US", "ECDC")) {
-  # validate file_paths exist
+
+  # NB: UNSURE WHICH OF THESE VERSIONS TO KEEP
+  # # validate file_paths exist
+  # if (is.null(file_paths) | missing(file_paths)){
+  #   stop("In load_forecast_files_repo, file_paths are not provided.")
+  # }
+  
   files_exist <- file.exists(file_paths)
   if (!any(files_exist)) {
     stop("In load_forecast_files_repo, no files exist at the provided file_paths.")
