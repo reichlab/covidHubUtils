@@ -39,7 +39,8 @@ load_latest_forecasts_zoltar <- function(models = NULL,
                              types = types,
                              targets = targets,
                              as_of = as_of,
-                             verbose = verbose)
+                             verbose = verbose,
+                             source = "zoltar")
   
   if(nrow(forecast) != 0) {
     # filter to get the latest forecast for each model

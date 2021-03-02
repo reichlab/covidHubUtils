@@ -73,12 +73,8 @@ load_forecasts_zoltar <- function (
     # convert value column to double and select columns
     forecasts <- forecasts %>%
       dplyr::mutate(value = as.double(value)) %>%
-      tidyr::separate(target, into=c("horizon","temporal_resolution","ahead",
-                                     "target_variable"),
-                      remove = FALSE, extra = "merge") %>%
       dplyr::rename(location = unit, forecast_date = timezero, type = class) %>%
-      dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
-                    target_variable, type, quantile, value)
+      dplyr::select(model, forecast_date, location, type, quantile, value)
   } else {
     forecasts <- forecasts %>%
       # keep only required columns

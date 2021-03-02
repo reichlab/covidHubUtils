@@ -151,7 +151,7 @@ load_forecast_files_repo <- function(file_paths,
                                      types = NULL,
                                      targets = NULL) {
   # validate file_paths exist
-  if (is.null(file_paths)){
+  if (is.null(file_paths) | missing(file_paths)){
     stop("In load_forecast_files_repo, file_paths are not provided.")
   }
   

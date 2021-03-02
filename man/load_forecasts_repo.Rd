@@ -14,6 +14,8 @@ load_forecasts_repo(
 )
 }
 \arguments{
+\item{file_path}{path to the data-processed folder within a local clone of the hub repo}
+
 \item{models}{Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.}
 
