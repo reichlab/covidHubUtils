@@ -86,7 +86,7 @@ load_forecasts_zoltar <- function (
       )) %>%
       dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
                     target_variable, target_end_date, type, quantile, value) %>%
-      dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
+      join_with_hub_locations(hub = hub)
   }
   
   return(forecasts)
