@@ -8,18 +8,17 @@
 #' Default to NULL so that forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
 #' @param forecast_dates date vector to load the most recent forecast from.
-#' Default to NULL which stands for all valid forecast dates in Zoltar.
+#' Default to all valid forecast dates in Zoltar.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
-#' @param locations list of valid fips code. Default to NULL which stands for
-#' all locations with available forecasts in Zoltar.
+#' @param locations list of valid fips code. Default to all locations with available forecasts in Zoltar.
 #' @param types character vector specifying type of forecasts to load: “quantile” 
-#' or “point”. Default to NULL which stands for all valid forecast types in Zoltar.
+#' or “point”. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). 
-#' Default to NULL which stands for all valid targets in Zoltar.
+#' Default to all valid targets in Zoltar.
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version.
-#' @param verbose a boolean for printing messages on zoltar job status poll
+#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -40,7 +39,8 @@ load_latest_forecasts_zoltar <- function(models = NULL,
                              types = types,
                              targets = targets,
                              as_of = as_of,
-                             verbose = verbose)
+                             verbose = verbose,
+                             source = "zoltar")
   
   if(nrow(forecast) != 0) {
     # filter to get the latest forecast for each model

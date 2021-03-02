@@ -22,7 +22,7 @@
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version. This parameter is only supported 
 #' when loading forecasts from Zoltar.
-#' @param verbose a boolean for printing messages on zoltar job status poll
+#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -64,19 +64,19 @@ load_latest_forecasts <- function (
     data_processed <- file.path(hub_repo_path, "data-processed/")
     
     forecasts <- load_latest_forecasts_repo(file_path = data_processed, 
-                                     models = models, 
-                                     forecast_dates = forecast_dates, 
-                                     locations = locations, 
-                                     types = types, 
-                                     targets = targets)
+                                            models = models, 
+                                            forecast_dates = forecast_dates, 
+                                            locations = locations, 
+                                            types = types, 
+                                            targets = targets)
   } else {
     forecasts <- load_latest_forecasts_zoltar(models = models, 
-                                       forecast_dates = forecast_dates, 
-                                       locations = locations, 
-                                       types = types,
-                                       targets = targets,
-                                       as_of = as_of,
-                                       verbose = verbose)
+                                              forecast_dates = forecast_dates,
+                                              locations = locations, 
+                                              types = types,
+                                              targets = targets,
+                                              as_of = as_of,
+                                              verbose = verbose)
   }
   
   return(forecasts)
