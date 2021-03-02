@@ -30,3 +30,21 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
   
   return(project_url)
 }
+
+
+# add stored information about location name and population by joining the 
+# data with the correct stored location data
+join_with_hub_locations <- function(data, 
+                                    hub = c("US", "ECDC")) {
+  # maybe make a helper function for this? 
+  if (hub[1] == "US") {
+    data <- dplyr::left_join(data, 
+                             covidHubUtils::hub_locations, 
+                             by=c("location" = "fips"))
+  } else if (hub[1] == "ECDC") {
+    data <- dplyr::left_join(data, 
+                             covidHubUtils::hub_locations_ecdc, 
+                             by=c("location"))
+  }
+  return(data)
+}

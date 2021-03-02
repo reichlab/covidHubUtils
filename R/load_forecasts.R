@@ -93,19 +93,8 @@ load_forecasts <- function (
         calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
       )) %>%
       dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
-                    target_variable, target_end_date, type, quantile, value)
-    
-    # maybe make a helper function for this? 
-    if (hub[1] == "US") {
-      forecasts <- dplyr::left_join(forecasts, 
-                                    covidHubUtils::hub_locations, 
-                                    by=c("location" = "fips"))
-    } else if (hub[1] == "ECDC") {
-      forecasts <- dplyr::left_join(forecasts, 
-                                    covidHubUtils::hub_locations_ecdc, 
-                                    by=c("location"))
-    }
+                    target_variable, target_end_date, type, quantile, value) %>%
+      join_with_hub_locations(hub = hub)
   }
-  
   return(forecasts)
 }
