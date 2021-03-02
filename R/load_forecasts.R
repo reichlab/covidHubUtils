@@ -20,7 +20,7 @@
 #' Default to NULL to load the latest version.
 #' @param verbose a boolean for printing messages on zoltar job status poll
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts
+#' from which to load forecasts. Possible options are "US" and "ECDC"
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -38,21 +38,11 @@ load_forecasts <- function (
   hub = c("US", "ECDC")) {
   
   # set up Zoltar connection
-  zoltar_connection <- zoltr::new_connection()
-  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-  } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-  }
+  zoltar_connection <- setup_zoltar_connection()
   
-  # construct Zoltar project url
-  the_projects <- zoltr::projects(zoltar_connection)
-  
-  if (hub[1] == "US") {
-    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-  } else if (hub[1] == "ECDC") {
-    project_url <- the_projects[the_projects$name == "ECDC European COVID-19 Forecast Hub", "url"]
-  }
+  # get project url
+  project_url <- get_zoltar_project_url(hub = hub, 
+                                        zoltar_connection = zoltar_connection)
   
   if (!is.null(forecast_dates)){
     # get all valid timezeros in project
