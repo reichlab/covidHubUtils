@@ -41,7 +41,8 @@ load_forecasts_zoltar <- function (
   
   if (!is.null(forecast_dates)){
     # construct Zoltar project url
-    get_zoltar_project_url(hub = hub, zoltar_connection = zoltar_connection)
+    project_url <- get_zoltar_project_url(hub = hub, 
+                                          zoltar_connection = zoltar_connection)
     
     # get all valid timezeros in project
     all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
