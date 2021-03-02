@@ -11,7 +11,8 @@
 #' model designations in "local_hub_repo"
 #' 
 #' @return data frame with columns `model` and `designation`
-#' 
+#' @importFrom stringr str_split_fixed
+#' @importFrom yaml yaml.load
 #' @export
 get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Date()) {
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))

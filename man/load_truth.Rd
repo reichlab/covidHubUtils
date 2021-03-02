@@ -2,14 +2,14 @@
 % Please edit documentation in R/load_truth.R
 \name{load_truth}
 \alias{load_truth}
-\title{Load truth data for specified target variable and locations
+\title{Load truth data for a specified target variable, locations and temporal resolution
 from one or more truth sources using files in reichlab/covid19-forecast-hub.}
 \usage{
 load_truth(
   truth_source,
   target_variable,
   truth_end_date = Sys.Date(),
-  temporal_resolution = "weekly",
+  temporal_resolution,
   locations,
   data_location = "remote_hub_repo",
   local_repo_path = NULL
@@ -17,16 +17,17 @@ load_truth(
 }
 \arguments{
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support "JHU","USAFacts", "NYTimes"}
+be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".}
 
 \item{target_variable}{string specifying target type It should be one of
-"cum death", "inc case", "inc death". "inc hosp" will be available soon.}
+"cum death", "inc case", "inc death", "inc hosp".}
 
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
 Default to system date.}
 
 \item{temporal_resolution}{character specifying temporal resolution
-to include: currently support "weekly" and "daily". Default to 'weekly'.}
+to include: currently support "weekly" and "daily".
+Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.}
 
 \item{locations}{vector of valid fips code. Defaults to all locations with available forecasts.}
 
@@ -41,6 +42,10 @@ data frame with columns model, inc_cum, death_case, target_end_date,
 location, value, location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-Load truth data for specified target variable and locations
-from one or more truth sources using files in reichlab/covid19-forecast-hub.
+"inc hosp" is only available from "HeatlthData" and this function is not loading
+data for other target variables from "HealthData".
+}
+\details{
+When loading weekly data, if there are not enough observations for a week, the corresponding
+weekly count would be NA in resulting data frame.
 }
