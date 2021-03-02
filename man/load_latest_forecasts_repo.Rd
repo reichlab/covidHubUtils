@@ -12,7 +12,8 @@ load_latest_forecasts_repo(
   locations = NULL,
   types = NULL,
   targets = NULL,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC"),
+  verbose = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ with available forecasts.}
 
 \item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are "US" and "ECDC"}
+
+\item{verbose}{whether or not to print out diagnostic messages. Default is TRUE}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

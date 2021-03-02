@@ -53,7 +53,7 @@ when loading forecasts from Zoltar.}
 \item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are "US" and "ECDC"}
 
-\item{verbose}{a boolean for printing messages on zoltar job status poll}
+\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
