@@ -1,7 +1,8 @@
 #' Load the most recent forecast submitted in a time window
 #' from reichlab/covid19-forecast-hub repo.
 #' 
-#' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
+#' @param file_path path to local copy of the data-processed folder of a 
+#' forecast hub repo. 
 #' @param models character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
@@ -13,6 +14,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
 #' with available forecasts.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -20,7 +23,9 @@
 #'
 #' @export
 load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates, 
-                                       locations = NULL, types = NULL, targets = NULL){
+                                       locations = NULL, types = NULL, 
+                                       targets = NULL, 
+                                       hub = c("US", "ECDC")){
   
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
@@ -38,37 +43,42 @@ load_latest_forecasts_repo <- function(file_path, models = NULL, forecast_dates,
     models <- all_valid_models
   }
   
+  # get valid location codes
+  if (hub[1] == "US") {
+    valid_location_codes <- covidHubUtils::hub_locations$fips
+  } else if (hub[1] == "ECDC") {
+    valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+  }
+  
   # validate locations
   if (!is.null(locations)){
-    all_valid_fips <- covidHubUtils::hub_locations$fips
-    locations <- match.arg(locations, choices = all_valid_fips, several.ok = TRUE)
-  } 
+    locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
+  } else {
+    locations <- valid_location_codes
+  }
   
   # validate types
   if (!is.null(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } 
-  
-  # validate targets
-  if (!is.null(targets)){
-    # set up Zoltar connection
-    zoltar_connection <- zoltr::new_connection()
-    if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-      zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-    } else {
-      zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-    }
-    
-    # construct Zoltar project url
-    the_projects <- zoltr::projects(zoltar_connection)
-    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-    
-    # validate targets 
-    all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
-    
-    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    types <- c("point", "quantile")
   }
   
+  # validate targets
+  # set up Zoltar connection
+  zoltar_connection <- setup_zoltar_connection()
+  # get Zoltar project url
+  project_url <- get_zoltar_project_url(hub = hub, 
+                                        zoltar_connection = zoltar_connection)
+  # get valid targets
+  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
+  if (!is.null(targets)){
+    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    targets <- all_valid_targets
+  }
+  
+  # get some default for that?
   forecast_dates <- as.Date(forecast_dates)
   
   # get paths to all forecast files
