@@ -36,7 +36,6 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
 # data with the correct stored location data
 join_with_hub_locations <- function(data, 
                                     hub = c("US", "ECDC")) {
-  # maybe make a helper function for this? 
   if (hub[1] == "US") {
     data <- dplyr::left_join(data, 
                              covidHubUtils::hub_locations, 
