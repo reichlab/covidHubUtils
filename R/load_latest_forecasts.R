@@ -24,7 +24,6 @@
 #' when loading forecasts from Zoltar.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"
-#' @param verbose a boolean for printing messages on zoltar job status Default to TRUE.
 #' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
