@@ -169,11 +169,10 @@ load_forecast_files_repo <- function(file_paths,
                                      targets = NULL, 
                                      hub = c("US", "ECDC")) {
 
-  # NB: UNSURE WHICH OF THESE VERSIONS TO KEEP
-  # # validate file_paths exist
-  # if (is.null(file_paths) | missing(file_paths)){
-  #   stop("In load_forecast_files_repo, file_paths are not provided.")
-  # }
+  # validate file_paths exist
+  if (is.null(file_paths) | missing(file_paths)){
+    stop("In load_forecast_files_repo, file_paths are not provided.")
+  }
   
   files_exist <- file.exists(file_paths)
   if (!any(files_exist)) {
