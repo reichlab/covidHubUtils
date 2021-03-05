@@ -36,8 +36,8 @@ load_forecasts <- function (
   source = "zoltar", 
   hub_repo_path,
   as_of = NULL,
-  verbose = TRUE, 
-  hub = c("US", "ECDC")) {
+  hub = c("US", "ECDC"),
+  verbose = TRUE) {
   
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
