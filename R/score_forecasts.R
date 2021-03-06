@@ -182,7 +182,8 @@ score_forecasts <- function(
           -dplyr::starts_with("underprediction_"),
           -dplyr::starts_with("overprediction_")
         ) %>% 
-    dplyr::select(1:7, dplyr::starts_with("coverage_"),"abs_error",
+        dplyr::select(1:7, dplyr::starts_with("coverage_"),
+                      dplyr::starts_with("abs_error"),
                   "n_interval_scores", "exists_interval_score_0", "wis",
                   "sharpness", "overprediction", "underprediction")
     })
