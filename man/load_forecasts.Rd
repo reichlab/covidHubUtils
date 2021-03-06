@@ -14,8 +14,8 @@ load_forecasts(
   source = "zoltar",
   hub_repo_path,
   as_of = NULL,
-  verbose = TRUE,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC"),
+  verbose = TRUE
 )
 }
 \arguments{
@@ -44,9 +44,9 @@ repository}
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version.}
 
-\item{verbose}{a boolean for printing messages on zoltar job status poll}
+\item{hub}{character vector, where the first element indicates the hub}
 
-\item{hub}{character vector, where the first element indicates the hub
+\item{verbose}{a boolean for printing messages on zoltar job status poll
 from which to load forecasts. Possible options are "US" and "ECDC"}
 }
 \value{

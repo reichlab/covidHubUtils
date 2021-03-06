@@ -53,3 +53,13 @@ data for other target variables from "HealthData".
 When loading weekly data, if there are not enough observations for a week, the corresponding
 weekly count would be NA in resulting data frame.
 }
+\examples{
+library(covidHubUtils)
+
+# load for US
+load_truth(truth_source = "JHU", target_variable = "inc case")
+
+# load for ECDC
+load_truth(truth_source = "JHU", target_variable = "inc case", hub = "ECDC")
+
+}
