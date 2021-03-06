@@ -11,6 +11,7 @@ load_forecasts_zoltar(
   types = NULL,
   targets = NULL,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE
 )
 }
@@ -33,6 +34,9 @@ Default to all valid targets in Zoltar.}
 
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version.}
+
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are "US" and "ECDC"}
 
 \item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
 }

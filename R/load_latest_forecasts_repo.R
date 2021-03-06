@@ -1,18 +1,22 @@
 #' Load the most recent forecast submitted in a time window
 #' from reichlab/covid19-forecast-hub repo.
 #' 
-#' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
+#' @param file_path path to local copy of the data-processed folder of a 
+#' forecast hub repo. 
 #' @param models character vector of model abbreviations.
 #' If missing, forecasts for all models that submitted forecasts 
 #' meeting the other criteria are returned.
 #' @param forecast_dates date vector to load the most recent forecast from
-#' @param locations list of valid fips code. Defaults to all locations with 
+#' @param locations list of valid location codes. Defaults to all locations with 
 #' available forecasts.
 #' @param types character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Defaults to all types  with available forecasts
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
 #' with available forecasts.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
+#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
 #' 
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -24,8 +28,10 @@ load_latest_forecasts_repo <- function(file_path,
                                        forecast_dates, 
                                        locations = NULL, 
                                        types = NULL, 
-                                       targets = NULL){
-  
+                                       targets = NULL, 
+                                       hub = c("US", "ECDC"), 
+                                       verbose = TRUE){
+
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
     stop("Error in load_forecasts_repo: data-processed folder does not 
@@ -42,49 +48,57 @@ load_latest_forecasts_repo <- function(file_path,
     models <- all_valid_models
   }
   
+  # get valid location codes
+  if (hub[1] == "US") {
+    valid_location_codes <- covidHubUtils::hub_locations$fips
+  } else if (hub[1] == "ECDC") {
+    valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+  }
+  
   # validate locations
   if (!is.null(locations)){
-    all_valid_fips <- covidHubUtils::hub_locations$fips
-    locations <- match.arg(locations, choices = all_valid_fips, several.ok = TRUE)
-  } 
+    locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
+  } else {
+    locations <- valid_location_codes
+  }
   
   # validate types
   if (!is.null(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } 
-  
-  # validate targets
-  if (!is.null(targets)){
-    # set up Zoltar connection
-    zoltar_connection <- zoltr::new_connection()
-    if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-      zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-    } else {
-      zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-    }
-    
-    # construct Zoltar project url
-    the_projects <- zoltr::projects(zoltar_connection)
-    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-    
-    # validate targets 
-    all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
-    
-    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    types <- c("point", "quantile")
   }
   
+  # validate targets
+  # set up Zoltar connection
+  zoltar_connection <- setup_zoltar_connection()
+  # get Zoltar project url
+  project_url <- get_zoltar_project_url(hub = hub, 
+                                        zoltar_connection = zoltar_connection)
+  # get valid targets
+  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
+  if (!is.null(targets)){
+    targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    targets <- all_valid_targets
+  }
+  
+  # get some default for that?
   forecast_dates <- as.Date(forecast_dates)
   
   # get paths to all forecast files
-  forecast_files <- get_forecast_file_path(models, file_path, forecast_dates, latest = TRUE)
+  forecast_files <- get_forecast_file_path(models, file_path, 
+                                           forecast_dates, 
+                                           latest = TRUE, 
+                                           verbose = verbose)
 
-  # read in the forecast files
   forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
                                         locations = locations, 
                                         types = types, 
-                                        targets = targets)
-  return(forecasts)
+                                        targets = targets, 
+                                        hub = hub)
   
+  return(forecasts)
 }
 
 #' Generate paths to forecast files submitted on a range of forecast dates from selected models
@@ -93,10 +107,13 @@ load_latest_forecasts_repo <- function(file_path,
 #' @param file_path path to local clone of the reichlab/covid19-forecast-hub/data-processed
 #' @param forecast_dates date vector to look for forecast files
 #' @param latest boolean to only generate path to the latest forecast file from each model
+#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
 #' 
 #' @return a list of paths to forecast files submitted on a range of forecast dates from selected models
 
-get_forecast_file_path <- function(models, file_path, forecast_dates, latest = FALSE){
+get_forecast_file_path <- function(models, file_path, forecast_dates, 
+                                   latest = FALSE, 
+                                   verbose = TRUE){
   
   forecast_files <- purrr::map(
     models,
@@ -115,29 +132,29 @@ get_forecast_file_path <- function(models, file_path, forecast_dates, latest = F
       }
       
       if (length(results_path) == 0) {
-        warning("Warning in get_forecast_file_path: No forecast files are submitted with the given parameters.")
+        if (verbose) {
+          message <- paste("Warning in get_forecast_file_path: Couldn't find forecasts for model",
+                           model, "on the following forceast dates:", 
+                           forecast_dates)
+          warning(message)
+        }
         return(NULL)
       } else {
         return(results_path)
       }
     }
   ) %>% unlist()
-  
   return(forecast_files)
 }
+
+
+
 
 #' Read in a set of forecast files from a repository
 #'
 #' @param file_paths paths to csv forecast files to read in.  It is expected that
 #' the file names are in the format "*YYYY-MM-DD-<model_name>.csv".
-#' @param locations list of valid fips codes. Defaults to all locations with
-#' available forecasts.
-#' @param types character vector specifying type of forecasts to load: “quantile”
-#' or “point”. Defaults to all types in the forecast file
-#' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
-#' in the forecast file.
-#'
+#' @inheritParams load_latest_forecasts_repo
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
@@ -149,7 +166,9 @@ get_forecast_file_path <- function(models, file_path, forecast_dates, latest = F
 load_forecast_files_repo <- function(file_paths,
                                      locations = NULL,
                                      types = NULL,
-                                     targets = NULL) {
+                                     targets = NULL, 
+                                     hub = c("US", "ECDC")) {
+
   # validate file_paths exist
   if (is.null(file_paths) | missing(file_paths)){
     stop("In load_forecast_files_repo, file_paths are not provided.")
@@ -220,7 +239,6 @@ load_forecast_files_repo <- function(file_paths,
       remove = FALSE, extra = "merge") %>%
     dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
                   target_variable, target_end_date, type, quantile, value) %>%
-    dplyr::left_join(covidHubUtils::hub_locations, by = c("location" = "fips"))
-  
+    join_with_hub_locations(hub = hub)
   return(all_forecasts)
 }

@@ -22,6 +22,8 @@
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version. This parameter is only supported 
 #' when loading forecasts from Zoltar.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
 #' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
@@ -39,6 +41,7 @@ load_latest_forecasts <- function (
   source = "local_hub_repo",
   hub_repo_path,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE) {
   
   # validate source
@@ -76,6 +79,7 @@ load_latest_forecasts <- function (
                                               types = types,
                                               targets = targets,
                                               as_of = as_of,
+                                              hub = hub,
                                               verbose = verbose)
   }
   

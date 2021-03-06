@@ -6,7 +6,7 @@
 #' @param forecast_dates The forecast date of forecasts to retrieve.
 #' Default to all valid forecast dates.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
-#' @param locations list of fips. Default to all locations with available forecasts.
+#' @param locations list of location codes Default to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: “quantile” 
 #' or “point”. Default to all valid forecast types.
 #' @param targets character vector of targets to retrieve, for example
@@ -14,11 +14,13 @@
 #' Default to NULL which stands for all valid targets.
 #' @param source string specifying where forecasts will be loaded from: either 
 #' "local_hub_repo" or "zoltar". Default to "zoltar"
-#' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
+#' @param hub_repo_path path to local clone of the forecast hub
 #' repository
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
-#' Default to NULL to load the latest version. Only available when source is "zoltar" now. 
-#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
+#' Default to NULL to load the latest version.
+#' @param hub character vector, where the first element indicates the hub
+#' @param verbose a boolean for printing messages on zoltar job status poll
+#' from which to load forecasts. Possible options are "US" and "ECDC"
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
@@ -34,6 +36,7 @@ load_forecasts <- function (
   source = "zoltar", 
   hub_repo_path,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE) {
   
   # validate source
@@ -67,8 +70,8 @@ load_forecasts <- function (
                                        types = types,
                                        targets = targets,
                                        as_of = as_of,
-                                       verbose = verbose)
+                                       verbose = verbose, 
+                                       hub = hub)
   }
-  
   return(forecasts)
 }

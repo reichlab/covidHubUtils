@@ -17,6 +17,8 @@
 #' Default to all valid targets in Zoltar.
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
 #' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
@@ -31,20 +33,16 @@ load_forecasts_zoltar <- function (
   types = NULL,
   targets = NULL,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE) {
   
   # set up Zoltar connection
-  zoltar_connection <- zoltr::new_connection()
-  if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-  } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-  }
+  zoltar_connection <- setup_zoltar_connection()
   
   if (!is.null(forecast_dates)){
     # construct Zoltar project url
-    the_projects <- zoltr::projects(zoltar_connection)
-    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+    project_url <- get_zoltar_project_url(hub = hub, 
+                                          zoltar_connection = zoltar_connection)
     
     # get all valid timezeros in project
     all_valid_timezeros <- zoltr::timezeros(zoltar_connection = zoltar_connection,
@@ -89,7 +87,7 @@ load_forecasts_zoltar <- function (
       )) %>%
       dplyr::select(model, forecast_date, location, horizon, temporal_resolution,
                     target_variable, target_end_date, type, quantile, value) %>%
-      dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
+      join_with_hub_locations(hub = hub)
   }
   
   return(forecasts)
