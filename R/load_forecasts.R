@@ -62,7 +62,9 @@ load_forecasts <- function (
                                      forecast_dates = forecast_dates, 
                                      locations = locations, 
                                      types = types, 
-                                     targets = targets)
+                                     targets = targets, 
+                                     verbose = verbose, 
+                                     hub = hub)
   } else {
     forecasts <- load_forecasts_zoltar(models = models,
                                        forecast_dates = forecast_dates,
