@@ -21,9 +21,20 @@
 #' Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
 #' @param local_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository. Only used when data_location is "local_hub_repo"
+#' @param hub character, which hub to use. Default is "US", other option is
+#' "ECDC"
 #' 
 #' @return data frame with columns model, inc_cum, death_case, target_end_date, 
 #' location, value, location_name, population, geo_type, geo_value, abbreviation
+#' 
+#' @examples 
+#' library(covidHubUtils)
+#' 
+#' # load for US
+#' load_truth(truth_source = "JHU", target_variable = "inc case")
+#' 
+#' # load for ECDC
+#' load_truth(truth_source = "JHU", target_variable = "inc case", hub = "ECDC")
 #' 
 #' @export
 load_truth <- function (truth_source,
@@ -32,44 +43,77 @@ load_truth <- function (truth_source,
                         temporal_resolution,
                         locations,
                         data_location = "remote_hub_repo",
-                        local_repo_path = NULL){
+                        local_repo_path = NULL, 
+                        hub = c("US", "ECDC")){
   
-  # validate target variable 
-  target_variable <- match.arg(target_variable, 
-                               choices = c("cum death",
-                                           "inc case",
-                                           "inc death",
-                                           "inc hosp"), 
-                               several.ok = FALSE)
   
-  # validate truth source
-  truth_source <- match.arg(truth_source, 
-                            choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
-                            several.ok = TRUE)
-  
-  if(target_variable == "inc hosp"){
-    if (any(truth_source != "HealthData")){
-      warning("Warning in load_truth: Incident hopsitalization truth data is only available from HealthData.gov now.
+  # preparations and validation checks that are different for US and ECDC hub
+  if (hub[1] == "US") {
+    # validate target variable 
+    target_variable <- match.arg(target_variable, 
+                                 choices = c("cum death",
+                                             "inc case",
+                                             "inc death",
+                                             "inc hosp"), 
+                                 several.ok = FALSE)
+    
+    # validate truth source
+    truth_source <- match.arg(truth_source, 
+                              choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
+                              several.ok = TRUE)
+    
+    # extra checks for truth source if target is inc hosp
+    if(target_variable == "inc hosp"){
+      if (any(truth_source != "HealthData")){
+        warning("Warning in load_truth: Incident hopsitalization truth data is only available from HealthData.gov now.
               Will be loading data from HealthData instead.")
-      truth_source <- "HealthData"
+        truth_source <- "HealthData"
+      }
+    } else {
+      if ("HealthData" %in% truth_source){
+        stop("Error in load_truth: This function does not support selected target_variable from HealthData.")
+      }
     }
-  } else {
-    if ("HealthData" %in% truth_source){
-      stop("Error in load_truth: This function does not support selected target_variable from HealthData.")
-    }
+    
+    # get list of all valid locations and codes
+    valid_locations <- covidHubUtils::hub_locations
+    valid_location_codes <- covidHubUtils::hub_locations$fips
+    
+    # store path of remote repo
+    remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
+    
+    
+  } else if (hub[1] == "ECDC") {
+    # validate target variable 
+    target_variable <- match.arg(target_variable, 
+                                 choices = c("inc case",
+                                             "inc death"), 
+                                 several.ok = FALSE)
+    
+    # validate truth source
+    truth_source <- match.arg(truth_source, 
+                              choices = c("JHU", "jhu", "ECDC", "ecdc"), 
+                              several.ok = FALSE)
+    
+    # get list of all valid locations and codes
+    valid_locations <- covidHubUtils::hub_locations_ecdc
+    valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+    
+    # store path of remote repo
+    remote_repo_path <- "https://raw.githubusercontent.com/epiforecasts/covid19-forecast-hub-europe/main"
   }
   
   # validate truth end date
   truth_end_date <- tryCatch({
     as.Date(truth_end_date)}, 
     error = function(err) {
-    stop("Error in load_truth: Please provide a valid date object or
+      stop("Error in load_truth: Please provide a valid date object or
     string in format YYYY-MM-DD in truth_end_date")}
-    )
+  )
   
-
   # validate temporal resolution
   if (missing(temporal_resolution)){
+    # only relevant for US hub currently where inc hosp is available
     if (target_variable == "inc hosp"){
       temporal_resolution = "daily"
     } else {
@@ -94,36 +138,20 @@ load_truth <- function (truth_source,
   }
   
   # validate locations
-  all_valid_fips <- covidHubUtils::hub_locations$fips
-  
   if (!missing(locations)){
     locations <- match.arg(locations, 
-                           choices = all_valid_fips, 
+                           choices = valid_location_codes, 
                            several.ok = TRUE)
-  }
-  
-  # generate full target variable
-  if (target_variable == "cum death"){
-    full_target_variable = "Cumulative Deaths"
-  } else if (target_variable == "inc case"){
-    full_target_variable = "Incident Cases"
-  } else if (target_variable == "inc death"){
-    full_target_variable = "Incident Deaths"
-  } else if (target_variable == "inc hosp"){
-    full_target_variable = "Incident Hospitalizations"
-  }
+  } 
   
   # create file path and file name based on data_location
   if (data_location == "remote_hub_repo"){
-    # create path to the truth folder
-    repo_path = "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
-    file_name<- paste0(gsub(" ","%20", full_target_variable), ".csv")
+    repo_path <- remote_repo_path
   } else if (data_location == "local_hub_repo") {
     if (missing(local_repo_path) | is.na(local_repo_path) | is.null(local_repo_path)) {
       stop ("Error in local_repo_path : Please provide a valid local_repo_path.")
     } else {
       repo_path = local_repo_path
-      file_name<- paste0(full_target_variable, ".csv")
     }
   }
  
@@ -131,13 +159,12 @@ load_truth <- function (truth_source,
   truth <- purrr::map_dfr(
     truth_source,
     function (source) {
-      # read file from path
-      truth_folder_path <- ifelse((tolower(source) =="jhu" || tolower(source) == "healthdata"), 
-                                  "/data-truth/truth-", 
-                                  paste0("/data-truth/",tolower(source),"/truth_",
-                                         tolower(source),"-"))
-      file_path <- paste0(repo_path, truth_folder_path, file_name)
-      
+      # construct file path and read file from path
+      file_path <- get_truth_path(source = source, 
+                                  repo_path = repo_path,
+                                  target_variable = target_variable, 
+                                  data_location = data_location,
+                                  hub = hub)
       truth <- readr::read_csv(file_path) 
       
       # add inc_cum and death_case columns and rename date column
@@ -153,7 +180,6 @@ load_truth <- function (truth_source,
   # filter to only include specified locations
   if (!missing(locations)){
     truth <- dplyr::filter(truth, location %in% locations) 
-    
     if (nrow(truth) == 0){
       warning("Warning in load_truth: Truth for selected locations are not available.\n Please check your parameters.")
       if (target_variable == "inc hosp"){
@@ -161,7 +187,6 @@ load_truth <- function (truth_source,
       }
     }
   }
-    
   
   if (temporal_resolution == "weekly"){
     if (unlist(strsplit(target_variable, " "))[1] == "cum") {
@@ -181,13 +206,61 @@ load_truth <- function (truth_source,
           value, 7, align = "right", fill = NA)) %>%
         dplyr::ungroup() %>%
         dplyr::filter(target_end_date %in% seq.Date(
-          as.Date("2020-01-25"), to = truth_end_date, by="1 week")) 
-  
+          as.Date("2020-01-25"), to = truth_end_date, by = "1 week")) 
     }
   }
   
-  truth <- truth %>%
-    dplyr::left_join(covidHubUtils::hub_locations, by=c("location" = "fips"))
-    
+  # merge with location data to get populations and location names
+  # for US the location codes are stored in a column called 'fips'
+  if (hub[1] == "US") {
+    truth <- truth %>%
+      dplyr::left_join(valid_locations, by = c("location" = "fips"))
+  } else {
+    truth <- truth %>%
+      dplyr::left_join(valid_locations, by = c("location"))
+  }
   return (truth)
 }
+
+
+
+# helper function to construct the file path based on the target_variable, 
+# the source and the hub
+get_truth_path <- function(source, 
+                           repo_path,
+                           target_variable,
+                           data_location,
+                           hub) {
+  # generate full target variable (this works for both hubs as previous 
+  # checks already made sure only applicable target_variables are used)
+  if (target_variable == "cum death"){
+    full_target_variable = "Cumulative Deaths"
+  } else if (target_variable == "inc case"){
+    full_target_variable = "Incident Cases"
+  } else if (target_variable == "inc death"){
+    full_target_variable = "Incident Deaths"
+  } else if (target_variable == "inc hosp"){
+    full_target_variable = "Incident Hospitalizations"
+  }
+  
+  if (data_location == "remote_hub_repo") {
+    file_name <- paste0(gsub(" ","%20", full_target_variable), ".csv")
+  } else if (data_location == "local_hub_repo") {
+    file_name <- paste0(full_target_variable, ".csv")
+  }
+  
+  if (hub[1] == "US") {
+    truth_folder_path <- ifelse((tolower(source) == "jhu" || tolower(source) == "healthdata"), 
+                                "/data-truth/truth-", 
+                                paste0("/data-truth/", tolower(source),"/truth_",
+                                       tolower(source),"-"))
+    file_path <- paste0(repo_path, truth_folder_path, file_name)
+  } else if (hub[1] == "ECDC") {
+    truth_folder_path <- paste0("/data-truth/", toupper(source), "/truth_", toupper(source), "-")
+    file_path <- paste0(repo_path, truth_folder_path, file_name)
+  }
+  return(file_path)
+}
+
+
+

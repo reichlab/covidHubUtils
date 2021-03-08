@@ -14,6 +14,7 @@ load_forecasts(
   source = "zoltar",
   hub_repo_path,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE
 )
 }
@@ -25,7 +26,7 @@ Default all models that submitted forecasts meeting the other criteria.}
 Default to all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
-\item{locations}{list of fips. Default to all locations with available forecasts.}
+\item{locations}{list of location codes Default to all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: “quantile”
 or “point”. Default to all valid forecast types.}
@@ -37,13 +38,16 @@ Default to NULL which stands for all valid targets.}
 \item{source}{string specifying where forecasts will be loaded from: either
 "local_hub_repo" or "zoltar". Default to "zoltar"}
 
-\item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
+\item{hub_repo_path}{path to local clone of the forecast hub
 repository}
 
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
-Default to NULL to load the latest version. Only available when source is "zoltar" now.}
+Default to NULL to load the latest version.}
 
-\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
+\item{hub}{character vector, where the first element indicates the hub}
+
+\item{verbose}{a boolean for printing messages on zoltar job status poll
+from which to load forecasts. Possible options are "US" and "ECDC"}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

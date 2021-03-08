@@ -11,6 +11,7 @@ load_latest_forecasts_zoltar(
   types = NULL,
   targets = NULL,
   as_of = NULL,
+  hub = c("US", "ECDC"),
   verbose = TRUE
 )
 }
@@ -23,7 +24,7 @@ meeting the other criteria are returned.}
 Default to all valid forecast dates in Zoltar.
 The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
-\item{locations}{list of valid fips code. Default to all locations with available forecasts in Zoltar.}
+\item{locations}{list of valid location codes. Default to all locations with available forecasts in Zoltar.}
 
 \item{types}{character vector specifying type of forecasts to load: “quantile”
 or “point”. Default to all valid forecast types in Zoltar.}
@@ -34,6 +35,9 @@ Default to all valid targets in Zoltar.}
 
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version.}
+
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are "US" and "ECDC"}
 
 \item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
 }

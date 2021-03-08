@@ -4,7 +4,13 @@
 \alias{get_forecast_file_path}
 \title{Generate paths to forecast files submitted on a range of forecast dates from selected models}
 \usage{
-get_forecast_file_path(models, file_path, forecast_dates, latest = FALSE)
+get_forecast_file_path(
+  models,
+  file_path,
+  forecast_dates,
+  latest = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{models}{character vector of model abbreviations.}
@@ -14,6 +20,8 @@ get_forecast_file_path(models, file_path, forecast_dates, latest = FALSE)
 \item{forecast_dates}{date vector to look for forecast files}
 
 \item{latest}{boolean to only generate path to the latest forecast file from each model}
+
+\item{verbose}{whether or not to print out diagnostic messages. Default is TRUE}
 }
 \value{
 a list of paths to forecast files submitted on a range of forecast dates from selected models

@@ -11,11 +11,14 @@ load_latest_forecasts_repo(
   forecast_dates,
   locations = NULL,
   types = NULL,
-  targets = NULL
+  targets = NULL,
+  hub = c("US", "ECDC"),
+  verbose = TRUE
 )
 }
 \arguments{
-\item{file_path}{path to local clone of the reichlab/covid19-forecast-hub/data-processed}
+\item{file_path}{path to local copy of the data-processed folder of a
+forecast hub repo.}
 
 \item{models}{character vector of model abbreviations.
 If missing, forecasts for all models that submitted forecasts
@@ -23,7 +26,7 @@ meeting the other criteria are returned.}
 
 \item{forecast_dates}{date vector to load the most recent forecast from}
 
-\item{locations}{list of valid fips code. Defaults to all locations with
+\item{locations}{list of valid location codes. Defaults to all locations with
 available forecasts.}
 
 \item{types}{character vector specifying type of forecasts to load: “quantile”
@@ -32,6 +35,11 @@ or “point”. Defaults to all types  with available forecasts}
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
 with available forecasts.}
+
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are "US" and "ECDC"}
+
+\item{verbose}{whether or not to print out diagnostic messages. Default is TRUE}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
