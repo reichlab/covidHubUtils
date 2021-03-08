@@ -19,8 +19,8 @@
 #' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
-#' @param verbose a boolean for printing messages on zoltar job status poll
 #' from which to load forecasts. Possible options are "US" and "ECDC"
+#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
 #'
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
