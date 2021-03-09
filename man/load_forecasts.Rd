@@ -44,10 +44,10 @@ repository}
 \item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
 Default to NULL to load the latest version.}
 
-\item{hub}{character vector, where the first element indicates the hub}
-
-\item{verbose}{a boolean for printing messages on zoltar job status poll
+\item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are "US" and "ECDC"}
+
+\item{verbose}{whether or not to print out diagnostic messages. Default is TRUE}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

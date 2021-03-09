@@ -112,8 +112,6 @@ plot_forecast <- function(forecast_data,
   if (length(locations) > 1) {
     if(is.null(facet)) {
       stop("Error in plot_forecast: Passed in multiple locations without a facet command")
-    } else if (!("location" %in% as.character(facet))){
-      stop("Error in plot_forecast: Passed in multiple locations without a facet command using location")
     }
   }
 
