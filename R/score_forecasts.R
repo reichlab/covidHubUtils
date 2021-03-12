@@ -115,7 +115,7 @@ score_forecasts <- function(
                                by = c("location", "target_variable", "target_end_date")) %>%
     dplyr::select(-c("model.y")) %>%
     dplyr::rename(model = model.x, prediction = value.x, true_value = value.y) %>%
-    dplyr::filter(!is.na(true_value))
+    dplyr::filter(!is.na(true_value)) 
 
   # score using scoringutil
   observation_cols <- c(
@@ -134,50 +134,65 @@ score_forecasts <- function(
     abs_var <- "ae_point"
     abs_var_rename <- "ae_point_NA"
   }
-
-  scores <- tibble::tibble(scoringutils::eval_forecasts(data = joint_df,
-    by = observation_cols,
-    summarise_by = c(observation_cols, "range"),
-    ## the below interval_score_arguments should ensure that WIS is computed correctly
-    interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))) %>%
-    tidyr::pivot_wider(id_cols = observation_cols,
-      names_from = c("range"),
-      values_from = c("coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
-    purrr::set_names(~sub(abs_var_rename, "abs_error", .x)) %>%
-    ## need to remove all columns ending with NA to not affect WIS calculations
-    dplyr::select(
-      -dplyr::ends_with("_NA")
-    ) %>%
-    ## before next lines: do we need to check to ensure interval_score columns exist?
-    ## the following lines ensure that we use denominator for the wis of
-    ## (# of interval_scores)-0.5
-    ## which is written in the paper and elsewhere as
-    ## (# of interval_scores at level >0 ) + 0.5 or (K + 1/2)
-    ## to make sure that the median only gets half the weight of the other
-    ## intervals, multiply its value by 0.5
-    dplyr::mutate(
-      n_interval_scores = rowSums(!is.na(dplyr::select(., dplyr::starts_with("interval_score")))),
-      exists_interval_score_0 = "interval_score_0" %in% names(.),
-      interval_score_0 = ifelse(exists_interval_score_0, 0.5 * interval_score_0, NA_real_),
-      sharpness_0 = ifelse(exists_interval_score_0, 0.5 * sharpness_0, NA_real_),
-      underprediction_0 = ifelse(exists_interval_score_0, 0.5 * underprediction_0, NA_real_),
-      overprediction_0 = ifelse(exists_interval_score_0, 0.5 * overprediction_0, NA_real_)) %>%
-    dplyr::mutate(
-      wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-    ) %>%
-    dplyr::mutate(
-      sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-      overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-      underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")), na.rm = TRUE)/(n_interval_scores-0.5*(exists_interval_score_0))
-    ) %>%
-    dplyr::select(
-      -dplyr::starts_with("aem_"),
-      -dplyr::starts_with("ae_point_"),
-      -dplyr::starts_with("interval_score"),
-      -dplyr::starts_with("sharpness_"),
-      -dplyr::starts_with("underprediction_"),
-      -dplyr::starts_with("overprediction_")
-    ) 
+  
+  scores <- purrr::map_dfr(
+    unique(joint_df$target_variable),
+    function(var) {
+      joint_df_target <- suppressMessages(joint_df %>% 
+                                            dplyr::filter(target_variable==var))
+      scoringutils::eval_forecasts(data = joint_df_target,
+                                   by = observation_cols,
+                                   summarise_by = c(observation_cols, "range"),
+                                   ## the below interval_score_arguments should ensure that WIS is computed correctly
+                                   interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE)) %>%
+        tidyr::pivot_wider(id_cols = observation_cols,
+                           names_from = c("range"),
+                           values_from = c("coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
+        purrr::set_names(~sub(abs_var_rename, "abs_error", .x)) %>%
+        ## need to remove all columns ending with NA to not affect WIS calculations
+        dplyr::select(
+          -dplyr::ends_with("_NA")
+        ) %>%
+        ## before next lines: do we need to check to ensure interval_score columns exist?
+        ## the following lines ensure that we use denominator for the wis of
+        ## (# of interval_scores)-0.5
+        ## which is written in the paper and elsewhere as
+        ## (# of interval_scores at level >0 ) + 0.5 or (K + 1/2)
+        ## to make sure that the median only gets half the weight of the other
+        ## intervals, multiply its value by 0.5
+        dplyr::mutate(
+          n_interval_scores = rowSums(!is.na(dplyr::select(., dplyr::starts_with("interval_score")))),
+          exists_interval_score_0 = "interval_score_0" %in% names(.),
+          interval_score_0 = ifelse(exists_interval_score_0, 0.5 * interval_score_0, NA_real_),
+          sharpness_0 = ifelse(exists_interval_score_0, 0.5 * sharpness_0, NA_real_),
+          underprediction_0 = ifelse(exists_interval_score_0, 0.5 * underprediction_0, NA_real_),
+          overprediction_0 = ifelse(exists_interval_score_0, 0.5 * overprediction_0, NA_real_)) %>%
+        dplyr::mutate(
+          wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+        ) %>%
+        dplyr::mutate(
+          sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+          overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+          underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0))
+        ) %>%
+        dplyr::select(
+          -dplyr::starts_with("aem_"),
+          -dplyr::starts_with("ae_point_"),
+          -dplyr::starts_with("interval_score"),
+          -dplyr::starts_with("sharpness_"),
+          -dplyr::starts_with("underprediction_"),
+          -dplyr::starts_with("overprediction_")
+        ) %>% 
+        dplyr::select(1:7, dplyr::starts_with("coverage_"),
+                      dplyr::starts_with("abs_error"),
+                  "n_interval_scores", "exists_interval_score_0", "wis",
+                  "sharpness", "overprediction", "underprediction")
+    })
+     
+        
+      
+                    
+  
   
   if ("coverage_0" %in% names(scores)) {
     scores <- scores %>% 
