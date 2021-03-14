@@ -104,3 +104,33 @@ calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
 
   return(result)
 }
+
+
+
+#' Calculate the submission date that corresponds to a given forecast date
+#' 
+#' Assuming that submissions are made on Mondays, this helper function 
+#' finds the nearest Monday for which a submission could have been made
+#'
+#' @param forecast_date character vector of dates in 'yyyy-mm-dd' format
+#' @param submision_day day when forecasts have to be submitted. Default is 
+#' Monday. 
+#' 
+#' @return return character vecor with corresponding submission date
+#' @importFrom lubridate ceiling_date
+#'
+#' @examples 
+#' calc_submission_date(Sys.Date() + 0:7) 
+#' @export
+calc_submission_date <- function(forecast_date, submission_day = "Monday") {
+  
+  dates <- as.character(Sys.Date() + 0:10)
+  
+  dates <- ifelse(
+    weekdays(as.Date(dates)) == submission_day, 
+    dates, 
+    as.character(ceiling_date(as.Date(dates), unit = "weeks", week_start = 1))
+  )
+  
+  return(dates)
+}
