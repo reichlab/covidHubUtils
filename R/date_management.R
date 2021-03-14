@@ -124,7 +124,7 @@ calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
 #' @export
 calc_submission_date <- function(forecast_date, submission_day = "Monday") {
   
-  dates <- as.character(Sys.Date() + 0:10)
+  dates <- as.character(forecast_date)
   
   dates <- ifelse(
     weekdays(as.Date(dates)) == submission_day, 
