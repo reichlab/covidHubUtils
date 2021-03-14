@@ -15,8 +15,9 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). 
 #' Default to NULL which stands for all valid targets.
-#' 
-
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
+#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
 #' @return data frame with columns model, forecast_date, location, horizon, 
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
@@ -28,7 +29,9 @@ load_forecasts_repo <- function (
   forecast_dates = NULL,
   locations = NULL,
   types = NULL,
-  targets = NULL) {
+  targets = NULL, 
+  hub = c("US", "ECDC"), 
+  verbose = TRUE) {
   
   #validate file path to data-processed folder
   if (!dir.exists(file_path)){
@@ -85,12 +88,15 @@ load_forecasts_repo <- function (
   }
   
   # get paths to all forecast files
-  forecast_files <- get_forecast_file_path(models, file_path, forecast_dates, latest = FALSE)
+  forecast_files <- get_forecast_file_path(models, file_path, forecast_dates, 
+                                           latest = FALSE, 
+                                           verbose = verbose)
   
   # read in the forecast files
   forecasts <- load_forecast_files_repo(file_paths = forecast_files, 
                                         locations = locations, 
                                         types = types, 
-                                        targets = targets)
+                                        targets = targets, 
+                                        hub = hub)
   return(forecasts)
 }
