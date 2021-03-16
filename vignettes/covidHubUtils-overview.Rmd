@@ -72,14 +72,14 @@ theme_set(theme_bw())
 
 ## Load and plot single forecast
 
-The following code loads 1 through 4 week ahead incident case forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `forecast_date_window_size` option specifies the range of days to look at for a forecast. So the query below is looking for the most recent forecast from COVIDhub-ensemble in the span of 2020-12-01 through 2020-12-07.
+The following code loads 1 through 4 week ahead incident case forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `forecast_date_window_size` option specifies the range of days to look at for a forecast. So the query below is looking for the most recent forecast from COVIDhub-ensemble in the span of 2020-12-01 through 2020-12-07. We have decided to set forecast_date_window_size to 6 because a window size of 0 still includes the last forecast date you provided.  So that last date minus 6 days will cover a week, starting from 6 days before the last date and going up through the last date.
 
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
                       last_forecast_date = "2020-12-07",
-                      forecast_date_window_size = 7, 
+                      forecast_date_window_size = 6, 
                       locations = "US",
                       types = c("point","quantile"),
                       targets = inc_case_targets,
@@ -126,7 +126,7 @@ The following code looks at three models' forecasts of incident deaths at one ti
 fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
   last_forecast_date = "2020-12-14",
   source = "zoltar",
-  forecast_date_window_size = 7,
+  forecast_date_window_size = 6,
   locations = "US",
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
@@ -154,7 +154,7 @@ The following code looks at three models' forecasts of incident deaths at one ti
 fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
   last_forecast_date = "2020-12-14",
   source = "zoltar",
-  forecast_date_window_size = 7,
+  forecast_date_window_size = 6,
   locations = c("19", "48", "46"),
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
@@ -163,7 +163,7 @@ p <- plot_forecast(fdat,
   target_variable = "inc death", 
   intervals = c(.5, .95), 
   truth_source = "JHU",
-  facet = location_name~model,
+  facet = location~model,
   facet_scales = "free_y",
   fill_by_model = TRUE, 
   plot=FALSE)
