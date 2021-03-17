@@ -47,11 +47,10 @@ For those starting out we recommend you begin with the [Getting Started vignette
 # Contributing Guidelines
 If you would like to contribute your work, please follow this list to create a pull request:
 * New functions should come with unit tests, or a promise of a new unit test in the form of an issue if getting the functionality merged in is urgent.
-* Add your tests to `.github/workflows/pr_unittest.yaml`.
+* If you added a new .R file with unit tests, add the tests to `.github/workflows/pr_unittest.yaml`.
 * Small/quick fixes don't need to be tested, necessarily.
 * Update `NEWS.md` by adding a short summary of your changes under “Changes since last release.”
 * Update `README.md` if you created a new function or add a new parameter to existing functions.
 * Update `DESCRIPTION` when you are using a new dependency in your script.
-
 
 
