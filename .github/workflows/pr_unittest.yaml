@@ -11,7 +11,7 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools"))
+          install.packages(c("remotes","devtools", "rmarkdown"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
@@ -28,5 +28,11 @@ jobs:
           devtools::test_file("test-get_model_designations.R", stop_on_failure = TRUE)
           devtools::test_file("test-load_as_of.R", stop_on_failure = TRUE)
         shell: Rscript {0}
+      - name: Render vignettes
+        run: |
+          rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
+        shell: Rscript {0}
+          
+        
 
 
