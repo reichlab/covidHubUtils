@@ -1,6 +1,6 @@
 ---
 title: "Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package"
-author: "Serena Wang, Evan L Ray, Nicholas G Reich"
+author: "Serena Wang, Evan L Ray, Nicholas G Reich, Apurv Shah"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   html_document:
@@ -74,6 +74,10 @@ theme_set(theme_bw())
 
 The following code loads 1 through 4 week ahead incident case forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `forecast_date_window_size` option specifies the range of days to look at for a forecast. So the query below is looking for the most recent forecast from COVIDhub-ensemble in the span of 2020-12-01 through 2020-12-07. We have decided to set forecast_date_window_size to 6 because a window size of 0 still includes the last forecast date you provided.  So that last date minus 6 days will cover a week, starting from 6 days before the last date and going up through the last date.
 
+We also load the hospitalization data and incident deaths here by changing the target to the desired quantity and load that dataset to further work on. The target variable can be changed to what is desired by changing the appropriate lines of code.
+
+The verbose parameter has been explicitly set to false here to prevent the multiple lines of output of the inner workings of the load function. It is set to false by default and all the information is printed to the console unless specified otherwise.
+
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
@@ -83,7 +87,35 @@ forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
                       locations = "US",
                       types = c("point","quantile"),
                       targets = inc_case_targets,
-                      source = "zoltar")
+                      source = "zoltar",
+                      verbose = FALSE,
+                      as_of=NULL,
+                      hub = c("US"))
+
+hosp_data <- paste(0:130, "day ahead inc hosp")
+forecasts_hosp <- load_latest_forecasts(models = "COVIDhub-ensemble",
+                      last_forecast_date = "2020-12-07",
+                      forecast_date_window_size = 6, 
+                      locations = "US",
+                      types = c("point","quantile"),
+                      targets = hosp_data,
+                      source = "zoltar",
+                      verbose = FALSE,
+                      as_of=NULL,
+                      hub = c("US"))
+
+inc_case_targets_death <- paste(1:4, "wk ahead inc death")
+forecasts_death <- load_latest_forecasts(models = "COVIDhub-ensemble",
+                      last_forecast_date = "2020-12-07",
+                      forecast_date_window_size = 6, 
+                      locations = "US",
+                      types = c("point","quantile"),
+                      targets = inc_case_targets_death,
+                      source = "zoltar",
+                      verbose = FALSE,
+                      as_of=NULL,
+                      hub = c("US"))
+
 ```
 
 And here is the data that is returned from this query, note that in addition to the essential forecast data itself, some additional columns with information about the locations are returned.
@@ -96,14 +128,38 @@ datatable(forecasts,
   scrollX = TRUE,
   fixedColumns = list(leftColumns = 2)
 ))
+datatable(forecasts_hosp,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+datatable(forecasts_death,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
 ```
 
-This data can then be plotted directly with a call to `plot_forecast()`.
+This data can then be plotted directly with a call to `plot_forecast()`. Examples for the inc 
 ```{r}
 p <- plot_forecast(forecast_data = forecasts, 
   truth_source = "JHU",
   target_variable = "inc case",  
   intervals = c(.5, .8, .95))
+
+p_hosp <- plot_forecast(forecast_data = forecasts_hosp, 
+  truth_source = "HealthData",
+  target_variable = "inc hosp",  
+  intervals = c(.5, .8, .95))
+p_death <- plot_forecast(forecast_data = forecasts_death, 
+  truth_source = "JHU",
+  target_variable = "inc death",  
+  intervals = c(.5, .8, .95))
+
 ```
 
 Note that many additional arguments may need to be passed to this function to have a reasonable plot returned if your dataset has multiple locations, forecast dates or models.
@@ -116,6 +172,15 @@ p + scale_x_date(name=NULL, date_breaks = "1 month", date_labels = "%b") +
 
   
 Additionally, `plot_forecast()` can handle plotting multiple models or locations or forecast dates at the same time as the following examples show.
+
+
+## as_of versioning
+
+Add the stuff here!
+
+## Hub Location
+
+Display the newly added hub parameter to support the US and European forecasts. 
 
 
 ## Plot multiple models
@@ -250,8 +315,18 @@ The inputs to the `scored_forecasts()` include a dataframe created using `load_f
 
 The following code creates a dataframe of scored data based on the forecasts and truth data loaded earlier in this vignette in long format. 
 ```{r}
-scores <- score_forecasts(forecasts = forecasts,
-  return_format = "long",
+forecasts_baseline <- load_latest_forecasts(models = "COVIDhub-baseline",
+                      last_forecast_date = "2020-12-07",
+                      forecast_date_window_size = 6, 
+                      locations = "US",
+                      types = c("point","quantile"),
+                      targets = inc_case_targets,
+                      source = "zoltar",
+                      verbose = FALSE,
+                      as_of=NULL,
+                      hub = c("US"))
+scores <- score_forecasts(forecasts = rbind(forecasts,forecasts_baseline),
+  return_format = "wide",
   truth = truth_data)
 ```
 
