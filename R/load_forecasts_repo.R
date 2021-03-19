@@ -49,35 +49,39 @@ load_forecasts_repo <- function (
     models <- all_valid_models
   }
   
+  # get valid location codes
+  if (hub[1] == "US") {
+    valid_location_codes <- covidHubUtils::hub_locations$fips
+  } else if (hub[1] == "ECDC") {
+    valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+  }
+  
   # validate locations
   if (!is.null(locations)){
-    all_valid_fips <- covidHubUtils::hub_locations$fips
-    locations <- match.arg(locations, choices = all_valid_fips, several.ok = TRUE)
-  } 
+    locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
+  } else {
+    locations <- valid_location_codes
+  }
   
   # validate types
   if (!is.null(types)){
     types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } 
+  } else {
+    types <- c("point", "quantile")
+  }
+  
+  # get valid targets
+  if (hub[1] == "US") {
+    all_valid_targets <- covidHubUtils::hub_targets_us
+  } else if (hub[1] == "ECDC") {
+    all_valid_targets <- covidHubUtils::hub_targets_ecdc
+  }
   
   # validate targets
   if (!is.null(targets)){
-    # set up Zoltar connection
-    zoltar_connection <- zoltr::new_connection()
-    if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-      zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
-    } else {
-      zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"),Sys.getenv("Z_PASSWORD"))
-    }
-    
-    # construct Zoltar project url
-    the_projects <- zoltr::projects(zoltar_connection)
-    project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-    
-    # validate targets 
-    all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
-    
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
+  } else {
+    targets <- all_valid_targets
   }
   
   # validate forecast_dates
