@@ -3,7 +3,7 @@
 \docType{data}
 \name{hub_locations_ecdc}
 \alias{hub_locations_ecdc}
-\title{Available Locations in the ECDC Hub}
+\title{Available locations in the ECDC Hub}
 \format{
 A data frame with 32 rows and 3 columns:
 \describe{
