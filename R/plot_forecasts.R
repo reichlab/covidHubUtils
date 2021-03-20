@@ -53,28 +53,28 @@
 #' @return invisible ggplot object
 #' 
 #' @export
-plot_forecast <- function(forecast_data,
-                          truth_data = NULL, 
-                          models,
-                          target_variable,
-                          locations,
-                          facet = NULL,
-                          facet_scales = "fixed",
-                          facet_nrow = NULL,
-                          facet_ncol = NULL,
-                          forecast_dates,
-                          intervals,
-                          horizon,
-                          truth_source,
-                          use_median_as_point = FALSE,
-                          plot_truth = TRUE,
-                          plot = TRUE,
-                          fill_by_model = FALSE,
-                          fill_transparency = 1.0,
-                          truth_as_of = NULL, 
-                          title = "default", 
-                          subtitle = "default",
-                          show_caption = TRUE){
+plot_forecasts <- function(forecast_data,
+                           truth_data = NULL, 
+                           models,
+                           target_variable,
+                           locations,
+                           facet = NULL,
+                           facet_scales = "fixed",
+                           facet_nrow = NULL,
+                           facet_ncol = NULL,
+                           forecast_dates,
+                           intervals,
+                           horizon,
+                           truth_source,
+                           use_median_as_point = FALSE,
+                           plot_truth = TRUE,
+                           plot = TRUE,
+                           fill_by_model = FALSE,
+                           fill_transparency = 1.0,
+                           truth_as_of = NULL, 
+                           title = "default", 
+                           subtitle = "default",
+                           show_caption = TRUE){
  
   # title format
   if(is.na(title))
@@ -473,4 +473,108 @@ plot_forecast <- function(forecast_data,
   }
   
   return (invisible(graph))
+}
+
+#' Plot forecasts and optional truth for only one selected target variable.
+#' Faceted plots for multiple models, locations and forecast dates are 
+#' supported with specified facet formula. 
+#' 
+#' @param forecast_data data frame with truth and forecasts from load_forecasts()
+#' @param truth_data optional data frame from one truth source in the format returned 
+#' by load_truth(). It needs to have columns model, target_variable, 
+#' target_end_date, location and value. 
+#' Model column can be "Observed Data (a truth source)".
+#' @param models vector of strings specifying models to plot. 
+#' Default to all models in forecast_data.
+#' @param target_variable string specifying target type. It should be one of 
+#' "cum death", "inc case", "inc death" and "inc hosp". 
+#' If there is only one target_variable in forecast_data, this parameter is optional. 
+#' @param locations string for fips code or 'US'. 
+#' Default to all locations in forecast_data.
+#' @param facet interpretable facet option for ggplot. Function will error 
+#' if multiple locations are passed in without location in the facet formula.
+#' @param facet_scales argument for scales in ggplot2::facet_wrap. Default to "fixed".
+#' @param facet_nrow number of rows for facetting; optional.
+#' @param facet_ncol number of columns for facetting; optional.
+#' @param forecast_dates date string vectors for forecast dates to plot. 
+#' Default to forecast_dates present in the data.
+#' @param intervals values indicating which central prediction interval levels 
+#' to plot. NULL means only plotting point forecasts.
+#' If not provided, it will default to c(.5, .8, .95).
+#' @param horizon forecasts are plotted for the horizon time steps after the 
+#' forecast date. Default to all available horizons in forecast data. 
+#' @param truth_source character specifying where the truth data will
+#' be loaded from if truth_data is not provided. Currently support "JHU",
+#' "USAFacts", "NYTimes" and "HealthData".
+#' Optional if truth_data is provided. 
+#' @param use_median_as_point boolean for using median quantiles as point forecasts in plot. 
+#' Default to FALSE.
+#' @param plot_truth boolean for showing truth data in plot. Default to FALSE.
+#' @param plot boolean for showing the plot. Default to TRUE.
+#' Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".
+#' @param fill_by_model boolean for specifying colors in plot.
+#' If TRUE, separate colors will be used for each model.
+#' If FALSE, only blues will be used for all models. Default to FALSE.
+#' @param fill_transparency numeric value used to set transparency of intervals.
+#' 0 means fully transparent, 1 means opaque.
+#' @param truth_as_of the plot includes the truth data that would have been 
+#' in real time as of the truth_as_of date (not using this parameter when truth data 
+#' is from github repo)
+#' @param title optional text for the title of the plot. If left as "default",
+#' the title will be automatically generated. If "none", no title will be plotted. 
+#' @param subtitle optional text for the subtitle of the plot. If left as "default",
+#' the subtitle will be automatically generated. If "none", no subtitle will be plotted. 
+#' @param show_caption logical, if TRUE, caption will be included showing data sources
+
+#' @importFrom grDevices dev.size
+#' @return invisible ggplot object
+#' 
+#' @export
+#'
+plot_forecast <- function(forecast_data,
+                           truth_data = NULL, 
+                           models,
+                           target_variable,
+                           locations,
+                           facet = NULL,
+                           facet_scales = "fixed",
+                           facet_nrow = NULL,
+                           facet_ncol = NULL,
+                           forecast_dates,
+                           intervals,
+                           horizon,
+                           truth_source,
+                           use_median_as_point = FALSE,
+                           plot_truth = TRUE,
+                           plot = TRUE,
+                           fill_by_model = FALSE,
+                           fill_transparency = 1.0,
+                           truth_as_of = NULL, 
+                           title = "default", 
+                           subtitle = "default",
+                           show_caption = TRUE){
+  
+  .Deprecated("plot_forecasts", package="covidHubUtils", old = "plot_forecast")
+  plot_forecasts(forecast_data = forecast_data,
+                 truth_data = truth_data, 
+                 models = models,
+                 target_variable = target_variable,
+                 locations = locations,
+                 facet = facet,
+                 facet_scales = facet_scales,
+                 facet_nrow = facet_nrow,
+                 facet_ncol = facet_ncol,
+                 forecast_dates = forecast_dates,
+                 intervals = intervals,
+                 horizon = horizon,
+                 truth_source = truth_source,
+                 use_median_as_point = use_median_as_point,
+                 plot_truth = plot_truth,
+                 plot = plot,
+                 fill_by_model = fill_by_model,
+                 fill_transparency = fill_transparency,
+                 truth_as_of = truth_as_of, 
+                 title = title, 
+                 subtitle = subtitle,
+                 show_caption = show_caption)  
 }
