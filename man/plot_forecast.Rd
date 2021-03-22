@@ -104,7 +104,6 @@ the subtitle will be automatically generated. If "none", no subtitle will be plo
 invisible ggplot object
 }
 \description{
-Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula.
+\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
+Please use \code{\link[=plot_forecasts]{plot_forecasts()}} instead.
 }

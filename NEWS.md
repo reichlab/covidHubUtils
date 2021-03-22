@@ -1,3 +1,11 @@
+## covidHubUtils 0.1.5
+
+This is a release for renaming `plot_forecast()` to `plot_forecasts()`.
+
+### Package updates
+- There is backwards compatibility.
+
+
 ## covidHubUtils 0.1.4
 
 This is a release focusing on updates that provide better interface with Zoltar and European COVID-19 Forecast Hub. The release also contains new feature updates and bug fixes in other util functions.
