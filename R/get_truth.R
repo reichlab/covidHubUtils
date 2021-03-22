@@ -151,7 +151,7 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
       names_to = "date",
       values_to = "cum"
     ) %>%
-    dplyr::mutate(date = as.Date(date, format = "%m/%d/%y")) %>%
+    dplyr::mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
     
     dplyr::group_by(location, cases_deaths) %>%
     dplyr::arrange(date) %>%
@@ -170,7 +170,7 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
       names_to = "date",
       values_to = "cum"
     ) %>%
-    dplyr::mutate(date = as.Date(date, format = "%m/%d/%y")) %>%
+    dplyr::mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
     
     # Calculate incident cases and deaths 
     # aggregated across counties within a state
