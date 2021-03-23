@@ -98,9 +98,9 @@ datatable(forecasts,
 ))
 ```
 
-This data can then be plotted directly with a call to `plot_forecast()`.
+This data can then be plotted directly with a call to `plot_forecasts()`.
 ```{r}
-p <- plot_forecast(forecast_data = forecasts, 
+p <- plot_forecasts(forecast_data = forecasts, 
   truth_source = "JHU",
   target_variable = "inc case",  
   intervals = c(.5, .8, .95))
@@ -115,7 +115,7 @@ p + scale_x_date(name=NULL, date_breaks = "1 month", date_labels = "%b") +
 ```
 
   
-Additionally, `plot_forecast()` can handle plotting multiple models or locations or forecast dates at the same time as the following examples show.
+Additionally, `plot_forecasts()` can handle plotting multiple models or locations or forecast dates at the same time as the following examples show.
 
 
 ## Plot multiple models
@@ -131,7 +131,7 @@ fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-s
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
 
-p <- plot_forecast(fdat, 
+p <- plot_forecasts(fdat, 
   target_variable = "inc death", 
   truth_source = "JHU",
   intervals = c(.5, .95), 
@@ -159,7 +159,7 @@ fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-s
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
 
-p <- plot_forecast(fdat, 
+p <- plot_forecasts(fdat, 
   target_variable = "inc death", 
   intervals = c(.5, .95), 
   truth_source = "JHU",
@@ -186,7 +186,7 @@ fdat <- load_forecasts(models = c("Karlen-pypm", "UMass-MechBayes"),
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
 
-p <- plot_forecast(fdat, 
+p <- plot_forecasts(fdat, 
   target_variable = "inc death", 
   truth_source = "JHU",
   intervals = c(.5, .95), 
@@ -201,18 +201,19 @@ p + scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
 
 # Working with truth data
 
-By default `plot_forecast()` uses JHU CSSE data as the "Observed Data" in the above plots. However, users can specify custom "ground truth" data that either they provide themselves or that is loaded in from the package. 
+By default `plot_forecasts()` uses JHU CSSE data as the "Observed Data" in the above plots. However, users can specify custom "ground truth" data that either they provide themselves or that is loaded in from the package. 
 
-Here is an example of a call to `plot_forecast()` that simply specifies an alternate truth source, which must be one of "JHU", "USAFacts", or "NYTimes".
+Here is an example of a call to `plot_forecasts()` that simply specifies an alternate truth source, which must be one of "JHU", "USAFacts", or "NYTimes".
 
 ```{r}
-plot_forecast (forecast_data = forecasts, 
+plot_forecasts(forecast_data = forecasts, 
   target_variable = "inc case",  
+  locations = "US",
   truth_source = "USAFacts",
   intervals = c(.5, .8, .95))
 ```
 
-Alternatively, truth data can be loaded in from one of those sources independently and stored in your active R session and passed to the `plot_forecast()` function.
+Alternatively, truth data can be loaded in from one of those sources independently and stored in your active R session and passed to the `plot_forecasts()` function.
 ```{r}
 truth_data <- load_truth(truth_source = "USAFacts",
   target_variable = "inc case",
@@ -231,9 +232,9 @@ datatable(truth_data,
 ))
 ```
 
-And can be used in conjunction with a call to plot_forecast
+And can be used in conjunction with a call to plot_forecasts
 ```{r}
-plot_forecast(forecast_data = forecasts, 
+plot_forecasts(forecast_data = forecasts, 
   target_variable = "inc case",  
   truth_data = truth_data,
   truth_source = "USAFacts",
