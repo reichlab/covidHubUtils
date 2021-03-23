@@ -1,6 +1,6 @@
 ## covidHubUtils 0.1.5
 
-This is a release for renaming `plot_forecast()` to `plot_forecasts()`.
+This is a release for renaming `plot_forecast()` to `plot_forecasts()`. `plot_forecast()` is still available to use but will return deprecation warnings to the user.
 
 ### Package updates
 - There is backwards compatibility.
