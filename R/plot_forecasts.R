@@ -53,28 +53,28 @@
 #' @return invisible ggplot object
 #' 
 #' @export
-plot_forecast <- function(forecast_data,
-                          truth_data = NULL, 
-                          models,
-                          target_variable,
-                          locations,
-                          facet = NULL,
-                          facet_scales = "fixed",
-                          facet_nrow = NULL,
-                          facet_ncol = NULL,
-                          forecast_dates,
-                          intervals,
-                          horizon,
-                          truth_source,
-                          use_median_as_point = FALSE,
-                          plot_truth = TRUE,
-                          plot = TRUE,
-                          fill_by_model = FALSE,
-                          fill_transparency = 1.0,
-                          truth_as_of = NULL, 
-                          title = "default", 
-                          subtitle = "default",
-                          show_caption = TRUE){
+plot_forecasts <- function(forecast_data,
+                           truth_data = NULL, 
+                           models,
+                           target_variable,
+                           locations,
+                           facet = NULL,
+                           facet_scales = "fixed",
+                           facet_nrow = NULL,
+                           facet_ncol = NULL,
+                           forecast_dates,
+                           intervals,
+                           horizon,
+                           truth_source,
+                           use_median_as_point = FALSE,
+                           plot_truth = TRUE,
+                           plot = TRUE,
+                           fill_by_model = FALSE,
+                           fill_transparency = 1.0,
+                           truth_as_of = NULL, 
+                           title = "default", 
+                           subtitle = "default",
+                           show_caption = TRUE){
  
   # title format
   if(is.na(title))
@@ -473,4 +473,64 @@ plot_forecast <- function(forecast_data,
   }
   
   return (invisible(graph))
+}
+
+#' Plot forecasts and optional truth for only one selected target variable.
+#' Faceted plots for multiple models, locations and forecast dates are 
+#' supported with specified facet formula. 
+#' 
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
+#' Please use [plot_forecasts()] instead.
+#' 
+#' @inheritParams plot_forecasts
+#' @importFrom grDevices dev.size
+#' @return invisible ggplot object
+#' 
+#' @export
+#'
+plot_forecast <- function(forecast_data,
+                           truth_data = NULL, 
+                           models,
+                           target_variable,
+                           locations,
+                           facet = NULL,
+                           facet_scales = "fixed",
+                           facet_nrow = NULL,
+                           facet_ncol = NULL,
+                           forecast_dates,
+                           intervals,
+                           horizon,
+                           truth_source,
+                           use_median_as_point = FALSE,
+                           plot_truth = TRUE,
+                           plot = TRUE,
+                           fill_by_model = FALSE,
+                           fill_transparency = 1.0,
+                           truth_as_of = NULL, 
+                           title = "default", 
+                           subtitle = "default",
+                           show_caption = TRUE){
+  lifecycle::deprecate_warn("0.1.5", "plot_forecast()", "plot_forecasts()")
+  plot_forecasts(forecast_data = forecast_data,
+                 truth_data = truth_data, 
+                 models = models,
+                 target_variable = target_variable,
+                 locations = locations,
+                 facet = facet,
+                 facet_scales = facet_scales,
+                 facet_nrow = facet_nrow,
+                 facet_ncol = facet_ncol,
+                 forecast_dates = forecast_dates,
+                 intervals = intervals,
+                 horizon = horizon,
+                 truth_source = truth_source,
+                 use_median_as_point = use_median_as_point,
+                 plot_truth = plot_truth,
+                 plot = plot,
+                 fill_by_model = fill_by_model,
+                 fill_transparency = fill_transparency,
+                 truth_as_of = truth_as_of, 
+                 title = title, 
+                 subtitle = subtitle,
+                 show_caption = show_caption)  
 }
