@@ -33,6 +33,7 @@ define the observation, namely, \code{model}, \code{forecast_date}, \code{locati
 \code{target_end_date}.
 Other columns will contain scores:
 \itemize{
+\item \code{true_value} is the observed truth at that \code{location} and \code{target_end_date}
 \item \code{abs_error} is the absolute error based on median estimate if
 use_median_as_point is TRUE, and absolute error based on point forecast
 if use_median_as_point is FALSE

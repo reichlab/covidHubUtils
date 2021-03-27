@@ -3327,4 +3327,226 @@ test_that("interval coverage  is correct, 2 intervals, median and point, use_med
   expect_equal(actual$coverage_80, expected_coverage_80)
 })
 
+test_that("true_value is correct, point forecast only", {
+  y <- c(1, -15, 22)
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1)
+  forecast_horizons <- rep(horizons, times = 1)
+  forecast_locations <- rep(locations, times = 1)
+  forecast_target_variables <-
+    rep(target_variables, times = 1)
+  
+  point_forecast <- c(5,6,7)
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  
+  n_forecasts <- length(point_forecast)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = rep("point", 3),
+    quantile = NA,
+    value = point_forecast,
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, use_median_as_point = FALSE)
+  
+  expected <- y
+  
+  expect_equal(actual$true_value, expected)
+})
 
+test_that("true_value is correct, point and median forecasts different, use_median_as_point is FALSE", {
+  y <- c(1, -15, 22)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, 1, 2, 2, 4),
+    c(-2, 0, 3, 3, 4))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
+  forecast_quantile_probs <- forecast_quantile_probs[3]
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  point_forecast <- c(5,6,7)
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, use_median_as_point = FALSE)
+  
+  expected <- y
+  
+  expect_equal(actual$true_value, expected)
+})
+
+test_that("true_value is correct, point and median forecasts different, use_median_as_point is TRUE", {
+  y <- c(1, -15, 22)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, 1, 2, 2, 4),
+    c(-2, 0, 3, 3, 4))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
+  forecast_quantile_probs <- forecast_quantile_probs[3]
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  point_forecast <- c(5,6,7)
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, use_median_as_point = TRUE)
+  
+  expected <- y
+  
+  expect_equal(actual$true_value, expected)
+})
+
+test_that("true_value is correct, point and median forecasts same", {
+  y <- c(1, -15, 22)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, 1, 2, 2, 4),
+    c(-2, 0, 3, 3, 4))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  forecast_quantiles_matrix <- forecast_quantiles_matrix[, 3, drop = FALSE]
+  forecast_quantile_probs <- forecast_quantile_probs[3]
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  point_forecast <- c(1,2,3)
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, use_median_as_point = FALSE)
+  
+  expected <- y
+  
+  expect_equal(actual$true_value, expected)
+  
+})

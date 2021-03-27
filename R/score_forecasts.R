@@ -17,6 +17,7 @@
 #' `horizon`, `temporal_resolution`, `target_variable`, `horizon`, and
 #' `target_end_date`.
 #' Other columns will contain scores:
+#'  - `true_value` is the observed truth at that `location` and `target_end_date`
 #'  - `abs_error` is the absolute error based on median estimate if
 #'  use_median_as_point is TRUE, and absolute error based on point forecast
 #'  if use_median_as_point is FALSE
@@ -122,7 +123,7 @@ score_forecasts <- function(
     "model",
     "location",
     "horizon", "temporal_resolution", "target_variable",
-    "forecast_date", "target_end_date"
+    "forecast_date", "target_end_date","true_value"
   )
 
   # creates placeholder variables to store the name of the column from scoringutils::eval_forecasts() to
@@ -183,7 +184,7 @@ score_forecasts <- function(
           -dplyr::starts_with("underprediction_"),
           -dplyr::starts_with("overprediction_")
         ) %>% 
-        dplyr::select(1:7, dplyr::starts_with("coverage_"),
+        dplyr::select(1:8, dplyr::starts_with("coverage_"),
                       dplyr::starts_with("abs_error"),
                   "n_interval_scores", "exists_interval_score_0", "wis",
                   "sharpness", "overprediction", "underprediction")
