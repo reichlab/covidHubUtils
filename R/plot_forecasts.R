@@ -7,6 +7,8 @@
 #' by load_truth(). It needs to have columns model, target_variable, 
 #' target_end_date, location and value. 
 #' Model column can be "Observed Data (a truth source)".
+#' @param hub character, which hub to use. 
+#' Default is "US", other option is "ECDC".
 #' @param models vector of strings specifying models to plot. 
 #' Default to all models in forecast_data.
 #' @param target_variable string specifying target type. It should be one of 
@@ -87,7 +89,8 @@
 #' 
 #' @export
 plot_forecasts <- function(forecast_data,
-                           truth_data = NULL, 
+                           truth_data = NULL,
+                           hub = c("US", "ECDC"),
                            models,
                            target_variable,
                            locations,
@@ -111,16 +114,16 @@ plot_forecasts <- function(forecast_data,
  
   # title format
   if(is.na(title))
-    stop("Error in plot_forecast: title argument interpretable as a character.")
+    stop("Error in plot_forecasts: title argument interpretable as a character.")
   
   # subtitle format
   if(is.na(subtitle))
-    stop("Error in plot_forecast: subtitle argument interpretable as a character.")
+    stop("Error in plot_forecasts: subtitle argument interpretable as a character.")
   
   # optional models parameter. Default to all models in forecast_data
   if (!missing(models)){
     if (!all(models %in% forecast_data$model)) {
-      stop("Error in plot_forecast: Not all models are available in forecast data.")
+      stop("Error in plot_forecasts: Not all models are available in forecast data.")
     }
   } else {
     models <- unique(forecast_data$model)
@@ -131,45 +134,50 @@ plot_forecasts <- function(forecast_data,
     locations <- unique(forecast_data$location)
   }
   
-  # validate location fips code
-  all_valid_fips <- covidHubUtils::hub_locations$fips
-  
-  locations <- match.arg(locations, 
-                        choices = all_valid_fips, 
-                        several.ok = TRUE)
-  
-  if (!all(locations %in% forecast_data$location)){
-    stop("Error in plot_forecast: Not all locations are available in forecast_data.")
+  # get lists of valid parameter choices based on `hub`
+  if (hub[1] == "US") {
+    valid_location_codes <- covidHubUtils::hub_locations$fips
+    valid_target_variables <-  c("cum death","inc case",
+                                 "inc death","inc hosp")
+    valid_truth_sources <- c("JHU","USAFacts", "NYTimes", "HealthData")
+  } else if (hub[1] == "ECDC") {
+    valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+    valid_target_variables <- c("inc case","inc death")
+    valid_truth_sources <- c("JHU", "jhu", "ECDC", "ecdc")
   }
+  
+  # validate locations
+  if (!all(locations %in% forecast_data$location)){
+    stop("Error in plot_forecasts: Not all locations are available in forecast_data.")
+  }
+
+  locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
   
   if (length(locations) > 1) {
     if(is.null(facet)) {
-      stop("Error in plot_forecast: Passed in multiple locations without a facet command")
+      stop("Error in plot_forecasts: Passed in multiple locations without a facet command")
     }
   }
 
-  
-  # validate target_variable
-  
+  # validate target variable 
   if (missing(target_variable)) {
+    # optional target_variable parameter when there's only one 
+    # target variable in forecast_data
     if (length(unique(forecast_data$target_variable)) == 1) {
       target_variable <- unique(forecast_data$target_variable)
     } else {
-      stop("Error in plot_forecast: Target variable unspecified and more than one target_variable in data.")
+      stop("Error in plot_forecasts: Target variable unspecified and more than one target_variable in data.")
     }
+  } else {
+    if (!(target_variable %in% forecast_data$target_variable)){
+      stop("Error in plot_forecasts: Please provide a valid target variable.")
+    }
+    
+    target_variable <- match.arg(target_variable, 
+                                 choices = valid_target_variables,
+                                 several.ok = FALSE)
   }
   
-  target_variable <- match.arg(target_variable, 
-                               choices = c("cum death",
-                                           "inc case",
-                                           "inc death",
-                                           "inc hosp"), 
-                               several.ok = FALSE)
-  
-  if (!(target_variable %in% forecast_data$target_variable)){
-    stop("Error in plot_forecast: Please provide a valid target variable.")
-  }
-
   # validate truth data if provided
   if (!is.null(truth_data)){
     # check if truth_data has all needed columns
@@ -177,42 +185,42 @@ plot_forecasts <- function(forecast_data,
                           "target_end_date", "location","value") 
                         %in% colnames(truth_data))
     if(!columns_check){
-      stop("Error in plot_forecast: Please provide columns model, 
+      stop("Error in plot_forecasts: Please provide columns model, 
            target_variable, target_end_date, location and value in truth_data.")
     } else {
       # check if all fips codes in location column are valid
-      if (!all(truth_data$location %in% all_valid_fips)){
-        stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
+      if (!all(truth_data$location %in% valid_location_codes)){
+        stop("Error in plot_forecasts: Please make sure all fips codes in location column are valid.")
       }
       # check if truth_data has data from specified location
       if (!all(locations %in% truth_data$location)){
-        stop("Error in plot_forecast: Please provide a valid location to plot.")
+        stop("Error in plot_forecasts: Please provide a valid location to plot.")
       }
       # check if truth_data has specified target variable
       if (!(target_variable %in% truth_data$target_variable)){
-        stop("Error in plot_forecast: Please provide a valid target variable.")
+        stop("Error in plot_forecasts: Please provide a valid target variable.")
       }
     }
   } else {
-    # validate truth_source if no truth_data is provided
+    # validate truth_source 
     truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
+                              choices = valid_truth_sources, 
                               several.ok = FALSE)
     
     if(target_variable == "inc hosp"){
       if (truth_source != "HealthData"){
-        stop("Error in plot_forecast: Incident hopsitalization truth data is only available from HealthData.gov now.")
+        stop("Error in plot_forecasts: Incident hopsitalization truth data is only available from HealthData.gov now.")
       }
     } else {
       if (truth_source == "HealthData"){
-        stop("Error in plot_forecast: This function does not support selected target_variable from HealthData.")
+        stop("Error in plot_forecasts: This function does not support selected target_variable from HealthData.")
       }
     }
   }
   
   if (show_caption){
     if (missing(truth_source)){
-      stop("Error in plot_forecast: Please provide truth_source for caption.")
+      stop("Error in plot_forecasts: Please provide truth_source for caption.")
     }
   }
   
@@ -222,7 +230,7 @@ plot_forecasts <- function(forecast_data,
   } else {
     forecast_dates <- as.Date(forecast_dates)
     if (!all(forecast_dates %in% forecast_data$forecast_date)){
-      stop ("Error in plot_forecast: Not all forecast_dates are available in forecast data.")
+      stop ("Error in plot_forecasts: Not all forecast_dates are available in forecast data.")
     }
   }
   
@@ -268,7 +276,7 @@ plot_forecasts <- function(forecast_data,
       # plot medians instead
       quantiles_to_plot <- append(quantiles_to_plot, 0.5)
     } else {
-      stop("Error in plot_forecast: Median quantiles are not available in forecast_data.")
+      stop("Error in plot_forecasts: Median quantiles are not available in forecast_data.")
     }
   }
   
@@ -334,7 +342,7 @@ plot_forecasts <- function(forecast_data,
   }
   
   if (!is.null(truth_as_of)){
-    warning("Warning in plot_forecast: truth_as_of is not used to load versioned truth data.
+    warning("Warning in plot_forecasts: truth_as_of is not used to load versioned truth data.
             Will be available soon.")
   }
   
@@ -349,7 +357,8 @@ plot_forecasts <- function(forecast_data,
                                       locations_to_plot = locations,
                                       plot_truth = plot_truth,
                                       truth_source = truth_source,
-                                      target_variable_to_plot = target_variable)
+                                      target_variable_to_plot = target_variable,
+                                      hub = hub)
  
 
   # generate caption and full target variable
@@ -522,30 +531,32 @@ plot_forecasts <- function(forecast_data,
 #' @export
 #'
 plot_forecast <- function(forecast_data,
-                           truth_data = NULL, 
-                           models,
-                           target_variable,
-                           locations,
-                           facet = NULL,
-                           facet_scales = "fixed",
-                           facet_nrow = NULL,
-                           facet_ncol = NULL,
-                           forecast_dates,
-                           intervals,
-                           horizon,
-                           truth_source,
-                           use_median_as_point = FALSE,
-                           plot_truth = TRUE,
-                           plot = TRUE,
-                           fill_by_model = FALSE,
-                           fill_transparency = 1.0,
-                           truth_as_of = NULL, 
-                           title = "default", 
-                           subtitle = "default",
-                           show_caption = TRUE){
+                          truth_data = NULL, 
+                          hub = hub,
+                          models,
+                          target_variable,
+                          locations,
+                          facet = NULL,
+                          facet_scales = "fixed",
+                          facet_nrow = NULL,
+                          facet_ncol = NULL,
+                          forecast_dates,
+                          intervals,
+                          horizon,
+                          truth_source,
+                          use_median_as_point = FALSE,
+                          plot_truth = TRUE,
+                          plot = TRUE,
+                          fill_by_model = FALSE,
+                          fill_transparency = 1.0,
+                          truth_as_of = NULL, 
+                          title = "default", 
+                          subtitle = "default",
+                          show_caption = TRUE){
   lifecycle::deprecate_warn("0.1.5", "plot_forecast()", "plot_forecasts()")
   plot_forecasts(forecast_data = forecast_data,
                  truth_data = truth_data, 
+                 hub = hub,
                  models = models,
                  target_variable = target_variable,
                  locations = locations,
