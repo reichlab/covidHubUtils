@@ -36,15 +36,14 @@ load_latest_forecasts_zoltar <- function(models = NULL,
                                          hub = c("US", "ECDC"),
                                          verbose = TRUE){
   
-  forecast <- load_forecasts(models = models,
-                             forecast_dates = forecast_dates,
-                             locations = locations,
-                             types = types,
-                             targets = targets,
-                             as_of = as_of,
-                             verbose = verbose,
-                             source = "zoltar", 
-                             hub = hub)
+  forecast <- load_forecasts_zoltar(models = models,
+                                    forecast_dates = forecast_dates,
+                                    locations = locations,
+                                    types = types,
+                                    targets = targets,
+                                    as_of = as_of,
+                                    verbose = verbose,
+                                    hub = hub)
   
   if(nrow(forecast) != 0) {
     # filter to get the latest forecast for each model

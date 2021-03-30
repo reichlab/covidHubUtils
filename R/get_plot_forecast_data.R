@@ -25,6 +25,8 @@
 #' "cum death", "inc case", "inc death" and "inc hosp". 
 #' @param  truth_as_of the plot includes the truth data that would have been 
 #' in real time as of the truth_as_of date.
+#' @param hub character, which hub to use. Default is "US", other option is
+#' "ECDC"
 #' 
 #' @return data frame with columns model, 
 #' forecast_date, location,  target_variable, type, quantile, value, horizon and 
@@ -41,16 +43,28 @@ get_plot_forecast_data <- function(forecast_data,
                                    plot_truth = TRUE,
                                    truth_source,
                                    target_variable_to_plot,
-                                   truth_as_of = NULL){
+                                   truth_as_of = NULL,
+                                   hub = c("US", "ECDC")){
+  
+  # get lists of valid parameter choices based on `hub`
+  if (hub[1] == "US") {
+    valid_location_codes <- covidHubUtils::hub_locations$fips
+    valid_target_variables <-  c("cum death","inc case",
+                                 "inc death","inc hosp")
+    valid_truth_sources <- c("JHU","USAFacts", "NYTimes", "HealthData")
+  } else if (hub[1] == "ECDC") {
+    valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+    valid_target_variables <- c("inc case","inc death")
+    valid_truth_sources <- c("JHU", "jhu", "ECDC", "ecdc")
+  }
+  
   # validate locations_to_plot
   if (missing(locations_to_plot)){
     locations_to_plot <- unique(forecast_data$location)
   }
   
-  all_valid_fips <- covidHubUtils::hub_locations$fips
-  
   locations_to_plot <- intersect(as.character(locations_to_plot), 
-                                 as.character(all_valid_fips))
+                                 as.character(valid_location_codes))
   
   # validate forecast_dates_to_plot
   if (missing(forecast_dates_to_plot)){
@@ -73,7 +87,7 @@ get_plot_forecast_data <- function(forecast_data,
            target_variable, target_end_date, location and value in truth_data.")
     } else {
       # check if all fips codes in location column are valid
-      if (!all(truth_data$location %in% all_valid_fips)){
+      if (!all(truth_data$location %in% valid_location_codes)){
         stop("Error in get_plot_forecast_data: Please make sure all fips codes in location column are valid.")
       }
       # check if truth_data has data from specified location
@@ -88,7 +102,7 @@ get_plot_forecast_data <- function(forecast_data,
   } else {
     # validate truth_source
     truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","USAFacts", "NYTimes", "HealthData"), 
+                              choices = valid_truth_sources, 
                               several.ok = FALSE)
   }
   
@@ -118,13 +132,15 @@ get_plot_forecast_data <- function(forecast_data,
   }
   
   forecasts <- pivot_forecasts_wider(forecast_data, quantiles_to_plot) %>%
-    dplyr::mutate(truth_forecast = "forecast") %>%
-    dplyr::mutate(full_location_name = 
-                    ifelse(geo_type == "county",
-                           paste(location_name,abbreviation, sep = ", "),
-                           location_name)) %>%
-    dplyr::rename(fips = location, location = full_location_name)
-  
+    dplyr::mutate(truth_forecast = "forecast") 
+    
+  if (hub[1] == "US") {
+    forecasts <- forecasts %>%
+      dplyr::rename(abbr = location, location = full_location_name)
+  } else if (hub[1] == "ECDC") {
+    forecasts <- forecasts %>%
+      dplyr::rename(abbr = location, location = location_name)
+  }
   
   if (plot_truth){
     if (is.null(truth_data)){
@@ -132,7 +148,8 @@ get_plot_forecast_data <- function(forecast_data,
       truth <- load_truth(truth_source = truth_source,
                           target_variable = target_variable_to_plot,
                           locations = locations_to_plot,
-                          temporal_resolution = temporal_resolution) %>%
+                          temporal_resolution = temporal_resolution,
+                          hub = hub) %>%
         dplyr::rename(point = value) %>%
         dplyr::mutate(truth_forecast = "truth")
     } else {
@@ -142,10 +159,10 @@ get_plot_forecast_data <- function(forecast_data,
                       target_variable == target_variable_to_plot)
       
       # add location info if user-provided truth does not have them
-      if (!all(c("geo_type", "location_name","abbreviation") %in% colnames(truth))){
+      if ((!"location_name" %in% colnames(truth)) |(!"full_location_name" %in% colnames(truth))){
         truth <- truth %>%
           dplyr::select(model, target_variable, target_end_date, location, value) %>%
-          dplyr::left_join(covidHubUtils::hub_locations, by = c("location" = "fips"))
+          join_with_hub_locations(hub = hub)
       }
         
       truth <- truth %>%
@@ -153,14 +170,14 @@ get_plot_forecast_data <- function(forecast_data,
         dplyr::mutate(truth_forecast = "truth", point = as.numeric(point))
     }
     
-    # add location name
-    truth <- truth %>%
-      dplyr::mutate(full_location_name = 
-                      ifelse(geo_type == "county",
-                             paste(location_name,abbreviation, sep = ", "),
-                             location_name)) %>%
-      dplyr::rename(fips = location, location = full_location_name)
-    
+    if (hub[1] == "US") {
+      truth <- truth %>%
+        dplyr::rename(abbr = location, location = full_location_name)
+    } else if (hub[1] == "ECDC") {
+      truth <- truth %>%
+        dplyr::rename(abbr = location, location = location_name)
+    }
+
     plot_data <- dplyr::bind_rows(forecasts, truth)
     return (plot_data)
   } else {
