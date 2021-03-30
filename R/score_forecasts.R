@@ -207,7 +207,7 @@ score_forecasts <- function(
   if (return_format == "long") {
     scores <- scores %>%
       tidyr::pivot_longer(
-        cols = !dplyr::any_of(observation_cols),
+        cols = !dplyr::any_of(observation_cols[observation_cols != "true_value"]),
         names_to = "score_name",
         values_to = "score_value"
       )
