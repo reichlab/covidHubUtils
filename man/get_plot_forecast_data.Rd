@@ -15,7 +15,8 @@ get_plot_forecast_data(
   plot_truth = TRUE,
   truth_source,
   target_variable_to_plot,
-  truth_as_of = NULL
+  truth_as_of = NULL,
+  hub = c("US", "ECDC")
 )
 }
 \arguments{
@@ -54,6 +55,9 @@ Optional if truth_data is provided.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the truth_as_of date.}
+
+\item{hub}{character, which hub to use. Default is "US", other option is
+"ECDC"}
 }
 \value{
 data frame with columns model,

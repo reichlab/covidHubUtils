@@ -47,6 +47,17 @@
 #' truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 #' scores <- score_forecasts(forecasts, truth)
 #' }
+#' \dontrun{
+#' forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
+#'   hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+#'   forecast_date_window_size = 0,
+#'   locations = c("GB"),
+#'   targets = paste(1:4, "wk ahead inc death"),
+#'   source = "zoltar")
+#' truth <- load_truth("JHU",hub = c("ECDC","US"), 
+#'   target_variable = "inc death", locations = "GB")
+#' scores <- score_forecasts(forecasts, truth)
+#' }
 #'
 #' @export
 score_forecasts <- function(

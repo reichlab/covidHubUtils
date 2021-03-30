@@ -1,6 +1,9 @@
 ## Changes since last release
 - Update `load_forecasts_repo()` and `load_latest_forecasts_repo()` to use local data objects to validate `targets` parameter.
 - Update `score_forecasts()` to return the `true_value` in function output
+- Add `hub` parameter in `plot_forecasts()` and `get_plot_forecast_data()`.
+- Update validation for `locations`, `truth_source` and `target_variable` in `plot_forecasts()` and `get_plot_forecast_data()`.
+- Add a column that appends state abbreviation to county names in US hub locations data object.
 
 ## covidHubUtils 0.1.5
 
