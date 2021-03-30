@@ -144,11 +144,8 @@ datatable(forecasts_death,
 ))
 ```
 
-<<<<<<< HEAD
-This data can then be plotted directly with a call to `plot_forecast()`. Examples for the inc 
-=======
+
 This data can then be plotted directly with a call to `plot_forecasts()`.
->>>>>>> aded6f92ead8ac02456d2f3664fd301a8134272e
 ```{r}
 p <- plot_forecasts(forecast_data = forecasts, 
   truth_source = "JHU",
@@ -226,11 +223,7 @@ fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-s
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
 
-<<<<<<< HEAD
-p <- covidHubUtils::plot_forecasts(fdat, 
-=======
 p <- plot_forecasts(fdat, 
->>>>>>> aded6f92ead8ac02456d2f3664fd301a8134272e
   target_variable = "inc death", 
   truth_source = "JHU",
   intervals = c(.5, .95), 
