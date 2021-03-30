@@ -9,6 +9,7 @@ supported with specified facet formula.}
 plot_forecast(
   forecast_data,
   truth_data = NULL,
+  hub = hub,
   models,
   target_variable,
   locations,
@@ -38,6 +39,9 @@ plot_forecast(
 by load_truth(). It needs to have columns model, target_variable,
 target_end_date, location and value.
 Model column can be "Observed Data (a truth source)".}
+
+\item{hub}{character, which hub to use.
+Default is "US", other option is "ECDC".}
 
 \item{models}{vector of strings specifying models to plot.
 Default to all models in forecast_data.}
