@@ -176,12 +176,38 @@ Additionally, `plot_forecast()` can handle plotting multiple models or locations
 
 ## as_of versioning
 
-Add the stuff here!
+```{r message=FALSE}
+# Load forecasts that were submitted in a time window from zoltar
+```
 
 ## Hub Location
 
-Display the newly added hub parameter to support the US and European forecasts. 
+```{r message=FALSE}
+# Load forecasts that were submitted in a time window from zoltar
+inc_case_targets <- paste(1:4, "wk ahead inc case")
+forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
+   hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+   forecast_date_window_size = 0,
+   locations = c("GB"),
+   targets = paste(1:4, "wk ahead inc death"),
+   source = "zoltar")
+   truth <- load_truth("JHU",hub = c("ECDC","US"), 
+   target_variable = "inc death", locations = "GB")
+ scores <- score_forecasts(forecasts, truth)
+ datatable(forecasts_ECDC,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+#p_ECDC <- plot_forecasts(forecast_data = forecasts_ECDC, 
+#  truth_source = "JHU",
+#  target_variable = "inc case",  
+#  intervals = c(.5, .8, .95)
+#)
 
+```
 
 ## Plot multiple models
 
