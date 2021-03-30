@@ -146,16 +146,16 @@ datatable(forecasts_death,
 
 This data can then be plotted directly with a call to `plot_forecast()`. Examples for the inc 
 ```{r}
-p <- plot_forecast(forecast_data = forecasts, 
+p <- plot_forecasts(forecast_data = forecasts, 
   truth_source = "JHU",
   target_variable = "inc case",  
   intervals = c(.5, .8, .95))
 
-p_hosp <- plot_forecast(forecast_data = forecasts_hosp, 
+p_hosp <- plot_forecasts(forecast_data = forecasts_hosp, 
   truth_source = "HealthData",
   target_variable = "inc hosp",  
   intervals = c(.5, .8, .95))
-p_death <- plot_forecast(forecast_data = forecasts_death, 
+p_death <- plot_forecasts(forecast_data = forecasts_death, 
   truth_source = "JHU",
   target_variable = "inc death",  
   intervals = c(.5, .8, .95))
@@ -191,9 +191,8 @@ forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
    locations = c("GB"),
    targets = paste(1:4, "wk ahead inc death"),
    source = "zoltar")
-   truth <- load_truth("JHU",hub = c("ECDC","US"), 
-   target_variable = "inc death", locations = "GB")
- scores <- score_forecasts(forecasts, truth)
+
+
  datatable(forecasts_ECDC,
   extensions = 'FixedColumns',
   options = list(
@@ -201,11 +200,12 @@ forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
   scrollX = TRUE,
   fixedColumns = list(leftColumns = 2)
 ))
-#p_ECDC <- plot_forecasts(forecast_data = forecasts_ECDC, 
-#  truth_source = "JHU",
-#  target_variable = "inc case",  
-#  intervals = c(.5, .8, .95)
-#)
+p_ECDC <- plot_forecasts(forecast_data = forecasts_ECDC, 
+  truth_source = "JHU",
+  target_variable = "inc death",  
+  intervals = c(.5, .8, .95),
+  hub = c("ECDC")
+)
 
 ```
 
@@ -222,7 +222,7 @@ fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-s
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
 
-p <- plot_forecast(fdat, 
+p <- covidHubUtils::plot_forecasts(fdat, 
   target_variable = "inc death", 
   truth_source = "JHU",
   intervals = c(.5, .95), 
