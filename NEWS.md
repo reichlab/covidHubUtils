@@ -1,5 +1,6 @@
 ## Changes since last release
 - Update `load_forecasts_repo()` and `load_latest_forecasts_repo()` to use local data objects to validate `targets` parameter.
+- Update `score_forecasts()` to return the `true_value` in function output
 
 ## covidHubUtils 0.1.5
 
