@@ -48,9 +48,10 @@ Default to all models in forecast_data.}
 
 \item{target_variable}{string specifying target type. It should be one of
 "cum death", "inc case", "inc death" and "inc hosp".
+"cum death" and "inc hosp" are only available in forecasts from US hub now.
 If there is only one target_variable in forecast_data, this parameter is optional.}
 
-\item{locations}{string for fips code or 'US'.
+\item{locations}{string for fips code, 'US' or abbreviation of European countries.
 Default to all locations in forecast_data.}
 
 \item{facet}{interpretable facet option for ggplot. Function will error
@@ -67,14 +68,15 @@ Default to forecast_dates present in the data.}
 
 \item{intervals}{values indicating which central prediction interval levels
 to plot. NULL means only plotting point forecasts.
-If not provided, it will default to c(.5, .8, .95).}
+If not provided, it will default to c(.5, .8, .95).
+When plotting 6 models or more, the plot will be reduced to show .95 interval only.}
 
 \item{horizon}{forecasts are plotted for the horizon time steps after the
 forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts", "NYTimes" and "HealthData".
+"USAFacts", "NYTimes", "HealthData" and "ECDC".
 Optional if truth_data is provided.}
 
 \item{use_median_as_point}{boolean for using median quantiles as point forecasts in plot.
@@ -106,6 +108,39 @@ the subtitle will be automatically generated. If "none", no subtitle will be plo
 }
 \value{
 invisible ggplot object
+
+\dontrun{
+us_forecasts <-load_latest_forecasts(
+  models =c("COVIDhub-ensemble","COVIDhub-baseline",
+  "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
+  "LANL-GrowthRate", "Microsoft-DeepSTIA"),
+  last_forecast_date = Sys.Date(),
+  forecast_date_window_size = 6,
+  locations = "US",
+  types = c("point","quantile"),
+  targets = paste(1:4, "wk ahead inc case"),
+  source = "zoltar")
+ 
+plot_forecasts(forecast_data = us_forecasts,
+  models = c("COVIDhub-ensemble","COVIDhub-baseline","JHU_CSSE-DECOM",
+  "CovidAnalytics-DELPHI","LANL-GrowthRate", "Microsoft-DeepSTIA"),
+  target_variable = "inc case", locations = c("US"), intervals = c(.95),
+  horizon = 4, truth_source = "JHU", plot = TRUE, fill_by_model = TRUE,
+  facet = ~model, facet_scales = "fixed", title = "default",
+  show_caption = TRUE)
+
+
+ecdc_forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
+  hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+  forecast_date_window_size = 0,
+  locations = c("GB"),
+  targets = paste(1:4, "wk ahead inc death"),
+  source = "zoltar")
+plot_forecasts(forecast_data = ecdc_forecasts, 
+               hub  = c("ECDC","US"), 
+               locations ="GB", 
+               truth_source = "JHU")
+}
 }
 \description{
 Plot forecasts and optional truth for only one selected target variable.
