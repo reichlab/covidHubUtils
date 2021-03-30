@@ -305,7 +305,7 @@ plot_forecast (forecast_data = forecasts,
 
 Alternatively, truth data can be loaded in from one of those sources independently and stored in your active R session and passed to the `plot_forecast()` function.
 ```{r}
-truth_data <- load_truth(truth_source = "USAFacts",
+truth_data <- load_truth(truth_source = "JHU",
   target_variable = "inc case",
   locations = "US")
 ```
@@ -341,7 +341,7 @@ The inputs to the `scored_forecasts()` include a dataframe created using `load_f
 
 The following code creates a dataframe of scored data based on the forecasts and truth data loaded earlier in this vignette in long format. 
 ```{r}
-forecasts_baseline <- load_latest_forecasts(models = "COVIDhub-baseline",
+forecasts_multiple <- load_latest_forecasts(models = c("COVIDhub-baseline", "COVIDhub-ensemble"),
                       last_forecast_date = "2020-12-07",
                       forecast_date_window_size = 6, 
                       locations = "US",
@@ -351,7 +351,7 @@ forecasts_baseline <- load_latest_forecasts(models = "COVIDhub-baseline",
                       verbose = FALSE,
                       as_of=NULL,
                       hub = c("US"))
-scores <- score_forecasts(forecasts = rbind(forecasts,forecasts_baseline),
+scores <- score_forecasts(forecasts = forecasts_multiple,
   return_format = "wide",
   truth = truth_data)
 
@@ -383,6 +383,25 @@ datatable(scores_ECDC,
 
 The scores calculated using this functionality can be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. 
 
-You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in depth explaination about the methadologies and you can also visit the [evaluation reports page](https://covid19forecasthub.org/eval-reports/). 
+You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in depth explanation about the methodologies and you can also visit the [evaluation reports page](https://covid19forecasthub.org/eval-reports/). 
 
+# Visualizing the Scores
+
+Scores can be visualized through number of aggregations and stratification and the following code should be a good starting point to get to visualizing the scores for your forecasts:
+
+```{r}
+calibration_df  <- scores  %>%
+    group_by(model) %>%
+    summarise(mean_PI50_recent = round(sum(coverage_50, na.rm = TRUE) / n(),2),
+              mean_PI95_recent = round(sum(coverage_95, na.rm = TRUE) / n(),2)) %>%
+    ungroup() 
+
+datatable(
+  calibration_df,
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+```
 
