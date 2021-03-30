@@ -52,6 +52,39 @@
 #' @importFrom grDevices dev.size
 #' @return invisible ggplot object
 #' 
+#' \dontrun{
+#' us_forecasts <-load_latest_forecasts(
+#'   models =c("COVIDhub-ensemble","COVIDhub-baseline",
+#'   "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
+#'   "LANL-GrowthRate", "Microsoft-DeepSTIA"),
+#'   last_forecast_date = Sys.Date(),
+#'   forecast_date_window_size = 6,
+#'   locations = "US",
+#'   types = c("point","quantile"),
+#'   targets = paste(1:4, "wk ahead inc case"),
+#'   source = "zoltar")
+#'  
+#' plot_forecasts(forecast_data = us_forecasts,
+#'   models = c("COVIDhub-ensemble","COVIDhub-baseline","JHU_CSSE-DECOM",
+#'   "CovidAnalytics-DELPHI","LANL-GrowthRate", "Microsoft-DeepSTIA"),
+#'   target_variable = "inc case", locations = c("US"), intervals = c(.95),
+#'   horizon = 4, truth_source = "JHU", plot = TRUE, fill_by_model = TRUE,
+#'   facet = ~model, facet_scales = "fixed", title = "default",
+#'   show_caption = TRUE)
+#' 
+#' 
+#' ecdc_forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
+#'   hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+#'   forecast_date_window_size = 0,
+#'   locations = c("GB"),
+#'   targets = paste(1:4, "wk ahead inc death"),
+#'   source = "zoltar")
+#' plot_forecasts(forecast_data = ecdc_forecasts, 
+#'                hub  = c("ECDC","US"), 
+#'                locations ="GB", 
+#'                truth_source = "JHU")
+#' }
+#' 
 #' @export
 plot_forecasts <- function(forecast_data,
                            truth_data = NULL, 
