@@ -120,7 +120,7 @@ forecasts_death <- load_latest_forecasts(models = "COVIDhub-ensemble",
 
 And here is the data that is returned from this query, note that in addition to the essential forecast data itself, some additional columns with information about the locations are returned.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 datatable(forecasts,
   extensions = 'FixedColumns',
   options = list(
@@ -354,10 +354,24 @@ forecasts_baseline <- load_latest_forecasts(models = "COVIDhub-baseline",
 scores <- score_forecasts(forecasts = rbind(forecasts,forecasts_baseline),
   return_format = "wide",
   truth = truth_data)
+
+truth <- load_truth("JHU",hub = c("ECDC","US"),    target_variable = "inc death", locations = "GB")
+
+scores_ECDC <- score_forecasts(forecasts = forecasts_ECDC,
+  return_format = "wide",
+  truth = truth)
 ```
 
 ```{r, echo=FALSE}
 datatable(scores,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+
+datatable(scores_ECDC,
   extensions = 'FixedColumns',
   options = list(
   dom = 't',
@@ -369,5 +383,6 @@ datatable(scores,
 
 The scores calculated using this functionality can be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. 
 
+You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in depth explaination about the methadologies and you can also visit the [evaluation reports page](https://covid19forecasthub.org/eval-reports/). 
 
 
