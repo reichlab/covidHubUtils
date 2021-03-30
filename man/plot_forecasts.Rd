@@ -48,9 +48,10 @@ Default to all models in forecast_data.}
 
 \item{target_variable}{string specifying target type. It should be one of
 "cum death", "inc case", "inc death" and "inc hosp".
+"cum death" and "inc hosp" are only available in forecasts from US hub now.
 If there is only one target_variable in forecast_data, this parameter is optional.}
 
-\item{locations}{string for fips code or 'US'.
+\item{locations}{string for fips code, 'US' or abbreviation of European countries.
 Default to all locations in forecast_data.}
 
 \item{facet}{interpretable facet option for ggplot. Function will error
@@ -67,14 +68,15 @@ Default to forecast_dates present in the data.}
 
 \item{intervals}{values indicating which central prediction interval levels
 to plot. NULL means only plotting point forecasts.
-If not provided, it will default to c(.5, .8, .95).}
+If not provided, it will default to c(.5, .8, .95).
+When plotting 6 models or more, the plot will be reduced to show .95 interval only.}
 
 \item{horizon}{forecasts are plotted for the horizon time steps after the
 forecast date. Default to all available horizons in forecast data.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts", "NYTimes" and "HealthData".
+"USAFacts", "NYTimes", "HealthData" and "ECDC".
 Optional if truth_data is provided.}
 
 \item{use_median_as_point}{boolean for using median quantiles as point forecasts in plot.
