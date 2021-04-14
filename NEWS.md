@@ -1,3 +1,18 @@
+## Changes since last release
+- Update `load_forecasts_repo()` and `load_latest_forecasts_repo()` to use local data objects to validate `targets` parameter.
+- Update `score_forecasts()` to return the `true_value` in function output
+- Add `hub` parameter in `plot_forecasts()` and `get_plot_forecast_data()`.
+- Update validation for `locations`, `truth_source` and `target_variable` in `plot_forecasts()` and `get_plot_forecast_data()`.
+- Add a column that appends state abbreviation to county names in US hub locations data object.
+
+## covidHubUtils 0.1.5
+
+This is a release for renaming `plot_forecast()` to `plot_forecasts()`. `plot_forecast()` is still available to use but will return deprecation warnings to the user.
+
+### Package updates
+- There is backwards compatibility.
+
+
 ## covidHubUtils 0.1.4
 
 This is a release focusing on updates that provide better interface with Zoltar and European COVID-19 Forecast Hub. The release also contains new feature updates and bug fixes in other util functions.

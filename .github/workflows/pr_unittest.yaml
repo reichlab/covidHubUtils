@@ -9,9 +9,10 @@ jobs:
         with:
           fetch-depth: 0
       - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools"))
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
@@ -22,11 +23,17 @@ jobs:
         shell: Rscript {0}
       - name: Run unit tests
         run: |
-          devtools::test_file("test-date_management.R", stop_on_failure = TRUE)
-          devtools::test_file("test-score_forecasts.R", stop_on_failure = TRUE)
-          devtools::test_file("test-load_forecast_files_repo.R", stop_on_failure = TRUE)
-          devtools::test_file("test-get_model_designations.R", stop_on_failure = TRUE)
-          devtools::test_file("test-load_as_of.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-score_forecasts.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
         shell: Rscript {0}
+      - name: Render vignettes
+        run: |
+          rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
+        shell: Rscript {0}
+          
+        
 
 

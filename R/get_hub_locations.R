@@ -28,5 +28,12 @@ get_hub_locations <- function(){
   #Rename US to United States in location_name
   hub_locations[hub_locations$fips == 'US', ]$location_name = 'United States'
   
+  # Append state abbreviation to county names
+  hub_locations <- hub_locations %>%
+    dplyr::mutate(full_location_name = 
+                    ifelse(geo_type == "county",
+                           paste(location_name, abbreviation, sep = ", "),
+                           location_name))
+  
   save(hub_locations, file = "data/hub_locations.rda")
 }

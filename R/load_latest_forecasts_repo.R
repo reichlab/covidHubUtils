@@ -69,14 +69,14 @@ load_latest_forecasts_repo <- function(file_path,
     types <- c("point", "quantile")
   }
   
-  # validate targets
-  # set up Zoltar connection
-  zoltar_connection <- setup_zoltar_connection()
-  # get Zoltar project url
-  project_url <- get_zoltar_project_url(hub = hub, 
-                                        zoltar_connection = zoltar_connection)
   # get valid targets
-  all_valid_targets <- zoltr::targets(zoltar_connection, project_url)$name
+  if (hub[1] == "US") {
+    all_valid_targets <- covidHubUtils::hub_targets_us
+  } else if (hub[1] == "ECDC") {
+    all_valid_targets <- covidHubUtils::hub_targets_ecdc
+  }
+  
+  # validate targets
   if (!is.null(targets)){
     targets <- match.arg(targets, choices = all_valid_targets, several.ok = TRUE)
   } else {

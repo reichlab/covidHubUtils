@@ -103,3 +103,24 @@ test_that("calc_target_end_date works: on Tuesdays to Fridays with
             
           })
 
+
+test_that("calc_submission_due_date works", 
+          {
+            sample_dates <- c("2020-05-12", "2021-03-2",
+                              "2022-04-09", "2021-12-04", 
+                              as.character(as.Date("2021-01-01") + 0:6))
+            
+            actual <- calc_submission_due_date(sample_dates)
+            
+            expected <- c("2020-05-18", "2021-03-08", 
+                          "2022-04-11", "2021-12-06", 
+                          "2021-01-04", "2021-01-04", 
+                          "2021-01-04", "2021-01-04", 
+                          "2021-01-11", "2021-01-11", 
+                          "2021-01-11")
+            
+            expect_equal(actual, expected)
+            
+          })
+
+

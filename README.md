@@ -29,7 +29,7 @@ For those starting out we recommend you begin with the [Getting Started vignette
 * `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Only support national level and state level truth data for `"inc hosp"` from `"HealthData"` source.
 
 **Plotting Forecasts**
- * `plot_forecast(forecast_data, truth_data, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
+ * `plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
  
 **Scoring Forecasts**
  * `score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))` Calculate specified scores for each combination of `model`, `forecast_date`, `location`, `horizon`, `temporal_resolution`, `target_variable`, and `target_end_date` in the `forecasts` data frame. Please see [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
@@ -42,4 +42,15 @@ For those starting out we recommend you begin with the [Getting Started vignette
  * `preprocess_jhu(save_location)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
  * `preprocess_hospitalization(save_location)`: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
  * `preprocess_truth_for_zoltar(target, issue_date)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
- * `save_truth_for_zoltar(save_location)`: Write results from `preprocess_truth_for_zoltar()` to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
+ * `save_truth_for_zoltar(save_location)`: Write results from `preprocess_truth_for_zoltar()` to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed.
+ 
+# Contributing Guidelines
+If you would like to contribute your work, please follow this list to create a pull request:
+* New functions should come with unit tests, or a promise of a new unit test in the form of an issue if getting the functionality merged in is urgent.
+* If you added a new .R file with unit tests, add the tests to `.github/workflows/pr_unittest.yaml`.
+* Small/quick fixes don't need to be tested, necessarily.
+* Update `NEWS.md` by adding a short summary of your changes under “Changes since last release.”
+* Update `README.md` if you created a new function or add a new parameter to existing functions.
+* Update `DESCRIPTION` when you are using a new dependency in your script.
+
+
