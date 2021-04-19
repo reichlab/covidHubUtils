@@ -1,6 +1,8 @@
 #' Load the most recent forecast submitted in a time window
 #' from reichlab/covid19-forecast-hub repo.
 #' 
+#' This function will drop rows with NULLs in value column.
+#' 
 #' @param file_path path to local copy of the data-processed folder of a 
 #' forecast hub repo. 
 #' @param models character vector of model abbreviations.
@@ -150,7 +152,8 @@ get_forecast_file_path <- function(models, file_path, forecast_dates,
 
 
 
-#' Read in a set of forecast files from a repository
+#' Read in a set of forecast files from a repository 
+#' without rows having NULLs in value column.
 #'
 #' @param file_paths paths to csv forecast files to read in.  It is expected that
 #' the file names are in the format "*YYYY-MM-DD-<model_name>.csv".
@@ -230,7 +233,9 @@ load_forecast_files_repo <- function(file_paths,
           target_end_date = target_end_date,
           type = type,
           quantile = quantile,
-          value = value)
+          value = value) %>%
+        # drop rows with NULL in value column
+        tidyr::drop_na(value)
       
     return(single_forecast)
     }) %>%

@@ -4,6 +4,7 @@
 - Add `hub` parameter in `plot_forecasts()` and `get_plot_forecast_data()`.
 - Update validation for `locations`, `truth_source` and `target_variable` in `plot_forecasts()` and `get_plot_forecast_data()`.
 - Add a column that appends state abbreviation to county names in US hub locations data object.
+- `load_forecasts_repo()`, `load_latest_forecasts_repo()` and `load_forecast_files_repo()` will drop rows with NULLs in `value` column in forecast files.
 
 ## covidHubUtils 0.1.5
 
