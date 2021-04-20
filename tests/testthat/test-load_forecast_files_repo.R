@@ -30,10 +30,10 @@ test_that("drop rows with null in value column",{
     "test-data/test-load_forecasts/data-processed/model-model1/2020-12-07-model-model1.csv")
   
   # number of rows match
-  expect_true(nrow(original) - nrow(original[is.na(original$value), ]) == nrow(actual))
+  expect_true(nrow(original) - nrow(original[original$value == "NULL", ]) == nrow(actual))
   
   # all NULLs are at rows where location is 60.
-  expect_true(!unique(original[is.na(original$value), ]$location) %in% actual$location)
+  expect_true(!unique(original[original$value == "NULL", ]$location) %in% actual$location)
   
 })
 
@@ -45,5 +45,5 @@ test_that("works when no need to drop rows",{
     "test-data/test-load_forecasts/data-processed/model-model1/2020-12-14-model-model1.csv")
   
   # number of rows match
-  expect_true(nrow(original) - nrow(original[is.na(original$value), ]) == nrow(actual))
+  expect_true(nrow(original) - nrow(original[original$value == "NULL", ]) == nrow(actual))
 })

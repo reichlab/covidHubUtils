@@ -208,7 +208,7 @@ load_forecast_files_repo <- function(file_paths,
             location = readr::col_character(),
             type = readr::col_character(),
             quantile = readr::col_double(),
-            value = readr::col_double()
+            value = readr::col_character()
           ))
       
       if (!is.null(types)) {
@@ -233,9 +233,11 @@ load_forecast_files_repo <- function(file_paths,
           target_end_date = target_end_date,
           type = type,
           quantile = quantile,
-          value = value) %>%
-        # drop rows with NULL in value column
-        tidyr::drop_na(value)
+          value = value) 
+      
+      # drop rows with NULL in value column
+      single_forecast <- single_forecast[!single_forecast$value == "NULL", ] %>%
+        dplyr::mutate(value = as.double(value))
       
     return(single_forecast)
     }) %>%
