@@ -23,7 +23,8 @@
 #' "cum death", "inc case", "inc death", "inc hosp". 
 #' Default for US hub is c("inc case", "inc death", "inc hosp").
 #' Default for ECDC hub is c("inc case", "inc death").
-#' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
+#' @param locations vector of valid location code. Defaults to all locations with available forecasts.
+#' US hub is using FIPS code and ECDC hub is using country name abbreviation.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 

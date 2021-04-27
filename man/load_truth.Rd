@@ -37,7 +37,8 @@ Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
 Weekly temporal_resolution will not be applied to "inc hosp" when
 multiple target variables are specified.}
 
-\item{locations}{vector of valid fips code. Defaults to all locations with available forecasts.}
+\item{locations}{vector of valid location code. Defaults to all locations with available forecasts.
+US hub is using FIPS code and ECDC hub is using country name abbreviation.}
 
 \item{data_location}{character specifying the location of truth data.
 Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".}
