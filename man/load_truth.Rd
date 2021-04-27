@@ -2,8 +2,9 @@
 % Please edit documentation in R/load_truth.R
 \name{load_truth}
 \alias{load_truth}
-\title{Load truth data for a specified target variable, locations and temporal resolution
-from one or more truth sources using files in reichlab/covid19-forecast-hub.}
+\title{Load truth data under multiple target variables
+from multiple truth sources
+using files in reichlab/covid19-forecast-hub.}
 \usage{
 load_truth(
   truth_source,
@@ -18,17 +19,21 @@ load_truth(
 }
 \arguments{
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".}
+be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".
+Default for US hub is c("JHU", "HealthData")}
 
-\item{target_variable}{string specifying target type It should be one of
-"cum death", "inc case", "inc death", "inc hosp".}
+\item{target_variable}{string specifying target type It should be one or more of
+"cum death", "inc case", "inc death", "inc hosp".
+Default for US hub is c("inc case", "inc death", "inc hosp")}
 
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
 Default to system date.}
 
 \item{temporal_resolution}{character specifying temporal resolution
 to include: currently support "weekly" and "daily".
-Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.}
+Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
+Weekly temporal_resolution will not be applied to "inc hosp" when
+multiple target variables are specified.}
 
 \item{locations}{vector of valid fips code. Defaults to all locations with available forecasts.}
 
@@ -50,6 +55,13 @@ location, value, location_name, population, geo_type, geo_value, abbreviation
 data for other target variables from "HealthData".
 }
 \details{
+When loading data for multiple target_variables, temporal_resolution will be applied
+to all target variables but "inc hosp". In that case, the function will return
+daily incident hospitalization counts along with other data.
+
+Weekly temporal resolution will be applied to "inc hosp" if the user specifies "inc hosp"
+as the only target_variable.
+
 When loading weekly data, if there are not enough observations for a week, the corresponding
 weekly count would be NA in resulting data frame.
 }
@@ -57,7 +69,8 @@ weekly count would be NA in resulting data frame.
 library(covidHubUtils)
 
 # load for US
-load_truth(truth_source = "JHU", target_variable = "inc case")
+load_truth(truth_source = c("JHU","HealthData"), 
+target_variable = c("inc case", "inc death", "inc hosp"))
 
 # load for ECDC
 load_truth(truth_source = "JHU", target_variable = "inc case", hub = "ECDC")
