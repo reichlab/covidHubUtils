@@ -17,10 +17,12 @@
 #' 
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".
-#' Default for US hub is c("JHU", "HealthData")
+#' Default for US hub is c("JHU", "HealthData").
+#' Default for ECDC hub is c("JHU").
 #' @param target_variable string specifying target type It should be one or more of 
 #' "cum death", "inc case", "inc death", "inc hosp". 
-#' Default for US hub is c("inc case", "inc death", "inc hosp")
+#' Default for US hub is c("inc case", "inc death", "inc hosp").
+#' Default for ECDC hub is c("inc case", "inc death").
 #' @param locations vector of valid fips code. Defaults to all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
@@ -47,7 +49,9 @@
 #' target_variable = c("inc case", "inc death", "inc hosp"))
 #' 
 #' # load for ECDC
-#' load_truth(truth_source = "JHU", target_variable = "inc case", hub = "ECDC")
+#' load_truth(truth_source = c("JHU"), 
+#' target_variable = c("inc case", "inc death"), 
+#' hub = "ECDC")
 #' 
 #' @export
 load_truth <- function (truth_source,
@@ -105,17 +109,24 @@ load_truth <- function (truth_source,
     
     
   } else if (hub[1] == "ECDC") {
-    # validate target variable 
-    target_variable <- match.arg(target_variable, 
-                                 choices = c("inc case",
-                                             "inc death"), 
-                                 several.ok = TRUE)
+    if (missing(target_variable)){
+      target_variable <- c("inc case", "inc death")
+    } else {
+      # validate target variable 
+      target_variable <- match.arg(target_variable, 
+                                   choices = c("inc case",
+                                               "inc death"), 
+                                   several.ok = TRUE)
+    }
     
-    # validate truth source
-    truth_source <- match.arg(truth_source, 
-                              choices = c("JHU","ECDC"), 
-                              several.ok = TRUE)
-    
+    if (missing(truth_source)){
+      truth_source <- c("JHU")
+    } else {
+      # validate truth source
+      truth_source <- match.arg(truth_source, 
+                                choices = c("JHU","ECDC"), 
+                                several.ok = TRUE)
+    }
     # get list of all valid locations and codes
     valid_locations <- covidHubUtils::hub_locations_ecdc
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location

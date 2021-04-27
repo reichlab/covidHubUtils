@@ -20,11 +20,13 @@ load_truth(
 \arguments{
 \item{truth_source}{character vector specifying where the truths will
 be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".
-Default for US hub is c("JHU", "HealthData")}
+Default for US hub is c("JHU", "HealthData").
+Default for ECDC hub is c("JHU").}
 
 \item{target_variable}{string specifying target type It should be one or more of
 "cum death", "inc case", "inc death", "inc hosp".
-Default for US hub is c("inc case", "inc death", "inc hosp")}
+Default for US hub is c("inc case", "inc death", "inc hosp").
+Default for ECDC hub is c("inc case", "inc death").}
 
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
 Default to system date.}
@@ -73,6 +75,8 @@ load_truth(truth_source = c("JHU","HealthData"),
 target_variable = c("inc case", "inc death", "inc hosp"))
 
 # load for ECDC
-load_truth(truth_source = "JHU", target_variable = "inc case", hub = "ECDC")
+load_truth(truth_source = c("JHU"), 
+target_variable = c("inc case", "inc death"), 
+hub = "ECDC")
 
 }

@@ -4,7 +4,7 @@
 - Add `hub` parameter in `plot_forecasts()` and `get_plot_forecast_data()`.
 - Update validation for `locations`, `truth_source` and `target_variable` in `plot_forecasts()` and `get_plot_forecast_data()`.
 - Add a column that appends state abbreviation to county names in US hub locations data object.
-- `load_truth()` now supports multiple target variables.
+- `load_truth()` now supports multiple target variables and has a new set of default values for `target_variable` and `truth_source` based on `hub` parameter.
 
 ## covidHubUtils 0.1.5
 
