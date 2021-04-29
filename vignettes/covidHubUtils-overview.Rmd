@@ -82,7 +82,7 @@ The verbose parameter has been explicitly set to false here to prevent the multi
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
-                      last_forecast_date = "2020-12-07",
+                      last_forecast_date = "2021-03-08",
                       forecast_date_window_size = 6, 
                       locations = "US",
                       types = c("point","quantile"),
@@ -94,7 +94,7 @@ forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
 
 hosp_data <- paste(0:130, "day ahead inc hosp")
 forecasts_hosp <- load_latest_forecasts(models = "COVIDhub-ensemble",
-                      last_forecast_date = "2020-12-07",
+                      last_forecast_date = "2021-03-08",
                       forecast_date_window_size = 6, 
                       locations = "US",
                       types = c("point","quantile"),
@@ -106,7 +106,7 @@ forecasts_hosp <- load_latest_forecasts(models = "COVIDhub-ensemble",
 
 inc_case_targets_death <- paste(1:4, "wk ahead inc death")
 forecasts_death <- load_latest_forecasts(models = "COVIDhub-ensemble",
-                      last_forecast_date = "2020-12-07",
+                      last_forecast_date = "2021-03-08",
                       forecast_date_window_size = 6, 
                       locations = "US",
                       types = c("point","quantile"),
@@ -175,14 +175,57 @@ p + scale_x_date(name=NULL, date_breaks = "1 month", date_labels = "%b") +
 Additionally, `plot_forecasts()` can handle plotting multiple models or locations or forecast dates at the same time as the following examples show.
 
 
-## as_of versioning
+## Versioned Forecasts
+
+CovidHubUtils package also includes functionaliity to load in versioned forecasts. This is available through the as_of parameter. as_of parameter accepts a date in YYYY-MM-DD format to load forecasts submitted as of this date. It defaults to NULL to load the latest version. This parameter is only supported when loading forecasts from Zoltar. It is useful to see the changes implemented in the forecasts. 
 
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
+as_of_forecasts <- load_latest_forecasts(models = "Columbia_UNC-SurvCon", 
+                                         last_forecast_date = "2021-01-03", 
+                                         source = 'zoltar',
+                                         as_of = "2021-01-04",
+                                         verbose = FALSE,
+                                         location = 'US')
+correct_forecast <- load_latest_forecasts(models = "Columbia_UNC-SurvCon", 
+                                         last_forecast_date = "2021-01-03", 
+                                         source = 'zoltar',
+                                         verbose = FALSE,
+                                         location = 'US')
+
+datatable(as_of_forecasts,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+datatable(correct_forecast,
+  extensions = 'FixedColumns',
+  options = list(
+  dom = 't',
+  scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+))
+```
+
+Plotting these 2 different forecasts will show the difference between the forecasts and the versioned forecasts. 
+```{r}
+p_as_of <- plot_forecasts(forecast_data = as_of_forecasts, 
+  truth_source = "JHU",
+  target_variable = "inc death",  
+  intervals = c(.5, .8, .95))
+p_correct <- plot_forecasts(forecast_data = correct_forecast, 
+  truth_source = "JHU",
+  target_variable = "inc death",  
+  intervals = c(.5, .8, .95))
 ```
 
 ## Hub Location
 
+The hub parameter has been included to incorporate the models that submit forecasts for European countries. The hub parameter is a character vector, where the first element indicates the hub from which to load forecasts. Possible options are "US" and "ECDC".
+
+Here is an example for using the European hub (ECDC), iif nothing is provided, it defaults to US. 
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
@@ -191,7 +234,8 @@ forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
    forecast_date_window_size = 0,
    locations = c("GB"),
    targets = paste(1:4, "wk ahead inc death"),
-   source = "zoltar")
+   source = "zoltar",
+   verbose=FALSE)
 
 
  datatable(forecasts_ECDC,
@@ -216,11 +260,12 @@ The following code looks at three models' forecasts of incident deaths at one ti
 
 ```{r}
 fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
-  last_forecast_date = "2020-12-14",
+  last_forecast_date = "2021-03-08",
   source = "zoltar",
   forecast_date_window_size = 6,
   locations = "US",
   types = c("quantile", "point"), 
+   verbose = FALSE,
   targets = paste(1:4, "wk ahead inc death"))
 
 p <- plot_forecasts(fdat, 
@@ -244,11 +289,12 @@ The following code looks at three models' forecasts of incident deaths at one ti
 
 ```{r}
 fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
-  last_forecast_date = "2020-12-14",
+  last_forecast_date = "2021-03-08",
   source = "zoltar",
   forecast_date_window_size = 6,
   locations = c("19", "48", "46"),
   types = c("quantile", "point"), 
+   verbose = FALSE,
   targets = paste(1:4, "wk ahead inc death"))
 
 p <- plot_forecasts(fdat, 
@@ -273,7 +319,7 @@ The following code looks at three models' forecasts of incident deaths at one ti
 
 ```{r}
 fdat <- load_forecasts(models = c("Karlen-pypm", "UMass-MechBayes"),
-  forecast_dates = seq.Date(as.Date("2020-09-06"), as.Date("2020-12-13"), by = "28 days"),
+  forecast_dates = seq.Date(as.Date("2020-12-13"), as.Date("2021-03-14"), by = "28 days"),
   locations = "US",
   types = c("quantile", "point"), 
   targets = paste(1:4, "wk ahead inc death"))
@@ -341,14 +387,18 @@ In addition to downloading forecasts, `covidHubUtils` has the capability to eval
 
 The inputs to the `scored_forecasts()` include a dataframe created using `load_forecasts()` and a dataframe created using `truth_data()`. 
 
-The following code creates a dataframe of scored data based on the forecasts and truth data loaded earlier in this vignette in long format. 
+The following code creates a dataframe of scored data based on the forecasts and truth data loaded earlier in this vignette in long format. This is the example for the USA models:
 ```{r}
-forecasts_multiple <- load_latest_forecasts(models = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-                      last_forecast_date = "2020-12-07",
-                      forecast_date_window_size = 6, 
+inc_case_targets <- paste(1:4, "wk ahead inc case")
+
+truth_data <- load_truth(truth_source = "JHU",
+  target_variable = "inc death",
+  locations = "US")
+forecasts_multiple <- load_forecasts(models = c("COVIDhub-baseline", "COVIDhub-ensemble"),
+                      forecast_dates = as.Date(c("2020-12-14", "2020-12-15")) + seq(0, 35, 7),
                       locations = "US",
                       types = c("point","quantile"),
-                      targets = inc_case_targets,
+                      targets = paste(1:4, "wk ahead inc death"),
                       source = "zoltar",
                       verbose = FALSE,
                       as_of=NULL,
@@ -357,14 +407,6 @@ scores <- score_forecasts(forecasts = forecasts_multiple,
   return_format = "wide",
   truth = truth_data)
 
-truth <- load_truth("JHU",hub = c("ECDC","US"),    target_variable = "inc death", locations = "GB")
-
-scores_ECDC <- score_forecasts(forecasts = forecasts_ECDC,
-  return_format = "wide",
-  truth = truth)
-```
-
-```{r, echo=FALSE}
 datatable(scores,
   extensions = 'FixedColumns',
   options = list(
@@ -372,6 +414,18 @@ datatable(scores,
   scrollX = TRUE,
   fixedColumns = list(leftColumns = 2)
 ))
+
+```
+
+
+This is the example code to run for models in the European Hub:
+```{r}
+
+truth <- load_truth("JHU",hub = c("ECDC","US"),    target_variable = "inc death", locations = "GB")
+
+scores_ECDC <- score_forecasts(forecasts = forecasts_ECDC,
+  return_format = "wide",
+  truth = truth)
 
 datatable(scores_ECDC,
   extensions = 'FixedColumns',
@@ -389,21 +443,37 @@ You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/20
 
 # Visualizing the Scores
 
-Scores can be visualized through number of aggregations and stratification and the following code should be a good starting point to get to visualizing the scores for your forecasts:
+Scores can be visualized through number of aggregations and stratification and the following segments of code should be a good starting point to get to visualizing the scores for your forecasts. 
+
+Heatmaps are a great way to visuazlize your data over a large number of models. The following code provides a skeleton for visualizing the WIS score of multiple models over the 4 horizons:
 
 ```{r}
-calibration_df  <- scores  %>%
-    group_by(model) %>%
-    summarise(mean_PI50_recent = round(sum(coverage_50, na.rm = TRUE) / n(),2),
-              mean_PI95_recent = round(sum(coverage_95, na.rm = TRUE) / n(),2)) %>%
-    ungroup() 
-
-datatable(
-  calibration_df,
-  options = list(
-  dom = 't',
-  scrollX = TRUE,
-  fixedColumns = list(leftColumns = 2)
-))
+scores %>%
+  dplyr::group_by(model, horizon) %>%
+  dplyr::summarise(wis = mean(wis)) %>%
+scoringutils::score_heatmap(metric = "wis", 
+                            x = "horizon")
 ```
 
+The following snippet of code is a way to visualize the WIS score in the form of a bar plot for multiple models. Each of the bar represents the WIS score of a different model and each bar is divided in the how much of it is underprediction, overprediction and sharpness:
+
+```{r}
+scores %>%
+  dplyr::group_by(model) %>%
+  dplyr::summarise(sharpness= mean(sharpness), 
+                   overprediction = mean(overprediction), 
+                   underprediction = mean(underprediction)) %>%
+  scoringutils::wis_components() 
+```
+
+
+The following snippet of code provides a line graph of the all the models chosen and plots the percentage of coverage inside the interval over a range of intervals. Here is the code for the plot:
+```{r}
+scores %>%
+  tidyr::pivot_longer(cols = dplyr::starts_with("coverage")) %>%
+  dplyr::rename(range = name, coverage = value) %>%
+  dplyr::group_by(model, range) %>%
+  dplyr::summarise(coverage = mean(coverage)) %>%
+  dplyr::mutate(range = as.numeric(sub("coverage_", "", range))) %>%
+  scoringutils::interval_coverage()
+```
