@@ -2,7 +2,8 @@
 % Please edit documentation in R/load_latest_forecasts_repo.R
 \name{load_forecast_files_repo}
 \alias{load_forecast_files_repo}
-\title{Read in a set of forecast files from a repository}
+\title{Read in a set of forecast files from a repository
+without rows having NULLs in value column.}
 \usage{
 load_forecast_files_repo(
   file_paths,
@@ -36,6 +37,7 @@ location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
 Read in a set of forecast files from a repository
+without rows having NULLs in value column.
 }
 \details{
 The model_name in the file name will be used for the value of the
