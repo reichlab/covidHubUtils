@@ -16,22 +16,24 @@
 #' weekly count would be NA in resulting data frame.
 #' 
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support "JHU","USAFacts", "NYTimes" and "HealthData".
-#' Default for US hub is c("JHU", "HealthData").
-#' Default for ECDC hub is c("JHU").
+#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' If \code{NULL}, default for US hub is c("JHU", "HealthData").
+#' If \code{NULL}, default for ECDC hub is c("JHU").
 #' @param target_variable string specifying target type It should be one or more of 
 #' "cum death", "inc case", "inc death", "inc hosp". 
-#' Default for US hub is c("inc case", "inc death", "inc hosp").
-#' Default for ECDC hub is c("inc case", "inc death").
-#' @param locations vector of valid location code. Defaults to all locations with available forecasts.
+#' If \code{NULL}, default for US hub is c("inc case", "inc death", "inc hosp").
+#' If \code{NULL}, default for ECDC hub is c("inc case", "inc death").
+#' @param locations vector of valid location code. 
+#' If \code{NULL}, default to all locations with available forecasts.
 #' US hub is using FIPS code and ECDC hub is using country name abbreviation.
 #' @param data_location character specifying the location of truth data.
-#' Currently only supports "local_hub_repo" and "remote_hub_repo". Default to "remote_hub_repo".
+#' Currently only supports "local_hub_repo" and "remote_hub_repo". 
+#' If \code{NULL}, default to "remote_hub_repo".
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 
-#' Default to system date.
+#' If \code{NULL},default to system date.
 #' @param temporal_resolution character specifying temporal resolution
 #' to include: currently support "weekly" and "daily". 
-#' Default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
+#' If \code{NULL}, default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
 #' Weekly temporal_resolution will not be applied to "inc hosp" when  
 #' multiple target variables are specified.
 #' @param local_repo_path path to local clone of the reichlab/covid19-forecast-hub
@@ -55,19 +57,19 @@
 #' hub = "ECDC")
 #' 
 #' @export
-load_truth <- function (truth_source,
-                        target_variable, 
-                        truth_end_date = Sys.Date(),
-                        temporal_resolution,
-                        locations,
-                        data_location = "remote_hub_repo",
+load_truth <- function (truth_source = NULL,
+                        target_variable = NULL, 
+                        truth_end_date = NULL,
+                        temporal_resolution = NULL,
+                        locations = NULL,
+                        data_location = NULL,
                         local_repo_path = NULL, 
                         hub = c("US", "ECDC")){
   
   
   # preparations and validation checks that are different for US and ECDC hub
   if (hub[1] == "US") {
-    if (missing(target_variable)){
+    if (is.null(target_variable)){
       target_variable <- c("inc case", "inc death", "inc hosp")
     } else {
     # validate target variable 
@@ -79,7 +81,7 @@ load_truth <- function (truth_source,
                                  several.ok = TRUE)
     }
     
-    if (missing(truth_source)){
+    if (is.null(truth_source)){
       truth_source <- c("JHU", "HealthData")
     } else{
       # validate truth source
@@ -110,7 +112,7 @@ load_truth <- function (truth_source,
     
     
   } else if (hub[1] == "ECDC") {
-    if (missing(target_variable)){
+    if (is.null(target_variable)){
       target_variable <- c("inc case", "inc death")
     } else {
       # validate target variable 
@@ -120,7 +122,7 @@ load_truth <- function (truth_source,
                                    several.ok = TRUE)
     }
     
-    if (missing(truth_source)){
+    if (is.null(truth_source)){
       truth_source <- c("JHU")
     } else {
       # validate truth source
@@ -137,6 +139,10 @@ load_truth <- function (truth_source,
   }
   
   # validate truth end date
+  if (is.null(truth_end_date)){
+    truth_end_date <- Sys.Date()
+  }
+  
   truth_end_date <- tryCatch({
     as.Date(truth_end_date)}, 
     error = function(err) {
@@ -145,7 +151,7 @@ load_truth <- function (truth_source,
   )
   
   # validate temporal resolution
-  if (missing(temporal_resolution)){
+  if (is.null(temporal_resolution)){
     # only relevant for US hub currently where inc hosp is available
     if (length(target_variable) == 1){
       if (target_variable == "inc hosp"){
@@ -164,7 +170,7 @@ load_truth <- function (truth_source,
   
   # validate data location
   # COVIDcast is not available now
-  if(!missing(data_location)){
+  if(!is.null(data_location)){
     data_location <- match.arg(data_location, 
                                choices = c("remote_hub_repo",
                                            "local_hub_repo"),
@@ -175,7 +181,7 @@ load_truth <- function (truth_source,
   }
   
   # validate locations
-  if (!missing(locations)){
+  if (!is.null(locations)){
     locations <- match.arg(locations, 
                            choices = valid_location_codes, 
                            several.ok = TRUE)
@@ -185,7 +191,7 @@ load_truth <- function (truth_source,
   if (data_location == "remote_hub_repo"){
     repo_path <- remote_repo_path
   } else if (data_location == "local_hub_repo") {
-    if (missing(local_repo_path) | is.na(local_repo_path) | is.null(local_repo_path)) {
+    if (is.na(local_repo_path) | is.null(local_repo_path)) {
       stop ("Error in local_repo_path : Please provide a valid local_repo_path.")
     } else {
       repo_path = local_repo_path
@@ -245,7 +251,7 @@ load_truth <- function (truth_source,
     dplyr::select(model, target_variable, target_end_date, location, value)
   
   # filter to only include specified locations
-  if (!missing(locations)){
+  if (!is.null(locations)){
     truth <- dplyr::filter(truth, location %in% locations) 
     if (nrow(truth) == 0){
       warning("Warning in load_truth: Truth for selected locations are not available.\n Please check your parameters.")
@@ -269,13 +275,26 @@ load_truth <- function (truth_source,
 
 
 
-# helper function to construct the file path based on the target_variable, 
-# the source and the hub
+#' Construct the file path to a truth file
+#' 
+#' @param source character vector specifying where the truths will
+#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' @param repo_path path to local clone of the reichlab/covid19-forecast-hub
+#' repository. Only used when data_location is "local_hub_repo"
+#' @param target_variable string specifying target type It should be one or more of 
+#' "cum death", "inc case", "inc death", "inc hosp". 
+#' @param data_location character specifying the location of truth data.
+#' Currently only supports "local_hub_repo" and "remote_hub_repo".
+#' @param hub character, which hub to use. Default is "US", other option is
+#' "ECDC"
+#' 
+#' @return character of file path
+
 get_truth_path <- function(source, 
                            repo_path,
                            target_variable,
                            data_location,
-                           hub) {
+                           hub = c("US", "ECDC")) {
   # generate full target variable (this works for both hubs as previous 
   # checks already made sure only applicable target_variables are used)
   if (target_variable == "cum death"){
