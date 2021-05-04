@@ -30,9 +30,8 @@
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
 #' 
-#' @export
 #' 
-
+#' 
 #' 
 #'\dontrun{
 #'
@@ -65,8 +64,8 @@
 #'  
 #'   }
 #'   
-
-
+#' @export
+#' 
 
 load_latest_forecasts <- function (
   models = NULL,

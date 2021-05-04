@@ -59,6 +59,37 @@ from which to load forecasts. Possible options are "US" and "ECDC"}
 data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
+
+\dontrun{
+
+
+forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
+ last_forecast_date = "2020-12-07",
+ forecast_date_window_size = 6, 
+ locations = "US",
+ types = c("point","quantile"),
+ targets = inc_case_targets,
+ source = "zoltar",
+ verbose = FALSE,
+ as_of=NULL,
+ hub = c("US"))
+ 
+forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
+ hub = c("ECDC","US"), 
+ last_forecast_date = "2021-03-08",
+ forecast_date_window_size = 0,
+ locations = c("GB"),
+ targets = paste(1:4, "wk ahead inc death"),
+ source = "zoltar")
+ 
+load_latest_forecasts(models = "Columbia_UNC-SurvCon", 
+ last_forecast_date = "2021-01-03", 
+ source = 'zoltar',
+ as_of = "2021-01-04",
+ verbose = FALSE,
+ location = 'US')
+ 
+  }
 }
 \description{
 Load covid forecasts from local hub repo or Zoltar.
