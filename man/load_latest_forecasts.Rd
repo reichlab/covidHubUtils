@@ -68,7 +68,7 @@ forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
  forecast_date_window_size = 6, 
  locations = "US",
  types = c("point","quantile"),
- targets = inc_case_targets,
+ targets = paste(1:4, "wk ahead inc case"),
  source = "zoltar",
  verbose = FALSE,
  as_of=NULL,
@@ -89,7 +89,7 @@ load_latest_forecasts(models = "Columbia_UNC-SurvCon",
  verbose = FALSE,
  location = 'US')
  
-  }
+}
 }
 \description{
 Load covid forecasts from local hub repo or Zoltar.

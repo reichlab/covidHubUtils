@@ -41,7 +41,7 @@
 #'  forecast_date_window_size = 6, 
 #'  locations = "US",
 #'  types = c("point","quantile"),
-#'  targets = inc_case_targets,
+#'  targets = paste(1:4, "wk ahead inc case"),
 #'  source = "zoltar",
 #'  verbose = FALSE,
 #'  as_of=NULL,
@@ -62,7 +62,7 @@
 #'  verbose = FALSE,
 #'  location = 'US')
 #'  
-#'   }
+#' }
 #'   
 #' @export
 #' 
