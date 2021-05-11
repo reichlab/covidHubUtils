@@ -118,18 +118,10 @@ forecasts_death <- load_latest_forecasts(models = "COVIDhub-ensemble",
 
 ```
 
-Here is the data frame returned from these queries. In addition to the essential forecast data, a few columns with location information are also returned.
+Here are the top rows of the data frame from the query of incident case forecasts. In addition to the essential forecast data, a few columns with location information are also returned. Tables of the other target variables look similar. Note that one row corresponds either to a point or a single quantile prediction. Details of the underlying data format are described in detail [here](https://github.com/reichlab/covid19-forecast-hub/blob/master/data-processed/README.md#forecast-file-format).
 
 ```{r, echo=FALSE, message=FALSE}
 datatable(forecasts_case,
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE,
-                         fixedColumns = list(leftColumns = 2)))
-datatable(forecasts_hosp,
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE, 
-                         fixedColumns = list(leftColumns = 2)))
-datatable(forecasts_death,
           extensions = 'FixedColumns',
           options = list(dom = 't', scrollX = TRUE,
                          fixedColumns = list(leftColumns = 2)))
@@ -206,7 +198,7 @@ p_correct <- plot_forecasts(forecast_data = new_forecasts,
                             intervals = c(.5, .8, .95))
 ```
 
-## Hub location
+## Query the US or the European Forecast Hubs
 
 The `hub` parameter is useful to load forecasts submitted to a particular forecast hub. This parameter takes a character vector, where the first element indicates the hub to load forecasts from. Currently, it supports "US" and "ECDC".
 
@@ -367,6 +359,12 @@ plot_forecasts(forecast_data = forecasts_case,
 
 In addition to querying forecasts and truth data, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at any provided quantiles, the absolute error based on a median estimate, the weighted interval score (WIS) of the forecast, and a component-wise breakdown of WIS into sharpness, overprediction and underprediction. 
 
+These scores could be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in-depth explanation about the methodologies.
+
+To find the most recent weekly forecast evaluation summary, please visit the [evaluation reports page](https://covid19forecasthub.org/eval-reports/) and [the Forecast Evaluation Dashboard](https://delphi.cmu.edu/forecast-eval/) built by the CMU Delphi team and the COVID-19 Forecast Hub.
+
+## Score forecasts
+
 The inputs to the `scored_forecasts()` include a `forecasts` data frame created by `load_forecasts()` and a `truth` data frame created by `load_truth()`. 
 
 The following code scores forecasts by the corresponding truth data loaded earlier in this vignette in long format. This is the example for the US Forecast Hub:
@@ -417,13 +415,14 @@ datatable(scores_ECDC,
                          fixedColumns = list(leftColumns = 2)))
 ```
 
-The scores could be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. 
-
-You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in-depth explanation about the methodologies and you can also visit the [evaluation reports page](https://covid19forecasthub.org/eval-reports/). 
-
-# Visualizing forecast scores
+## Visualize forecast scores
 
 We use plotting functions from `scoringutils` to visualize different scoring metrics.
+
+The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install the most up-to-date development version of `scoringutils` from GitHub:
+``` {r}
+devtools::install_github("epiforecasts/scoringutils")
+```
 
 Heatmaps are a great way to visualize your data over a large number of models. The following code provides a skeleton for visualizing the WIS score of multiple models over the 4 horizons:
 
