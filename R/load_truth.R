@@ -36,6 +36,7 @@
 #' If \code{NULL}, default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
 #' Weekly temporal_resolution will not be applied to "inc hosp" when  
 #' multiple target variables are specified.
+#' "ECDC" truth data is weekly by default. Daily level data is not available.
 #' @param local_repo_path path to local clone of the reichlab/covid19-forecast-hub
 #' repository. Only used when data_location is "local_hub_repo"
 #' @param hub character, which hub to use. Default is "US", other option is
@@ -130,6 +131,7 @@ load_truth <- function (truth_source = NULL,
                                 choices = c("JHU","ECDC"), 
                                 several.ok = TRUE)
     }
+    
     # get list of all valid locations and codes
     valid_locations <- covidHubUtils::hub_locations_ecdc
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
@@ -166,6 +168,9 @@ load_truth <- function (truth_source = NULL,
     temporal_resolution <- match.arg(temporal_resolution, 
                                      choices = c("daily","weekly"), 
                                      several.ok = FALSE)
+    if("ECDC" %in% truth_source & temporal_resolution == "daily"){
+      warning("Warning in load_truth: ECDC truth data will be weekly.")
+    }
   }
   
   # validate data location
@@ -213,8 +218,15 @@ load_truth <- function (truth_source = NULL,
                                     target_variable = target, 
                                     data_location = data_location,
                                     hub = hub)
-        # load data from file patth
-        truth <- readr::read_csv(file_path) %>%
+        # load data from file path
+        truth <- readr::read_csv(file_path) 
+        
+        if (source == "ECDC"){
+          truth <- truth %>%
+            dplyr::rename(date = week_start)
+        }
+        
+        truth <- truth %>%
           # add inc_cum and death_case columns and rename date column
           dplyr::mutate(model = paste0("Observed Data (",source,")"), 
                         target_variable = target,
@@ -223,7 +235,9 @@ load_truth <- function (truth_source = NULL,
         
         # optional aggregation step based on temporal resolution
         # only loading daily incident hospitalization truth data
-        if (target != "inc hosp" & temporal_resolution == "weekly"){
+        if ((target != "inc hosp" & temporal_resolution == "weekly") &
+            # ECDC is weekly data by default. No need to aggregate.
+            (source != "ECDC")){
           if (unlist(strsplit(target, " "))[1] == "cum") {
             # only keep weekly data
             truth <- dplyr::filter(truth, 

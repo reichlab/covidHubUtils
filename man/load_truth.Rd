@@ -35,7 +35,8 @@ If \code{NULL},default to system date.}
 to include: currently support "weekly" and "daily".
 If \code{NULL}, default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
 Weekly temporal_resolution will not be applied to "inc hosp" when
-multiple target variables are specified.}
+multiple target variables are specified.
+"ECDC" truth data is weekly by default. Daily level data is not available.}
 
 \item{locations}{vector of valid location code.
 If \code{NULL}, default to all locations with available forecasts.
