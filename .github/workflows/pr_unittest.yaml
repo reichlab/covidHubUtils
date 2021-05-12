@@ -36,13 +36,7 @@ jobs:
         working-directory: ./covidData/code/data-processing
       - name: Run unit tests
         run: |
-          devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-score_forecasts.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-get_truth.R", stop_on_failure = TRUE)
+          devtools::test(stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Render vignettes
         run: |
