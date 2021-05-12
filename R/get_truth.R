@@ -37,9 +37,9 @@ download_raw_nytimes <- function (save_location="./data-truth/nytimes/raw/"){
                                 deaths = readr::col_integer()
                               )) 
   
-  readr::write_csv(us,       path = paste0(save_location,"us.csv"))
-  readr::write_csv(states,   path = paste0(save_location,"us-states.csv"))
-  readr::write_csv(counties, path = paste0(save_location,"us-counties.csv"))
+  readr::write_csv(us,       file = paste0(save_location,"us.csv"))
+  readr::write_csv(states,   file = paste0(save_location,"us-states.csv"))
+  readr::write_csv(counties, file = paste0(save_location,"us-counties.csv"))
   return(list("us" = us, "states" = states, "counties" = counties))
 }
 
@@ -76,19 +76,19 @@ preprocess_nytimes <- function (save_location="./data-truth/nytimes/"){
   
   readr::write_csv(
     d %>% dplyr::select(date, location, deaths) %>% dplyr::rename(value = deaths),
-    path = paste0(save_location,"truth_nytimes-Cumulative Deaths.csv"))
+    file = paste0(save_location,"truth_nytimes-Cumulative Deaths.csv"))
   
   readr::write_csv(
     d %>% dplyr::select(date, location, cases) %>% dplyr::rename(value = cases),
-    path = paste0(save_location,"truth_nytimes-Cumulative Cases.csv"))
+    file = paste0(save_location,"truth_nytimes-Cumulative Cases.csv"))
   
   readr::write_csv(
     d %>% dplyr::select(date, location, inc_deaths) %>% dplyr::rename(value = inc_deaths),
-    path = paste0(save_location,"truth_nytimes-Incident Deaths.csv"))
+    file = paste0(save_location,"truth_nytimes-Incident Deaths.csv"))
   
   readr::write_csv(
     d %>% dplyr::select(date, location, inc_cases) %>% dplyr::rename(value = inc_cases),
-    path = paste0(save_location,"truth_nytimes-Incident Cases.csv"))
+    file = paste0(save_location,"truth_nytimes-Incident Cases.csv"))
 }
 
 
@@ -123,8 +123,8 @@ download_raw_usafacts <- function (save_location="./data-truth/usafacts/raw/"){
                             ))
   
   
-  readr::write_csv(cases,  path = paste0(save_location,"covid_confirmed_usafacts.csv"))
-  readr::write_csv(deaths, path = paste0(save_location,"covid_deaths_usafacts.csv"))
+  readr::write_csv(cases,  file = paste0(save_location,"covid_confirmed_usafacts.csv"))
+  readr::write_csv(deaths, file = paste0(save_location,"covid_deaths_usafacts.csv"))
   return(list("cases" = cases, "deaths" = deaths))
 }
 
@@ -199,28 +199,28 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
       dplyr::filter(cases_deaths == "death") %>% 
       dplyr::rename(value = cum) %>%
       dplyr::select(date, location, value),
-    path = paste0(save_location,"truth_usafacts-Cumulative Deaths.csv"))
+    file = paste0(save_location,"truth_usafacts-Cumulative Deaths.csv"))
   
   readr::write_csv(
     d %>% 
       dplyr::filter(cases_deaths == "death") %>% 
       dplyr::rename(value = inc) %>%
       dplyr::select(date, location, value),
-    path = paste0(save_location,"truth_usafacts-Incident Deaths.csv"))
+    file = paste0(save_location,"truth_usafacts-Incident Deaths.csv"))
   
   readr::write_csv(
     d %>% 
       dplyr::filter(cases_deaths == "case") %>% 
       dplyr::rename(value = cum) %>%
       dplyr::select(date, location, value),
-    path = paste0(save_location,"truth_usafacts-Cumulative Cases.csv"))
+    file = paste0(save_location,"truth_usafacts-Cumulative Cases.csv"))
   
   readr::write_csv(
     d %>% 
       dplyr::filter(cases_deaths == "case") %>% 
       dplyr::rename(value = inc) %>%
       dplyr::select(date, location, value),
-    path = paste0(save_location,"truth_usafacts-Incident Cases.csv"))
+    file = paste0(save_location,"truth_usafacts-Incident Cases.csv"))
 }
 
 
@@ -254,25 +254,25 @@ preprocess_jhu <- function (save_location="./data-truth"){
   cumulative_deaths <- deaths_dframes[, c("date", "location", "location_name", "cum")]
   colnames(cumulative_deaths)[colnames(cumulative_deaths) == 'cum'] <- 'value'
   cumulative_deaths <- cumulative_deaths[!rowSums(is.na(cumulative_deaths[c("location_name","value")])), ]
-  readr::write_csv(cumulative_deaths, path = file.path(save_location,"truth-Cumulative Deaths.csv"))
+  readr::write_csv(cumulative_deaths, file = file.path(save_location,"truth-Cumulative Deaths.csv"))
   
   # Get incident deaths
   incident_deaths <- deaths_dframes[, c("date", "location", "location_name", "inc")]
   colnames(incident_deaths)[colnames(incident_deaths) == 'inc'] <- 'value'
   incident_deaths <- incident_deaths[!rowSums(is.na(incident_deaths[c("location_name","value")])), ]
-  readr::write_csv(incident_deaths, path = file.path(save_location,"truth-Incident Deaths.csv"))
+  readr::write_csv(incident_deaths, file = file.path(save_location,"truth-Incident Deaths.csv"))
   
   # Get cumulative cases
   cumulative_cases <- cases_dframes[, c("date", "location", "location_name", "cum")]
   colnames(cumulative_cases)[colnames(cumulative_cases) == 'cum'] <- 'value'
   cumulative_cases <- cumulative_cases[!rowSums(is.na(cumulative_cases[c("location_name","value")])), ]
-  readr::write_csv(cumulative_cases, path = file.path(save_location,"truth-Cumulative Cases.csv"))
+  readr::write_csv(cumulative_cases, file = file.path(save_location,"truth-Cumulative Cases.csv"))
   
   # Get incident cases
   incident_cases <- cases_dframes[, c("date", "location", "location_name", "inc")]
   colnames(incident_cases)[colnames(incident_cases) == 'inc'] <- 'value'
   incident_cases <- incident_cases[!rowSums(is.na(incident_cases[c("location_name","value")])), ]
-  readr::write_csv(incident_cases, path = file.path(save_location,"truth-Incident Cases.csv"))
+  readr::write_csv(incident_cases, file = file.path(save_location,"truth-Incident Cases.csv"))
   
   return(list("cumulative_deaths" = cumulative_deaths, 
               "incident_deaths" = incident_deaths,
@@ -307,7 +307,7 @@ preprocess_hospitalization <- function (save_location="./data-truth"){
   
   # Filter out rows with NA values in 'location_name' and 'value' columns, else the visualization might break
   cumulative_hosp <- cumulative_hosp[!rowSums(is.na(cumulative_hosp[c("location_name","value")])), ]
-  readr::write_csv(cumulative_hosp, path = file.path(save_location,"truth-Cumulative Hospitalizations.csv"))
+  readr::write_csv(cumulative_hosp, file = file.path(save_location,"truth-Cumulative Hospitalizations.csv"))
   
   # Get incident hospitalizations
   incident_hosp <- hospitalization_dframes[, c("date", "location", "location_name", "inc")]
@@ -315,7 +315,7 @@ preprocess_hospitalization <- function (save_location="./data-truth"){
   
   # Filter out rows with NA values in 'location_name' and 'value' columns, else the visualization might break
   incident_hosp <- incident_hosp[!rowSums(is.na(incident_hosp[c("location_name","value")])), ]
-  readr::write_csv(incident_hosp, path = file.path(save_location,"truth-Incident Hospitalizations.csv"))
+  readr::write_csv(incident_hosp, file = file.path(save_location,"truth-Incident Hospitalizations.csv"))
   
   return(list("cumulative_hosp" = cumulative_hosp, "incident_hosp" = incident_hosp))
 }
