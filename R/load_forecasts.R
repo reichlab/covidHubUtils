@@ -1,6 +1,8 @@
 #' Load all available forecasts submitted on forecast_dates from Zoltar
 #' or local hub repo.
 #' 
+#' WORKFLOW TEST
+#' 
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
 #' @param forecast_dates The forecast date of forecasts to retrieve.
