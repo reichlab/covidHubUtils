@@ -28,6 +28,24 @@
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
 #' 
+#' \dontrun{
+#' forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
+#'  forecast_date = "2020-12-07",
+#'  locations = "US",
+#'  types = c("point","quantile"),
+#'  targets = paste(1:4, "wk ahead inc case"),
+#'  source = "zoltar",
+#'  verbose = FALSE,
+#'  as_of = NULL)
+#'  
+#' forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
+#'  hub = c("ECDC","US"), 
+#'  forecast_date = "2021-03-08",
+#'  locations = "GB",
+#'  targets = paste(1:4, "wk ahead inc death"),
+#'  source = "zoltar")
+#' }
+#' 
 #' @export
 load_forecasts <- function (
   models = NULL,

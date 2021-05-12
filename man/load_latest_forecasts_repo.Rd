@@ -47,6 +47,5 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-Load the most recent forecast submitted in a time window
-from reichlab/covid19-forecast-hub repo.
+This function will drop rows with NULLs in value column.
 }
