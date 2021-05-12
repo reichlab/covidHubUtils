@@ -17,7 +17,7 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT"))
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
