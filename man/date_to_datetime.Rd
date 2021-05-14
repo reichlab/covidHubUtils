@@ -9,7 +9,9 @@ date_to_datetime(date, hub = c("US", "ECDC"))
 }
 \arguments{
 \item{date}{date in character.
-It could be a date, or a date with time, or a date with time and timezone.}
+It could be a YYYY-MM-DD date,
+or a YYYY-MM-DD date format with HH:MM:SS time,
+or a YYYY-MM-DD date with HH:MM:SS time and timezone.}
 
 \item{hub}{character vector, where the first element indicates the hub
 to set default timezone. Possible options are "US" and "ECDC".}

@@ -16,7 +16,9 @@
 #' "local_hub_repo" or "zoltar". Default to "zoltar"
 #' @param hub_repo_path path to local clone of the forecast hub
 #' repository
-#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
+#' @param as_of character for date time to load forecasts submitted as of this time from Zoltar. 
+#' It could use the format of one of the three examples: 
+#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 EDT".
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"

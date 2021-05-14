@@ -46,9 +46,10 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
 
-\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
-Default to NULL to load the latest version. This parameter is only supported
-when loading forecasts from Zoltar.}
+\item{as_of}{character for date time to load forecasts submitted as of this time from Zoltar.
+It could use the format of one of the three examples:
+"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 EDT".
+Default to NULL to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are "US" and "ECDC"}
