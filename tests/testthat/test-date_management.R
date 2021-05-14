@@ -123,4 +123,31 @@ test_that("calc_submission_due_date works",
             
           })
 
+test_that("date_to_datetime works", {
+  # case1 
+  # user input is date only
+  actual_us <- covidHubUtils::date_to_datetime(date = "2021-05-12", hub = c("US"))
+  expect_equal(actual_us, "2021-05-12 23:59:59 EDT")
+  
+  actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-05-12", hub = c("ECDC"))
+  expect_equal(actual_ecdc, "2021-05-12 23:59:59 CEST")
+  
+  # case2 
+  # user input is date and time only
+  actual_us <- covidHubUtils::date_to_datetime(date = "2021-05-12 01:30:40", hub = c("US"))
+  expect_equal(actual_us, "2021-05-12 01:30:40 EDT")
+  
+  actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-05-12 01:30:40", hub = c("ECDC"))
+  expect_equal(actual_ecdc, "2021-05-12 01:30:40 CEST")
+  
+  # case3
+  # no need to change but time zone is not defaults
+  actual_us <- covidHubUtils::date_to_datetime(date = "2021-05-12 01:30:40 UTC", hub = c("US"))
+  expect_equal(actual_us, "2021-05-12 01:30:40 UTC")
+  
+  actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-05-12 01:30:40 UTC", hub = c("ECDC"))
+  expect_equal(actual_ecdc, "2021-05-12 01:30:40 UTC")
+  
+  
+})
 

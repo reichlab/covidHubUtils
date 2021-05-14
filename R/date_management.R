@@ -136,3 +136,49 @@ calc_submission_due_date <- function(forecast_date, submission_day = "Monday") {
   
   return(dates)
 }
+
+#' Create a datetime by appending time and/or timezone 
+#' to the given date string, if necessary
+#' 
+#' @param date date in character. 
+#' It could be a YYYY-MM-DD date, 
+#' or a YYYY-MM-DD date format with HH:MM:SS time, 
+#' or a YYYY-MM-DD date with HH:MM:SS time and timezone.
+#' @param hub character vector, where the first element indicates the hub
+#' to set default timezone. Possible options are "US" and "ECDC".
+#' 
+#' @return datetime characters with date, time and timezone
+#' 
+#' @export
+date_to_datetime <- function(date, hub = c("US", "ECDC")){
+  if (hub[1] == "US"){
+    default_timezone <- "America/New_York" 
+  } else if (hub[1] == "ECDC"){
+    default_timezone <- "Europe/Berlin"
+  }
+ 
+  # case 1: date only
+  # append time and default timezone
+  if (date == strftime(date, format = "%Y-%m-%d")){
+    date <- strftime(paste(date, "23:59:59", sep = " "),
+                      format = "%Y-%m-%d %H:%M:%S", 
+                     tz = default_timezone, 
+                     usetz = TRUE)
+    #date <- strftime(date, tz = default_timezone, usetz = TRUE)
+    warning("Warning in date_to_datetime: appending default time and timezone to the given date.")
+  } 
+  # case 2: date and time, no timezone
+  # append default timezone
+  else if (date == strftime(date, format = "%Y-%m-%d %H:%M:%S")){
+    date <- strftime(date, format = "%Y-%m-%d %H:%M:%S", tz = default_timezone, usetz = TRUE)
+    warning("Warning in date_to_datetime: appending default timezone to the given date.")
+  } else {
+    date <- format(x = date, format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+  }
+  
+  if (nchar(date) < 22){
+    stop("Error in date_to_datetime: Please make sure date parameter is in the right format.")
+  }
+  
+  return (date)
+}
