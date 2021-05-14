@@ -18,7 +18,9 @@
 #' repository
 #' @param as_of character for date time to load forecasts submitted as of this time from Zoltar. 
 #' It could use the format of one of the three examples: 
-#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 EDT".
+#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+#' If you would like to set a timezone, it has to be UTC now. 
+#' If not, helper function will append the default timezone to your input based on hub parameter. 
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"

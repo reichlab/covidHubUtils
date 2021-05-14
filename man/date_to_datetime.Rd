@@ -2,24 +2,25 @@
 % Please edit documentation in R/date_management.R
 \name{date_to_datetime}
 \alias{date_to_datetime}
-\title{Create a datetime by appending time and/or timezone
+\title{Create a datetime by appending time and/or UTC timezone with offset
 to the given date string, if necessary}
 \usage{
-date_to_datetime(date, hub = c("US", "ECDC"))
+date_to_datetime(date = NULL, hub = c("US", "ECDC"))
 }
 \arguments{
 \item{date}{date in character.
 It could be a YYYY-MM-DD date,
 or a YYYY-MM-DD date format with HH:MM:SS time,
-or a YYYY-MM-DD date with HH:MM:SS time and timezone.}
+or a YYYY-MM-DD date with HH:MM:SS time and UTC timezone.
+Default to NULL}
 
 \item{hub}{character vector, where the first element indicates the hub
 to set default timezone. Possible options are "US" and "ECDC".}
 }
 \value{
-datetime characters with date, time and timezone
+NULL or datetime characters with date, time, UTC timezone and optional offset
 }
 \description{
-Create a datetime by appending time and/or timezone
-to the given date string, if necessary
+If you would like to set a timezone in date parameter, it has to be UTC now.
+If not, this function will append the default timezone to your input based on hub parameter.
 }

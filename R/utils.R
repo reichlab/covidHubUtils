@@ -1,9 +1,9 @@
 # set up zoltar connection
 setup_zoltar_connection <- function(staging = FALSE) {
   if(staging){
-    host = "https://zoltardata.com"
+    host = "https://rl-zoltar-staging.herokuapp.com"
   } else {
-    host = 'https://rl-zoltar-staging.herokuapp.com'
+    host = "https://zoltardata.com"
   }
   
   zoltar_connection <- zoltr::new_connection(host)

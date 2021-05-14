@@ -137,47 +137,58 @@ calc_submission_due_date <- function(forecast_date, submission_day = "Monday") {
   return(dates)
 }
 
-#' Create a datetime by appending time and/or timezone 
+#' Create a datetime by appending time and/or UTC timezone with offset 
 #' to the given date string, if necessary
+#' 
+#' If you would like to set a timezone in date parameter, it has to be UTC now. 
+#' If not, this function will append the default timezone to your input based on hub parameter. 
 #' 
 #' @param date date in character. 
 #' It could be a YYYY-MM-DD date, 
 #' or a YYYY-MM-DD date format with HH:MM:SS time, 
-#' or a YYYY-MM-DD date with HH:MM:SS time and timezone.
+#' or a YYYY-MM-DD date with HH:MM:SS time and UTC timezone.
+#' Default to NULL
 #' @param hub character vector, where the first element indicates the hub
 #' to set default timezone. Possible options are "US" and "ECDC".
 #' 
-#' @return datetime characters with date, time and timezone
+#' @return NULL or datetime characters with date, time, UTC timezone and optional offset 
 #' 
 #' @export
-date_to_datetime <- function(date, hub = c("US", "ECDC")){
+date_to_datetime <- function(date = NULL, hub = c("US", "ECDC")){
+  # default for `as_of` in zoltr
+  if(is.null(date)){
+    return (NULL)
+  }
+  
   if (hub[1] == "US"){
-    default_timezone <- "America/New_York" 
+    default_timezone_offset <- "-5"
   } else if (hub[1] == "ECDC"){
-    default_timezone <- "Europe/Berlin"
+    default_timezone_offset <- "+1"
   }
  
   # case 1: date only
   # append time and default timezone
   if (date == strftime(date, format = "%Y-%m-%d")){
-    date <- strftime(paste(date, "23:59:59", sep = " "),
+    date <- paste(strftime(paste(date, "23:59:59", sep = " "),
                       format = "%Y-%m-%d %H:%M:%S", 
-                     tz = default_timezone, 
-                     usetz = TRUE)
-    #date <- strftime(date, tz = default_timezone, usetz = TRUE)
+                     tz = "UTC", 
+                     usetz = TRUE), default_timezone_offset, sep = "")
     warning("Warning in date_to_datetime: appending default time and timezone to the given date.")
   } 
   # case 2: date and time, no timezone
   # append default timezone
   else if (date == strftime(date, format = "%Y-%m-%d %H:%M:%S")){
-    date <- strftime(date, format = "%Y-%m-%d %H:%M:%S", tz = default_timezone, usetz = TRUE)
+    date <- paste(strftime(date, format = "%Y-%m-%d %H:%M:%S", tz = "UTC", usetz = TRUE),
+                  default_timezone_offset, sep = "")
     warning("Warning in date_to_datetime: appending default timezone to the given date.")
-  } else {
-    date <- format(x = date, format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
-  }
-  
-  if (nchar(date) < 22){
-    stop("Error in date_to_datetime: Please make sure date parameter is in the right format.")
+  } 
+  # case 3: full date time in UTC timezone
+  else if (grepl("UTC", date, fixed=TRUE)) {
+    date <- strftime(date, format = "%Y-%m-%d %H:%M:%S", tz = "UTC", usetz = TRUE)
+  } 
+  # case 4: none above, mostly for full date time in other timezones
+  else {
+    stop ("Error in date_to_datetime: Please make sure date parameter is in the right format.")
   }
   
   return (date)
