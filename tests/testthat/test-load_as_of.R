@@ -66,8 +66,8 @@ test_that("load_forecasts uses as_of correctly in ECDC hub",{
                                             forecast_dates = "2021-04-26", 
                                             hub = c("ECDC"))
   
-  expect_true(nrow(version1) ==0)
-  expect_true(nrow(version2)!=0)
+  expect_true(nrow(version1) == 0)
+  expect_true(nrow(version2) != 0)
 })
 
 test_that("load_latest_forecasts uses as_of correctly in ECDC hub",{
@@ -83,7 +83,7 @@ test_that("load_latest_forecasts uses as_of correctly in ECDC hub",{
                                                    hub = c("ECDC"),
                                                    source = 'zoltar')
   
-  expect_true(nrow(version1) ==0)
-  expect_true(nrow(version2)!=0)
+  expect_true(nrow(version1) == 0)
+  expect_true(nrow(version2) != 0)
 })
 
