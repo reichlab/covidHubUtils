@@ -7,6 +7,7 @@
 - `load_truth()` now supports multiple target variables and has a new set of default values for `target_variable` and `truth_source` based on `hub` parameter.
 - `load_forecasts_repo()`, `load_latest_forecasts_repo()` and `load_forecast_files_repo()` drop rows with NULLs in `value` column in forecast files.
 - Add `date_to_datetime()` that converts a date to a date time with timezone offset for `as_of` parameter. This function is used when the user is loading forecasts from zoltar only.
+- Add `preprocess_visualization_truth()` to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests
 
 ## covidHubUtils 0.1.5
 
