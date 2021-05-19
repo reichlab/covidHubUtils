@@ -37,7 +37,7 @@ jobs:
         shell: Rscript {0}
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v2.1
+        uses: tj-actions/changed-files@v6.2
       - name: Checkout covidData when get_truth.R has changed 
         if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
         uses: actions/checkout@v2
