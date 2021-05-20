@@ -127,18 +127,26 @@ test_that("date_to_datetime works", {
   # case1 
   # user input is date only
   actual_us <- covidHubUtils::date_to_datetime(date = "2021-05-12", hub = c("US"))
-  expect_equal(actual_us, "2021-05-12 23:59:59 UTC-5")
+  expect_equal(actual_us, "2021-05-13 03:59:59 UTC")
   
   actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-05-12", hub = c("ECDC"))
-  expect_equal(actual_ecdc, "2021-05-12 23:59:59 UTC+1")
+  expect_equal(actual_ecdc, "2021-05-12 21:59:59 UTC")
   
   # case2 
   # user input is date and time only
-  actual_us <- covidHubUtils::date_to_datetime(date = "2021-05-12 01:30:40", hub = c("US"))
-  expect_equal(actual_us, "2021-05-12 01:30:40 UTC-5")
+  # winter time
+  actual_us <- covidHubUtils::date_to_datetime(date = "2021-01-01 01:30:40", hub = c("US"))
+  expect_equal(actual_us, "2021-01-01 06:30:40 UTC")
   
-  actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-05-12 01:30:40", hub = c("ECDC"))
-  expect_equal(actual_ecdc, "2021-05-12 01:30:40 UTC+1")
+  actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-01-01 01:30:40", hub = c("ECDC"))
+  expect_equal(actual_ecdc, "2021-01-01 00:30:40 UTC")
+  
+  # summer time
+  actual_us <- covidHubUtils::date_to_datetime(date = "2021-08-01 01:30:40", hub = c("US"))
+  expect_equal(actual_us, "2021-08-01 05:30:40 UTC")
+  
+  actual_ecdc <- covidHubUtils::date_to_datetime(date = "2021-08-01 01:30:40", hub = c("ECDC"))
+  expect_equal(actual_ecdc, "2021-07-31 23:30:40 UTC")
   
   # case3
   # no need to change but time zone is not defaults

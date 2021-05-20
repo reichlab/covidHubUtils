@@ -42,6 +42,7 @@ Default to NULL which stands for all valid targets.}
 repository}
 
 \item{as_of}{character for date time to load forecasts submitted as of this time from Zoltar.
+Ignored if \code{source} is \code{"local_hub_repo"}.
 It could use the format of one of the three examples:
 "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
 If you would like to set a timezone, it has to be UTC now.

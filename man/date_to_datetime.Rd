@@ -2,7 +2,7 @@
 % Please edit documentation in R/date_management.R
 \name{date_to_datetime}
 \alias{date_to_datetime}
-\title{Create a datetime by appending time and/or UTC timezone with offset
+\title{Create a datetime by appending time and/or UTC timezone
 to the given date string, if necessary}
 \usage{
 date_to_datetime(date = NULL, hub = c("US", "ECDC"))
@@ -18,9 +18,11 @@ Default to NULL}
 to set default timezone. Possible options are "US" and "ECDC".}
 }
 \value{
-NULL or datetime characters with date, time, UTC timezone and optional offset
+NULL or datetime characters with date, time in UTC timezone
 }
 \description{
 If you would like to set a timezone in date parameter, it has to be UTC now.
-If not, this function will append the default timezone to your input based on hub parameter.
+If not, this function will first convert the input to the default timezone based on hub parameter.
+It is using Eastern Time for \code{hub = "US"} and CET for \code{hub = "ECDC"}.
+Then, return the converted date time in UTC timezone.
 }
