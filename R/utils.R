@@ -1,6 +1,12 @@
 # set up zoltar connection
-setup_zoltar_connection <- function() {
-  zoltar_connection <- zoltr::new_connection()
+setup_zoltar_connection <- function(staging = FALSE) {
+  if(staging){
+    host = "https://rl-zoltar-staging.herokuapp.com"
+  } else {
+    host = "https://zoltardata.com"
+  }
+  
+  zoltar_connection <- zoltr::new_connection(host)
   if(Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
     zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo","Dq65&aP0nIlG")
   } else {
@@ -47,7 +53,6 @@ join_with_hub_locations <- function(data,
   }
   return(data)
 }
-
 globalVariables(
   c(".", "County", "Name", "Prediction", "Interval", "State", "StateFIPS", 
     "V1", "V2", "abbreviation", "alpha", "cases", "cases_deaths", "county", 
