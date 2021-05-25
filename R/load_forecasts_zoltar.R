@@ -41,7 +41,7 @@ load_forecasts_zoltar <- function (
   verbose = TRUE) {
   
   # set up Zoltar connection
-  zoltar_connection <- setup_zoltar_connection(staging = TRUE)
+  zoltar_connection <- setup_zoltar_connection(staging = FALSE)
   
   if (!is.null(forecast_dates)){
     # construct Zoltar project url
