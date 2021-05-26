@@ -3,7 +3,7 @@ on: pull_request
 jobs:
   run-unit-tests:
     name: run unit tests
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -22,7 +22,7 @@ jobs:
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
         run: |
-          install.packages("RcppArmadillo")
+          install.packages("https://cran.r-project.org/src/contrib/Archive/RcppArmadillo/RcppArmadillo_0.10.4.0.0.tar.gz", repos=NULL, type="source")
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
