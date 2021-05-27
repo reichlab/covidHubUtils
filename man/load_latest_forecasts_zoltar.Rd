@@ -33,7 +33,11 @@ or “point”. Default to all valid forecast types in Zoltar.}
 c('1 wk ahead cum death', '2 wk ahead cum death').
 Default to all valid targets in Zoltar.}
 
-\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
+\item{as_of}{character for date time to load forecasts submitted as of this time.
+It could use the format of one of the three examples:
+"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+If you would like to set a timezone, it has to be UTC now.
+If not, helper function will append the default timezone to your input based on hub parameter.
 Default to NULL to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub

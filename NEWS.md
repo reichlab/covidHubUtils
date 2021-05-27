@@ -6,9 +6,9 @@
 - Add a column that appends state abbreviation to county names in US hub locations data object.
 - `load_truth()` now supports multiple target variables and has a new set of default values for `target_variable` and `truth_source` based on `hub` parameter.
 - `load_forecasts_repo()`, `load_latest_forecasts_repo()` and `load_forecast_files_repo()` drop rows with NULLs in `value` column in forecast files.
+- Add `date_to_datetime()` that converts a date to a date time in the corresponding timezone based on `hub` and returns that date time in UTC timezone. This function is used when the user is using `as_of` parameter to load forecasts from zoltar only.
 - Add `preprocess_visualization_truth()` to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests
 - Add `calc_cramers_dist_equal_space()`, `calc_cramers_dist_equal_space()`, and `calc_cramers_dist_one_model_pair()` to calculate forecast similarities based on the approximation of Cramer's distance.
-
 
 ## covidHubUtils 0.1.5
 
