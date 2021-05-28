@@ -13,6 +13,7 @@ load_forecasts(
   targets = NULL,
   source = "zoltar",
   hub_repo_path,
+  data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
   verbose = TRUE
@@ -40,6 +41,10 @@ Default to NULL which stands for all valid targets.}
 
 \item{hub_repo_path}{path to local clone of the forecast hub
 repository}
+
+\item{data_processed_subpath}{folder within the hub_repo_path that contains
+forecast submission files.  Defaults to "data-processed/", which is
+appropriate for the covid19-forecast-hub repository.}
 
 \item{as_of}{character for date time to load forecasts submitted as of this time from Zoltar.
 Ignored if \code{source} is \code{"local_hub_repo"}.
