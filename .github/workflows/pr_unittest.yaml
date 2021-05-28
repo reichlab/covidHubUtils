@@ -22,6 +22,7 @@ jobs:
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
         run: |
+          install.packages("https://cran.r-project.org/src/contrib/Archive/RcppArmadillo/RcppArmadillo_0.9.900.3.0.tar.gz", repos=NULL, type="source")
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
