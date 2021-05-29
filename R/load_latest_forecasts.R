@@ -89,14 +89,14 @@ load_latest_forecasts <- function (
                    seq(from = -forecast_date_window_size, to = 0, by = 1))
     }, error = function(err){
       stop("Error in load_latest_forecasts: Please provide a valid date object or
-           string in format YYYY-MM-DD in latest_forrecast_date.")
+           string in format YYYY-MM-DD in latest_forecast_date.")
       }
     )
 
   if (source == "local_hub_repo") {
     # validate hub repo path
     if (missing(hub_repo_path) | !dir.exists(hub_repo_path)) {
-      stop("Error in load_latest_forecasts: Please provide a vaid path to hub repo.")
+      stop("Error in load_latest_forecasts: Please provide a valid path to hub repo.")
     } 
     
     # path to data-processed folder in hub repo
