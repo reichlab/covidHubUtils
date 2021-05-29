@@ -16,7 +16,15 @@
 #' "local_hub_repo" or "zoltar". Default to "zoltar"
 #' @param hub_repo_path path to local clone of the forecast hub
 #' repository
-#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
+#' @param data_processed_subpath folder within the hub_repo_path that contains
+#' forecast submission files.  Defaults to "data-processed/", which is
+#' appropriate for the covid19-forecast-hub repository.
+#' @param as_of character for date time to load forecasts submitted as of this time from Zoltar. 
+#' Ignored if \code{source} is \code{"local_hub_repo"}. 
+#' It could use the format of one of the three examples: 
+#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+#' If you would like to set a timezone, it has to be UTC now. 
+#' If not, helper function will append the default timezone to your input based on hub parameter. 
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"
@@ -53,6 +61,7 @@ load_forecasts <- function (
   targets = NULL,
   source = "zoltar", 
   hub_repo_path,
+  data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
   verbose = TRUE) {
@@ -73,7 +82,7 @@ load_forecasts <- function (
     }
     
     # path to data-processed folder in hub repo
-    data_processed <- file.path(hub_repo_path, "data-processed/")
+    data_processed <- file.path(hub_repo_path, data_processed_subpath)
     
     forecasts <- load_forecasts_repo(file_path = data_processed, 
                                      models = models, 

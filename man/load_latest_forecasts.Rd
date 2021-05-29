@@ -15,6 +15,7 @@ load_latest_forecasts(
   targets = NULL,
   source = "local_hub_repo",
   hub_repo_path,
+  data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
   verbose = TRUE
@@ -46,9 +47,17 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
 
-\item{as_of}{a date in YYYY-MM-DD format to load forecasts submitted as of this date.
-Default to NULL to load the latest version. This parameter is only supported
-when loading forecasts from Zoltar.}
+\item{data_processed_subpath}{folder within the hub_repo_path that contains
+forecast submission files.  Defaults to "data-processed/", which is
+appropriate for the covid19-forecast-hub repository.}
+
+\item{as_of}{character for date time to load forecasts submitted as of this time from Zoltar.
+Ignored if \code{source} is \code{"local_hub_repo"}.
+It could use the format of one of the three examples:
+"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+If you would like to set a timezone, it has to be UTC now.
+If not, helper function will append the default timezone to your input based on hub parameter.
+Default to NULL to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are "US" and "ECDC"}
