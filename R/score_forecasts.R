@@ -10,6 +10,8 @@
 #' @param use_median_as_point logical: "TRUE" uses the median as the point
 #' forecast when scoring; "FALSE" uses the point forecasts from the data when
 #' scoring. Defaults to "FALSE"
+#' @param quantile_side string: "two" calculates two sided quantile coverage 
+#' and "one" calculates one sided quantile coverage. Defaults to "two".
 #' 
 #' @importFrom dplyr any_of
 #' @return data.frame with scores. The result will have some columns that
@@ -38,12 +40,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBayes"),
-#'   last_forecast_date = "2020-12-14",
-#'   forecast_date_window_size = 7,
-#'   locations = c("US"),
-#'   targets = paste(1:4, "wk ahead inc death"),
-#'   source = "zoltar")
+forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBayes"),
+  last_forecast_date = "2020-12-14",
+  forecast_date_window_size = 7,
+  locations = c("US"),
+  targets = paste(1:4, "wk ahead inc death"),
+  source = "zoltar")
 #' truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 #' scores <- score_forecasts(forecasts, truth)
 #' }
@@ -64,7 +66,8 @@ score_forecasts <- function(
   forecasts,
   truth,
   return_format = "wide",
-  use_median_as_point = FALSE
+  use_median_as_point = FALSE,
+  quantile_side = "two"
 ) {
 
   # forecasts data.frame format
@@ -121,6 +124,9 @@ score_forecasts <- function(
   if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
     stop("Want to use point forecast when scoring but no point forecast in forecast data")
   }
+  
+  #validate quantile_side
+  quantile_side <- match.arg(quantile_side, choices = c("two", "one"))
 
   # get dataframe into scoringutil format
   joint_df <- dplyr::left_join(x = forecasts, y = truth,
@@ -147,6 +153,31 @@ score_forecasts <- function(
     abs_var_rename <- "ae_point_NA"
   }
   
+  # one sided
+  joint_df_q <- scoringutils::quantile_to_range_long(joint_df)
+  sq <- scoringutils::eval_forecasts(data = joint_df,
+                                     by = observation_cols,
+                                     summarise_by = c(observation_cols, "quantile"),
+                                     interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))%>%
+    tidyr::pivot_wider(id_cols = observation_cols,
+                       names_from = c("quantile"),
+                       values_from = c("quantile_coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
+    purrr::set_names(~sub(abs_var_rename, "abs_error", .x))%>%
+    dplyr::select(
+      -dplyr::ends_with("_NA")
+    ) %>% 
+    dplyr::select(
+      -dplyr::starts_with("aem_"),
+      -dplyr::starts_with("ae_point_"),
+      -dplyr::starts_with("interval_score"),
+      -dplyr::starts_with("sharpness_"),
+      -dplyr::starts_with("underprediction_"),
+      -dplyr::starts_with("overprediction_")
+    ) %>% 
+    dplyr::select(1:8, sort(everything(dplyr::starts_with("quantile_coverage_"))),
+                  dplyr::starts_with("abs_error"))
+  
+  # two sided
   scores <- purrr::map_dfr(
     unique(joint_df$target_variable),
     function(var) {
