@@ -153,29 +153,6 @@ score_forecasts <- function(
     abs_var_rename <- "ae_point_NA"
   }
   
-  # one sided
-  joint_df_q <- scoringutils::quantile_to_range_long(joint_df)
-  sq <- scoringutils::eval_forecasts(data = joint_df,
-                                     by = observation_cols,
-                                     summarise_by = c(observation_cols, "quantile"),
-                                     interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))%>%
-    tidyr::pivot_wider(id_cols = observation_cols,
-                       names_from = c("quantile"),
-                       values_from = c("quantile_coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
-    purrr::set_names(~sub(abs_var_rename, "abs_error", .x))%>%
-    dplyr::select(
-      -dplyr::ends_with("_NA")
-    ) %>% 
-    dplyr::select(
-      -dplyr::starts_with("aem_"),
-      -dplyr::starts_with("ae_point_"),
-      -dplyr::starts_with("interval_score"),
-      -dplyr::starts_with("sharpness_"),
-      -dplyr::starts_with("underprediction_"),
-      -dplyr::starts_with("overprediction_")
-    ) %>% 
-    dplyr::select(1:8, sort(everything(dplyr::starts_with("quantile_coverage_"))),
-                  dplyr::starts_with("abs_error"))
   
   # two sided
   scores <- purrr::map_dfr(
@@ -232,8 +209,41 @@ score_forecasts <- function(
                   "sharpness", "overprediction", "underprediction")
     })
      
-        
-      
+  # one sided     
+  if (quantile_side == "one") {
+    sq <- scoringutils::eval_forecasts(data = joint_df,
+                                       by = observation_cols,
+                                       summarise_by = c(observation_cols, "quantile"),
+                                       interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))%>%
+      tidyr::pivot_wider(id_cols = observation_cols,
+                         names_from = c("quantile"),
+                         values_from = c("quantile_coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
+      purrr::set_names(~sub(abs_var_rename, "abs_error", .x))%>%
+      dplyr::select(
+        -dplyr::ends_with("_NA")
+      ) %>% 
+      dplyr::select(
+        -dplyr::starts_with("abs_error."),
+        -dplyr::starts_with("aem_"),
+        -dplyr::starts_with("ae_point_"),
+        -dplyr::starts_with("interval_score"),
+        -dplyr::starts_with("sharpness_"),
+        -dplyr::starts_with("underprediction_"),
+        -dplyr::starts_with("overprediction_")
+      )  
+    quantile_coverage_columns <-
+      sort(colnames(sq %>% 
+                      dplyr::select(dplyr::starts_with("quantile_coverage_"))))
+    
+    scores_one_sided <- sq %>% 
+      dplyr::select(1:8, dplyr::all_of(quantile_coverage_columns))
+    
+    scores <- suppressMessages(dplyr::full_join(scores_one_sided, 
+                               scores %>% 
+                                 dplyr::select(1:8,"abs_error",
+                                               "exists_interval_score_0","wis",
+                                               "sharpness","overprediction","underprediction")))
+  }
                     
   
   
