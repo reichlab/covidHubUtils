@@ -8,7 +8,8 @@ score_forecasts(
   forecasts,
   truth,
   return_format = "wide",
-  use_median_as_point = FALSE
+  use_median_as_point = FALSE,
+  quantile_side = "two"
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ a separate column for each score. Defaults to "wide".}
 \item{use_median_as_point}{logical: "TRUE" uses the median as the point
 forecast when scoring; "FALSE" uses the point forecasts from the data when
 scoring. Defaults to "FALSE"}
+
+\item{quantile_side}{string: "two" calculates two sided quantile coverage
+and "one" calculates one sided quantile coverage. Defaults to "two".}
 }
 \value{
 data.frame with scores. The result will have some columns that
@@ -59,7 +63,7 @@ forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBaye
   locations = c("US"),
   targets = paste(1:4, "wk ahead inc death"),
   source = "zoltar")
-truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
+  truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 scores <- score_forecasts(forecasts, truth)
 }
 \dontrun{
