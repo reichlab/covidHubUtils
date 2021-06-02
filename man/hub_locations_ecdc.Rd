@@ -16,6 +16,6 @@ A data frame with 32 rows and 3 columns:
 hub_locations_ecdc
 }
 \description{
-Data set with available locations for the EDCD hub
+Data set with available locations for the ECDC hub
 }
 \keyword{datasets}

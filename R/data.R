@@ -15,7 +15,7 @@
 
 #' Available locations in the ECDC Hub
 #'
-#' Data set with available locations for the EDCD hub
+#' Data set with available locations for the ECDC hub
 #'
 #' @format A data frame with 32 rows and 3 columns:
 #' \describe{
