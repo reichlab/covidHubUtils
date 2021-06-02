@@ -48,3 +48,6 @@ location_name, population, geo_type, geo_value, abbreviation
 The function will throw an error when no forecasts are submitted on
 any dates in forecast_dates for selected models, locations, types and target.
 }
+\details{
+This function will drop rows with NULLs in value column.
+}

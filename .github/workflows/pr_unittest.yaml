@@ -12,7 +12,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT"))
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
@@ -28,6 +28,25 @@ jobs:
           devtools::test_active_file("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
+        shell: Rscript {0}
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v2.1
+      - name: Checkout covidData when get_truth.R has changed 
+        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
+        uses: actions/checkout@v2
+        with:
+          repository: reichlab/covidData
+          path: covidData
+      - name: Install covidData when get_truth.R has changed 
+        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
+        run: make recent_data
+        working-directory: ./covidData/code/data-processing
+      - name: Run unit test for get_truth.R
+        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
+        run: |
+          devtools::test_active_file("tests/testthat/test-get_truth.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Render vignettes
         run: |
