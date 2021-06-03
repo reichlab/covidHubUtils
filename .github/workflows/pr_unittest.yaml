@@ -14,12 +14,17 @@ jobs:
         run: |
           install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
+        shell: Rscript {0}
+      - name: Check 
+        run: |
+          rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-vignettes"))
         shell: Rscript {0}
       - name: Run unit tests
         run: |
@@ -52,6 +57,7 @@ jobs:
         run: |
           rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
         shell: Rscript {0}
+    
           
         
 
