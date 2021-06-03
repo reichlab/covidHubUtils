@@ -10,6 +10,7 @@
 #'   \item{geo_type}{Type of location}
 #'   \item{geo_value}{Location abbreviation or FIPS code}
 #'   \item{abbreviation}{Corresponding state abbrevaition}
+#'   \item{full_location_name}{Full location name with correponding state}
 #' }
 "hub_locations"
 

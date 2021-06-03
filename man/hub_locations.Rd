@@ -23,6 +23,7 @@ A data frame with 3200 rows and 6 columns:
 \item{geo_type}{Type of location}
 \item{geo_value}{Location abbreviation or FIPS code}
 \item{abbreviation}{Corresponding state abbrevaition}
+\item{full_location_name}{Full location name with correponding state}
 }
 }
 \source{

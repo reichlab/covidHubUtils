@@ -9,7 +9,7 @@ calc_submission_due_date(forecast_date, submission_day = "Monday")
 \arguments{
 \item{forecast_date}{character vector of dates in 'yyyy-mm-dd' format}
 
-\item{submision_day}{day when forecasts have to be submitted. Default is
+\item{submission_day}{day when forecasts have to be submitted. Default is
 Monday.}
 }
 \value{
@@ -20,5 +20,7 @@ Assuming that submissions are made on Mondays, this helper function
 finds the nearest Monday for which a submission could have been made
 }
 \examples{
+\dontrun{
 calc_submission_due_date(Sys.Date() + 0:7) 
+}
 }
