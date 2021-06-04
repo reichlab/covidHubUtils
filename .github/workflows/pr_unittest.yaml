@@ -10,6 +10,11 @@ jobs:
           fetch-depth: 0
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
+      - name: Cache R packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
           install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
@@ -20,6 +25,10 @@ jobs:
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
+        shell: Rscript {0}
+      - name: Check 
+        run: |
+          devtools::check(args = c("--no-tests", "--no-vignettes"), force_suggests = FALSE, error_on = c("error"))
         shell: Rscript {0}
       - name: Run unit tests
         run: |
@@ -52,6 +61,7 @@ jobs:
         run: |
           rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
         shell: Rscript {0}
+    
           
         
 

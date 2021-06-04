@@ -63,7 +63,12 @@ from which to load forecasts. Possible options are "US" and "ECDC"}
 data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
-
+}
+\description{
+Load all available forecasts submitted on forecast_dates from Zoltar
+or local hub repo.
+}
+\examples{
 \dontrun{
 forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
  forecast_date = "2020-12-07",
@@ -81,8 +86,5 @@ forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
  targets = paste(1:4, "wk ahead inc death"),
  source = "zoltar")
 }
-}
-\description{
-Load all available forecasts submitted on forecast_dates from Zoltar
-or local hub repo.
+
 }

@@ -34,6 +34,7 @@
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
 #' 
+#' @examples
 #' \dontrun{
 #' forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
 #'  forecast_date = "2020-12-07",
