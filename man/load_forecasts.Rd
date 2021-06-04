@@ -27,7 +27,7 @@ Default all models that submitted forecasts meeting the other criteria.}
 Default to all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
-\item{locations}{list of location codes Default to all locations with available forecasts.}
+\item{locations}{list of location codes. Default to all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: “quantile”
 or “point”. Default to all valid forecast types.}
@@ -78,9 +78,9 @@ forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
  source = "zoltar",
  verbose = FALSE,
  as_of = NULL)
- 
+
 forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
- hub = c("ECDC","US"), 
+ hub = c("ECDC","US"),
  forecast_date = "2021-03-08",
  locations = "GB",
  targets = paste(1:4, "wk ahead inc death"),
