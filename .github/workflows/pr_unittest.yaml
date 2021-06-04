@@ -26,6 +26,10 @@ jobs:
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
         shell: Rscript {0}
+      - name: Check 
+        run: |
+          devtools::check(args = c("--no-tests", "--no-vignettes"), force_suggests = FALSE, error_on = c("error"))
+        shell: Rscript {0}
       - name: Run unit tests
         run: |
           devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
@@ -34,6 +38,9 @@ jobs:
           devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Get changed files
         id: changed-files
@@ -57,6 +64,7 @@ jobs:
         run: |
           rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
         shell: Rscript {0}
+    
           
         
 

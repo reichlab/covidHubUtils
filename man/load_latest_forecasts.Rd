@@ -15,6 +15,7 @@ load_latest_forecasts(
   targets = NULL,
   source = "local_hub_repo",
   hub_repo_path,
+  data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
   verbose = TRUE
@@ -46,6 +47,10 @@ c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
 \item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
 repository}
 
+\item{data_processed_subpath}{folder within the hub_repo_path that contains
+forecast submission files.  Defaults to "data-processed/", which is
+appropriate for the covid19-forecast-hub repository.}
+
 \item{as_of}{character for date time to load forecasts submitted as of this time from Zoltar.
 Ignored if \code{source} is \code{"local_hub_repo"}.
 It could use the format of one of the three examples:
@@ -63,7 +68,13 @@ from which to load forecasts. Possible options are "US" and "ECDC"}
 data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
-
+}
+\description{
+Load covid forecasts from local hub repo or Zoltar.
+Return the most recent forecast from each model within
+forecast_date_window_size days of the last_forecast_date
+}
+\examples{
 \dontrun{
 
 
@@ -94,9 +105,5 @@ load_latest_forecasts(models = "Columbia_UNC-SurvCon",
  location = 'US')
  
 }
-}
-\description{
-Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date
+  
 }

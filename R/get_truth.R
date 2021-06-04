@@ -49,6 +49,7 @@ download_raw_nytimes <- function (save_location="./data-truth/nytimes/raw/"){
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./data-truth/nytimes/raw/"
 #' 
+#' @importFrom readr write_csv
 #' @export
 preprocess_nytimes <- function (save_location="./data-truth/nytimes/"){
   raw_dframes <- download_raw_nytimes(paste0(save_location,"raw/"))
@@ -97,6 +98,7 @@ preprocess_nytimes <- function (save_location="./data-truth/nytimes/"){
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./data-truth/usafacts/raw/"
 #' 
+#' @importFrom readr read_csv write_csv
 #' @return data frame of cases and deaths raw truth data
 #' 
 #' @export
@@ -134,6 +136,7 @@ download_raw_usafacts <- function (save_location="./data-truth/usafacts/raw/"){
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./data-truth/usafacts/raw/"
 #' 
+#' @importFrom readr write_csv
 #' @export
 preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
   raw_dframes <- download_raw_usafacts(paste0(save_location,"raw/"))
@@ -228,6 +231,8 @@ preprocess_usafacts <- function (save_location="./data-truth/usafacts/"){
 #' 
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./data-truth"
+#' 
+#' @importFrom readr write_csv
 #' @export
 preprocess_jhu <- function (save_location="./data-truth"){
   # Location name
@@ -286,6 +291,9 @@ preprocess_jhu <- function (save_location="./data-truth"){
 #' 
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./visualization/vis-master/covid-csv-tools/dist/truth"
+#' 
+#' @importFrom readr write_csv
+#' @importFrom jsonlite write_json
 #' @export
 preprocess_visualization_truth <- function (save_location="./visualization/vis-master/covid-csv-tools/dist/truth"){
   # Location name
@@ -374,6 +382,7 @@ preprocess_visualization_truth <- function (save_location="./visualization/vis-m
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to "./data-truth"
 #' 
+#' @importFrom readr write_csv
 #' @return data frame of cumulative and incident hospitalization data
 #' @export
 preprocess_hospitalization <- function (save_location="./data-truth"){
@@ -499,7 +508,8 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
 #' 
 #' @param save_location character specifying the location of to save zoltar truth data.
 #' Default to "./data-truth"
-#'
+#' 
+#' @importFrom readr write_csv
 #' @export
 #'
 save_truth_for_zoltar <- function(save_location = "./data-truth"){

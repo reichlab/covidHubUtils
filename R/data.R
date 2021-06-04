@@ -10,12 +10,13 @@
 #'   \item{geo_type}{Type of location}
 #'   \item{geo_value}{Location abbreviation or FIPS code}
 #'   \item{abbreviation}{Corresponding state abbrevaition}
+#'   \item{full_location_name}{Full location name with correponding state}
 #' }
 "hub_locations"
 
 #' Available locations in the ECDC Hub
 #'
-#' Data set with available locations for the EDCD hub
+#' Data set with available locations for the ECDC hub
 #'
 #' @format A data frame with 32 rows and 3 columns:
 #' \describe{
