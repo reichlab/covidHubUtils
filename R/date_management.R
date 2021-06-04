@@ -3,7 +3,7 @@
 #' of epidemic week from a specified date
 #'
 #' @param forecast_date vector of dates as Date objects
-#' @param integer vector of week offsets.  must be either length 1 or the same
+#' @param week_offset vector of week offsets.  must be either length 1 or the same
 #'     length as forecast_date
 #'
 #' @return character vector of dates in 'yyyy-mm-dd' format
@@ -113,14 +113,16 @@ calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
 #' finds the nearest Monday for which a submission could have been made
 #'
 #' @param forecast_date character vector of dates in 'yyyy-mm-dd' format
-#' @param submision_day day when forecasts have to be submitted. Default is 
+#' @param submission_day day when forecasts have to be submitted. Default is 
 #' Monday. 
 #' 
 #' @return return character vecor with corresponding submission date
 #' @importFrom lubridate ceiling_date
 #'
 #' @examples 
+#' \dontrun{
 #' calc_submission_due_date(Sys.Date() + 0:7) 
+#' }
 #' @export
 calc_submission_due_date <- function(forecast_date, submission_day = "Monday") {
   

@@ -1,4 +1,9 @@
-# set up zoltar connection
+#' Set up Zoltar connection
+#' 
+#' @param staging boolean to change Zoltar server for staging
+#' 
+#' @return a Zoltar connection
+#' @export
 setup_zoltar_connection <- function(staging = FALSE) {
   if(staging){
     host = "https://rl-zoltar-staging.herokuapp.com"
@@ -16,7 +21,14 @@ setup_zoltar_connection <- function(staging = FALSE) {
 }
 
 
-# helper function to get the zoltar project URL
+#' Get Zoltar project URL
+#' 
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
+#' @param zoltar_connection an authenticated Zoltar connecton
+#' 
+#' @return project url
+#' @export
 get_zoltar_project_url <- function(hub = c("US", "ECDC"), 
                                    zoltar_connection = NULL) {
   # if no zoltar connection was provided, set up a new one
@@ -37,9 +49,15 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
   return(project_url)
 }
 
-
-# add stored information about location name and population by joining the 
-# data with the correct stored location data
+#' Add stored information about location name and population by joining the 
+#' data with the correct stored location data
+#'
+#' @param data data frame to append location data
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are "US" and "ECDC"
+#' 
+#' @return original data with corresponding location information
+#' @export
 join_with_hub_locations <- function(data, 
                                     hub = c("US", "ECDC")) {
   if (hub[1] == "US") {
@@ -53,6 +71,7 @@ join_with_hub_locations <- function(data,
   }
   return(data)
 }
+
 globalVariables(
   c(".", "County", "Name", "Prediction", "Interval", "State", "StateFIPS", 
     "V1", "V2", "abbreviation", "alpha", "cases", "cases_deaths", "county", 

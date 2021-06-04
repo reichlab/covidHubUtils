@@ -68,7 +68,13 @@ from which to load forecasts. Possible options are "US" and "ECDC"}
 data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
-
+}
+\description{
+Load covid forecasts from local hub repo or Zoltar.
+Return the most recent forecast from each model within
+forecast_date_window_size days of the last_forecast_date
+}
+\examples{
 \dontrun{
 
 
@@ -99,9 +105,5 @@ load_latest_forecasts(models = "Columbia_UNC-SurvCon",
  location = 'US')
  
 }
-}
-\description{
-Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date
+  
 }
