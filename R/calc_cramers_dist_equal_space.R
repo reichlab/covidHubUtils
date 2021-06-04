@@ -1,5 +1,5 @@
-#’ Approximate the Cramer’s distance between a pair of distributions
-#’ F and G that are represented by a collection of equally-spaced quantiles.
+#' Approximate the Cramer’s distance between a pair of distributions
+#' F and G that are represented by a collection of equally-spaced quantiles.
 #'
 #' @param q_F vector containing the quantiles of F
 #' @param tau_F vector containing the probability levels corresponding to
@@ -30,6 +30,7 @@
 #' g_vector <- seq(2,18,2)
 #' calc_cramers_dist_equal_space(f_vector,tau_F_vector,g_vector,tau_G_vector, "approximation1")
 #' @export
+#'
 #'
 calc_cramers_dist_equal_space <-
   function(q_F, tau_F, q_G, tau_G, approx_rule) {

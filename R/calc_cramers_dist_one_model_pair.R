@@ -1,5 +1,5 @@
-#’ Calculate the approximated Cramer’s distance between a pair of distributions
-#’ F and G that are represented by a collection of quantiles using a specific
+#' Calculate the approximated Cramer’s distance between a pair of distributions
+#' F and G that are represented by a collection of quantiles using a specific
 #' approximation rule.
 #'
 #' @param q_F vector containing the quantiles of F

@@ -1,5 +1,5 @@
-#’ Approximate the Cramer’s distance between a pair of distributions
-#’ F and G that are represented by a collection of unequally-spaced quantiles.
+#' Approximate the Cramer’s distance between a pair of distributions
+#' F and G that are represented by a collection of unequally-spaced quantiles.
 #'
 #' @param q_F vector containing the quantiles of F
 #' @param tau_F vector containing the probability levels corresponding to
