@@ -56,6 +56,7 @@
 #' @importFrom grDevices dev.size
 #' @return invisible ggplot object
 #' 
+#' @examples
 #' \dontrun{
 #' us_forecasts <-load_latest_forecasts(
 #'   models =c("COVIDhub-ensemble","COVIDhub-baseline",

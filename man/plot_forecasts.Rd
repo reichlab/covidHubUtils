@@ -108,7 +108,13 @@ the subtitle will be automatically generated. If "none", no subtitle will be plo
 }
 \value{
 invisible ggplot object
-
+}
+\description{
+Plot forecasts and optional truth for only one selected target variable.
+Faceted plots for multiple models, locations and forecast dates are
+supported with specified facet formula.
+}
+\examples{
 \dontrun{
 us_forecasts <-load_latest_forecasts(
   models =c("COVIDhub-ensemble","COVIDhub-baseline",
@@ -141,9 +147,5 @@ plot_forecasts(forecast_data = ecdc_forecasts,
                locations ="GB", 
                truth_source = "JHU")
 }
-}
-\description{
-Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula.
+
 }
