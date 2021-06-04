@@ -88,9 +88,6 @@ calc_cramers_dist_equal_space <-
     # run select rule
     # compute quantile levels from length of provided quantile vectors:
     K <- length(q_F_ordered)
-    p <-
-      (1:K) / (K + 1) # function assumes that the quantile levels are equally spaced
-    
     # pool quantiles:
     q0 <- c(q_F_ordered, q_G_ordered)
     # vector of grouping variables, with 1 for values belonging to F, -1 for values
@@ -113,7 +110,7 @@ calc_cramers_dist_equal_space <-
     if (approx_rule == "approximation1") {
       cvm <- sum(diffs_q * b * (b + 1)) / ((K + 1) * (K))
     } else if (approx_rule == "approximation2") {
-      cvm <- sum(diffs_q * b ^ 2 / K ^ 2)
+      cvm <- sum(diffs_q * b ^ 2 / (K+1) ^ 2)
     }
     return(cvm)
   }
