@@ -39,8 +39,8 @@
 #' 
 #' 
 #' 
-#' 
-#'\dontrun{
+#' @examples
+#' \dontrun{
 #'
 #'
 #' forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",

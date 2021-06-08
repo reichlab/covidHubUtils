@@ -27,7 +27,7 @@ Default all models that submitted forecasts meeting the other criteria.}
 Default to all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
 
-\item{locations}{list of location codes Default to all locations with available forecasts.}
+\item{locations}{list of location codes. Default to all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: “quantile”
 or “point”. Default to all valid forecast types.}
@@ -63,7 +63,12 @@ from which to load forecasts. Possible options are "US" and "ECDC"}
 data frame with columns model, forecast_date, location, horizon,
 temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
-
+}
+\description{
+Load all available forecasts submitted on forecast_dates from Zoltar
+or local hub repo.
+}
+\examples{
 \dontrun{
 forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
  forecast_date = "2020-12-07",
@@ -73,16 +78,13 @@ forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
  source = "zoltar",
  verbose = FALSE,
  as_of = NULL)
- 
+
 forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
- hub = c("ECDC","US"), 
+ hub = c("ECDC","US"),
  forecast_date = "2021-03-08",
  locations = "GB",
  targets = paste(1:4, "wk ahead inc death"),
  source = "zoltar")
 }
-}
-\description{
-Load all available forecasts submitted on forecast_dates from Zoltar
-or local hub repo.
+
 }
