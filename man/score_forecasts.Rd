@@ -8,8 +8,7 @@ score_forecasts(
   forecasts,
   truth,
   return_format = "wide",
-  use_median_as_point = FALSE,
-  quantile_side = "two"
+  use_median_as_point = FALSE
 )
 }
 \arguments{
@@ -26,9 +25,6 @@ a separate column for each score. Defaults to "wide".}
 \item{use_median_as_point}{logical: "TRUE" uses the median as the point
 forecast when scoring; "FALSE" uses the point forecasts from the data when
 scoring. Defaults to "FALSE"}
-
-\item{quantile_side}{string: "two" calculates two sided quantile coverage
-and "one" calculates one sided quantile coverage. Defaults to "two".}
 }
 \value{
 data.frame with scores. The result will have some columns that
@@ -46,6 +42,7 @@ if use_median_as_point is FALSE
 \item \code{overprediction} the component of WIS made up of overprediction of intervals
 \item \code{underprediction} the component of WIS made up of underprediction of intervals
 \item \code{coverage_X} are prediction interval coverage at alpha level X
+\item \code{quantile_coverage_0.X} are one-sided quantile coverage at quantile X
 If return_format is "long", also contains columns score_name and score_value
 where score_name is the type of score calculated and score_value has the numeric
 value of the score.
