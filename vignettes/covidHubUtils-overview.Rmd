@@ -8,6 +8,10 @@ output:
     toc_float:
       collapsed: false
       smooth_scroll: false
+vignette: >
+  %\VignetteIndexEntry{Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 <!-- code to run rmarkdown::render(input="./vignettes/covidHubUtils-overview.Rmd") -->
