@@ -432,14 +432,21 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
   
   # validate target 
   target <- match.arg(target, 
-                      choices = c("Cumulative Deaths", "Incident Deaths"), 
+                      choices = c("Cumulative Deaths", "Incident Deaths", 
+                                  "Incident Cases"), 
                       several.ok = FALSE)
+  
+  if (grepl("Deaths", target, fixed = TRUE)) {
+    measure <- 'deaths'
+  } else if (grepl("Cases", target, fixed = TRUE)){
+    measure <- 'cases'
+  }
   
   # load the most up to date weeky truth data from JHU CSSE
   df <- covidData::load_jhu_data(issue_date = issue_date, 
                                  spatial_resolution = c('national', 'state'),
                                  temporal_resolution = 'weekly', 
-                                 measure = 'deaths',
+                                 measure = measure,
                                  replace_negatives = FALSE, 
                                  adjustment_cases = 'none',
                                  adjustment_method = 'none')
@@ -450,8 +457,13 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL){
     df <- df %>%
       dplyr::select(-inc) %>%
       dplyr::rename(value = cum, unit = location)
-  } else {
+  } else if (target == "Incident Deaths"){
     target_var <- " wk ahead inc death"
+    df <- df %>%
+      dplyr::select(-cum) %>%
+      dplyr::rename(value = inc, unit = location)
+  } else if (target == "Incident Cases"){
+    target_var <- " wk ahead inc case"
     df <- df %>%
       dplyr::select(-cum) %>%
       dplyr::rename(value = inc, unit = location)
@@ -516,8 +528,10 @@ save_truth_for_zoltar <- function(save_location = "./data-truth"){
   
   df_cum_death <- preprocess_truth_for_zoltar("Cumulative Deaths")
   df_inc_death <- preprocess_truth_for_zoltar("Incident Deaths")
+  df_inc_case <- preprocess_truth_for_zoltar("Incident Cases")
   
   zoltar_truth <- rbind(df_cum_death, df_inc_death)
+  zoltar_truth <- rbind(zoltar_truth, df_inc_case)
   
   file_path <- file.path(save_location,"zoltar-truth.csv")
   
