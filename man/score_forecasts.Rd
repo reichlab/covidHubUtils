@@ -42,6 +42,7 @@ if use_median_as_point is FALSE
 \item \code{overprediction} the component of WIS made up of overprediction of intervals
 \item \code{underprediction} the component of WIS made up of underprediction of intervals
 \item \code{coverage_X} are prediction interval coverage at alpha level X
+\item \code{quantile_coverage_0.X} are one-sided quantile coverage at quantile X
 If return_format is "long", also contains columns score_name and score_value
 where score_name is the type of score calculated and score_value has the numeric
 value of the score.
@@ -59,7 +60,7 @@ forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBaye
   locations = c("US"),
   targets = paste(1:4, "wk ahead inc death"),
   source = "zoltar")
-truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
+  truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 scores <- score_forecasts(forecasts, truth)
 }
 \dontrun{

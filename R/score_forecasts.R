@@ -26,6 +26,7 @@
 #'  - `overprediction` the component of WIS made up of overprediction of intervals
 #'  - `underprediction` the component of WIS made up of underprediction of intervals
 #'  - `coverage_X` are prediction interval coverage at alpha level X
+#'  - `quantile_coverage_0.X` are one-sided quantile coverage at quantile X
 #' If return_format is "long", also contains columns score_name and score_value
 #' where score_name is the type of score calculated and score_value has the numeric
 #' value of the score.
@@ -121,6 +122,7 @@ score_forecasts <- function(
   if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
     stop("Want to use point forecast when scoring but no point forecast in forecast data")
   }
+  
 
   # get dataframe into scoringutil format
   joint_df <- dplyr::left_join(x = forecasts, y = truth,
@@ -147,6 +149,8 @@ score_forecasts <- function(
     abs_var_rename <- "ae_point_NA"
   }
   
+  
+  # two sided
   scores <- purrr::map_dfr(
     unique(joint_df$target_variable),
     function(var) {
@@ -201,8 +205,40 @@ score_forecasts <- function(
                   "sharpness", "overprediction", "underprediction")
     })
      
-        
-      
+  # one sided     
+  sq <- scoringutils::eval_forecasts(data = joint_df,
+                                     by = observation_cols,
+                                     summarise_by = c(observation_cols, "quantile"),
+                                     interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))%>%
+    tidyr::pivot_wider(id_cols = observation_cols,
+                       names_from = c("quantile"),
+                       values_from = c("quantile_coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
+    purrr::set_names(~sub(abs_var_rename, "abs_error", .x))%>%
+    dplyr::select(
+      -dplyr::ends_with("_NA")
+    ) %>% 
+    dplyr::select(
+      -dplyr::starts_with("abs_error."),
+      -dplyr::starts_with("aem_"),
+      -dplyr::starts_with("ae_point_"),
+      -dplyr::starts_with("interval_score"),
+      -dplyr::starts_with("sharpness_"),
+      -dplyr::starts_with("underprediction_"),
+      -dplyr::starts_with("overprediction_")
+    )  
+  #order one-sided quantiles to ascending order
+  quantile_coverage_columns <-
+    sort(colnames(sq %>% 
+                    dplyr::select(dplyr::starts_with("quantile_coverage_"))))
+  
+  #select necessary columns and the one-sided quantiles in ascending order
+  scores_one_sided <- sq %>% 
+    dplyr::select(1:8, dplyr::all_of(quantile_coverage_columns))
+  
+  #combine one and two sided
+  scores <- suppressMessages(dplyr::full_join(scores_one_sided, 
+                                              scores))
+  
                     
   
   
