@@ -13,5 +13,6 @@ aggregate_to_weekly(data)
 data frame with the same set of input columns and weekly aggregated data in value column
 }
 \description{
-Aggregate daily data to weekly data
+If the last week is not complete, drop all observations from the
+previous Saturday in that week
 }
