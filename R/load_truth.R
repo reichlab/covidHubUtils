@@ -247,15 +247,7 @@ load_truth <- function (truth_source = NULL,
                                      by="1 week")) 
           } else {
             # aggregate daily inc counts to weekly counts
-            truth <- truth %>%
-              dplyr::group_by(model, location) %>%
-              dplyr::arrange(target_end_date) %>%
-              # generate weekly counts
-              dplyr:: mutate(value = RcppRoll::roll_sum(
-                value, 7, align = "right", fill = NA)) %>%
-              dplyr::ungroup() %>%
-              dplyr::filter(target_end_date %in% seq.Date(
-                as.Date("2020-01-25"), to = truth_end_date, by = "1 week")) 
+            truth <- aggregate_to_weekly(truth)
           }
         }
         return (truth)
