@@ -3550,3 +3550,7 @@ test_that("true_value is correct, point and median forecasts same", {
   expect_equal(actual$true_value, expected)
   
 })
+
+test_that("one-sided quantile coverage returns correct number of intervals for",{
+  
+})
