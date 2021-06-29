@@ -65,7 +65,7 @@ score_forecasts <- function(
   forecasts,
   truth,
   return_format = "wide",
-  scores_returned = c("abs_error", "wis", "wis_components", 
+  metrics = c("abs_error", "wis", "wis_components", 
                       "interval_coverage", "quantile_coverage"),
   use_median_as_point = FALSE
 ) {
@@ -107,8 +107,8 @@ score_forecasts <- function(
     return_format <- "wide"
   }
   
-  #validate scores_returned
-  scores_returned <- match.arg(scores_returned,
+  #validate metrics
+  metrics <- match.arg(metrics,
                                choices = c("abs_error", "wis", "wis_components", "interval_coverage", "quantile_coverage"),
                                several.ok = TRUE)
 
@@ -213,7 +213,7 @@ score_forecasts <- function(
     })
      
   # one-sided quantile coverage only calculated if needed    
-  if("quantile_coverage" %in% scores_returned){
+  if("quantile_coverage" %in% metrics){
     sq <- scoringutils::eval_forecasts(data = joint_df,
                                        by = observation_cols,
                                        summarise_by = c(observation_cols, "quantile"),
@@ -251,11 +251,11 @@ score_forecasts <- function(
   
   #remove unwanted columns note if quantile coverage not wanted value is not calculated
   scores <- scores %>% 
-    dplyr::select(-c(if(!("abs_error" %in% scores_returned)){c("abs_error")},
-                     if(!("wis" %in% scores_returned)){c("wis")},
-                     if(!("wis_components" %in% scores_returned)){c("sharpness","overprediction","underprediction")}, 
-                     if(!("interval_coverage" %in% scores_returned)){dplyr::starts_with("coverage_")}, 
-                     if(!("interval_coverage" %in% scores_returned)){c("n_interval_scores","exists_interval_score_0")}
+    dplyr::select(-c(if(!("abs_error" %in% metrics)){c("abs_error")},
+                     if(!("wis" %in% metrics)){c("wis")},
+                     if(!("wis_components" %in% metrics)){c("sharpness","overprediction","underprediction")}, 
+                     if(!("interval_coverage" %in% metrics)){dplyr::starts_with("coverage_")}, 
+                     if(!("interval_coverage" %in% metrics)){c("n_interval_scores","exists_interval_score_0")}
                      ))
     
   if ("coverage_0" %in% names(scores)) {
