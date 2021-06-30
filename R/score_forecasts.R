@@ -7,6 +7,8 @@
 #' @param return_format string: "long" returns long format with a column for
 #' "score_name" and a column for "score_value"; "wide" returns wide format with
 #' a separate column for each score. Defaults to "wide".
+#' @param metrics character vector of the metrics to be returned with options 
+#' "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"
 #' @param use_median_as_point logical: "TRUE" uses the median as the point
 #' forecast when scoring; "FALSE" uses the point forecasts from the data when
 #' scoring. Defaults to "FALSE"
@@ -16,8 +18,8 @@
 #' define the observation, namely, `model`, `forecast_date`, `location`,
 #' `horizon`, `temporal_resolution`, `target_variable`, `horizon`, and
 #' `target_end_date`.
-#' Other columns will contain scores:
-#'  - `true_value` is the observed truth at that `location` and `target_end_date`
+#' Other columns will contain scores dependent on metrics parameter:
+#'  - `true_value` is the observed truth at that `location` and `target_end_date` (always returned)
 #'  - `abs_error` is the absolute error based on median estimate if
 #'  use_median_as_point is TRUE, and absolute error based on point forecast
 #'  if use_median_as_point is FALSE
@@ -27,6 +29,7 @@
 #'  - `underprediction` the component of WIS made up of underprediction of intervals
 #'  - `coverage_X` are prediction interval coverage at alpha level X
 #'  - `quantile_coverage_0.X` are one-sided quantile coverage at quantile X
+#'  
 #' If return_format is "long", also contains columns score_name and score_value
 #' where score_name is the type of score calculated and score_value has the numeric
 #' value of the score.
