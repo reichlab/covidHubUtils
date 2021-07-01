@@ -3550,3 +3550,375 @@ test_that("true_value is correct, point and median forecasts same", {
   expect_equal(actual$true_value, expected)
   
 })
+
+test_that("correct columns included when metrics parameter excludes `abs_error`", {
+  y <- c(1, -1, 5)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, -1, 2, 2, 4),
+    c(-2, 0, 3, 4, 6))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  
+  point_forecast <- c(5,6,7)
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = FALSE,
+                            metrics = c("wis", "wis_components", 
+                                        "interval_coverage", "quantile_coverage"))
+  
+  cols <- colnames(actual)
+  quantile_coverage_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('quantile_coverage_')) %>% 
+    colnames()
+  coverage_interval_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('coverage_')) %>% 
+    colnames()
+  
+  expect_false("abs_error" %in% cols)
+  expect_true("wis" %in% cols)
+  expect_true("sharpness" %in% cols)
+  expect_true("overprediction" %in% cols)
+  expect_true("underprediction" %in% cols)
+  expect_true("n_interval_scores" %in% cols)
+  expect_true("exists_interval_score_0" %in% cols)
+  expect_equal(length(quantile_coverage_columns),5)
+  expect_equal(length(coverage_interval_columns),2)
+  
+})
+
+test_that("correct columns included when metrics parameter excludes `wis`", {
+  y <- c(1, -1, 5)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, -1, 2, 2, 4),
+    c(-2, 0, 3, 4, 6))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  
+  point_forecast <- c(5,6,7)
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = FALSE,
+                            metrics = c("abs_error", "wis_components", 
+                                        "interval_coverage", "quantile_coverage"))
+  
+  cols <- colnames(actual)
+  quantile_coverage_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('quantile_coverage_')) %>% 
+    colnames()
+  coverage_interval_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('coverage_')) %>% 
+    colnames()
+  
+  expect_true("abs_error" %in% cols)
+  expect_false("wis" %in% cols)
+  expect_true("sharpness" %in% cols)
+  expect_true("overprediction" %in% cols)
+  expect_true("underprediction" %in% cols)
+  expect_true("n_interval_scores" %in% cols)
+  expect_true("exists_interval_score_0" %in% cols)
+  expect_equal(length(quantile_coverage_columns),5)
+  expect_equal(length(coverage_interval_columns),2)
+  
+})
+
+test_that("correct columns included when metrics parameter excludes `wis_components`", {
+  y <- c(1, -1, 5)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, -1, 2, 2, 4),
+    c(-2, 0, 3, 4, 6))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  
+  point_forecast <- c(5,6,7)
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = FALSE,
+                            metrics = c("abs_error", "wis", 
+                                        "interval_coverage", "quantile_coverage"))
+  
+  cols <- colnames(actual)
+  quantile_coverage_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('quantile_coverage_')) %>% 
+    colnames()
+  coverage_interval_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('coverage_')) %>% 
+    colnames()
+  
+  expect_true("abs_error" %in% cols)
+  expect_true("wis" %in% cols)
+  expect_false("sharpness" %in% cols)
+  expect_false("overprediction" %in% cols)
+  expect_false("underprediction" %in% cols)
+  expect_true("n_interval_scores" %in% cols)
+  expect_true("exists_interval_score_0" %in% cols)
+  expect_equal(length(quantile_coverage_columns),5)
+  expect_equal(length(coverage_interval_columns),2)
+  
+})
+
+test_that("correct columns included when metrics parameter excludes `interval_coverage`", {
+  y <- c(1, -1, 5)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, -1, 2, 2, 4),
+    c(-2, 0, 3, 4, 6))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  
+  point_forecast <- c(5,6,7)
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = FALSE,
+                            metrics = c("abs_error", "wis", "wis_components", 
+                                        "quantile_coverage"))
+  
+  cols <- colnames(actual)
+  quantile_coverage_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('quantile_coverage_')) %>% 
+    colnames()
+  coverage_interval_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('coverage_')) %>% 
+    colnames()
+  
+  expect_true("abs_error" %in% cols)
+  expect_true("wis" %in% cols)
+  expect_true("sharpness" %in% cols)
+  expect_true("overprediction" %in% cols)
+  expect_true("underprediction" %in% cols)
+  expect_false("n_interval_scores" %in% cols)
+  expect_false("exists_interval_score_0" %in% cols)
+  expect_equal(length(quantile_coverage_columns),5)
+  expect_equal(length(coverage_interval_columns),0)
+  
+})
+
+test_that("correct columns included when metrics parameter excludes `quantile_coverage`", {
+  y <- c(1, -1, 5)
+  forecast_quantiles_matrix <- rbind(
+    c(-1, 0, 1, 2, 3),
+    c(-2, -1, 2, 2, 4),
+    c(-2, 0, 3, 4, 6))
+  forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  
+  point_forecast <- c(5,6,7)
+  
+  target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
+  horizons <- c("1", "2", "1")
+  locations <- c("01", "01", "02")
+  target_variables <- rep("inc death", length(y))
+  
+  forecast_target_end_dates <-
+    rep(target_end_dates, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_horizons <- rep(horizons, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_locations <- rep(locations, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_target_variables <-
+    rep(target_variables, times = 1 + ncol(forecast_quantiles_matrix))
+  forecast_quantile_probs <- rep(forecast_quantile_probs, each = length(y))
+  forecast_quantiles <- forecast_quantiles_matrix
+  dim(forecast_quantiles) <- prod(dim(forecast_quantiles))
+  
+  test_truth <- data.frame(
+    model = rep("truth_source", length(y)),
+    target_variable = target_variables,
+    target_end_date = target_end_dates,
+    location = locations,
+    value = y,
+    stringsAsFactors = FALSE
+  )
+  
+  n_forecasts <- length(point_forecast) + length(forecast_quantiles)
+  test_forecasts <- data.frame(
+    model = rep("m1", n_forecasts),
+    forecast_date = rep(lubridate::ymd("20200101"), n_forecasts),
+    location = forecast_locations,
+    horizon = forecast_horizons,
+    temporal_resolution = rep("wk", n_forecasts),
+    target_variable = forecast_target_variables,
+    target_end_date = forecast_target_end_dates,
+    type = c(rep("point",length(point_forecast)),rep("quantile", length(forecast_quantiles))),
+    quantile = c(rep(NA,length(point_forecast)),forecast_quantile_probs),
+    value = c(point_forecast,forecast_quantiles),
+    stringsAsFactors = FALSE
+  )
+  
+  actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
+                            use_median_as_point = FALSE,
+                            metrics = c("abs_error", "wis", "wis_components", 
+                                        "interval_coverage"))
+  
+  cols <- colnames(actual)
+  quantile_coverage_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('quantile_coverage_')) %>% 
+    colnames()
+  coverage_interval_columns <- actual %>% 
+    dplyr::select(dplyr::starts_with('coverage_')) %>% 
+    colnames()
+  
+  expect_true("abs_error" %in% cols)
+  expect_true("wis" %in% cols)
+  expect_true("sharpness" %in% cols)
+  expect_true("overprediction" %in% cols)
+  expect_true("underprediction" %in% cols)
+  expect_true("n_interval_scores" %in% cols)
+  expect_true("exists_interval_score_0" %in% cols)
+  expect_equal(length(quantile_coverage_columns),0)
+  expect_equal(length(coverage_interval_columns),2)
+  
+})
+
+
