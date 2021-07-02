@@ -62,11 +62,8 @@ test_that("handles `inc hosp` and `HealthData` source in US hub correctly",{
   # add 'HealthData' internally to load "inc hosp" truth
   # when using `inc hosp` together with other target_variable,
   # inc hosp truth will be daily counts
-  expect_warning(load_truth(truth_source = c("JHU"),
-                            target_variable = c("inc case", "inc hosp")))
-  
-  actual <- load_truth(truth_source = c("JHU"),
-                       target_variable = c("inc case", "inc hosp"))
+  expect_warning(actual <- load_truth(truth_source = c("JHU"),
+                                      target_variable = c("inc case", "inc hosp")))
   # weekly
   expected_inc_case <- load_truth(truth_source = c("JHU"),
                                   target_variable = c("inc case"))
@@ -88,14 +85,11 @@ test_that("handles `inc hosp` and `HealthData` source in US hub correctly",{
 
 test_that("handles `ECDC`source in ECDC hub correctly",{
   # return warning and weekly data when temporal resolution is daily
-  expect_warning(load_truth(truth_source = c("ECDC"),
-                            target_variable = c("inc case", "inc hosp"),
-                            temporal_resolution = "daily",
-                            hub = c("ECDC")))
-  actual <- load_truth(truth_source = c("ECDC"),
-                      target_variable = c("inc case", "inc hosp"),
-                      temporal_resolution = "daily",
-                      hub = c("ECDC"))
+  expect_warning(actual <- load_truth(truth_source = c("ECDC"),
+                                      target_variable = c("inc case", "inc hosp"),
+                                      temporal_resolution = "daily",
+                                      hub = c("ECDC")))
+  
   expect_equal(unique(actual$target_end_date), 
                seq(min(actual$target_end_date), 
                    max(actual$target_end_date), 7))
