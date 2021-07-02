@@ -1,9 +1,10 @@
 context("load_truth")
 library(covidHubUtils)
+library(covidData)
 library(zoltr)
 library(dplyr)
 
-test_that("default selections",{
+test_that("default selections from remote hub repo",{
   # US hub
   actual_us <- load_truth()
   # weekly
@@ -35,7 +36,26 @@ test_that("default selections",{
                                                 expected_ecdc_inc_death)))
 })
 
-test_that("load one target variable from multiple sources", {
+test_that("comapre default selections from remote hub repo and covidData",{
+  # # US hub from covidData
+  # actual_us <- load_truth(data_location = "covidData", as_of = "2020-06-30")
+  # # US hub from remote hub repo
+  # expected_us <- load_truth()
+  # 
+  # # need to check values
+  # expect_true(nrow(actual_us) == nrow(expected_us))
+  
+  # ECDC hub from covidData
+  actual_ecdc <- load_truth(hub = c("ECDC"))
+  # ECDC hub from remote hub repo
+  expected_ecdc <- load_truth(hub = c("ECDC"), data_location = "covidData")
+  
+  expect_true(nrow(actual_ecdc) == nrow(expected_ecdc))
+  # uncomment when aggregate weekly pr is merged
+  #expect_true(dplyr::all_equal(actual_ecdc, expected_ecdc))
+})
+
+test_that("load one target variable from multiple sources from remote hub repo", {
   # US hub
   actual_us <- load_truth(truth_source = c("JHU", "NYTimes", "USAFacts"),
                           target_variable = c("inc case"))
@@ -57,16 +77,15 @@ test_that("load one target variable from multiple sources", {
                  "Observed Data (JHU)"))
 })
 
-test_that("handles `inc hosp` and `HealthData` source in US hub correctly",{
+test_that("handles `inc hosp` and `HealthData` source in US hub correctly when loading
+          from remote hub repo",{
   # case 1
   # add 'HealthData' internally to load "inc hosp" truth
   # when using `inc hosp` together with other target_variable,
   # inc hosp truth will be daily counts
-  expect_warning(load_truth(truth_source = c("JHU"),
-                            target_variable = c("inc case", "inc hosp")))
+  expect_warning(actual <- load_truth(truth_source = c("JHU"),
+                                      target_variable = c("inc case", "inc hosp")))
   
-  actual <- load_truth(truth_source = c("JHU"),
-                       target_variable = c("inc case", "inc hosp"))
   # weekly
   expected_inc_case <- load_truth(truth_source = c("JHU"),
                                   target_variable = c("inc case"))
@@ -86,16 +105,14 @@ test_that("handles `inc hosp` and `HealthData` source in US hub correctly",{
                                               "cum death")))
 })
 
-test_that("handles `ECDC`source in ECDC hub correctly",{
+test_that("handles `ECDC`source in ECDC hub correctly when loading from remote 
+          hub repo",{
   # return warning and weekly data when temporal resolution is daily
-  expect_warning(load_truth(truth_source = c("ECDC"),
-                            target_variable = c("inc case", "inc hosp"),
-                            temporal_resolution = "daily",
-                            hub = c("ECDC")))
-  actual <- load_truth(truth_source = c("ECDC"),
-                      target_variable = c("inc case", "inc hosp"),
-                      temporal_resolution = "daily",
-                      hub = c("ECDC"))
+  expect_warning(actual <- load_truth(truth_source = c("ECDC"),
+                                      target_variable = c("inc case", "inc death"),
+                                      temporal_resolution = "daily",
+                                      hub = c("ECDC")))
+ 
   expect_equal(unique(actual$target_end_date), 
                seq(min(actual$target_end_date), 
                    max(actual$target_end_date), 7))

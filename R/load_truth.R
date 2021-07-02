@@ -23,11 +23,15 @@
 #' "cum death", "inc case", "inc death", "inc hosp". 
 #' If \code{NULL}, default for US hub is c("inc case", "inc death", "inc hosp").
 #' If \code{NULL}, default for ECDC hub is c("inc case", "inc death").
+#' @param as_of character vector of "as of" dates to use for querying truths in
+#' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
+#' available data with an issue date on or before the given \code{as_of} date are returned.
+#' This is only available for covidData now.
 #' @param locations vector of valid location code. 
 #' If \code{NULL}, default to all locations with available forecasts.
 #' US hub is using FIPS code and ECDC hub is using country name abbreviation.
 #' @param data_location character specifying the location of truth data.
-#' Currently only supports "local_hub_repo" and "remote_hub_repo". 
+#' Currently only supports "local_hub_repo","remote_hub_repo" and "covidData". 
 #' If \code{NULL}, default to "remote_hub_repo".
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 
 #' If \code{NULL},default to system date.
@@ -60,6 +64,7 @@
 #' @export
 load_truth <- function (truth_source = NULL,
                         target_variable = NULL, 
+                        as_of = NULL,
                         truth_end_date = NULL,
                         temporal_resolution = NULL,
                         locations = NULL,
@@ -82,6 +87,7 @@ load_truth <- function (truth_source = NULL,
                                  several.ok = TRUE)
     }
     
+    # NEED TO CHANGE WHEN THERE IS A TARGET VAR
     if (is.null(truth_source)){
       truth_source <- c("JHU", "HealthData")
     } else{
@@ -174,16 +180,29 @@ load_truth <- function (truth_source = NULL,
   }
   
   # validate data location
-  # COVIDcast is not available now
   if(!is.null(data_location)){
     data_location <- match.arg(data_location, 
                                choices = c("remote_hub_repo",
-                                           "local_hub_repo"),
-                                           #"COVIDcast"), 
+                                           "local_hub_repo",
+                                           "covidData"), 
                                several.ok = FALSE)
   } else {
-    data_location = "remote_hub_repo"
+    data_location <- "remote_hub_repo"
   }
+  
+  # validate truth source for covidData
+  if (data_location == "covidData"){
+    if(hub[1] == "US"){
+      if ("USAFacts" %in% truth_source || "NYTimes" %in% truth_source){
+        stop ("Error in load_truth: The truth source you selected is not supported in for US data in covidData.")
+      }
+    } else if (hub[1] == "ECDC") {
+      if ("ECDC" %in% truth_source){
+        stop ("Error in load_truth: The truth source you selected is not supported in for ECDC data in covidData.")
+      }
+    }
+  }
+  
   
   # validate locations
   if (!is.null(locations)){
@@ -199,81 +218,67 @@ load_truth <- function (truth_source = NULL,
     if (is.na(local_repo_path) | is.null(local_repo_path)) {
       stop ("Error in local_repo_path : Please provide a valid local_repo_path.")
     } else {
-      repo_path = local_repo_path
+      repo_path <- local_repo_path
     }
   }
   
   # get all combinations of elements in tsruth_source and target_variable
   all_combinations <- tidyr::crossing(truth_source, target_variable)
-  
+    
   # load truth data for each combination of truth_source and target_variable
   truth <- purrr::map2_dfr(
     all_combinations$truth_source, all_combinations$target_variable,
-    function (source, target) {
-      if ((source == 'HealthData' & target == "inc hosp") | 
-          (source != 'HealthData' & target != "inc hosp")){
-        # construct file path and read file from path
-        file_path <- get_truth_path(source = source, 
-                                    repo_path = repo_path,
-                                    target_variable = target, 
-                                    data_location = data_location,
-                                    hub = hub)
-        # load data from file path
-        truth <- readr::read_csv(file_path) 
-        
-        if (source == "ECDC"){
-          truth <- truth %>%
-            dplyr::rename(date = week_start)
-        }
-        
-        truth <- truth %>%
-          # add inc_cum and death_case columns and rename date column
-          dplyr::mutate(model = paste0("Observed Data (",source,")"), 
-                        target_variable = target,
-                        date = as.Date(date)) %>%
-          dplyr::rename(target_end_date = date)
-        
-        # optional aggregation step based on temporal resolution
-        # only loading daily incident hospitalization truth data
-        if ((target != "inc hosp" & temporal_resolution == "weekly") &
-            # ECDC is weekly data by default. No need to aggregate.
-            (source != "ECDC")){
-          if (unlist(strsplit(target, " "))[1] == "cum") {
-            # only keep weekly data
-            truth <- dplyr::filter(truth, 
-                                   target_end_date %in% seq.Date(
-                                     as.Date("2020-01-25"), 
-                                     to = truth_end_date, 
-                                     by="1 week")) 
-          } else {
-            # aggregate daily inc counts to weekly counts
-            truth <- truth %>%
-              dplyr::group_by(model, location) %>%
-              dplyr::arrange(target_end_date) %>%
-              # generate weekly counts
-              dplyr:: mutate(value = RcppRoll::roll_sum(
-                value, 7, align = "right", fill = NA)) %>%
-              dplyr::ungroup() %>%
-              dplyr::filter(target_end_date %in% seq.Date(
-                as.Date("2020-01-25"), to = truth_end_date, by = "1 week")) 
+    function (source, target){
+      if (data_location == "covidData"){
+        if ((source == 'HealthData' & target == "inc hosp") | 
+            (source != 'HealthData' & target != "inc hosp")){
+          
+          if (target == "inc hosp"){
+            temporal_resolution <- "daily"
           }
+          if (is.null(locations)){
+            selected_locations <- valid_location_codes
+          } else{
+            selected_locations <- locations
+          }
+          
+          data <- load_from_coviddata(target_variable = target, 
+                                      truth_source = source,
+                                      locations = selected_locations, 
+                                      as_of = as_of,
+                                      temporal_resolution = temporal_resolution,
+                                      truth_end_date = truth_end_date,
+                                      hub = hub)
+          return(data)
         }
-        return (truth)
+      } else{
+        if ((source == 'HealthData' & target == "inc hosp") | 
+            (source != 'HealthData' & target != "inc hosp")){
+          
+          data <- load_from_hub_repo(target_variable = target, 
+                                     truth_source = source,
+                                     repo_path = repo_path ,
+                                     temporal_resolution = temporal_resolution,
+                                     truth_end_date = truth_end_date,
+                                     data_location = data_location,
+                                     hub = hub)
+          return(data)
+        } 
       }
     }
-  ) %>%
-    dplyr::select(model, target_variable, target_end_date, location, value)
-  
-  # filter to only include specified locations
-  if (!is.null(locations)){
-    truth <- dplyr::filter(truth, location %in% locations) 
-    if (nrow(truth) == 0){
-      warning("Warning in load_truth: Truth for selected locations are not available.\n Please check your parameters.")
-      if ("inc hosp" %in% target_variable){
-        warning("Warning in load_truth: Only national and state level of incident hospitalization data is available.")
+    ) %>%
+      dplyr::select(model, target_variable, target_end_date, location, value)
+    
+    # filter to only include specified locations
+    if (!is.null(locations)){
+      truth <- dplyr::filter(truth, location %in% locations) 
+      if (nrow(truth) == 0){
+        warning("Warning in load_truth: Truth for selected locations are not available.\n Please check your parameters.")
+        if ("inc hosp" %in% target_variable){
+          warning("Warning in load_truth: Only national and state level of incident hospitalization data is available.")
+        }
       }
     }
-  }
 
   # merge with location data to get populations and location names
   # for US the location codes are stored in a column called 'fips'
@@ -293,8 +298,7 @@ load_truth <- function (truth_source = NULL,
 #' 
 #' @param source character vector specifying where the truths will
 #' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
-#' @param repo_path path to local clone of the reichlab/covid19-forecast-hub
-#' repository. Only used when data_location is "local_hub_repo"
+#' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
 #' @param target_variable string specifying target type It should be one or more of 
 #' "cum death", "inc case", "inc death", "inc hosp". 
 #' @param data_location character specifying the location of truth data.
@@ -340,5 +344,149 @@ get_truth_path <- function(source,
   return(file_path)
 }
 
+#' load truth data from covidData
+#' 
+#' @param target_variable string specifying target type It should be one or more of 
+#' "cum death", "inc case", "inc death", "inc hosp". 
+#' @param locations vector of valid location code. 
+#' US hub is using FIPS code and ECDC hub is using country name abbreviation.
+#' @param as_of character vector of "as of" dates to use for querying truths in
+#' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
+#' available data with an issue date on or before the given \code{as_of} date are returned.
+#' @param temporal_resolution string specifying temporal resolution
+#' to include: one of 'daily' or 'weekly'
+#' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 
+#' @param hub character, which hub to use. Default is "US", other option is
+#' "ECDC"
+#' 
+#' @return a data frame with columns location, target_end_date, target_variable and value
+#' 
+load_from_coviddata <- function(target_variable, 
+                                truth_source,
+                                locations = NULL, 
+                                as_of = NULL,
+                                temporal_resolution,
+                                truth_end_date,
+                                hub = c("US", "ECDC")){
+  
+  # create geography variable
+  if (hub[1] == "ECDC"){
+    geography <- "global"
+  } else {
+    geography <- hub
+  }
+  
+  inc_cum = unlist(strsplit(target_variable, " "))[1]
+  # create measure variable
+  measure <- unlist(strsplit(target_variable, " "))[2]
+  if (measure == "death"){
+    measure <- "deaths"
+  } else if (measure == "case"){
+    measure <- "cases"
+  } else if (measure == "hosp"){
+    measure <- "hospitalizations"
+  }
+    
+  truth_data <- covidData::load_data(location_code = locations,
+                                     as_of = as_of,
+                                     temporal_resolution = temporal_resolution,
+                                     geography = geography,
+                                     measure = measure,
+                                     source = tolower(truth_source)) %>%
+    dplyr::rename(target_end_date = date)%>%
+    dplyr::mutate(model = paste0("Observed Data (",truth_source,")"), target_variable = target_variable) %>%
+    # take out DC county and filter target_end_date
+    dplyr::filter(location != "11001", 
+                  target_end_date >= as.Date("2020-01-25"), 
+                  target_end_date <= truth_end_date) 
+    
+  if (inc_cum == "inc"){
+    truth_data <- truth_data %>%
+      dplyr::rename(value = inc) %>%
+      dplyr::select(-cum)
+  } else if (inc_cum == "cum"){
+    truth_data <- truth_data %>%
+      dplyr::rename(value = cum) %>%
+      dplyr::select(-inc)
+  }
+  # drop na
+  if (target_variable == "inc hosp") {
+    truth_data <- truth_data %>%
+      tidyr::drop_na()
+  }
+  return (truth_data)
+}
 
+#' load truth data from covidData
+#' 
+#' @param target_variable string specifying target type It should be one or more of 
+#' "cum death", "inc case", "inc death", "inc hosp". 
+#' @param truth_source character vector specifying where the truths will
+#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
+#' @param temporal_resolution string specifying temporal resolution
+#' to include: one of 'daily' or 'weekly'
+#' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format. 
+#' @param data_location character specifying the location of truth data.
+#' Currently only supports "local_hub_repo" or "remote_hub_repo".
+#' @param hub character, which hub to use. Default is "US", other option is
+#' "ECDC"
+#' @return a data frame with columns location, target_end_date, target_variable and value
+#' 
+load_from_hub_repo <- function(target_variable, 
+                               truth_source,
+                               repo_path,
+                               temporal_resolution,
+                               truth_end_date,
+                               data_location,
+                               hub = c("US", "ECDC")){
+  
+  # construct file path and read file from path
+  file_path <- get_truth_path(source = truth_source, 
+                              repo_path = repo_path,
+                              target_variable = target_variable, 
+                              data_location = data_location,
+                              hub = hub)
+  # load data from file path
+  truth_data <- readr::read_csv(file_path) 
+  
+  if (truth_source == "ECDC"){
+    truth_data <- truth_data %>% dplyr::rename(date = week_start)
+  }
+  
+  truth_data <- truth_data %>%
+    # add inc_cum and death_case columns and rename date column
+    dplyr::mutate(model = paste0("Observed Data (",truth_source,")"), 
+                  target_variable = target_variable,
+                  date = as.Date(date)) %>%
+    dplyr::rename(target_end_date = date) %>%
+    dplyr::filter(target_end_date >= as.Date("2020-01-25"))
+  
+  # optional aggregation step based on temporal resolution
+  # only loading daily incident hospitalization truth data
+  if ((target_variable != "inc hosp" & temporal_resolution == "weekly") &
+      # ECDC is weekly data by default. No need to aggregate.
+      (truth_source != "ECDC")){
+    if (unlist(strsplit(target_variable, " "))[1] == "cum") {
+      # only keep weekly data
+      truth_data <- dplyr::filter(truth_data, 
+                            target_end_date %in% seq.Date(
+                              as.Date("2020-01-25"), 
+                              to = truth_end_date, 
+                              by="1 week")) 
+    } else {
+      # aggregate daily inc counts to weekly counts
+      truth_data <- truth_data %>%
+        dplyr::group_by(model, location) %>%
+        dplyr::arrange(target_end_date) %>%
+        # generate weekly counts
+        dplyr:: mutate(value = RcppRoll::roll_sum(
+          value, 7, align = "right", fill = NA)) %>%
+        dplyr::ungroup() %>%
+        dplyr::filter(target_end_date %in% seq.Date(
+          as.Date("2020-01-25"), to = truth_end_date, by = "1 week")) 
+    }
+  }
+  return (truth_data)
+}
 
