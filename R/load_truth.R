@@ -2,7 +2,7 @@
 #' from multiple truth sources 
 #' using files in reichlab/covid19-forecast-hub.
 #' 
-#' "inc hosp" is only available from "HeatlthData" and this function is not loading
+#' "inc hosp" is only available from "HealthData" and "ECDC" and this function is not loading
 #' data for other target variables from "HealthData".
 #' 
 #' When loading data for multiple target_variables, temporal_resolution will be applied
@@ -119,7 +119,8 @@ load_truth <- function (truth_source = NULL,
       # validate target variable 
       target_variable <- match.arg(target_variable, 
                                    choices = c("inc case",
-                                               "inc death"), 
+                                               "inc death",
+                                               "inc hosp"), 
                                    several.ok = TRUE)
     }
     
@@ -153,8 +154,8 @@ load_truth <- function (truth_source = NULL,
   )
   
   # validate temporal resolution
-  if (is.null(temporal_resolution)){
-    # only relevant for US hub currently where inc hosp is available
+  if (is.null(temporal_resolution) & hub == "US"){
+    # only relevant for US hub
     if (length(target_variable) == 1){
       if (target_variable == "inc hosp"){
         temporal_resolution = "daily"
@@ -168,8 +169,10 @@ load_truth <- function (truth_source = NULL,
     temporal_resolution <- match.arg(temporal_resolution, 
                                      choices = c("daily","weekly"), 
                                      several.ok = FALSE)
-    if("ECDC" %in% truth_source & temporal_resolution == "daily"){
-      warning("Warning in load_truth: ECDC truth data will be weekly.")
+    if("ECDC" %in% truth_source & 
+       target_variable %in% c("inc case", "inc death") &
+       temporal_resolution == "daily"){
+      warning("Warning in load_truth: ECDC case and death data will be weekly.")
     }
   }
   
@@ -209,9 +212,9 @@ load_truth <- function (truth_source = NULL,
   # load truth data for each combination of truth_source and target_variable
   truth <- purrr::map2_dfr(
     all_combinations$truth_source, all_combinations$target_variable,
-    function (source, target) {
-      if ((source == 'HealthData' & target == "inc hosp") | 
-          (source != 'HealthData' & target != "inc hosp")){
+    function(source, target) {
+      if ((source %in% c('HealthData', 'ECDC') & target == "inc hosp") | 
+          (source != 'HealthData' & target != "inc hosp")) {
         # construct file path and read file from path
         file_path <- get_truth_path(source = source, 
                                     repo_path = repo_path,
@@ -221,49 +224,55 @@ load_truth <- function (truth_source = NULL,
         # load data from file path
         truth <- readr::read_csv(file_path) 
         
-        if (source == "ECDC"){
-          truth <- truth %>%
-            dplyr::rename(date = week_start)
-        }
-        
         truth <- truth %>%
-          # add inc_cum and death_case columns and rename date column
+          # add inc_cum and death_case columns 
           dplyr::mutate(model = paste0("Observed Data (",source,")"), 
-                        target_variable = target,
-                        date = as.Date(date)) %>%
-          dplyr::rename(target_end_date = date)
-        
+                        target_variable = target)
+        # ECDC case/death is in ISO weeks
+        if ("week_start" %in% names(truth)) {
+          truth <- truth %>%
+            dplyr::mutate(week_start = as.Date(week_start),
+                          target_end_date = week_start + 5) %>% # to match epiweek
+            dplyr::select(model, target_variable, 
+                          week_start, target_end_date, # include ISO week start
+                          location, value)
+        } else { 
+          # for daily data, rename date column
+          truth <- truth %>%
+           dplyr::rename(target_end_date = date) %>%
+            dplyr::select(model, target_variable, target_end_date, location, value)
+        }
+         
         # optional aggregation step based on temporal resolution
-        # only loading daily incident hospitalization truth data
-        if ((target != "inc hosp" & temporal_resolution == "weekly") &
-            # ECDC is weekly data by default. No need to aggregate.
-            (source != "ECDC")){
-          if (unlist(strsplit(target, " "))[1] == "cum") {
-            # only keep weekly data
-            truth <- dplyr::filter(truth, 
-                                   target_end_date %in% seq.Date(
-                                     as.Date("2020-01-25"), 
-                                     to = truth_end_date, 
-                                     by="1 week")) 
-          } else {
-            # aggregate daily inc counts to weekly counts
-            truth <- truth %>%
-              dplyr::group_by(model, location) %>%
-              dplyr::arrange(target_end_date) %>%
-              # generate weekly counts
-              dplyr:: mutate(value = RcppRoll::roll_sum(
-                value, 7, align = "right", fill = NA)) %>%
-              dplyr::ungroup() %>%
-              dplyr::filter(target_end_date %in% seq.Date(
-                as.Date("2020-01-25"), to = truth_end_date, by = "1 week")) 
+        if (!"week_start" %in% names(truth)) { # ECDC case/death already in weeks
+          if (temporal_resolution == "weekly" &
+              # only loading daily incident hospitalization truth data in US
+              !(hub == "US" & target == "inc hosp")) {
+            if (unlist(strsplit(target, " "))[1] == "cum") {
+              # only keep weekly data
+              truth <- dplyr::filter(truth, 
+                                     target_end_date %in% seq.Date(
+                                       as.Date("2020-01-25"), 
+                                       to = truth_end_date, 
+                                       by="1 week")) 
+            } else {
+              # aggregate daily inc counts to weekly counts
+              truth <- truth %>%
+                dplyr::group_by(model, location) %>%
+                dplyr::arrange(target_end_date) %>%
+                # generate weekly counts
+                dplyr:: mutate(value = RcppRoll::roll_sum(
+                  value, 7, align = "right", fill = NA)) %>%
+                dplyr::ungroup() %>%
+                dplyr::filter(target_end_date %in% seq.Date(
+                  as.Date("2020-01-25"), to = truth_end_date, by = "1 week")) 
+            }
           }
         }
         return (truth)
       }
     }
-  ) %>%
-    dplyr::select(model, target_variable, target_end_date, location, value)
-  
+  ) 
   # filter to only include specified locations
   if (!is.null(locations)){
     truth <- dplyr::filter(truth, location %in% locations) 
