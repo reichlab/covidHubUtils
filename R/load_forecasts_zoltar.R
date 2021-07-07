@@ -15,7 +15,11 @@
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). 
 #' Default to all valid targets in Zoltar.
-#' @param as_of a date in YYYY-MM-DD format to load forecasts submitted as of this date. 
+#' @param as_of character for date time to load forecasts submitted as of this time. 
+#' It could use the format of one of the three examples: 
+#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+#' If you would like to set a timezone, it has to be UTC now. 
+#' If not, helper function will append the default timezone to your input based on hub parameter. 
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are "US" and "ECDC"
@@ -37,7 +41,7 @@ load_forecasts_zoltar <- function (
   verbose = TRUE) {
   
   # set up Zoltar connection
-  zoltar_connection <- setup_zoltar_connection()
+  zoltar_connection <- setup_zoltar_connection(staging = FALSE)
   
   if (!is.null(forecast_dates)){
     # construct Zoltar project url
@@ -65,7 +69,7 @@ load_forecasts_zoltar <- function (
                                       targets = targets,
                                       types = types,
                                       verbose = verbose,
-                                      as_of = as_of)
+                                      as_of = date_to_datetime(as_of, hub))
   if (nrow(forecasts) == 0){
     warning("Warning in do_zoltar_query: Forecasts are not available.\n Please check your parameters.")
     # convert value column to double and select columns

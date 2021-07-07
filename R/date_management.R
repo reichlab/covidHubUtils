@@ -3,7 +3,7 @@
 #' of epidemic week from a specified date
 #'
 #' @param forecast_date vector of dates as Date objects
-#' @param integer vector of week offsets.  must be either length 1 or the same
+#' @param week_offset vector of week offsets.  must be either length 1 or the same
 #'     length as forecast_date
 #'
 #' @return character vector of dates in 'yyyy-mm-dd' format
@@ -113,14 +113,16 @@ calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
 #' finds the nearest Monday for which a submission could have been made
 #'
 #' @param forecast_date character vector of dates in 'yyyy-mm-dd' format
-#' @param submision_day day when forecasts have to be submitted. Default is 
+#' @param submission_day day when forecasts have to be submitted. Default is 
 #' Monday. 
 #' 
 #' @return return character vecor with corresponding submission date
 #' @importFrom lubridate ceiling_date
 #'
 #' @examples 
+#' \dontrun{
 #' calc_submission_due_date(Sys.Date() + 0:7) 
+#' }
 #' @export
 calc_submission_due_date <- function(forecast_date, submission_day = "Monday") {
   
@@ -135,4 +137,62 @@ calc_submission_due_date <- function(forecast_date, submission_day = "Monday") {
   )
   
   return(dates)
+}
+
+#' Create a datetime by appending time and/or UTC timezone 
+#' to the given date string, if necessary
+#' 
+#' If you would like to set a timezone in date parameter, it has to be UTC now. 
+#' If not, this function will first convert the input to the default timezone based on hub parameter.
+#' It is using Eastern Time for \code{hub = "US"} and CET for \code{hub = "ECDC"}.
+#' Then, return the converted date time in UTC timezone.
+#' 
+#' @param date date in character. 
+#' It could be a YYYY-MM-DD date, 
+#' or a YYYY-MM-DD date format with HH:MM:SS time, 
+#' or a YYYY-MM-DD date with HH:MM:SS time and UTC timezone.
+#' Default to NULL
+#' @param hub character vector, where the first element indicates the hub
+#' to set default timezone. Possible options are "US" and "ECDC".
+#' 
+#' @return NULL or datetime characters with date, time in UTC timezone
+#' 
+#' @export
+date_to_datetime <- function(date = NULL, hub = c("US", "ECDC")){
+  # default for `as_of` in zoltr
+  if(is.null(date)){
+    return (NULL)
+  }
+  
+  if (hub[1] == "US"){
+    default_timezone_location <- "America/New_York"
+  } else if (hub[1] == "ECDC"){
+    default_timezone_location <- "Europe/Stockholm"
+  }
+ 
+  # case 1: date only
+  # append time and default timezone
+  if (date == strftime(date, format = "%Y-%m-%d")){
+    date <- format(as.POSIXct(paste(date, "23:59:59", sep = " "),
+                      format = "%Y-%m-%d %H:%M:%S", 
+                     tz = default_timezone_location), tz = 'UTC', usetz = TRUE)
+    message("Warning in date_to_datetime: appending default time to the given input and converting it to default timezone.")
+  } 
+  # case 2: date and time, no timezone
+  # append default timezone
+  else if (date == strftime(date, format = "%Y-%m-%d %H:%M:%S")){
+    date <- format(as.POSIXct(date, format = "%Y-%m-%d %H:%M:%S", tz = default_timezone_location), 
+                  tz = 'UTC', usetz = TRUE)
+    message("Warning in date_to_datetime: converting the given date to default timezone.")
+  } 
+  # case 3: full date time in UTC timezone
+  else if (grepl("UTC", date, fixed=TRUE)) {
+    date <- strftime(date, format = "%Y-%m-%d %H:%M:%S", tz = "UTC", usetz = TRUE)
+  } 
+  # case 4: none above, mostly for full date time in other timezones
+  else {
+    stop ("Error in date_to_datetime: Please make sure date parameter is in the right format.")
+  }
+  
+  return (date)
 }
