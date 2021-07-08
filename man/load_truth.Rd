@@ -81,12 +81,15 @@ weekly count would be NA in resulting data frame.
 library(covidHubUtils)
 
 # load for US
-load_truth(truth_source = c("JHU","HealthData"), 
-target_variable = c("inc case", "inc death", "inc hosp"))
+load_truth(
+  truth_source = c("JHU", "HealthData"),
+  target_variable = c("inc case", "inc death", "inc hosp")
+)
 
 # load for ECDC
-load_truth(truth_source = c("JHU"), 
-target_variable = c("inc case", "inc death"), 
-hub = "ECDC")
-
+load_truth(
+  truth_source = c("JHU"),
+  target_variable = c("inc case", "inc death"),
+  hub = "ECDC"
+)
 }

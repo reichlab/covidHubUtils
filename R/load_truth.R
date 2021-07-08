@@ -246,42 +246,39 @@ load_truth <- function(truth_source = NULL,
   truth <- purrr::map2_dfr(
     all_combinations$truth_source, all_combinations$target_variable,
     function(source, target) {
-      if (data_location == "covidData") {
-        if ((source == "HealthData" & target == "inc hosp") |
+      if ((source == "HealthData" & target == "inc hosp") |
           (source != "HealthData" & target != "inc hosp")) {
-          if (target == "inc hosp") {
-            temporal_resolution <- "daily"
-          }
-          if (is.null(locations)) {
-            selected_locations <- valid_location_codes
-          } else {
-            selected_locations <- locations
-          }
-
-          data <- load_from_coviddata(
-            target_variable = target,
-            truth_source = source,
-            locations = selected_locations,
-            as_of = as_of,
-            temporal_resolution = temporal_resolution,
-            truth_end_date = truth_end_date,
-            hub = hub
-          )
-          return(data)
-        }
-      } else {
-        if ((source == "HealthData" & target == "inc hosp") |
-          (source != "HealthData" & target != "inc hosp")) {
-          data <- load_from_hub_repo(
-            target_variable = target,
-            truth_source = source,
-            repo_path = repo_path,
-            temporal_resolution = temporal_resolution,
-            truth_end_date = truth_end_date,
-            data_location = data_location,
-            hub = hub
-          )
-          return(data)
+        if (data_location == "covidData") {
+            if (target == "inc hosp") {
+              temporal_resolution <- "daily"
+            }
+            if (is.null(locations)) {
+              selected_locations <- valid_location_codes
+            } else {
+              selected_locations <- locations
+            }
+  
+            data <- load_from_coviddata(
+              target_variable = target,
+              truth_source = source,
+              locations = selected_locations,
+              as_of = as_of,
+              temporal_resolution = temporal_resolution,
+              truth_end_date = truth_end_date,
+              hub = hub
+            )
+            return(data)
+        } else {
+            data <- load_from_hub_repo(
+              target_variable = target,
+              truth_source = source,
+              repo_path = repo_path,
+              temporal_resolution = temporal_resolution,
+              truth_end_date = truth_end_date,
+              data_location = data_location,
+              hub = hub
+            )
+            return(data)
         }
       }
     }
@@ -509,19 +506,7 @@ load_from_hub_repo <- function(target_variable,
       )
     } else {
       # aggregate daily inc counts to weekly counts
-      truth_data <- truth_data %>%
-        dplyr::group_by(model, location) %>%
-        dplyr::arrange(target_end_date) %>%
-        # generate weekly counts
-        dplyr::mutate(value = RcppRoll::roll_sum(
-          value, 7,
-          align = "right", fill = NA
-        )) %>%
-        dplyr::ungroup() %>%
-        dplyr::filter(target_end_date %in% seq.Date(
-          as.Date("2020-01-25"),
-          to = truth_end_date, by = "1 week"
-        ))
+      truth_data <- aggregate_to_weekly(truth_data)
     }
   }
   return(truth_data)
