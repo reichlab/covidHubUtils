@@ -46,13 +46,13 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v2.1
       - name: Checkout covidData when get_truth.R or aggregate_to_weekly.R has changed 
-        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') || contains(steps.changed-files.outputs.modified_files, 'R/aggregate_to_weekly.R')
+        if: ${{ contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') || contains(steps.changed-files.outputs.modified_files, 'R/aggregate_to_weekly.R') }} 
         uses: actions/checkout@v2
         with:
           repository: reichlab/covidData
           path: covidData
       - name: Install covidData when get_truth.R has changed 
-        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') || contains(steps.changed-files.outputs.modified_files, 'R/aggregate_to_weekly.R')
+        if: ${{ contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') || contains(steps.changed-files.outputs.modified_files, 'R/aggregate_to_weekly.R') }}
         run: make recent_data
         working-directory: ./covidData/code/data-processing
       - name: Run unit test for get_truth.R
