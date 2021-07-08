@@ -172,15 +172,6 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
     hub = c("ECDC")
   ))
   
-  expect_equal(unique(actual$target_end_date), 
-               seq(min(actual$target_end_date), 
-                   max(actual$target_end_date), 7))
-  expect_equal(unique(weekdays(actual$target_end_date)),
-               "Monday")
-  
-})
-
-
   expect_equal(
     unique(actual$target_end_date),
     seq(
@@ -188,6 +179,7 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
       max(actual$target_end_date), 7
     )
   )
+  
   expect_equal(
     unique(weekdays(actual$target_end_date)),
     "Monday"
