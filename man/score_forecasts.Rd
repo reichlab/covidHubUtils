@@ -8,6 +8,8 @@ score_forecasts(
   forecasts,
   truth,
   return_format = "wide",
+  metrics = c("abs_error", "wis", "wis_components", "interval_coverage",
+    "quantile_coverage"),
   use_median_as_point = FALSE
 )
 }
@@ -22,6 +24,9 @@ by load_truth}
 "score_name" and a column for "score_value"; "wide" returns wide format with
 a separate column for each score. Defaults to "wide".}
 
+\item{metrics}{character vector of the metrics to be returned with options
+"abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"}
+
 \item{use_median_as_point}{logical: "TRUE" uses the median as the point
 forecast when scoring; "FALSE" uses the point forecasts from the data when
 scoring. Defaults to "FALSE"}
@@ -31,9 +36,9 @@ data.frame with scores. The result will have some columns that
 define the observation, namely, \code{model}, \code{forecast_date}, \code{location},
 \code{horizon}, \code{temporal_resolution}, \code{target_variable}, \code{horizon}, and
 \code{target_end_date}.
-Other columns will contain scores:
+Other columns will contain scores dependent on metrics parameter:
 \itemize{
-\item \code{true_value} is the observed truth at that \code{location} and \code{target_end_date}
+\item \code{true_value} is the observed truth at that \code{location} and \code{target_end_date} (always returned)
 \item \code{abs_error} is the absolute error based on median estimate if
 use_median_as_point is TRUE, and absolute error based on point forecast
 if use_median_as_point is FALSE
@@ -43,11 +48,12 @@ if use_median_as_point is FALSE
 \item \code{underprediction} the component of WIS made up of underprediction of intervals
 \item \code{coverage_X} are prediction interval coverage at alpha level X
 \item \code{quantile_coverage_0.X} are one-sided quantile coverage at quantile X
+}
+
 If return_format is "long", also contains columns score_name and score_value
 where score_name is the type of score calculated and score_value has the numeric
 value of the score.
 If return_format is "wide", each calculated score is in its own column.
-}
 }
 \description{
 Score forecasts

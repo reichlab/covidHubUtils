@@ -57,10 +57,10 @@ test_that("load_latest_forecasts uses as_of correctly in US hub",{
 
 test_that("load_forecasts uses as_of correctly in ECDC hub",{
   #Version with as_of
-  version1 <- covidHubUtils::load_forecasts(models = "BIOCOMSC-Gompertz", 
-                                            forecast_dates = "2021-04-26", 
-                                            as_of = "2021-05-02 11:00:00 UTC+1", 
-                                            hub = c("ECDC"))
+  expect_warning(version1 <- covidHubUtils::load_forecasts(models = "BIOCOMSC-Gompertz", 
+                                                           forecast_dates = "2021-04-26", 
+                                                           as_of = "2021-05-02 11:00:00 UTC+1", 
+                                                           hub = c("ECDC")))
   #Version without as_of
   version2 <- covidHubUtils::load_forecasts(models = "BIOCOMSC-Gompertz",
                                             forecast_dates = "2021-04-26", 
@@ -72,11 +72,11 @@ test_that("load_forecasts uses as_of correctly in ECDC hub",{
 
 test_that("load_latest_forecasts uses as_of correctly in ECDC hub",{
   #Version with as_of
-  version1 <- covidHubUtils::load_latest_forecasts(models = "BIOCOMSC-Gompertz", 
-                                                   last_forecast_date = "2021-04-26", 
-                                                   as_of = "2021-05-02", 
-                                                   hub = c("ECDC"),
-                                                   source = 'zoltar')
+  expect_warning(version1 <- covidHubUtils::load_latest_forecasts(models = "BIOCOMSC-Gompertz", 
+                                                                  last_forecast_date = "2021-04-26", 
+                                                                  as_of = "2021-05-02", 
+                                                                  hub = c("ECDC"),
+                                                                  source = 'zoltar'))
   #Version without as_of
   version2 <- covidHubUtils::load_latest_forecasts(models = "BIOCOMSC-Gompertz",
                                                    last_forecast_date = "2021-04-26", 
