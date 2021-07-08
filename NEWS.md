@@ -11,6 +11,8 @@
 - Add `calc_cramers_dist_equal_space()`, `calc_cramers_dist_equal_space()`, and `calc_cramers_dist_one_model_pair()` to calculate forecast similarities based on the approximation of Cramer's distance.
 - In `score_forecasts()` calculate one-sided quantile coverage denoted quantile_coverage0.xx.
 - Allow `load_truth()` to load truth data from covidData. Note `as_of` parameter is only supported when `data_location = "covidData"`.
+- In `score_forecasts()` add `metrics` parameter which is a character vector of the metrics to
+be returned with options "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"
 
 ## covidHubUtils 0.1.5
 

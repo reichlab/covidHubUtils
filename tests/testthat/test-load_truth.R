@@ -131,7 +131,6 @@ test_that("handles `inc hosp` and `HealthData` source in US hub correctly when l
     truth_source = c("JHU"),
     target_variable = c("inc case", "inc hosp")
   ))
-
   # weekly
   expected_inc_case <- load_truth(
     truth_source = c("JHU"),
@@ -172,6 +171,15 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
     temporal_resolution = "daily",
     hub = c("ECDC")
   ))
+  
+  expect_equal(unique(actual$target_end_date), 
+               seq(min(actual$target_end_date), 
+                   max(actual$target_end_date), 7))
+  expect_equal(unique(weekdays(actual$target_end_date)),
+               "Monday")
+  
+})
+
 
   expect_equal(
     unique(actual$target_end_date),
