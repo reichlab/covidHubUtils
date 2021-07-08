@@ -16,8 +16,7 @@ get_truth_path(
 \item{source}{character vector specifying where the truths will
 be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".}
 
-\item{repo_path}{path to local clone of the reichlab/covid19-forecast-hub
-repository. Only used when data_location is "local_hub_repo"}
+\item{repo_path}{path to local clone or remote of the corresponding prediction hub repository.}
 
 \item{target_variable}{string specifying target type It should be one or more of
 "cum death", "inc case", "inc death", "inc hosp".}
