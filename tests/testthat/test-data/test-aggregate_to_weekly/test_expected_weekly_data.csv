@@ -1,0 +1,5 @@
+model,location,target_end_date,target_variable,value
+Observed Data (JHU),US,2021-05-22,inc death,3177
+Observed Data (JHU),US,2021-05-29,inc death,4449
+Observed Data (JHU),01,2021-05-22,inc death,74
+Observed Data (JHU),01,2021-05-29,inc death,34
