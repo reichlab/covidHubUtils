@@ -124,7 +124,7 @@ load_truth <- function(truth_source = NULL,
     remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
   } else if (hub[1] == "ECDC") {
     if (is.null(target_variable)) {
-      target_variable <- c("inc case", "inc death")
+      target_variable <- c("inc case", "inc death", "inc hosp")
     } else {
       # validate target variable 
       target_variable <- match.arg(target_variable, 
