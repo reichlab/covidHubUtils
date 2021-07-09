@@ -9,6 +9,7 @@ using files in reichlab/covid19-forecast-hub.}
 load_truth(
   truth_source = NULL,
   target_variable = NULL,
+  as_of = NULL,
   truth_end_date = NULL,
   temporal_resolution = NULL,
   locations = NULL,
@@ -28,6 +29,11 @@ If \code{NULL}, default for ECDC hub is c("JHU").}
 If \code{NULL}, default for US hub is c("inc case", "inc death", "inc hosp").
 If \code{NULL}, default for ECDC hub is c("inc case", "inc death").}
 
+\item{as_of}{character vector of "as of" dates to use for querying truths in
+format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
+available data with an issue date on or before the given \code{as_of} date are returned.
+This is only available for covidData now.}
+
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
 If \code{NULL},default to system date.}
 
@@ -43,7 +49,7 @@ If \code{NULL}, default to all locations with available forecasts.
 US hub is using FIPS code and ECDC hub is using country name abbreviation.}
 
 \item{data_location}{character specifying the location of truth data.
-Currently only supports "local_hub_repo" and "remote_hub_repo".
+Currently only supports "local_hub_repo","remote_hub_repo" and "covidData".
 If \code{NULL}, default to "remote_hub_repo".}
 
 \item{local_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
@@ -75,12 +81,15 @@ weekly count would be NA in resulting data frame.
 library(covidHubUtils)
 
 # load for US
-load_truth(truth_source = c("JHU","HealthData"), 
-target_variable = c("inc case", "inc death", "inc hosp"))
+load_truth(
+  truth_source = c("JHU", "HealthData"),
+  target_variable = c("inc case", "inc death", "inc hosp")
+)
 
 # load for ECDC
-load_truth(truth_source = c("JHU"), 
-target_variable = c("inc case", "inc death"), 
-hub = "ECDC")
-
+load_truth(
+  truth_source = c("JHU"),
+  target_variable = c("inc case", "inc death"),
+  hub = "ECDC"
+)
 }
