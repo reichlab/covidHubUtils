@@ -94,6 +94,8 @@ test_that("handles `ECDC`source in ECDC hub correctly",{
                seq(min(actual$target_end_date), 
                    max(actual$target_end_date), 7))
   expect_equal(unique(weekdays(actual$target_end_date)),
+               "Saturday")
+  expect_equal(unique(weekdays(actual$week_start)),
                "Monday")
   
 })
