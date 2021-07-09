@@ -63,7 +63,7 @@ data frame with columns model, inc_cum, death_case, target_end_date,
 location, value, location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-"inc hosp" is only available from "HeatlthData" and this function is not loading
+"inc hosp" is only available from "HealthData" and "ECDC" and this function is not loading
 data for other target variables from "HealthData".
 }
 \details{
