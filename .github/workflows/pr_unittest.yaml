@@ -37,7 +37,6 @@ jobs:
           devtools::test_active_file("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
@@ -45,20 +44,40 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v2.1
-      - name: Checkout covidData when get_truth.R has changed 
-        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
+      - name: Checkout covidData when get_truth.R, aggregate_to_weekly.R or load_truth.R has changed 
+        if: >-
+          ${{ contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') ||
+          contains(steps.changed-files.outputs.modified_files,
+          'R/aggregate_to_weekly.R') ||
+          contains(steps.changed-files.outputs.modified_files,
+          'R/load_truth.R')}}
         uses: actions/checkout@v2
         with:
           repository: reichlab/covidData
           path: covidData
-      - name: Install covidData when get_truth.R has changed 
-        if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
+      - name: Install covidData when get_truth.R, aggregate_to_weekly.R or load_truth.R has changed 
+        if: >-
+          ${{ contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') ||
+          contains(steps.changed-files.outputs.modified_files,
+          'R/aggregate_to_weekly.R') ||
+          contains(steps.changed-files.outputs.modified_files,
+          'R/load_truth.R')}}
         run: make recent_data
         working-directory: ./covidData/code/data-processing
       - name: Run unit test for get_truth.R
         if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
         run: |
           devtools::test_active_file("tests/testthat/test-get_truth.R", stop_on_failure = TRUE)
+        shell: Rscript {0}
+      - name: Run unit test for aggregate_to_weekly.R
+        if: contains(steps.changed-files.outputs.modified_files, 'R/aggregate_to_weekly.R')
+        run: |
+          devtools::test_active_file("tests/testthat/test-aggregate_to_weekly.R", stop_on_failure = TRUE)
+        shell: Rscript {0}
+      - name: Run unit test for load_truth.R
+        if: contains(steps.changed-files.outputs.modified_files, 'R/load_truth.R')
+        run: |
+          devtools::test_active_file("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Render vignettes
         run: |
