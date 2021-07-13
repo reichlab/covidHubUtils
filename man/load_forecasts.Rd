@@ -2,12 +2,13 @@
 % Please edit documentation in R/load_forecasts.R
 \name{load_forecasts}
 \alias{load_forecasts}
-\title{Load all available forecasts submitted on forecast_dates from Zoltar
+\title{Load all available forecasts submitted around forecast dates from Zoltar
 or local hub repo.}
 \usage{
 load_forecasts(
   models = NULL,
-  forecast_dates = NULL,
+  dates = NULL,
+  date_window_size = 0,
   locations = NULL,
   types = NULL,
   targets = NULL,
@@ -23,9 +24,13 @@ load_forecasts(
 \item{models}{Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.}
 
-\item{forecast_dates}{The forecast date of forecasts to retrieve.
-Default to all valid forecast dates.
-The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
+\item{dates}{The forecast date of forecasts to retrieve.
+A vector of one or more Date objects or character strings in format “YYYY-MM-DD”
+Default to all valid forecast dates.}
+
+\item{date_window_size}{The number of days across which to
+look for the most recent forecasts for each date in dates parameter.
+Default to 0, which means to only look at the dates parameter only.}
 
 \item{locations}{list of location codes. Default to all locations with available forecasts.}
 
@@ -65,13 +70,17 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-Load all available forecasts submitted on forecast_dates from Zoltar
-or local hub repo.
+If \code{date_window_size} is 0, this function returns all available forecasts
+submitted on every day in \code{dates}.
+}
+\details{
+If \code{date_window_size} is not 0, this function will look for all the latest
+forecasts that are submitted within window size for each day in \code{dates}.
 }
 \examples{
 \dontrun{
 forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
- forecast_date = "2020-12-07",
+ dates = "2020-12-07",
  locations = "US",
  types = c("point","quantile"),
  targets = paste(1:4, "wk ahead inc case"),
@@ -81,7 +90,7 @@ forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
 
 forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
  hub = c("ECDC","US"),
- forecast_date = "2021-03-08",
+ dates = "2021-03-08",
  locations = "GB",
  targets = paste(1:4, "wk ahead inc death"),
  source = "zoltar")

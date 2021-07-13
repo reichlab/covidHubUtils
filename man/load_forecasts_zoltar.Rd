@@ -19,9 +19,12 @@ load_forecasts_zoltar(
 \item{models}{Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.}
 
-\item{forecast_dates}{The forecast date of forecasts to retrieve.
+\item{forecast_dates}{A list of forecast dates to retrieve forecasts.
 Default to all valid forecast dates in Zoltar.
-The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
+If this is a 1-D list, this function will return all available forecasts
+submitted on these dates.
+If this is a 2-D list, this function will return the latest forecasts
+for each sub-list of dates.}
 
 \item{locations}{list of fips. Default to all locations with available forecasts in Zoltar.}
 
@@ -50,7 +53,7 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-The function will throw a warning and return an empty data frame when
+This function will throw a warning and return an empty data frame when
 no forecasts are submitted on any dates in forecast_dates for selected models,
 locations, types and target.
 }
