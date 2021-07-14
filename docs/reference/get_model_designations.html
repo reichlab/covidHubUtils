@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get models and their designations — get_model_designations • covidHubUtils</title>
+<title>Get model designations from metadata — get_model_designations • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get models and their designations — get_model_designations" />
-<meta property="og:description" content="Get models and their designations" />
+<meta property="og:title" content="Get model designations from metadata — get_model_designations" />
+<meta property="og:description" content="Get model designations from metadata" />
 
 
 
@@ -120,13 +120,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get models and their designations</h1>
+    <h1>Get model designations from metadata</h1>
     
     <div class="hidden name"><code>get_model_designations.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get models and their designations</p>
+    <p>Get model designations from metadata</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_model_designations</span><span class='op'>(</span><span class='va'>models</span>, <span class='va'>source</span>, <span class='va'>hub_repo_path</span>, as_of <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></code></pre></div>
@@ -143,23 +143,23 @@ designations for all models.</p></td>
     <tr>
       <th>source</th>
       <td><p>string specifying where forecasts will be loaded from:
-either "local_hub_repo" or "zoltar"</p></td>
+either <code>"local_hub_repo"</code> or <code>"zoltar"</code></p></td>
     </tr>
     <tr>
       <th>hub_repo_path</th>
-      <td><p>path to local clone of the reichlab/covid19-forecast-hub
+      <td><p>path to local clone of the <code>reichlab/covid19-forecast-hub</code>
 repository</p></td>
     </tr>
     <tr>
       <th>as_of</th>
       <td><p>optional date specifying the version. Only support versioned
-model designations in "local_hub_repo"</p></td>
+model designations in <code>"local_hub_repo"</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with columns <code>model</code> and <code>designation</code></p>
+    <p>data.frame with columns <code>model</code> and <code>designation</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

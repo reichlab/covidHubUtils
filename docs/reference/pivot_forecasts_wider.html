@@ -136,14 +136,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>forecast_data</th>
-      <td><p>forecasts data frame from load_forecast(). It has columns model,
-forecast_date,location, target, type, quantile, value, horizon and
-target_end_date.</p></td>
+      <td><p>required data.frame with forecasts in the format returned
+by <code><a href='load_forecasts.html'>load_forecasts()</a></code>.
+It has columns <code>model</code>,<code>forecast_date</code>,<code>location</code>, <code>target</code>, <code>type</code>,
+<code>quantile</code>, <code>value</code>, <code>horizon</code> and <code>target_end_date</code>.</p></td>
     </tr>
     <tr>
       <th>quantiles</th>
       <td><p>vector of quantiles to return for plotting
-Defaults to all available quantiles in forecast data.
+Default to all available quantiles in <code>forecast_data</code>.
 Note that point forecasts and median quantiles do not necessarily align.
 Throws an error if quantile levels are not in the forecast data.</p></td>
     </tr>
@@ -151,9 +152,9 @@ Throws an error if quantile levels are not in the forecast data.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with columns model, forecast_date, location,
-horizon, temporal_resolution, target_variable, target_end_date, type, point,
-point_type, Prediction Interval, upper, lower.</p>
+    <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>,
+<code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>point</code>,
+<code>point_type</code>, <code>Prediction Interval</code>, <code>upper</code>, <code>lower</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

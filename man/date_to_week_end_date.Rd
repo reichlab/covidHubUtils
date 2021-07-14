@@ -12,7 +12,7 @@ date_to_week_end_date(forecast_date, week_offset = 0)
 \item{forecast_date}{vector of dates as Date objects}
 
 \item{week_offset}{vector of week offsets.  must be either length 1 or the same
-length as forecast_date}
+length as \code{forecast_date}}
 }
 \value{
 character vector of dates in 'yyyy-mm-dd' format

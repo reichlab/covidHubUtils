@@ -175,13 +175,7 @@ F and G that are represented by a collection of unequally-spaced quantiles.</p><
         <td>
           <p><code><a href="calc_forecast_week_end_date.html">calc_forecast_week_end_date()</a></code> </p>
         </td>
-        <td><p>Calculate end date for the week a forecast was made. Following
-https://github.com/reichlab/covid19-forecast-hub/blob/master/data-processed/README.md,
-"For week-ahead forecasts with forecast_date of Sunday or Monday of EW12, a
-1 week ahead forecast corresponds to EW12 and should have target_end_date of
-the Saturday of EW12."  This means that the forecast week end date is set to
-Saturday of EW11 (the previous week) for Sunday and Monday of EW12, and
-Saturday of EW12 (the current week) for Tuesday through Saturday of EW12.</p></td>
+        <td><p>Calculate end date for the week a forecast was made.</p></td>
       </tr><tr>
         
         <td>
@@ -199,14 +193,7 @@ Saturday of EW12 (the current week) for Tuesday through Saturday of EW12.</p></t
         <td>
           <p><code><a href="calc_target_week_end_date.html">calc_target_week_end_date()</a></code> </p>
         </td>
-        <td><p>Calculate end date for the week a forecast is targeting. Following
-https://github.com/reichlab/covid19-forecast-hub/blob/master/data-processed/README.md,
-"For week-ahead forecasts with forecast_date of Sunday or Monday of EW12, a
-1 week ahead forecast corresponds to EW12 and should have target_end_date of
-the Saturday of EW12."  This means that if horizon is 1, the forecast week
-end date is set to Saturday of EW12 (the current week) for Sunday and Monday
-of EW12, and Saturday of EW13 (the next week) for Tuesday through Saturday of
-EW12.</p></td>
+        <td><p>Calculate end date for the week a forecast is targeting.</p></td>
       </tr><tr>
         
         <td>
@@ -257,19 +244,19 @@ of epidemic week from a specified date</p></td>
         <td>
           <p><code><a href="get_hub_locations.html">get_hub_locations()</a></code> </p>
         </td>
-        <td><p>Create data/hub_locations.rda for loading data from zoltar and covidcast</p></td>
+        <td><p>Create data/hub_locations.rda for loading data from zoltar and covidData</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_model_designations.html">get_model_designations()</a></code> </p>
         </td>
-        <td><p>Get models and their designations</p></td>
+        <td><p>Get model designations from metadata</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_plot_forecast_data.html">get_plot_forecast_data()</a></code> </p>
         </td>
-        <td><p>Combines load_truth() and pivot_forecasts_wider(), returns the data.</p></td>
+        <td><p>Combine <code>load_truth()</code> and <code>pivot_forecasts_wider()</code></p></td>
       </tr><tr>
         
         <td>
@@ -344,7 +331,7 @@ or local hub repo.</p></td>
         <td>
           <p><code><a href="load_forecasts_zoltar.html">load_forecasts_zoltar()</a></code> </p>
         </td>
-        <td><p>Load all available forecasts submitted on forecast_dates from Zoltar.</p></td>
+        <td><p>Load all available forecasts submitted on <code>forecast_dates</code> from Zoltar.</p></td>
       </tr><tr>
         
         <td>
@@ -385,7 +372,7 @@ from reichlab/covid19-forecast-hub repo.</p></td>
         </td>
         <td><p>Load truth data under multiple target variables
 from multiple truth sources
-using files in reichlab/covid19-forecast-hub.</p></td>
+using files in <code>reichlab/covid19-forecast-hub</code>.</p></td>
       </tr><tr>
         
         <td>
@@ -405,9 +392,7 @@ supported with specified facet formula.</p></td>
         <td>
           <p><code><a href="plot_forecasts.html">plot_forecasts()</a></code> </p>
         </td>
-        <td><p>Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula.</p></td>
+        <td><p>Plot forecasts and optional truth for only one selected target variable.</p></td>
       </tr><tr>
         
         <td>

@@ -1,18 +1,18 @@
 #' Score forecasts
 #'
 #' @param forecasts required data.frame with forecasts in the format returned
-#' by load_forecasts
+#' by [load_forecasts()]
 #' @param truth required data.frame with forecasts in the format returned
-#' by load_truth
-#' @param return_format string: "long" returns long format with a column for
-#' "score_name" and a column for "score_value"; "wide" returns wide format with
-#' a separate column for each score. Defaults to "wide".
-#' @param metrics character vector of the metrics to be returned with options 
-#' "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"
-#' @param use_median_as_point logical: "TRUE" uses the median as the point
-#' forecast when scoring; "FALSE" uses the point forecasts from the data when
-#' scoring. Defaults to "FALSE"
-#' 
+#' by [load_truth()]
+#' @param return_format string: `"long"` returns long format with a column for
+#' `"score_name"` and a column for `"score_value"`; `"wide"` returns wide format with
+#' a separate column for each score. Defaults to `"wide"`.
+#' @param metrics character vector of the metrics to be returned with options
+#' `"abs_error"`, `"wis"`, `"wis_components"`,`"interval_coverage"`, and `"quantile_coverage"`
+#' @param use_median_as_point logical: `TRUE` uses the median as the point
+#' forecast when scoring; `FALSE` uses the point forecasts from the data when
+#' scoring. Defaults to `FALSE`
+#'
 #' @importFrom dplyr any_of
 #' @return data.frame with scores. The result will have some columns that
 #' define the observation, namely, `model`, `forecast_date`, `location`,
@@ -29,11 +29,11 @@
 #'  - `underprediction` the component of WIS made up of underprediction of intervals
 #'  - `coverage_X` are prediction interval coverage at alpha level X
 #'  - `quantile_coverage_0.X` are one-sided quantile coverage at quantile X
-#'  
-#' If return_format is "long", also contains columns score_name and score_value
-#' where score_name is the type of score calculated and score_value has the numeric
+#'
+#' If return_format is `"long"`, also contains columns score_name and score_value
+#' where `score_name` is the type of score calculated and `score_value` has the numeric
 #' value of the score.
-#' If return_format is "wide", each calculated score is in its own column.
+#' If return_format is `"wide"`, each calculated score is in its own column.
 #'
 #' @references
 #' Bracher J, Ray EL, Gneiting T, Reich NG. (2020) Evaluating epidemic forecasts
@@ -42,36 +42,43 @@
 #'
 #' @examples
 #' \dontrun{
-#' forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBayes"),
+#' forecasts <- load_latest_forecasts(
+#'   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
 #'   last_forecast_date = "2020-12-14",
 #'   forecast_date_window_size = 7,
 #'   locations = c("US"),
 #'   targets = paste(1:4, "wk ahead inc death"),
-#'   source = "zoltar")
+#'   source = "zoltar"
+#' )
 #' truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 #' scores <- score_forecasts(forecasts, truth)
 #' }
 #' \dontrun{
-#' forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
-#'   hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+#' forecasts <- load_latest_forecasts(
+#'   models = c("ILM-EKF"),
+#'   hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
 #'   forecast_date_window_size = 0,
 #'   locations = c("GB"),
 #'   targets = paste(1:4, "wk ahead inc death"),
-#'   source = "zoltar")
-#' truth <- load_truth("JHU",hub = c("ECDC","US"), 
-#'   target_variable = "inc death", locations = "GB")
+#'   source = "zoltar"
+#' )
+#' truth <- load_truth("JHU",
+#'   hub = c("ECDC", "US"),
+#'   target_variable = "inc death", locations = "GB"
+#' )
 #' scores <- score_forecasts(forecasts, truth)
 #' }
 #'
 #' @export
 score_forecasts <- function(
-  forecasts,
-  truth,
-  return_format = "wide",
-  metrics = c("abs_error", "wis", "wis_components", 
-                      "interval_coverage", "quantile_coverage"),
-  use_median_as_point = FALSE
-) {
+                            forecasts,
+                            truth,
+                            return_format = "wide",
+                            metrics = c(
+                              "abs_error", "wis", "wis_components",
+                              "interval_coverage", "quantile_coverage"
+                            ),
+                            use_median_as_point = FALSE) {
 
   # forecasts data.frame format
   # columns: model, forecast_date, location, horizon, temporal_resolution,
@@ -109,11 +116,12 @@ score_forecasts <- function(
   if (!is.element(return_format, c("long", "wide"))) {
     return_format <- "wide"
   }
-  
-  #validate metrics
+
+  # validate metrics
   metrics <- match.arg(metrics,
-                               choices = c("abs_error", "wis", "wis_components", "interval_coverage", "quantile_coverage"),
-                               several.ok = TRUE)
+    choices = c("abs_error", "wis", "wis_components", "interval_coverage", "quantile_coverage"),
+    several.ok = TRUE
+  )
 
   # validate use_median_as_point
   if (is.null(use_median_as_point)) {
@@ -121,7 +129,7 @@ score_forecasts <- function(
   }
 
   # match.arg does not like logical input
-  if (!(use_median_as_point %in% c(FALSE,TRUE))) {
+  if (!(use_median_as_point %in% c(FALSE, TRUE))) {
     stop("use_median_as_point should be one of (TRUE,FALSE)")
   }
 
@@ -129,24 +137,26 @@ score_forecasts <- function(
     stop("use_median_as_point should only have a length of 1")
   }
 
-  if (use_median_as_point==FALSE && !("point" %in% unique(forecasts$type))){
+  if (use_median_as_point == FALSE && !("point" %in% unique(forecasts$type))) {
     stop("Want to use point forecast when scoring but no point forecast in forecast data")
   }
-  
+
 
   # get dataframe into scoringutil format
-  joint_df <- dplyr::left_join(x = forecasts, y = truth,
-                               by = c("location", "target_variable", "target_end_date")) %>%
+  joint_df <- dplyr::left_join(
+    x = forecasts, y = truth,
+    by = c("location", "target_variable", "target_end_date")
+  ) %>%
     dplyr::select(-c("model.y")) %>%
     dplyr::rename(model = model.x, prediction = value.x, true_value = value.y) %>%
-    dplyr::filter(!is.na(true_value)) 
+    dplyr::filter(!is.na(true_value))
 
   # score using scoringutil
   observation_cols <- c(
     "model",
     "location",
     "horizon", "temporal_resolution", "target_variable",
-    "forecast_date", "target_end_date","true_value"
+    "forecast_date", "target_end_date", "true_value"
   )
 
   # creates placeholder variables to store the name of the column from scoringutils::eval_forecasts() to
@@ -158,23 +168,27 @@ score_forecasts <- function(
     abs_var <- "ae_point"
     abs_var_rename <- "ae_point_NA"
   }
-  
-  
+
+
   # two sided
   scores <- purrr::map_dfr(
     unique(joint_df$target_variable),
     function(var) {
-      joint_df_target <- suppressMessages(joint_df %>% 
-                                            dplyr::filter(target_variable==var))
-      scoringutils::eval_forecasts(data = joint_df_target,
-                                   by = observation_cols,
-                                   summarise_by = c(observation_cols, "range"),
-                                   ## the below interval_score_arguments should ensure that WIS is computed correctly
-                                   interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE)) %>%
-        tidyr::pivot_wider(id_cols = observation_cols,
-                           names_from = c("range"),
-                           values_from = c("coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
-        purrr::set_names(~sub(abs_var_rename, "abs_error", .x)) %>%
+      joint_df_target <- suppressMessages(joint_df %>%
+        dplyr::filter(target_variable == var))
+      scoringutils::eval_forecasts(
+        data = joint_df_target,
+        by = observation_cols,
+        summarise_by = c(observation_cols, "range"),
+        ## the below interval_score_arguments should ensure that WIS is computed correctly
+        interval_score_arguments = list(weigh = TRUE, count_median_twice = FALSE)
+      ) %>%
+        tidyr::pivot_wider(
+          id_cols = observation_cols,
+          names_from = c("range"),
+          values_from = c("coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")
+        ) %>%
+        purrr::set_names(~ sub(abs_var_rename, "abs_error", .x)) %>%
         ## need to remove all columns ending with NA to not affect WIS calculations
         dplyr::select(
           -dplyr::ends_with("_NA")
@@ -192,14 +206,15 @@ score_forecasts <- function(
           interval_score_0 = ifelse(exists_interval_score_0, 0.5 * interval_score_0, NA_real_),
           sharpness_0 = ifelse(exists_interval_score_0, 0.5 * sharpness_0, NA_real_),
           underprediction_0 = ifelse(exists_interval_score_0, 0.5 * underprediction_0, NA_real_),
-          overprediction_0 = ifelse(exists_interval_score_0, 0.5 * overprediction_0, NA_real_)) %>%
-        dplyr::mutate(
-          wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
+          overprediction_0 = ifelse(exists_interval_score_0, 0.5 * overprediction_0, NA_real_)
         ) %>%
         dplyr::mutate(
-          sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-          overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0)),
-          underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")), na.rm = FALSE)/(n_interval_scores-0.5*(exists_interval_score_0))
+          wis = rowSums(dplyr::select(., dplyr::starts_with("interval_score")), na.rm = FALSE) / (n_interval_scores - 0.5 * (exists_interval_score_0)),
+        ) %>%
+        dplyr::mutate(
+          sharpness = rowSums(dplyr::select(., dplyr::starts_with("sharpness")), na.rm = FALSE) / (n_interval_scores - 0.5 * (exists_interval_score_0)),
+          overprediction = rowSums(dplyr::select(., dplyr::starts_with("overprediction")), na.rm = FALSE) / (n_interval_scores - 0.5 * (exists_interval_score_0)),
+          underprediction = rowSums(dplyr::select(., dplyr::starts_with("underprediction")), na.rm = FALSE) / (n_interval_scores - 0.5 * (exists_interval_score_0))
         ) %>%
         dplyr::select(
           -dplyr::starts_with("aem_"),
@@ -208,26 +223,33 @@ score_forecasts <- function(
           -dplyr::starts_with("sharpness_"),
           -dplyr::starts_with("underprediction_"),
           -dplyr::starts_with("overprediction_")
-        ) %>% 
-        dplyr::select(1:8, dplyr::starts_with("coverage_"),
-                      dplyr::starts_with("abs_error"),
-                  "n_interval_scores", "exists_interval_score_0", "wis",
-                  "sharpness", "overprediction", "underprediction")
-    })
-     
-  # one-sided quantile coverage only calculated if needed    
-  if("quantile_coverage" %in% metrics){
-    sq <- scoringutils::eval_forecasts(data = joint_df,
-                                       by = observation_cols,
-                                       summarise_by = c(observation_cols, "quantile"),
-                                       interval_score_arguments = list(weigh = TRUE, count_median_twice=FALSE))%>%
-      tidyr::pivot_wider(id_cols = observation_cols,
-                         names_from = c("quantile"),
-                         values_from = c("quantile_coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")) %>%
-      purrr::set_names(~sub(abs_var_rename, "abs_error", .x))%>%
+        ) %>%
+        dplyr::select(
+          1:8, dplyr::starts_with("coverage_"),
+          dplyr::starts_with("abs_error"),
+          "n_interval_scores", "exists_interval_score_0", "wis",
+          "sharpness", "overprediction", "underprediction"
+        )
+    }
+  )
+
+  # one-sided quantile coverage only calculated if needed
+  if ("quantile_coverage" %in% metrics) {
+    sq <- scoringutils::eval_forecasts(
+      data = joint_df,
+      by = observation_cols,
+      summarise_by = c(observation_cols, "quantile"),
+      interval_score_arguments = list(weigh = TRUE, count_median_twice = FALSE)
+    ) %>%
+      tidyr::pivot_wider(
+        id_cols = observation_cols,
+        names_from = c("quantile"),
+        values_from = c("quantile_coverage", "interval_score", abs_var, "sharpness", "overprediction", "underprediction")
+      ) %>%
+      purrr::set_names(~ sub(abs_var_rename, "abs_error", .x)) %>%
       dplyr::select(
         -dplyr::ends_with("_NA")
-      ) %>% 
+      ) %>%
       dplyr::select(
         -dplyr::starts_with("abs_error."),
         -dplyr::starts_with("aem_"),
@@ -236,31 +258,44 @@ score_forecasts <- function(
         -dplyr::starts_with("sharpness_"),
         -dplyr::starts_with("underprediction_"),
         -dplyr::starts_with("overprediction_")
-      )  
-    #order one-sided quantiles to ascending order
+      )
+    # order one-sided quantiles to ascending order
     quantile_coverage_columns <-
-      sort(colnames(sq %>% 
-                      dplyr::select(dplyr::starts_with("quantile_coverage_"))))
-    
-    #select necessary columns and the one-sided quantiles in ascending order
-    scores_one_sided <- sq %>% 
+      sort(colnames(sq %>%
+        dplyr::select(dplyr::starts_with("quantile_coverage_"))))
+
+    # select necessary columns and the one-sided quantiles in ascending order
+    scores_one_sided <- sq %>%
       dplyr::select(1:8, dplyr::all_of(quantile_coverage_columns))
-    
-    #combine one and two sided
-    scores <- suppressMessages(dplyr::full_join(scores_one_sided, 
-                                                scores))
+
+    # combine one and two sided
+    scores <- suppressMessages(dplyr::full_join(
+      scores_one_sided,
+      scores
+    ))
   }
-  
-  
-  #remove unwanted columns note if quantile coverage not wanted value is not calculated
-  scores <- scores %>% 
-    dplyr::select(-c(if(!("abs_error" %in% metrics)){c("abs_error")},
-                     if(!("wis" %in% metrics)){c("wis")},
-                     if(!("wis_components" %in% metrics)){c("sharpness","overprediction","underprediction")}, 
-                     if(!("interval_coverage" %in% metrics)){dplyr::starts_with("coverage_")}, 
-                     if(!("interval_coverage" %in% metrics)){c("n_interval_scores","exists_interval_score_0")}
-                     ))
-    
+
+
+  # remove unwanted columns note if quantile coverage not wanted value is not calculated
+  scores <- scores %>%
+    dplyr::select(-c(
+      if (!("abs_error" %in% metrics)) {
+        c("abs_error")
+      },
+      if (!("wis" %in% metrics)) {
+        c("wis")
+      },
+      if (!("wis_components" %in% metrics)) {
+        c("sharpness", "overprediction", "underprediction")
+      },
+      if (!("interval_coverage" %in% metrics)) {
+        dplyr::starts_with("coverage_")
+      },
+      if (!("interval_coverage" %in% metrics)) {
+        c("n_interval_scores", "exists_interval_score_0")
+      }
+    ))
+
   if ("coverage_0" %in% names(scores)) {
     scores <- scores %>%
       dplyr::select(-c("coverage_0"))

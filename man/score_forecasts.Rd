@@ -15,21 +15,21 @@ score_forecasts(
 }
 \arguments{
 \item{forecasts}{required data.frame with forecasts in the format returned
-by load_forecasts}
+by \code{\link[=load_forecasts]{load_forecasts()}}}
 
 \item{truth}{required data.frame with forecasts in the format returned
-by load_truth}
+by \code{\link[=load_truth]{load_truth()}}}
 
-\item{return_format}{string: "long" returns long format with a column for
-"score_name" and a column for "score_value"; "wide" returns wide format with
-a separate column for each score. Defaults to "wide".}
+\item{return_format}{string: \code{"long"} returns long format with a column for
+\code{"score_name"} and a column for \code{"score_value"}; \code{"wide"} returns wide format with
+a separate column for each score. Defaults to \code{"wide"}.}
 
 \item{metrics}{character vector of the metrics to be returned with options
-"abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"}
+\code{"abs_error"}, \code{"wis"}, \code{"wis_components"},\code{"interval_coverage"}, and \code{"quantile_coverage"}}
 
-\item{use_median_as_point}{logical: "TRUE" uses the median as the point
-forecast when scoring; "FALSE" uses the point forecasts from the data when
-scoring. Defaults to "FALSE"}
+\item{use_median_as_point}{logical: \code{TRUE} uses the median as the point
+forecast when scoring; \code{FALSE} uses the point forecasts from the data when
+scoring. Defaults to \code{FALSE}}
 }
 \value{
 data.frame with scores. The result will have some columns that
@@ -50,34 +50,40 @@ if use_median_as_point is FALSE
 \item \code{quantile_coverage_0.X} are one-sided quantile coverage at quantile X
 }
 
-If return_format is "long", also contains columns score_name and score_value
-where score_name is the type of score calculated and score_value has the numeric
+If return_format is \code{"long"}, also contains columns score_name and score_value
+where \code{score_name} is the type of score calculated and \code{score_value} has the numeric
 value of the score.
-If return_format is "wide", each calculated score is in its own column.
+If return_format is \code{"wide"}, each calculated score is in its own column.
 }
 \description{
 Score forecasts
 }
 \examples{
 \dontrun{
-forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBayes"),
+forecasts <- load_latest_forecasts(
+  models = c("COVIDhub-ensemble", "UMass-MechBayes"),
   last_forecast_date = "2020-12-14",
   forecast_date_window_size = 7,
   locations = c("US"),
   targets = paste(1:4, "wk ahead inc death"),
-  source = "zoltar")
+  source = "zoltar"
+)
 truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 scores <- score_forecasts(forecasts, truth)
 }
 \dontrun{
-forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
-  hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+forecasts <- load_latest_forecasts(
+  models = c("ILM-EKF"),
+  hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
   forecast_date_window_size = 0,
   locations = c("GB"),
   targets = paste(1:4, "wk ahead inc death"),
-  source = "zoltar")
-truth <- load_truth("JHU",hub = c("ECDC","US"), 
-  target_variable = "inc death", locations = "GB")
+  source = "zoltar"
+)
+truth <- load_truth("JHU",
+  hub = c("ECDC", "US"),
+  target_variable = "inc death", locations = "GB"
+)
 scores <- score_forecasts(forecasts, truth)
 }
 

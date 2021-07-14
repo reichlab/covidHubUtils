@@ -8,7 +8,7 @@ preprocess_usafacts(save_location = "./data-truth/usafacts/")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./data-truth/usafacts/raw/"}
+Default to \code{"./data-truth/usafacts/raw/"}}
 }
 \description{
 Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs

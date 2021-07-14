@@ -6,9 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula. — plot_forecasts • covidHubUtils</title>
+<title>Plot forecasts and optional truth for only one selected target variable. — plot_forecasts • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -41,11 +39,8 @@ supported with specified facet formula. — plot_forecasts • covidHubUtils</ti
 
 
 
-<meta property="og:title" content="Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula. — plot_forecasts" />
-<meta property="og:description" content="Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
+<meta property="og:title" content="Plot forecasts and optional truth for only one selected target variable. — plot_forecasts" />
+<meta property="og:description" content="Faceted plots for multiple models, locations and forecast dates are
 supported with specified facet formula." />
 
 
@@ -126,16 +121,13 @@ supported with specified facet formula." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula.</h1>
+    <h1>Plot forecasts and optional truth for only one selected target variable.</h1>
     
     <div class="hidden name"><code>plot_forecasts.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
+    <p>Faceted plots for multiple models, locations and forecast dates are
 supported with specified facet formula.</p>
     </div>
 
@@ -170,36 +162,38 @@ supported with specified facet formula.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>forecast_data</th>
-      <td><p>data frame with truth and forecasts from load_forecasts()</p></td>
+      <td><p>required data.frame with forecasts in the format returned
+by <code><a href='load_forecasts.html'>load_forecasts()</a></code></p></td>
     </tr>
     <tr>
       <th>truth_data</th>
-      <td><p>optional data frame from one truth source in the format returned
-by load_truth(). It needs to have columns model, target_variable,
-target_end_date, location and value.
-Model column can be "Observed Data (a truth source)".</p></td>
+      <td><p>optional data.frame from one truth source in the format returned
+by <code><a href='load_truth.html'>load_truth()</a></code>.
+It needs to have columns <code>model</code>, <code>target_variable</code>,
+<code>target_end_date</code>, <code>location and value</code>.
+<code>Model</code> column can be <code>"Observed Data (a truth source)"</code>.</p></td>
     </tr>
     <tr>
       <th>hub</th>
       <td><p>character, which hub to use.
-Default is "US", other option is "ECDC".</p></td>
+Default is <code>"US"</code>, other option is <code>"ECDC"</code>.</p></td>
     </tr>
     <tr>
       <th>models</th>
       <td><p>vector of strings specifying models to plot.
-Default to all models in forecast_data.</p></td>
+Default to all models in <code>forecast_data</code>.</p></td>
     </tr>
     <tr>
       <th>target_variable</th>
       <td><p>string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp".
-"cum death" and "inc hosp" are only available in forecasts from US hub now.
-If there is only one target_variable in forecast_data, this parameter is optional.</p></td>
+<code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code> and <code>"inc hosp"</code>.
+<code>"cum death"</code> and <code>"inc hosp"</code> are only available in forecasts from US hub now.
+If there is only one <code>target_variable</code> in <code>forecast_data</code>, this parameter is optional.</p></td>
     </tr>
     <tr>
       <th>locations</th>
-      <td><p>string for fips code, 'US' or abbreviation of European countries.
-Default to all locations in forecast_data.</p></td>
+      <td><p>vector of strings for fips code, <code>'US'</code> or abbreviation of European countries.
+Default to all locations in <code>forecast_data</code>.</p></td>
     </tr>
     <tr>
       <th>facet</th>
@@ -208,7 +202,7 @@ if multiple locations are passed in without location in the facet formula.</p></
     </tr>
     <tr>
       <th>facet_scales</th>
-      <td><p>argument for scales in ggplot2::facet_wrap. Default to "fixed".</p></td>
+      <td><p>argument for scales in <a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>ggplot2::facet_wrap</a>. Default to <code>"fixed"</code>.</p></td>
     </tr>
     <tr>
       <th>facet_nrow</th>
@@ -226,41 +220,41 @@ Default to forecast_dates present in the data.</p></td>
     <tr>
       <th>intervals</th>
       <td><p>values indicating which central prediction interval levels
-to plot. NULL means only plotting point forecasts.
-If not provided, it will default to c(.5, .8, .95).
+to plot. <code>NULL</code> means only plotting point forecasts.
+If not provided, it will default to <code>c(.5, .8, .95)</code>.
 When plotting 6 models or more, the plot will be reduced to show .95 interval only.</p></td>
     </tr>
     <tr>
       <th>horizon</th>
       <td><p>forecasts are plotted for the horizon time steps after the
-forecast date. Default to all available horizons in forecast data.</p></td>
+forecast date. Default to all available horizons in <code>forecast_data</code>.</p></td>
     </tr>
     <tr>
       <th>truth_source</th>
       <td><p>character specifying where the truth data will
-be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts", "NYTimes", "HealthData" and "ECDC".
-Optional if truth_data is provided.</p></td>
+be loaded from if <code>truth_data</code> is not provided. Currently support <code>"JHU"</code>,
+<code>"USAFacts"</code>, <code>"NYTimes"</code>, <code>"HealthData"</code> and <code>"ECDC"</code>.
+Optional if <code>truth_data</code> is provided.</p></td>
     </tr>
     <tr>
       <th>use_median_as_point</th>
-      <td><p>boolean for using median quantiles as point forecasts in plot.
-Default to FALSE.</p></td>
+      <td><p>logical for using median quantiles as point forecasts in plot.
+Default to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>plot_truth</th>
-      <td><p>boolean for showing truth data in plot. Default to FALSE.</p></td>
+      <td><p>logical for showing truth data in plot. Default to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>plot</th>
-      <td><p>boolean for showing the plot. Default to TRUE.
-Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".</p></td>
+      <td><p>logical for showing the plot. Default to <code>TRUE</code>.
+Currently supports <code>"JHU"</code>,<code>"USAFacts"</code>, <code>"NYTimes"</code>. Default to <code>"JHU"</code>.</p></td>
     </tr>
     <tr>
       <th>fill_by_model</th>
-      <td><p>boolean for specifying colors in plot.
-If TRUE, separate colors will be used for each model.
-If FALSE, only blues will be used for all models. Default to FALSE.</p></td>
+      <td><p>logical for specifying colors in plot.
+If <code>TRUE</code>, separate colors will be used for each model.
+If <code>FALSE</code>, only blues will be used for all models. Default to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>fill_transparency</th>
@@ -270,22 +264,22 @@ If FALSE, only blues will be used for all models. Default to FALSE.</p></td>
     <tr>
       <th>truth_as_of</th>
       <td><p>the plot includes the truth data that would have been
-in real time as of the truth_as_of date (not using this parameter when truth data
+in real time as of the <code>truth_as_of</code> date (not using this parameter when truth data
 is from github repo)</p></td>
     </tr>
     <tr>
       <th>title</th>
-      <td><p>optional text for the title of the plot. If left as "default",
-the title will be automatically generated. If "none", no title will be plotted.</p></td>
+      <td><p>optional text for the title of the plot. If left as <code>"default"</code>,
+the title will be automatically generated. If <code>"none"</code>, no title will be plotted.</p></td>
     </tr>
     <tr>
       <th>subtitle</th>
-      <td><p>optional text for the subtitle of the plot. If left as "default",
-the subtitle will be automatically generated. If "none", no subtitle will be plotted.</p></td>
+      <td><p>optional text for the subtitle of the plot. If left as <code>"default"</code>,
+the subtitle will be automatically generated. If <code>"none"</code>, no subtitle will be plotted.</p></td>
     </tr>
     <tr>
       <th>show_caption</th>
-      <td><p>logical, if TRUE, caption will be included showing data sources</p></td>
+      <td><p>logical, if <code>TRUE</code>, caption will be included showing data sources</p></td>
     </tr>
     </table>
 
@@ -294,38 +288,89 @@ the subtitle will be automatically generated. If "none", no subtitle will be plo
     <p>invisible ggplot object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>us_forecasts</span> <span class='op'>&lt;-</span><span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
-<span class='r-in'>  models <span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COVIDhub-ensemble"</span>,<span class='st'>"COVIDhub-baseline"</span>,</span>
-<span class='r-in'>  <span class='st'>"JHU_CSSE-DECOM"</span>,<span class='st'>"CovidAnalytics-DELPHI"</span>,</span>
-<span class='r-in'>  <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span><span class='op'>)</span>,</span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>us_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"COVIDhub-baseline"</span>,</span>
+<span class='r-in'>    <span class='st'>"JHU_CSSE-DECOM"</span>, <span class='st'>"CovidAnalytics-DELPHI"</span>,</span>
+<span class='r-in'>    <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
 <span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
 <span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>,</span>
 <span class='r-in'>  locations <span class='op'>=</span> <span class='st'>"US"</span>,</span>
-<span class='r-in'>  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>,<span class='st'>"quantile"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span></span>
-<span class='r-in'> </span>
-<span class='r-in'><span class='fu'>plot_forecasts</span><span class='op'>(</span>forecast_data <span class='op'>=</span> <span class='va'>us_forecasts</span>,</span>
-<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COVIDhub-ensemble"</span>,<span class='st'>"COVIDhub-baseline"</span>,<span class='st'>"JHU_CSSE-DECOM"</span>,</span>
-<span class='r-in'>  <span class='st'>"CovidAnalytics-DELPHI"</span>,<span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> polling for status change. job_url=https://zoltardata.com/api/job/73201/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73201/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73201/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73201/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUCCESS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73201/data/</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>plot_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  forecast_data <span class='op'>=</span> <span class='va'>us_forecasts</span>,</span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"COVIDhub-baseline"</span>, <span class='st'>"JHU_CSSE-DECOM"</span>,</span>
+<span class='r-in'>    <span class='st'>"CovidAnalytics-DELPHI"</span>, <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
 <span class='r-in'>  target_variable <span class='op'>=</span> <span class='st'>"inc case"</span>, locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>, intervals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.95</span><span class='op'>)</span>,</span>
 <span class='r-in'>  horizon <span class='op'>=</span> <span class='fl'>4</span>, truth_source <span class='op'>=</span> <span class='st'>"JHU"</span>, plot <span class='op'>=</span> <span class='cn'>TRUE</span>, fill_by_model <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
 <span class='r-in'>  facet <span class='op'>=</span> <span class='op'>~</span><span class='va'>model</span>, facet_scales <span class='op'>=</span> <span class='st'>"fixed"</span>, title <span class='op'>=</span> <span class='st'>"default"</span>,</span>
-<span class='r-in'>  show_caption <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'>  show_caption <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Scale for 'colour' is already present. Adding another scale for 'colour',</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> which will replace the existing scale.</span>
+<span class='r-plt'><img src='plot_forecasts-1.png' alt='' width='700' height='433' /></span>
 <span class='r-in'></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='va'>ecdc_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span>models<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
+<span class='r-in'><span class='va'>ecdc_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
 <span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,</span>
 <span class='r-in'>  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>plot_forecasts</span><span class='op'>(</span>forecast_data <span class='op'>=</span> <span class='va'>ecdc_forecasts</span>, </span>
-<span class='r-in'>               hub  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>, </span>
-<span class='r-in'>               locations <span class='op'>=</span><span class='st'>"GB"</span>, </span>
-<span class='r-in'>               truth_source <span class='op'>=</span> <span class='st'>"JHU"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> polling for status change. job_url=https://zoltardata.com/api/job/73204/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73204/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73204/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUCCESS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73204/data/</span>
+<span class='r-in'><span class='fu'>plot_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  forecast_data <span class='op'>=</span> <span class='va'>ecdc_forecasts</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  locations <span class='op'>=</span> <span class='st'>"GB"</span>,</span>
+<span class='r-in'>  truth_source <span class='op'>=</span> <span class='st'>"JHU"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Scale for 'colour' is already present. Adding another scale for 'colour',</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> which will replace the existing scale.</span>
+<span class='r-plt'><img src='plot_forecasts-2.png' alt='' width='700' height='433' /></span>
 <span class='r-in'></span>
 </code></pre></div>
   </div>

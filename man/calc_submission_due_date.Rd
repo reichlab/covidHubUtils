@@ -21,6 +21,6 @@ finds the nearest Monday for which a submission could have been made
 }
 \examples{
 \dontrun{
-calc_submission_due_date(Sys.Date() + 0:7) 
+calc_submission_due_date(Sys.Date() + 0:7)
 }
 }

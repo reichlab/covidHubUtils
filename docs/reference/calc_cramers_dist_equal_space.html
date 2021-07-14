@@ -184,6 +184,13 @@ of <code>q_F</code> and <code>q_G</code> and \(b_i\) is an element of a vector o
 values of cumulative sums of \(\mathbf{a}\), whose element is 1 if
 \(q_i\) is a quantile of F or -1 if \(q_i\) is a quantile of G.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>f_vector</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>9</span></span>
+<span class='r-in'><span class='va'>tau_F_vector</span> <span class='op'>&lt;-</span> <span class='va'>tau_G_vector</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.1</span>,<span class='fl'>0.9</span>,<span class='fl'>0.1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>g_vector</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>18</span>,<span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>calc_cramers_dist_equal_space</span><span class='op'>(</span><span class='va'>f_vector</span>,<span class='va'>tau_F_vector</span>,<span class='va'>g_vector</span>,<span class='va'>tau_G_vector</span>, <span class='st'>"approximation1"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.111111</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

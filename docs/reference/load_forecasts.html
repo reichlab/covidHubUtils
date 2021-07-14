@@ -168,19 +168,19 @@ The function will throw an error if all dates in this parameter are invalid fore
     </tr>
     <tr>
       <th>types</th>
-      <td><p>Character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types.</p></td>
+      <td><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
+and/or <code>"point"</code>. Default to all valid forecast types.</p></td>
     </tr>
     <tr>
       <th>targets</th>
       <td><p>character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
-Default to NULL which stands for all valid targets.</p></td>
+<code>c('1 wk ahead cum death', '2 wk ahead cum death')</code>.
+Default to <code>NULL</code> which stands for all valid targets.</p></td>
     </tr>
     <tr>
       <th>source</th>
       <td><p>string specifying where forecasts will be loaded from: either
-"local_hub_repo" or "zoltar". Default to "zoltar"</p></td>
+<code>"local_hub_repo"</code> or <code>"zoltar"</code>. Default to <code>"zoltar"</code>.</p></td>
     </tr>
     <tr>
       <th>hub_repo_path</th>
@@ -190,39 +190,38 @@ repository</p></td>
     <tr>
       <th>data_processed_subpath</th>
       <td><p>folder within the hub_repo_path that contains
-forecast submission files.  Defaults to "data-processed/", which is
+forecast submission files.  Default to <code>"data-processed/"</code>, which is
 appropriate for the covid19-forecast-hub repository.</p></td>
     </tr>
     <tr>
       <th>as_of</th>
       <td><p>character for date time to load forecasts submitted as of this time from Zoltar.
-Ignored if <code>source</code> is <code>"local_hub_repo"</code>.
+Ignored if <code>source = "local_hub_repo"</code>.
 It could use the format of one of the three examples:
-"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+<code>"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC"</code>.
 If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on hub parameter.
+If not, helper function will append the default timezone to your input based on <code>hub</code> parameter.
 Default to NULL to load the latest version.</p></td>
     </tr>
     <tr>
       <th>hub</th>
       <td><p>character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"</p></td>
+from which to load forecasts. Possible options are <code>"US"</code> and <code>"ECDC"</code>.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>whether or not to print out diagnostic messages. Default is TRUE</p></td>
+      <td><p>logical to print out diagnostic messages. Default is <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation</p>
+    <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
+<code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
+<code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>forecasts_US</span> <span class='op'>&lt;-</span> <span class='fu'>load_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,</span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>forecasts_US</span> <span class='op'>&lt;-</span> <span class='fu'>load_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,</span>
 <span class='r-in'> forecast_date <span class='op'>=</span> <span class='st'>"2020-12-07"</span>,</span>
 <span class='r-in'> locations <span class='op'>=</span> <span class='st'>"US"</span>,</span>
 <span class='r-in'> types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>,<span class='st'>"quantile"</span><span class='op'>)</span>,</span>
@@ -230,6 +229,13 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 <span class='r-in'> source <span class='op'>=</span> <span class='st'>"zoltar"</span>,</span>
 <span class='r-in'> verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
 <span class='r-in'> as_of <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73196/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73196/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73196/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73196/data/</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>forecasts_ECDC</span> <span class='op'>&lt;-</span> <span class='fu'>load_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"ILM-EKF"</span>,</span>
 <span class='r-in'> hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>,</span>
@@ -237,7 +243,15 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 <span class='r-in'> locations <span class='op'>=</span> <span class='st'>"GB"</span>,</span>
 <span class='r-in'> targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
 <span class='r-in'> source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> polling for status change. job_url=https://zoltardata.com/api/job/73198/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73198/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73198/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUCCESS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73198/data/</span>
 <span class='r-in'></span>
 </code></pre></div>
   </div>

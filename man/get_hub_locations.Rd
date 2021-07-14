@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_hub_locations.R
 \name{get_hub_locations}
 \alias{get_hub_locations}
-\title{Create data/hub_locations.rda for loading data from zoltar and covidcast}
+\title{Create data/hub_locations.rda for loading data from zoltar and covidData}
 \usage{
 get_hub_locations()
 }
 \value{
-data frame with columns fips, location_name, population, geo_type,
-geo_value, abbreviation
+data frame with columns \code{fips}, \code{location_name}, \code{population}, \code{geo_type},
+\code{geo_value}, \code{abbreviation}
 }
 \description{
-Create data/hub_locations.rda for loading data from zoltar and covidcast
+Create data/hub_locations.rda for loading data from zoltar and covidData
 }

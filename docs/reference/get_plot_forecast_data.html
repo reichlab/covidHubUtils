@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Combines load_truth() and pivot_forecasts_wider(), returns the data. — get_plot_forecast_data • covidHubUtils</title>
+<title>Combine load_truth() and pivot_forecasts_wider() — get_plot_forecast_data • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Combines load_truth() and pivot_forecasts_wider(), returns the data. — get_plot_forecast_data" />
-<meta property="og:description" content="Combines load_truth() and pivot_forecasts_wider(), returns the data." />
+<meta property="og:title" content="Combine load_truth() and pivot_forecasts_wider() — get_plot_forecast_data" />
+<meta property="og:description" content="Combine load_truth() and pivot_forecasts_wider()" />
 
 
 
@@ -120,13 +120,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Combines load_truth() and pivot_forecasts_wider(), returns the data.</h1>
+    <h1>Combine <code><a href='load_truth.html'>load_truth()</a></code> and <code><a href='pivot_forecasts_wider.html'>pivot_forecasts_wider()</a></code></h1>
     
     <div class="hidden name"><code>get_plot_forecast_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Combines load_truth() and pivot_forecasts_wider(), returns the data.</p>
+    <p>Combine <code><a href='load_truth.html'>load_truth()</a></code> and <code><a href='pivot_forecasts_wider.html'>pivot_forecasts_wider()</a></code></p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>get_plot_forecast_data</span><span class='op'>(</span>
@@ -149,16 +149,17 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>forecast_data</th>
-      <td><p>forecasts data frame from load_forecast().
-It has columns model, forecast_date,location, target, type, quantile,
-value, horizon and target_end_date.</p></td>
+      <td><p>required data.frame with forecasts in the format returned
+by <code><a href='load_forecasts.html'>load_forecasts()</a></code>.
+It has columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>target</code>, <code>type</code>, <code>quantile</code>,
+<code>value</code>, <code>horizon</code> and <code>target_end_date</code>.</p></td>
     </tr>
     <tr>
       <th>truth_data</th>
-      <td><p>optional data frame from one truth source in the format returned
-by load_truth(). It needs to have columns model, target_variable,
-target_end_date, location and value.
-Model column can be "Observed Data (a truth source)".</p></td>
+      <td><p>optional data.frame from one truth source in the format returned
+by <code><a href='load_truth.html'>load_truth()</a></code>. It needs to have columns <code>model</code>, <code>target_variable</code>,
+<code>target_end_date</code>, <code>location</code> and <code>value</code>.
+<code>Model</code> column can be "Observed Data (a truth source)".</p></td>
     </tr>
     <tr>
       <th>models_to_plot</th>
@@ -167,7 +168,7 @@ Model column can be "Observed Data (a truth source)".</p></td>
     <tr>
       <th>forecast_dates_to_plot</th>
       <td><p>date string vectors for forecast dates to plot.
-Default to all forecast dates available in forecast_data.</p></td>
+Default to all forecast dates available in <code>forecast_data</code>.</p></td>
     </tr>
     <tr>
       <th>horizons_to_plot</th>
@@ -176,47 +177,47 @@ the forecast date.</p></td>
     </tr>
     <tr>
       <th>quantiles_to_plot</th>
-      <td><p>vector of quanitles to include in the plot</p></td>
+      <td><p>vector of quantiles to include in the plot</p></td>
     </tr>
     <tr>
       <th>locations_to_plot</th>
       <td><p>optional character vector of location fips codes.
-Default to all locations available in forecast_data.</p></td>
+Default to all locations available in <code>forecast_data</code>.</p></td>
     </tr>
     <tr>
       <th>plot_truth</th>
-      <td><p>boolean to indicate whether truth data should be plotted.
-Default to TRUE.</p></td>
+      <td><p>logical to indicate whether truth data should be plotted.
+Default to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>truth_source</th>
       <td><p>character specifying where the truth data will
-be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts", "NYTimes" and "HealthData".
-Optional if truth_data is provided.</p></td>
+be loaded from if truth_data is not provided. Currently support <code>"JHU"</code>,
+<code>"USAFacts"</code>, <code>"NYTimes"</code> and <code>"HealthData"</code>.
+Optional if <code>truth_data</code> is provided.</p></td>
     </tr>
     <tr>
       <th>target_variable_to_plot</th>
       <td><p>string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp".</p></td>
+<code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code> and <code>"inc hosp"</code>.</p></td>
     </tr>
     <tr>
       <th>truth_as_of</th>
       <td><p>the plot includes the truth data that would have been
-in real time as of the truth_as_of date.</p></td>
+in real time as of the <code>truth_as_of</code> date.</p></td>
     </tr>
     <tr>
       <th>hub</th>
-      <td><p>character, which hub to use. Default is "US", other option is
-"ECDC"</p></td>
+      <td><p>character, which hub to use. Default is <code>"US"</code>, other option is
+<code>"ECDC"</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with columns model,
-forecast_date, location,  target_variable, type, quantile, value, horizon and
-target_end_date.</p>
+    <p>data.frame with columns <code>model</code>,
+<code>forecast_date</code>, <code>location</code>, <code>target_variable</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
+<code>horizon</code> and <code>target_end_date</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

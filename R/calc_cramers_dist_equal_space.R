@@ -24,7 +24,7 @@
 #' of `q_F` and `q_G` and \eqn{b_i} is an element of a vector of the absolute
 #' values of cumulative sums of \eqn{\mathbf{a}}, whose element is 1 if
 #' \eqn{q_i} is a quantile of F or -1 if \eqn{q_i} is a quantile of G.
-#' @example
+#' @examples
 #' f_vector <- 1:9
 #' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
 #' g_vector <- seq(2,18,2)

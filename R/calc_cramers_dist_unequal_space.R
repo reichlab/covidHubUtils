@@ -24,7 +24,7 @@
 #' the probability level of a quantile in `q_F` when \eqn{q_i} comes from \eqn{F} and
 #' the probability level of a quantile in `q_G` when \eqn{q_i} comes from \eqn{G},
 #' respectively.
-#' @example
+#' @examples
 #' f_vector <- 1:9
 #' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
 #' g_vector <- seq(4,20,2)

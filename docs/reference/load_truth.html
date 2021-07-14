@@ -127,14 +127,14 @@ data for other target variables from &quot;HealthData&quot;." />
     <div class="page-header">
     <h1>Load truth data under multiple target variables
 from multiple truth sources
-using files in reichlab/covid19-forecast-hub.</h1>
+using files in <code>reichlab/covid19-forecast-hub</code>.</h1>
     
     <div class="hidden name"><code>load_truth.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>"inc hosp" is only available from "HeatlthData" and this function is not loading
-data for other target variables from "HealthData".</p>
+    <p><code>"inc hosp"</code> is only available from <code>"HeatlthData"</code> and this function is not loading
+data for other target variables from <code>"HealthData"</code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_truth</span><span class='op'>(</span>
@@ -155,23 +155,23 @@ data for other target variables from "HealthData".</p>
     <tr>
       <th>truth_source</th>
       <td><p>character vector specifying where the truths will
-be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
-If <code>NULL</code>, default for US hub is c("JHU", "HealthData").
-If <code>NULL</code>, default for ECDC hub is c("JHU").</p></td>
+be loaded from: currently support <code>"JHU"</code>, <code>"USAFacts"</code>, <code>"NYTimes"</code>, <code>"HealthData</code>" and <code>"ECDC"</code>.
+If <code>NULL</code>, default for US hub is <code>c("JHU", "HealthData")</code>.
+If <code>NULL</code>, default for ECDC hub is <code>c("JHU")</code>.</p></td>
     </tr>
     <tr>
       <th>target_variable</th>
       <td><p>string specifying target type It should be one or more of
-"cum death", "inc case", "inc death", "inc hosp".
-If <code>NULL</code>, default for US hub is c("inc case", "inc death", "inc hosp").
-If <code>NULL</code>, default for ECDC hub is c("inc case", "inc death").</p></td>
+<code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code>, <code>"inc hosp"</code>.
+If <code>NULL</code>, default for US hub is <code>c("inc case", "inc death", "inc hosp")</code>.
+If <code>NULL</code>, default for ECDC hub is <code>c("inc case", "inc death")</code>.</p></td>
     </tr>
     <tr>
       <th>as_of</th>
       <td><p>character vector of "as of" dates to use for querying truths in
 format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 available data with an issue date on or before the given <code>as_of</code> date are returned.
-This is only available for covidData now.</p></td>
+This is only available for <code>covidData</code> now.</p></td>
     </tr>
     <tr>
       <th>truth_end_date</th>
@@ -181,11 +181,11 @@ If <code>NULL</code>,default to system date.</p></td>
     <tr>
       <th>temporal_resolution</th>
       <td><p>character specifying temporal resolution
-to include: currently support "weekly" and "daily".
-If <code>NULL</code>, default to 'weekly' for cases and deaths, 'daily' for hospitalizations.
-Weekly temporal_resolution will not be applied to "inc hosp" when
+to include: currently support <code>"weekly"</code> and <code>"daily"</code>.
+If <code>NULL</code>, default to <code>"weekly"</code> for cases and deaths, <code>"daily"</code> for hospitalizations.
+Weekly <code>temporal_resolution</code> will not be applied to <code>"inc hosp"</code> when
 multiple target variables are specified.
-"ECDC" truth data is weekly by default. Daily level data is not available.</p></td>
+<code>"ECDC"</code> truth data is weekly by default. Daily level data is not available.</p></td>
     </tr>
     <tr>
       <th>locations</th>
@@ -196,34 +196,34 @@ US hub is using FIPS code and ECDC hub is using country name abbreviation.</p></
     <tr>
       <th>data_location</th>
       <td><p>character specifying the location of truth data.
-Currently only supports "local_hub_repo","remote_hub_repo" and "covidData".
-If <code>NULL</code>, default to "remote_hub_repo".</p></td>
+Currently only supports <code>"local_hub_repo"</code>, <code>"remote_hub_repo"</code> and <code>"covidData"</code>.
+If <code>NULL</code>, default to <code>"remote_hub_repo"</code>.</p></td>
     </tr>
     <tr>
       <th>local_repo_path</th>
-      <td><p>path to local clone of the reichlab/covid19-forecast-hub
-repository. Only used when data_location is "local_hub_repo"</p></td>
+      <td><p>path to local clone of the <code>reichlab/covid19-forecast-hub</code>
+repository. Only used when data_location is <code>"local_hub_repo"</code></p></td>
     </tr>
     <tr>
       <th>hub</th>
-      <td><p>character, which hub to use. Default is "US", other option is
-"ECDC"</p></td>
+      <td><p>character, which hub to use. Default is <code>"US"</code>, other option is
+<code>"ECDC"</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with columns model, inc_cum, death_case, target_end_date,
-location, value, location_name, population, geo_type, geo_value, abbreviation</p>
+    <p>data.frame with columns <code>model</code>, <code>inc_cum</code>, <code>death_case</code>, <code>target_end_date</code>,
+<code>location</code>, <code>value</code>, <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>When loading data for multiple target_variables, temporal_resolution will be applied
-to all target variables but "inc hosp". In that case, the function will return
+    <p>When loading data for multiple <code>target_variables</code>, <code>temporal_resolution</code> will be applied
+to all target variables but <code>"inc hosp"</code>. In that case, this function will return
 daily incident hospitalization counts along with other data.</p>
-<p>Weekly temporal resolution will be applied to "inc hosp" if the user specifies "inc hosp"
-as the only target_variable.</p>
+<p>Weekly temporal resolution will be applied to <code>"inc hosp"</code> if the user specifies <code>"inc hosp"</code>
+as the only <code>target_variable</code>.</p>
 <p>When loading weekly data, if there are not enough observations for a week, the corresponding
-weekly count would be NA in resulting data frame.</p>
+weekly count would be <code>NA</code> in resulting data frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>covidHubUtils</span><span class='op'>)</span></span>

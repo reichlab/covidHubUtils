@@ -7,19 +7,20 @@
 pivot_forecasts_wider(forecast_data, quantiles)
 }
 \arguments{
-\item{forecast_data}{forecasts data frame from load_forecast(). It has columns model,
-forecast_date,location, target, type, quantile, value, horizon and
-target_end_date.}
+\item{forecast_data}{required data.frame with forecasts in the format returned
+by \code{\link[=load_forecasts]{load_forecasts()}}.
+It has columns \code{model},\code{forecast_date},\code{location}, \code{target}, \code{type},
+\code{quantile}, \code{value}, \code{horizon} and \code{target_end_date}.}
 
 \item{quantiles}{vector of quantiles to return for plotting
-Defaults to all available quantiles in forecast data.
+Default to all available quantiles in \code{forecast_data}.
 Note that point forecasts and median quantiles do not necessarily align.
 Throws an error if quantile levels are not in the forecast data.}
 }
 \value{
-data frame with columns model, forecast_date, location,
-horizon, temporal_resolution, target_variable, target_end_date, type, point,
-point_type, Prediction Interval, upper, lower.
+data.frame with columns \code{model}, \code{forecast_date}, \code{location},
+\code{horizon}, \code{temporal_resolution}, \code{target_variable}, \code{target_end_date}, \code{type}, \code{point},
+\code{point_type}, \verb{Prediction Interval}, \code{upper}, \code{lower}.
 }
 \description{
 Return a data frame of forecasts with predictive quantiles in columns.

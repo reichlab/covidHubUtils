@@ -144,29 +144,29 @@
     <tr>
       <th>forecasts</th>
       <td><p>required data.frame with forecasts in the format returned
-by load_forecasts</p></td>
+by <code><a href='load_forecasts.html'>load_forecasts()</a></code></p></td>
     </tr>
     <tr>
       <th>truth</th>
       <td><p>required data.frame with forecasts in the format returned
-by load_truth</p></td>
+by <code><a href='load_truth.html'>load_truth()</a></code></p></td>
     </tr>
     <tr>
       <th>return_format</th>
-      <td><p>string: "long" returns long format with a column for
-"score_name" and a column for "score_value"; "wide" returns wide format with
-a separate column for each score. Defaults to "wide".</p></td>
+      <td><p>string: <code>"long"</code> returns long format with a column for
+<code>"score_name"</code> and a column for <code>"score_value"</code>; <code>"wide"</code> returns wide format with
+a separate column for each score. Defaults to <code>"wide"</code>.</p></td>
     </tr>
     <tr>
       <th>metrics</th>
       <td><p>character vector of the metrics to be returned with options
-"abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"</p></td>
+<code>"abs_error"</code>, <code>"wis"</code>, <code>"wis_components"</code>,<code>"interval_coverage"</code>, and <code>"quantile_coverage"</code></p></td>
     </tr>
     <tr>
       <th>use_median_as_point</th>
-      <td><p>logical: "TRUE" uses the median as the point
-forecast when scoring; "FALSE" uses the point forecasts from the data when
-scoring. Defaults to "FALSE"</p></td>
+      <td><p>logical: <code>TRUE</code> uses the median as the point
+forecast when scoring; <code>FALSE</code> uses the point forecasts from the data when
+scoring. Defaults to <code>FALSE</code></p></td>
     </tr>
     </table>
 
@@ -189,10 +189,10 @@ if use_median_as_point is FALSE</p></li>
 <li><p><code>quantile_coverage_0.X</code> are one-sided quantile coverage at quantile X</p></li>
 </ul>
 
-<p>If return_format is "long", also contains columns score_name and score_value
-where score_name is the type of score calculated and score_value has the numeric
+<p>If return_format is <code>"long"</code>, also contains columns score_name and score_value
+where <code>score_name</code> is the type of score calculated and <code>score_value</code> has the numeric
 value of the score.
-If return_format is "wide", each calculated score is in its own column.</p>
+If return_format is <code>"wide"</code>, each calculated score is in its own column.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bracher J, Ray EL, Gneiting T, Reich NG. (2020) Evaluating epidemic forecasts
@@ -201,24 +201,30 @@ in an interval format. arXiv:2005.12881.
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span>models<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"UMass-MechBayes"</span><span class='op'>)</span>,</span>
+<span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"UMass-MechBayes"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='st'>"2020-12-14"</span>,</span>
 <span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>7</span>,</span>
 <span class='r-in'>  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span></span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>truth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_truth.html'>load_truth</a></span><span class='op'>(</span><span class='st'>"JHU"</span>, target_variable <span class='op'>=</span> <span class='st'>"inc death"</span>, locations <span class='op'>=</span> <span class='st'>"US"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>score_forecasts</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>truth</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span>models<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
+<span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
 <span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,</span>
 <span class='r-in'>  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>truth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_truth.html'>load_truth</a></span><span class='op'>(</span><span class='st'>"JHU"</span>,hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>, </span>
-<span class='r-in'>  target_variable <span class='op'>=</span> <span class='st'>"inc death"</span>, locations <span class='op'>=</span> <span class='st'>"GB"</span><span class='op'>)</span></span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>truth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_truth.html'>load_truth</a></span><span class='op'>(</span><span class='st'>"JHU"</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  target_variable <span class='op'>=</span> <span class='st'>"inc death"</span>, locations <span class='op'>=</span> <span class='st'>"GB"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>score_forecasts</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>truth</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'></span>

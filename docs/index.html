@@ -100,18 +100,89 @@
 <div id="currently-available" class="section level2">
 <h2 class="hasAnchor">
 <a href="#currently-available" class="anchor" aria-hidden="true"></a>Currently available:</h2>
-<p><strong>Reading Forecast Data</strong> * <code>get_model_designations(models, source, hub_repo_path, as_of)</code>: Assemble a data frame with columns model and designation. <strong>Note:</strong> Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository. * <code>load_latest_forecasts(models, last_forecast_date, forecast_date_window_size, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar. * <code>load_forecasts(models, forecast_dates, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load all available forecasts either from a local clone of the covid19-forecast-hub repository or Zoltar.</p>
-<p><strong>Reading Observed “Truth” Data</strong> * <code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</p>
-<p><strong>Plotting Forecasts</strong> * <code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates. To see more example plots, please to go <a href="https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html" class="external-link">vignettes/demo</a>.</p>
-<p><strong>Scoring Forecasts</strong> * <code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</p>
-<p><strong>Download and pre-process “Truth” Data</strong> * <code>download_raw_nytimes(save_location)</code>: Download raw truth data from NYTimes and write to CSV files. * <code>download_raw_usafacts(save_location)</code>: Download raw truth data from USAFacts and write to CSV files. * <code>preprocess_nytimes(save_location)</code>: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs * <code>preprocess_usafacts(save_location)</code>: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs * <code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed. * <code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed. * <code>preprocess_truth_for_zoltar(target, issue_date)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed. * <code>save_truth_for_zoltar(save_location)</code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</p>
-<p><strong>Calculating Forecast Similarities</strong> * <code>calc_cramers_dist_equal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles. * <code>calc_cramers_dist_unequal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of unequally-spaced quantiles. *<code>calc_cramers_dist_one_model_pair(q_F, tau_F, q_G, tau_G, approx_rule)</code>: A wrapper function for <code><a href="reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code> and <code><a href="reference/calc_cramers_dist_unequal_space.html">calc_cramers_dist_unequal_space()</a></code>.</p>
+<div id="reading-forecast-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#reading-forecast-data" class="anchor" aria-hidden="true"></a>Reading Forecast Data</h3>
+<ul>
+<li>
+<code>get_model_designations(models, source, hub_repo_path, as_of)</code>: Assemble a data frame with columns model and designation. <strong>Note:</strong> Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository.</li>
+<li>
+<code>load_latest_forecasts(models, last_forecast_date, forecast_date_window_size, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
+<li>
+<code>load_forecasts(models, forecast_dates, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load all available forecasts either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
+</ul>
+</div>
+<div id="reading-observed-truth-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#reading-observed-truth-data" class="anchor" aria-hidden="true"></a>Reading Observed “Truth” Data</h3>
+<ul>
+<li>
+<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li>
+</ul>
+</div>
+<div id="plotting-forecasts" class="section level3">
+<h3 class="hasAnchor">
+<a href="#plotting-forecasts" class="anchor" aria-hidden="true"></a>Plotting Forecasts</h3>
+<ul>
+<li>
+<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates. To see more example plots, please to go <a href="https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html" class="external-link">vignettes/demo</a>.</li>
+</ul>
+</div>
+<div id="scoring-forecasts" class="section level3">
+<h3 class="hasAnchor">
+<a href="#scoring-forecasts" class="anchor" aria-hidden="true"></a>Scoring Forecasts</h3>
+<ul>
+<li>
+<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li>
+</ul>
+</div>
+<div id="download-and-pre-process-truth-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#download-and-pre-process-truth-data" class="anchor" aria-hidden="true"></a>Download and pre-process “Truth” Data</h3>
+<ul>
+<li>
+<code>download_raw_nytimes(save_location)</code>: Download raw truth data from NYTimes and write to CSV files.</li>
+<li>
+<code>download_raw_usafacts(save_location)</code>: Download raw truth data from USAFacts and write to CSV files.</li>
+<li>
+<code>preprocess_nytimes(save_location)</code>: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
+<li>
+<code>preprocess_usafacts(save_location)</code>: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
+<li>
+<code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
+<li>
+<code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
+<li>
+<code>preprocess_truth_for_zoltar(target, issue_date)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
+<li>
+<code>save_truth_for_zoltar(save_location)</code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
+</ul>
+</div>
+<div id="calculating-forecast-similarities" class="section level3">
+<h3 class="hasAnchor">
+<a href="#calculating-forecast-similarities" class="anchor" aria-hidden="true"></a>Calculating Forecast Similarities</h3>
+<ul>
+<li>
+<code>calc_cramers_dist_equal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles.</li>
+<li>
+<code>calc_cramers_dist_unequal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of unequally-spaced quantiles. -<code>calc_cramers_dist_one_model_pair(q_F, tau_F, q_G, tau_G, approx_rule)</code>: A wrapper function for <code><a href="reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code> and <code><a href="reference/calc_cramers_dist_unequal_space.html">calc_cramers_dist_unequal_space()</a></code>.</li>
+</ul>
+</div>
 </div>
 </div>
 <div id="contributing-guidelines" class="section level1">
 <h1 class="hasAnchor">
 <a href="#contributing-guidelines" class="anchor" aria-hidden="true"></a>Contributing Guidelines</h1>
-<p>If you would like to contribute your work, please follow this list to create a pull request: * New functions should come with unit tests, or a promise of a new unit test in the form of an issue if getting the functionality merged in is urgent. * If you added a new .R file with unit tests, add the tests to <code>.github/workflows/pr_unittest.yaml</code>. * Small/quick fixes don’t need to be tested, necessarily. * Update <code>NEWS.md</code> by adding a short summary of your changes under “Changes since last release.” * Update <code>README.md</code> if you created a new function or add a new parameter to existing functions. * Update <code>DESCRIPTION</code> when you are using a new dependency in your script.</p>
+<p>If you would like to contribute your work, please follow this list to create a pull request:</p>
+<ul>
+<li>New functions should come with unit tests, or a promise of a new unit test in the form of an issue if getting the functionality merged in is urgent.</li>
+<li>If you added a new .R file with unit tests, add the tests to <code>.github/workflows/pr_unittest.yaml</code>.</li>
+<li>Small/quick fixes don’t need to be tested, necessarily.</li>
+<li>Update <code>NEWS.md</code> by adding a short summary of your changes under “Changes since last release.”</li>
+<li>Update <code>README.md</code> if you created a new function or add a new parameter to existing functions.</li>
+<li>Update <code>DESCRIPTION</code> when you are using a new dependency in your script.</li>
+<li>Make sure your pull request passes all checks in Github Action.</li>
+</ul>
 </div>
 
   </div>

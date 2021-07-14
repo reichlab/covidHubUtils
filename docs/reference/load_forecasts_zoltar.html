@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Load all available forecasts submitted on forecast_dates from Zoltar. — load_forecasts_zoltar" />
-<meta property="og:description" content="The function will throw a warning and return an empty data frame when
+<meta property="og:description" content="This function will throw a warning and return an empty data frame when
 no forecasts are submitted on any dates in forecast_dates for selected models,
 locations, types and target." />
 
@@ -122,15 +122,15 @@ locations, types and target." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load all available forecasts submitted on forecast_dates from Zoltar.</h1>
+    <h1>Load all available forecasts submitted on <code>forecast_dates</code> from Zoltar.</h1>
     
     <div class="hidden name"><code>load_forecasts_zoltar.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in forecast_dates for selected models,
-locations, types and target.</p>
+    <p>This function will throw a warning and return an empty data frame when
+no forecasts are submitted on any dates in <code>forecast_dates</code> for selected <code>models</code>,
+<code>locations</code>, <code>types</code> and <code>target</code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_forecasts_zoltar</span><span class='op'>(</span>
@@ -164,40 +164,40 @@ The function will throw an error if all dates in this parameter are invalid fore
     </tr>
     <tr>
       <th>types</th>
-      <td><p>Character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types in Zoltar.</p></td>
+      <td><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
+and/or <code>"point"</code>. Default to all valid forecast types in Zoltar.</p></td>
     </tr>
     <tr>
       <th>targets</th>
       <td><p>character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
+<code>c('1 wk ahead cum death', '2 wk ahead cum death')</code>.
 Default to all valid targets in Zoltar.</p></td>
     </tr>
     <tr>
       <th>as_of</th>
       <td><p>character for date time to load forecasts submitted as of this time.
 It could use the format of one of the three examples:
-"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+<code>"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".</code>
 If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on hub parameter.
-Default to NULL to load the latest version.</p></td>
+If not, helper function will append the default timezone to your input based on <code>hub</code> parameter.
+Default to <code>NULL</code> to load the latest version.</p></td>
     </tr>
     <tr>
       <th>hub</th>
       <td><p>character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"</p></td>
+from which to load forecasts. Possible options are <code>"US"</code> and <code>"ECDC"</code>.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>a boolean for printing messages on zoltar job status. Default to TRUE.</p></td>
+      <td><p>logical for printing messages on zoltar job status. Default to <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation</p>
+    <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
+<code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
+<code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

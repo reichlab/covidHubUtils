@@ -2,9 +2,7 @@
 % Please edit documentation in R/plot_forecasts.R
 \name{plot_forecasts}
 \alias{plot_forecasts}
-\title{Plot forecasts and optional truth for only one selected target variable.
-Faceted plots for multiple models, locations and forecast dates are
-supported with specified facet formula.}
+\title{Plot forecasts and optional truth for only one selected target variable.}
 \usage{
 plot_forecasts(
   forecast_data,
@@ -33,31 +31,33 @@ plot_forecasts(
 )
 }
 \arguments{
-\item{forecast_data}{data frame with truth and forecasts from load_forecasts()}
+\item{forecast_data}{required data.frame with forecasts in the format returned
+by \code{\link[=load_forecasts]{load_forecasts()}}}
 
-\item{truth_data}{optional data frame from one truth source in the format returned
-by load_truth(). It needs to have columns model, target_variable,
-target_end_date, location and value.
-Model column can be "Observed Data (a truth source)".}
+\item{truth_data}{optional data.frame from one truth source in the format returned
+by \code{\link[=load_truth]{load_truth()}}.
+It needs to have columns \code{model}, \code{target_variable},
+\code{target_end_date}, \verb{location and value}.
+\code{Model} column can be \code{"Observed Data (a truth source)"}.}
 
 \item{hub}{character, which hub to use.
-Default is "US", other option is "ECDC".}
+Default is \code{"US"}, other option is \code{"ECDC"}.}
 
 \item{models}{vector of strings specifying models to plot.
-Default to all models in forecast_data.}
+Default to all models in \code{forecast_data}.}
 
 \item{target_variable}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp".
-"cum death" and "inc hosp" are only available in forecasts from US hub now.
-If there is only one target_variable in forecast_data, this parameter is optional.}
+\code{"cum death"}, \code{"inc case"}, \code{"inc death"} and \code{"inc hosp"}.
+\code{"cum death"} and \code{"inc hosp"} are only available in forecasts from US hub now.
+If there is only one \code{target_variable} in \code{forecast_data}, this parameter is optional.}
 
-\item{locations}{string for fips code, 'US' or abbreviation of European countries.
-Default to all locations in forecast_data.}
+\item{locations}{vector of strings for fips code, \code{'US'} or abbreviation of European countries.
+Default to all locations in \code{forecast_data}.}
 
 \item{facet}{interpretable facet option for ggplot. Function will error
 if multiple locations are passed in without location in the facet formula.}
 
-\item{facet_scales}{argument for scales in ggplot2::facet_wrap. Default to "fixed".}
+\item{facet_scales}{argument for scales in \link[ggplot2:facet_wrap]{ggplot2::facet_wrap}. Default to \code{"fixed"}.}
 
 \item{facet_nrow}{number of rows for facetting; optional.}
 
@@ -67,85 +67,93 @@ if multiple locations are passed in without location in the facet formula.}
 Default to forecast_dates present in the data.}
 
 \item{intervals}{values indicating which central prediction interval levels
-to plot. NULL means only plotting point forecasts.
-If not provided, it will default to c(.5, .8, .95).
+to plot. \code{NULL} means only plotting point forecasts.
+If not provided, it will default to \code{c(.5, .8, .95)}.
 When plotting 6 models or more, the plot will be reduced to show .95 interval only.}
 
 \item{horizon}{forecasts are plotted for the horizon time steps after the
-forecast date. Default to all available horizons in forecast data.}
+forecast date. Default to all available horizons in \code{forecast_data}.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts", "NYTimes", "HealthData" and "ECDC".
-Optional if truth_data is provided.}
+be loaded from if \code{truth_data} is not provided. Currently support \code{"JHU"},
+\code{"USAFacts"}, \code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.
+Optional if \code{truth_data} is provided.}
 
-\item{use_median_as_point}{boolean for using median quantiles as point forecasts in plot.
-Default to FALSE.}
+\item{use_median_as_point}{logical for using median quantiles as point forecasts in plot.
+Default to \code{FALSE}.}
 
-\item{plot_truth}{boolean for showing truth data in plot. Default to FALSE.}
+\item{plot_truth}{logical for showing truth data in plot. Default to \code{FALSE}.}
 
-\item{plot}{boolean for showing the plot. Default to TRUE.
-Currently supports "JHU","USAFacts", "NYTimes". Default to "JHU".}
+\item{plot}{logical for showing the plot. Default to \code{TRUE}.
+Currently supports \code{"JHU"},\code{"USAFacts"}, \code{"NYTimes"}. Default to \code{"JHU"}.}
 
-\item{fill_by_model}{boolean for specifying colors in plot.
-If TRUE, separate colors will be used for each model.
-If FALSE, only blues will be used for all models. Default to FALSE.}
+\item{fill_by_model}{logical for specifying colors in plot.
+If \code{TRUE}, separate colors will be used for each model.
+If \code{FALSE}, only blues will be used for all models. Default to \code{FALSE}.}
 
 \item{fill_transparency}{numeric value used to set transparency of intervals.
 0 means fully transparent, 1 means opaque.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
-in real time as of the truth_as_of date (not using this parameter when truth data
+in real time as of the \code{truth_as_of} date (not using this parameter when truth data
 is from github repo)}
 
-\item{title}{optional text for the title of the plot. If left as "default",
-the title will be automatically generated. If "none", no title will be plotted.}
+\item{title}{optional text for the title of the plot. If left as \code{"default"},
+the title will be automatically generated. If \code{"none"}, no title will be plotted.}
 
-\item{subtitle}{optional text for the subtitle of the plot. If left as "default",
-the subtitle will be automatically generated. If "none", no subtitle will be plotted.}
+\item{subtitle}{optional text for the subtitle of the plot. If left as \code{"default"},
+the subtitle will be automatically generated. If \code{"none"}, no subtitle will be plotted.}
 
-\item{show_caption}{logical, if TRUE, caption will be included showing data sources}
+\item{show_caption}{logical, if \code{TRUE}, caption will be included showing data sources}
 }
 \value{
 invisible ggplot object
 }
 \description{
-Plot forecasts and optional truth for only one selected target variable.
 Faceted plots for multiple models, locations and forecast dates are
 supported with specified facet formula.
 }
 \examples{
-\dontrun{
-us_forecasts <-load_latest_forecasts(
-  models =c("COVIDhub-ensemble","COVIDhub-baseline",
-  "JHU_CSSE-DECOM","CovidAnalytics-DELPHI",
-  "LANL-GrowthRate", "Microsoft-DeepSTIA"),
+us_forecasts <- load_latest_forecasts(
+  models = c(
+    "COVIDhub-ensemble", "COVIDhub-baseline",
+    "JHU_CSSE-DECOM", "CovidAnalytics-DELPHI",
+    "LANL-GrowthRate", "Microsoft-DeepSTIA"
+  ),
   last_forecast_date = Sys.Date(),
   forecast_date_window_size = 6,
   locations = "US",
-  types = c("point","quantile"),
+  types = c("point", "quantile"),
   targets = paste(1:4, "wk ahead inc case"),
-  source = "zoltar")
- 
-plot_forecasts(forecast_data = us_forecasts,
-  models = c("COVIDhub-ensemble","COVIDhub-baseline","JHU_CSSE-DECOM",
-  "CovidAnalytics-DELPHI","LANL-GrowthRate", "Microsoft-DeepSTIA"),
+  source = "zoltar"
+)
+
+plot_forecasts(
+  forecast_data = us_forecasts,
+  models = c(
+    "COVIDhub-ensemble", "COVIDhub-baseline", "JHU_CSSE-DECOM",
+    "CovidAnalytics-DELPHI", "LANL-GrowthRate", "Microsoft-DeepSTIA"
+  ),
   target_variable = "inc case", locations = c("US"), intervals = c(.95),
   horizon = 4, truth_source = "JHU", plot = TRUE, fill_by_model = TRUE,
   facet = ~model, facet_scales = "fixed", title = "default",
-  show_caption = TRUE)
+  show_caption = TRUE
+)
 
 
-ecdc_forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
-  hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+ecdc_forecasts <- load_latest_forecasts(
+  models = c("ILM-EKF"),
+  hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
   forecast_date_window_size = 0,
   locations = c("GB"),
   targets = paste(1:4, "wk ahead inc death"),
-  source = "zoltar")
-plot_forecasts(forecast_data = ecdc_forecasts, 
-               hub  = c("ECDC","US"), 
-               locations ="GB", 
-               truth_source = "JHU")
-}
+  source = "zoltar"
+)
+plot_forecasts(
+  forecast_data = ecdc_forecasts,
+  hub = c("ECDC", "US"),
+  locations = "GB",
+  truth_source = "JHU"
+)
 
 }
