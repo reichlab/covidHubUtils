@@ -200,8 +200,7 @@ in an interval format. arXiv:2005.12881.
 <a href='https://arxiv.org/abs/2005.12881'>https://arxiv.org/abs/2005.12881</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
 <span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"UMass-MechBayes"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='st'>"2020-12-14"</span>,</span>
 <span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>7</span>,</span>
@@ -209,10 +208,57 @@ in an interval format. arXiv:2005.12881.
 <span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
 <span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> polling for status change. job_url=https://zoltardata.com/api/job/73267/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73267/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73267/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73267/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUCCESS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73267/data/</span>
 <span class='r-in'><span class='va'>truth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_truth.html'>load_truth</a></span><span class='op'>(</span><span class='st'>"JHU"</span>, target_variable <span class='op'>=</span> <span class='st'>"inc death"</span>, locations <span class='op'>=</span> <span class='st'>"US"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>score_forecasts</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>truth</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-in'><span class='fu'>score_forecasts</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>truth</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 8 x 49</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   model         location horizon temporal_resolut… target_variable forecast_date</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> COVIDhub-ens… US       1       wk                inc death       2020-12-14   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> COVIDhub-ens… US       2       wk                inc death       2020-12-14   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> COVIDhub-ens… US       3       wk                inc death       2020-12-14   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> COVIDhub-ens… US       4       wk                inc death       2020-12-14   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span> UMass-MechBa… US       1       wk                inc death       2020-12-13   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span> UMass-MechBa… US       2       wk                inc death       2020-12-13   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>7</span> UMass-MechBa… US       3       wk                inc death       2020-12-13   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>8</span> UMass-MechBa… US       4       wk                inc death       2020-12-13   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 43 more variables: target_end_date &lt;date&gt;, true_value &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.55 &lt;dbl&gt;, quantile_coverage_0.6 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.65 &lt;dbl&gt;, quantile_coverage_0.7 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.75 &lt;dbl&gt;, quantile_coverage_0.8 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.85 &lt;dbl&gt;, quantile_coverage_0.9 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.95 &lt;dbl&gt;, quantile_coverage_0.975 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.99 &lt;dbl&gt;, coverage_10 &lt;dbl&gt;, coverage_20 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   coverage_30 &lt;dbl&gt;, coverage_40 &lt;dbl&gt;, coverage_50 &lt;dbl&gt;, coverage_60 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   coverage_70 &lt;dbl&gt;, coverage_80 &lt;dbl&gt;, coverage_90 &lt;dbl&gt;, coverage_95 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   coverage_98 &lt;dbl&gt;, abs_error &lt;dbl&gt;, n_interval_scores &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   exists_interval_score_0 &lt;lgl&gt;, wis &lt;dbl&gt;, sharpness &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   overprediction &lt;dbl&gt;, underprediction &lt;dbl&gt;</span></span>
+<span class='r-in'></span>
 <span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
 <span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
@@ -221,12 +267,53 @@ in an interval format. arXiv:2005.12881.
 <span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
 <span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> polling for status change. job_url=https://zoltardata.com/api/job/73268/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73268/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> QUEUED</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73268/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUCCESS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/job/73268/data/</span>
 <span class='r-in'><span class='va'>truth</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_truth.html'>load_truth</a></span><span class='op'>(</span><span class='st'>"JHU"</span>,</span>
 <span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,</span>
 <span class='r-in'>  target_variable <span class='op'>=</span> <span class='st'>"inc death"</span>, locations <span class='op'>=</span> <span class='st'>"GB"</span></span>
 <span class='r-in'><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>scores</span> <span class='op'>&lt;-</span> <span class='fu'>score_forecasts</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>truth</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-in'><span class='fu'>score_forecasts</span><span class='op'>(</span><span class='va'>forecasts</span>, <span class='va'>truth</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 4 x 49</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   model   location horizon temporal_resolution target_variable forecast_date</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> ILM-EKF GB       1       wk                  inc death       2021-03-08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> ILM-EKF GB       2       wk                  inc death       2021-03-08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> ILM-EKF GB       3       wk                  inc death       2021-03-08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> ILM-EKF GB       4       wk                  inc death       2021-03-08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 43 more variables: target_end_date &lt;date&gt;, true_value &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.55 &lt;dbl&gt;, quantile_coverage_0.6 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.65 &lt;dbl&gt;, quantile_coverage_0.7 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.75 &lt;dbl&gt;, quantile_coverage_0.8 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.85 &lt;dbl&gt;, quantile_coverage_0.9 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.95 &lt;dbl&gt;, quantile_coverage_0.975 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   quantile_coverage_0.99 &lt;dbl&gt;, coverage_10 &lt;dbl&gt;, coverage_20 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   coverage_30 &lt;dbl&gt;, coverage_40 &lt;dbl&gt;, coverage_50 &lt;dbl&gt;, coverage_60 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   coverage_70 &lt;dbl&gt;, coverage_80 &lt;dbl&gt;, coverage_90 &lt;dbl&gt;, coverage_95 &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   coverage_98 &lt;dbl&gt;, abs_error &lt;dbl&gt;, n_interval_scores &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   exists_interval_score_0 &lt;lgl&gt;, wis &lt;dbl&gt;, sharpness &lt;dbl&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   overprediction &lt;dbl&gt;, underprediction &lt;dbl&gt;</span></span>
 <span class='r-in'></span>
 </code></pre></div>
   </div>

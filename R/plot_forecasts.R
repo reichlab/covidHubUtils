@@ -60,6 +60,7 @@
 #' @return invisible ggplot object
 #'
 #' @examples
+#' # load forecasts from US forecast hub
 #' us_forecasts <- load_latest_forecasts(
 #'   models = c(
 #'     "COVIDhub-ensemble", "COVIDhub-baseline",
@@ -73,7 +74,7 @@
 #'   targets = paste(1:4, "wk ahead inc case"),
 #'   source = "zoltar"
 #' )
-#'
+#' # plot 
 #' plot_forecasts(
 #'   forecast_data = us_forecasts,
 #'   models = c(
@@ -86,7 +87,7 @@
 #'   show_caption = TRUE
 #' )
 #'
-#'
+#' # load forecasts from ECDC forecast hub
 #' ecdc_forecasts <- load_latest_forecasts(
 #'   models = c("ILM-EKF"),
 #'   hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
@@ -95,6 +96,7 @@
 #'   targets = paste(1:4, "wk ahead inc death"),
 #'   source = "zoltar"
 #' )
+#' #plot
 #' plot_forecasts(
 #'   forecast_data = ecdc_forecasts,
 #'   hub = c("ECDC", "US"),

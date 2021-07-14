@@ -114,6 +114,7 @@ Faceted plots for multiple models, locations and forecast dates are
 supported with specified facet formula.
 }
 \examples{
+# load forecasts from US forecast hub
 us_forecasts <- load_latest_forecasts(
   models = c(
     "COVIDhub-ensemble", "COVIDhub-baseline",
@@ -127,7 +128,7 @@ us_forecasts <- load_latest_forecasts(
   targets = paste(1:4, "wk ahead inc case"),
   source = "zoltar"
 )
-
+# plot 
 plot_forecasts(
   forecast_data = us_forecasts,
   models = c(
@@ -140,7 +141,7 @@ plot_forecasts(
   show_caption = TRUE
 )
 
-
+# load forecasts from ECDC forecast hub
 ecdc_forecasts <- load_latest_forecasts(
   models = c("ILM-EKF"),
   hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
@@ -149,6 +150,7 @@ ecdc_forecasts <- load_latest_forecasts(
   targets = paste(1:4, "wk ahead inc death"),
   source = "zoltar"
 )
+#plot
 plot_forecasts(
   forecast_data = ecdc_forecasts,
   hub = c("ECDC", "US"),

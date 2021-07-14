@@ -69,7 +69,8 @@ Load all available forecasts submitted on forecast_dates from Zoltar
 or local hub repo.
 }
 \examples{
-forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
+# load forecasts from US forecast hub
+load_forecasts(models = "COVIDhub-ensemble",
  forecast_date = "2020-12-07",
  locations = "US",
  types = c("point","quantile"),
@@ -78,7 +79,8 @@ forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
  verbose = FALSE,
  as_of = NULL)
 
-forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
+# load forecasts from ECDC forecast hub
+load_forecasts(models = "ILM-EKF",
  hub = c("ECDC","US"),
  forecast_date = "2021-03-08",
  locations = "GB",

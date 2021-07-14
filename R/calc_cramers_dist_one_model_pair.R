@@ -44,11 +44,10 @@
 #' respectively.
 #' @examples
 #' f_vector <- 1:9
-#' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
-#' g_vector <- seq(4,20,2)
-#' calc_cramers_dist_one_model_pair(f_vector,tau_F_vector,g_vector,tau_G_vector,"left_sided_riemann")
+#' tau_F_vector <- tau_G_vector <- seq(0.1, 0.9, 0.1)
+#' g_vector <- seq(4, 20, 2)
+#' calc_cramers_dist_one_model_pair(f_vector, tau_F_vector, g_vector, tau_G_vector, "left_sided_riemann")
 #' @export
-#'
 #'
 calc_cramers_dist_one_model_pair <-
   function(q_F, tau_F, q_G, tau_G, approx_rule) {

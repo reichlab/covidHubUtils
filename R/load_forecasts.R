@@ -35,7 +35,8 @@
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @examples
-#' forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
+#' # load forecasts from US forecast hub
+#' load_forecasts(models = "COVIDhub-ensemble",
 #'  forecast_date = "2020-12-07",
 #'  locations = "US",
 #'  types = c("point","quantile"),
@@ -43,8 +44,9 @@
 #'  source = "zoltar",
 #'  verbose = FALSE,
 #'  as_of = NULL)
-#'
-#' forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
+#' 
+#' # load forecasts from ECDC forecast hub
+#' load_forecasts(models = "ILM-EKF",
 #'  hub = c("ECDC","US"),
 #'  forecast_date = "2021-03-08",
 #'  locations = "GB",

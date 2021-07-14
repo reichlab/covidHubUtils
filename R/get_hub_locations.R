@@ -1,4 +1,4 @@
-#' Create data/hub_locations.rda for loading data from zoltar and covidData
+#' Create data/hub_locations.rda for loading data from `zoltar` and `covidData`
 #'
 #' @importFrom readr read_csv
 #' @return data frame with columns `fips`, `location_name`, `population`, `geo_type`,

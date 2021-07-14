@@ -59,7 +59,6 @@ If return_format is \code{"wide"}, each calculated score is in its own column.
 Score forecasts
 }
 \examples{
-\dontrun{
 forecasts <- load_latest_forecasts(
   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
   last_forecast_date = "2020-12-14",
@@ -69,9 +68,8 @@ forecasts <- load_latest_forecasts(
   source = "zoltar"
 )
 truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
-scores <- score_forecasts(forecasts, truth)
-}
-\dontrun{
+score_forecasts(forecasts, truth)
+
 forecasts <- load_latest_forecasts(
   models = c("ILM-EKF"),
   hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
@@ -84,8 +82,7 @@ truth <- load_truth("JHU",
   hub = c("ECDC", "US"),
   target_variable = "inc death", locations = "GB"
 )
-scores <- score_forecasts(forecasts, truth)
-}
+score_forecasts(forecasts, truth)
 
 }
 \references{

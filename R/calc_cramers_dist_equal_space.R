@@ -26,9 +26,9 @@
 #' \eqn{q_i} is a quantile of F or -1 if \eqn{q_i} is a quantile of G.
 #' @examples
 #' f_vector <- 1:9
-#' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
-#' g_vector <- seq(2,18,2)
-#' calc_cramers_dist_equal_space(f_vector,tau_F_vector,g_vector,tau_G_vector, "approximation1")
+#' tau_F_vector <- tau_G_vector <- seq(0.1, 0.9, 0.1)
+#' g_vector <- seq(2, 18, 2)
+#' calc_cramers_dist_equal_space(f_vector, tau_F_vector, g_vector, tau_G_vector, "approximation1")
 #' @export
 #'
 #'
