@@ -49,7 +49,7 @@ For those starting out we recommend you begin with the [Getting Started vignette
 distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles.
 - `calc_cramers_dist_unequal_space(q_F, tau_F, q_G, tau_G, approx_rule)`: Calculating approximated Cramer's 
 distance between a pair of distributions F and G that are represented by a collection of unequally-spaced quantiles.
--`calc_cramers_dist_one_model_pair(q_F, tau_F, q_G, tau_G, approx_rule)`: A wrapper function for `calc_cramers_dist_equal_space()` and `calc_cramers_dist_unequal_space()`.
+- `calc_cramers_dist_one_model_pair(q_F, tau_F, q_G, tau_G, approx_rule)`: A wrapper function for `calc_cramers_dist_equal_space()` and `calc_cramers_dist_unequal_space()`.
  
 # Contributing Guidelines
 If you would like to contribute your work, please follow this list to create a pull request:
