@@ -1,22 +1,24 @@
-#' Get models and their designations
+#' Get model designations from metadata
 #'
 #' @param models optional character vector of model abbreviations for
 #' which to retrieve designations. If not provided, the function returns model
 #' designations for all models.
 #' @param source string specifying where forecasts will be loaded from:
-#'  either "local_hub_repo" or "zoltar"
-#' @param hub_repo_path path to local clone of the reichlab/covid19-forecast-hub
+#'  either `"local_hub_repo"` or `"zoltar"`
+#' @param hub_repo_path path to local clone of the `reichlab/covid19-forecast-hub`
 #' repository
 #' @param as_of optional date specifying the version. Only support versioned
-#' model designations in "local_hub_repo"
+#' model designations in `"local_hub_repo"`
 #'
-#' @return data frame with columns `model` and `designation`
+#' @return data.frame with columns `model` and `designation`
 #' @importFrom stringr str_split_fixed
 #' @importFrom yaml yaml.load
 #' @export
-get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Date()) {
+get_model_designations <- function(models, 
+                                   source, 
+                                   hub_repo_path, 
+                                   as_of = Sys.Date()) {
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
-
 
   if (as_of != Sys.Date() & source != "local_hub_repo") {
     stop("Error in get_model_designations: Currently only support versioned model designation in local hub repo.")
@@ -41,10 +43,10 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
 
       # construct path to metadata file from the root of hub repo
       model_metadata_paths <- paste0("data-processed/", models, "/metadata-", models, ".txt")
-      
+
       # replace space in hub repo path with a backslash and a space
       hub_repo_path <- gsub(" ", "\ ", hub_repo_path, fixed = TRUE)
-      
+
       model_info <- purrr::map_dfr(
         model_metadata_paths,
         function(model_metadata_path) {
@@ -54,7 +56,7 @@ get_model_designations <- function(models, source, hub_repo_path, as_of = Sys.Da
           # convert search time to UTC timestamp
           attr(search_time, "tzone") <- "UTC"
           search_time_timestamp <- as.numeric(search_time)
-    
+
           # find git commits related to a specified metadata file before search_time
           commits_command <- paste0(
             "cd ", hub_repo_path,

@@ -3,9 +3,11 @@
 #' If the last week is not complete, drop all observations from the
 #' previous Saturday in that week
 #'
-#' @param data data frame with columns model, location, target_variable, target_end_date and value
+#' @param data data.frame with columns `model`, `location`, 
+#' `target_variable`, `target_end_date` and `value`
 #'
-#' @return data frame with the same set of input columns and weekly aggregated data in value column
+#' @return data.frame with the same set of input columns and weekly 
+#' aggregated data in `value` column
 #'
 #' @export
 aggregate_to_weekly <- function(data) {

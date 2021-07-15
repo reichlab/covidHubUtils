@@ -8,10 +8,10 @@ download_raw_nytimes(save_location = "./data-truth/nytimes/raw/")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./data-truth/nytimes/raw/"}
+Default to \code{"./data-truth/nytimes/raw/"}}
 }
 \value{
-data frame of national, state and county level raw truth data
+data.frame of national, state and county level raw truth data
 }
 \description{
 Download raw truth data from NYTimes and write to CSV files

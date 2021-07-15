@@ -9,7 +9,7 @@ save_truth_for_zoltar(save_location = "./data-truth")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save zoltar truth data.
-Default to "./data-truth"}
+Default to \code{"./data-truth"}}
 }
 \description{
 Generate the most up to date truth data for zoltar
