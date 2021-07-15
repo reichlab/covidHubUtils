@@ -1,0 +1,4 @@
+team_name: test team name
+model_name: A
+model_abbr: teamA-modelA
+team_model_designation: primary
