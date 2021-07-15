@@ -194,9 +194,9 @@ load_truth <- function(truth_source = NULL,
                                      several.ok = FALSE)
     }
   
-  if ("ECDC" %in% truth_source & 
-      target_variable %in% c("inc case", "inc death") &
-      temporal_resolution == "daily") {
+  if (all("ECDC" %in% truth_source) & 
+      (target_variable %in% c("inc case", "inc death")) &
+      (temporal_resolution == "daily")) {
     warning("Warning in load_truth: ECDC case and death data will be weekly.")
   }
 
