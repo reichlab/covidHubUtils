@@ -176,13 +176,18 @@ between q_F and q_G</p>
 of equal length. The approximation methods are formulated based on
 two collections of quantiles corresponding to equally-spaced
 probability levels. The approximation formula for "approximation1" is
-$$ \text{CD}(F,G) \approx \left\{\frac{1}{K(K+1)}\sum^{2K-1}_{i=1}b_i(b_i+1)(q_{i+1}-q_i)\right $$
+$$ \text{CD}(F,G) \approx \left\{\frac{1}{K(K+1)}\sum^{2K-1}_{i=1}b_i(b_i+1)(q_{i+1}-q_i)\right\} 
+$$
 and the approximation formula for "approximation2" is
-$$ \text{CD}(F,G) \approx \left\{\frac{1}{(K+1)^2}\sum^{2K-1}_{i=1}b_i^2(q_{i+1}-q_i)\right. $$
+$$ \text{CD}(F,G) \approx \left\{\frac{1}{(K+1)^2}\sum^{2K-1}_{i=1}b_i^2(q_{i+1}-q_i)\right\} 
+$$
 where \(q_i\) is an element in a vector of an ordered pooled quantiles
 of <code>q_F</code> and <code>q_G</code> and \(b_i\) is an element of a vector of the absolute
 values of cumulative sums of \(\mathbf{a}\), whose element is 1 if
-\(q_i\) is a quantile of F or -1 if \(q_i\) is a quantile of G.</p>
+\(q_i\) is a quantile of F or -1 if \(q_i\) is a quantile of G.
+The "approximation1" formula reduces to the WIS if G is a point mass, while
+the "approximation2" formula is a direct approximation of the integral
+via a step function.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>f_vector</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>9</span></span>
