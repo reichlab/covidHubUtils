@@ -16,15 +16,19 @@
 #' `q_F` and `q_G` are not equal and when `tau_F` and `tau_G` are not equal.
 #' A Riemann sum is used to approximate a pairwise Cramér distance.
 #' The approximation formula for "left_sided_riemann" is
-#' \deqn{ \text{CD}(F,G) \approx \left\{\sum^{2K-1}_{j=1}(\tau^F_j-\tau^G_j)^2(q_{i+1}-q_i)\right }{ (non-Latex version) }
+#' \deqn{ \text{CD}(F,G) \approx \left\{\sum^{2K-1}_{j=1}(\tau^F_j-\tau^G_j)^2(q_{i+1}-q_i)\right\} 
+#' }{ sum^{2K-1}_{j=1}(tau^F_j-tau^G_j)^2(q_{i+1}-q_i) }
 #' and the approximation formula for "trapezoid_riemann" is
-#' \deqn{ \text{CD}(F,G) \approx \left\{\frac{1}{(K+1)^2}\sum^{2K-1}_{i=1}\frac{(\tau^F_j-\tau^G_j)^2+(\tau^F_{j+1}-\tau^G_{j+1})^2}{2}(q_{i+1}-q_i)\right. }{ (non-Latex version) }
+#' \deqn{ \text{CD}(F,G) \approx \left\{\frac{1}{(K+1)^2}\sum^{2K-1}_{i=1}\frac{(\tau^F_j-\tau^G_j)^2+(\tau^F_{j+1}-\tau^G_{j+1})^2}{2}(q_{i+1}-q_i)\right\} 
+#' }{ 1/((K+1)^2) * 
+#'    sum^{2K-1}_{i=1}\frac{(\tau^F_j-\tau^G_j)^2+(\tau^F_{j+1}-\tau^G_{j+1})^2}{2} *
+#'    (q_{i+1}-q_i)  }
 #' where \eqn{q_i} is an element in a vector of an ordered pooled quantiles
 #' of `q_F` and `q_G` and \eqn{\tau^F_j} and \eqn{\tau^G_j} are defined as
 #' the probability level of a quantile in `q_F` when \eqn{q_i} comes from \eqn{F} and
 #' the probability level of a quantile in `q_G` when \eqn{q_i} comes from \eqn{G},
 #' respectively.
-#' @example
+#' @examples
 #' f_vector <- 1:9
 #' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
 #' g_vector <- seq(4,20,2)
