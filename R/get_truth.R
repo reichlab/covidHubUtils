@@ -538,6 +538,7 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL) {
 
 
 #' Generate the most up to date truth data for zoltar
+#' and save the differences between the new version and old version.
 #' It only includes national and state-level truth data.
 #'
 #' @param save_location character specifying the location of to save zoltar truth data.
@@ -549,10 +550,13 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL) {
 save_truth_for_zoltar <- function(save_location = "./data-truth") {
   df_cum_death <- preprocess_truth_for_zoltar("Cumulative Deaths")
   df_inc_death <- preprocess_truth_for_zoltar("Incident Deaths")
-
   zoltar_truth <- rbind(df_cum_death, df_inc_death)
 
-  file_path <- file.path(save_location, "zoltar-truth.csv")
+  zoltar_connection <- setup_zoltar_connection()
+  project_url <- get_zoltar_project_url(zoltar_connection = zoltar_connection)
+  old_version <- zoltr::do_zoltar_query(zoltar_connection, project_url, "truth")
+  diff <- dplyr::setdiff(zoltar_truth, old_version)
 
-  readr::write_csv(zoltar_truth, file_path)
+  file_path <- file.path(save_location, "zoltar-truth.csv")
+  readr::write_csv(diff, file_path)
 }
