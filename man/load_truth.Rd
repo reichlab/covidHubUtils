@@ -32,7 +32,7 @@ If \code{NULL}, default for ECDC hub is \code{c("inc case", "inc death")}.}
 \item{as_of}{character vector of "as of" dates to use for querying truths in
 format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 available data with an issue date on or before the given \code{as_of} date are returned.
-This is only available for \code{covidData} now.}
+This is only available for \code{covidData} and \code{zoltar}now.}
 
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
 If \code{NULL},default to system date.}
@@ -49,7 +49,7 @@ If \code{NULL}, default to all locations with available forecasts.
 US hub is using FIPS code and ECDC hub is using country name abbreviation.}
 
 \item{data_location}{character specifying the location of truth data.
-Currently only supports \code{"local_hub_repo"}, \code{"remote_hub_repo"} and \code{"covidData"}.
+Currently only supports \code{"local_hub_repo"}, \code{"remote_hub_repo"}, \code{"covidData"} and \code{"zoltar"}.
 If \code{NULL}, default to \code{"remote_hub_repo"}.}
 
 \item{local_repo_path}{path to local clone of the \code{reichlab/covid19-forecast-hub}

@@ -26,12 +26,12 @@
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
-#' This is only available for `covidData` now.
+#' This is only available for `covidData` and `zoltar`now.
 #' @param locations vector of valid location code.
 #' If `NULL`, default to all locations with available forecasts.
 #' US hub is using FIPS code and ECDC hub is using country name abbreviation.
 #' @param data_location character specifying the location of truth data.
-#' Currently only supports `"local_hub_repo"`, `"remote_hub_repo"` and `"covidData"`.
+#' Currently only supports `"local_hub_repo"`, `"remote_hub_repo"`, `"covidData"` and `"zoltar"`.
 #' If `NULL`, default to `"remote_hub_repo"`.
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format.
 #' If `NULL`,default to system date.
@@ -511,3 +511,80 @@ load_from_hub_repo <- function(target_variable,
   }
   return(truth_data)
 }
+
+
+#' load truth data from zoltar server
+#'
+#' @param target_variable string specifying target type It should be one or more of
+#' `"cum death"` and `"inc death"`.
+#' @param locations vector of valid location code.
+#' If `NULL`, default to all locations with available forecasts.
+#' US hub is using FIPS code and ECDC hub is using country name abbreviation.
+#' @param as_of character vector of "as of" dates to use for querying truths in
+#' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
+#' available data with an issue date on or before the given `as_of` date are returned.
+#' @param hub character, which hub to use. Default is "US", other option is
+#' "ECDC"
+#' @return a data frame with columns location, target_end_date, target_variable and value
+#'
+load_from_zoltar <- function(target_variable,
+                             locations,
+                             as_of,
+                             hub = c("US", "ECDC")) {
+  
+  # set up Zoltar connection
+  zoltar_connection <- setup_zoltar_connection(staging = FALSE)
+  
+  # construct Zoltar project url
+  project_url <- get_zoltar_project_url(
+    hub = hub,
+    zoltar_connection = zoltar_connection
+  )
+  
+  targets <- c()
+  if (hub[1] == "US"){
+    if ("inc death" %in% target_variable) {
+      targets <- c(targets, paste(1:20, "wk ahead inc death"))
+    } else if ("cum death" %in% target_variable) {
+      targets <- c(targets, paste(1:20, "wk ahead cum death"))
+    } else {
+      warning("Warning in load_from_zoltar: Some of the specified target variables are not available in Zoltar.")
+    }
+  } else {
+    #ECDC hub
+    
+  }
+  
+  truth <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection, 
+                                  project_url = project_url, 
+                                  units = locations, 
+                                  query_type = "truth",
+                                  as_of = date_to_datetime(as_of, hub))
+  
+  # reformat 
+  truth <- truth %>%
+    dplyr::mutate(model = "Observed Data (Zoltar)") %>%
+    # keep only required columns
+    dplyr::select(model, timezero, unit, target, value) %>%
+    dplyr::rename(location = unit, 
+                  forecast_date = timezero) %>%
+    # create horizon and target_end_date columns
+    tidyr::separate(target, into=c("horizon","temporal_resolution","ahead","target_variable"),
+                    remove = FALSE, extra = "merge") %>%
+    dplyr::mutate(target_end_date = as.Date(
+      calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
+    )) %>%
+    # drop duplicates
+    # for each target_end_date, keep the entry with the most recent forecast_date
+    dplyr::select(model, forecast_date, target_variable, target_end_date, location, value) %>%
+    dplyr::group_by(model, target_end_date, target_variable, location) %>%
+    dplyr::arrange(value, desc(forecast_date)) %>%
+    dplyr::slice(1) %>% 
+    dplyr::ungroup() %>%
+    dplyr::select(-forecast_date)
+  
+  
+  return (truth)
+    
+}
+  
