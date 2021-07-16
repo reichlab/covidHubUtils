@@ -59,8 +59,9 @@ repository. Only used when data_location is \code{"local_hub_repo"}}
 \code{"ECDC"}}
 }
 \value{
-data.frame with columns \code{model}, \code{inc_cum}, \code{death_case}, \code{target_end_date},
+data.frame with columns \code{model}, \code{target_variable}, \code{target_end_date},
 \code{location}, \code{value}, \code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
+and \code{full_location_name}
 }
 \description{
 \code{"inc hosp"} is only available from \code{"HeatlthData"} and this function is not loading

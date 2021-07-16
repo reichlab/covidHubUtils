@@ -14,18 +14,18 @@ get_truth_path(
 }
 \arguments{
 \item{source}{character vector specifying where the truths will
-be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".}
+be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \verb{"HealthData}" and \code{"ECDC"}.}
 
 \item{repo_path}{path to local clone or remote of the corresponding prediction hub repository.}
 
 \item{target_variable}{string specifying target type It should be one or more of
-"cum death", "inc case", "inc death", "inc hosp".}
+\code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.}
 
 \item{data_location}{character specifying the location of truth data.
-Currently only supports "local_hub_repo" and "remote_hub_repo".}
+Currently only supports \code{"local_hub_repo"} and \code{"remote_hub_repo"}.}
 
-\item{hub}{character, which hub to use. Default is "US", other option is
-"ECDC"}
+\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
+\code{"ECDC"}}
 }
 \value{
 character of file path

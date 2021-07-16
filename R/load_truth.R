@@ -46,8 +46,9 @@
 #' @param hub character, which hub to use. Default is `"US"`, other option is
 #' `"ECDC"`
 #'
-#' @return data.frame with columns `model`, `inc_cum`, `death_case`, `target_end_date`,
+#' @return data.frame with columns `model`, `target_variable`, `target_end_date`,
 #' `location`, `value`, `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
+#' and `full_location_name`
 #'
 #' @examples
 #' library(covidHubUtils)
@@ -313,14 +314,14 @@ load_truth <- function(truth_source = NULL,
 #' Construct the file path to a truth file
 #'
 #' @param source character vector specifying where the truths will
-#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
 #' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
 #' @param target_variable string specifying target type It should be one or more of
-#' "cum death", "inc case", "inc death", "inc hosp".
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' @param data_location character specifying the location of truth data.
-#' Currently only supports "local_hub_repo" and "remote_hub_repo".
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
+#' Currently only supports `"local_hub_repo"` and `"remote_hub_repo"`.
+#' @param hub character, which hub to use. Default is `"US"`, other option is
+#' `"ECDC"`
 #'
 #' @return character of file path
 
@@ -366,19 +367,20 @@ get_truth_path <- function(source,
 #' load truth data from covidData
 #'
 #' @param target_variable string specifying target type It should be one or more of
-#' "cum death", "inc case", "inc death", "inc hosp".
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' @param locations vector of valid location code.
 #' US hub is using FIPS code and ECDC hub is using country name abbreviation.
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
-#' available data with an issue date on or before the given \code{as_of} date are returned.
+#' available data with an issue date on or before the given `as_of` date are returned.
 #' @param temporal_resolution string specifying temporal resolution
-#' to include: one of 'daily' or 'weekly'
+#' to include: one of `'daily'` or `'weekly'`
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format.
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
+#' @param hub character, which hub to use. Default is `"US"`, other option is
+#' `"ECDC"`
 #'
-#' @return a data frame with columns location, target_end_date, target_variable and value
+#' @return data.frame with columns `model`, `location`, `target_end_date`, `target_variable` 
+#' and `value`
 #'
 load_from_coviddata <- function(target_variable,
                                 truth_source,
@@ -443,18 +445,19 @@ load_from_coviddata <- function(target_variable,
 #' load truth data from covidData
 #'
 #' @param target_variable string specifying target type It should be one or more of
-#' "cum death", "inc case", "inc death", "inc hosp".
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
 #' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
 #' @param temporal_resolution string specifying temporal resolution
-#' to include: one of 'daily' or 'weekly'
+#' to include: one of `'daily'` or `'weekly'`
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format.
 #' @param data_location character specifying the location of truth data.
-#' Currently only supports "local_hub_repo" or "remote_hub_repo".
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
-#' @return a data frame with columns location, target_end_date, target_variable and value
+#' Currently only supports `"local_hub_repo"` or `"remote_hub_repo"`.
+#' @param hub character, which hub to use. Default is `"US"`, other option is
+#' `"ECDC"`
+#' @return a data frame with columns `model`, `location`, `target_end_date`, `target_variable` 
+#' and `value`
 #'
 load_from_hub_repo <- function(target_variable,
                                truth_source,
@@ -523,9 +526,10 @@ load_from_hub_repo <- function(target_variable,
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
-#' @return a data frame with columns location, target_end_date, target_variable and value
+#' @param hub character, which hub to use. Default is `"US"`, other option is
+#' `"ECDC"`
+#' @return data.frame with columns `model`, `location`, `target_end_date`, `target_variable` 
+#' and `value`
 #'
 load_from_zoltar <- function(target_variable,
                              locations,
