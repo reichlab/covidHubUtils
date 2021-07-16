@@ -3,6 +3,7 @@ library(covidHubUtils)
 library(covidData)
 library(zoltr)
 library(dplyr)
+library(mockery)
 
 test_that("preprocess_jhu files has expected columns", {
   actual <- covidHubUtils::preprocess_jhu(
