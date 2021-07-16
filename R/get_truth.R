@@ -542,7 +542,7 @@ preprocess_truth_for_zoltar <- function(target, issue_date = NULL) {
 #' It only includes national and state-level truth data.
 #'
 #' @param save_location character specifying the location of to save zoltar truth data.
-#' Default to "./data-truth"
+#' Default to `"./data-truth"`
 #'
 #' @importFrom readr write_csv
 #' @export
