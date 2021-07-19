@@ -2,13 +2,7 @@
 % Please edit documentation in R/date_management.R
 \name{calc_forecast_week_end_date}
 \alias{calc_forecast_week_end_date}
-\title{Calculate end date for the week a forecast was made. Following
-https://github.com/reichlab/covid19-forecast-hub/blob/master/data-processed/README.md,
-"For week-ahead forecasts with forecast_date of Sunday or Monday of EW12, a
-1 week ahead forecast corresponds to EW12 and should have target_end_date of
-the Saturday of EW12."  This means that the forecast week end date is set to
-Saturday of EW11 (the previous week) for Sunday and Monday of EW12, and
-Saturday of EW12 (the current week) for Tuesday through Saturday of EW12.}
+\title{Calculate end date for the week a forecast was made.}
 \usage{
 calc_forecast_week_end_date(forecast_date)
 }
@@ -19,7 +13,7 @@ calc_forecast_week_end_date(forecast_date)
 character vector of dates in 'yyyy-mm-dd' format
 }
 \description{
-Calculate end date for the week a forecast was made. Following
+Following
 https://github.com/reichlab/covid19-forecast-hub/blob/master/data-processed/README.md,
 "For week-ahead forecasts with forecast_date of Sunday or Monday of EW12, a
 1 week ahead forecast corresponds to EW12 and should have target_end_date of

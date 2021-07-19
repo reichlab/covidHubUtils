@@ -16,51 +16,51 @@
 #' look for the most recent forecasts for each date in dates parameter.
 #' Default to 0, which means to only look at the dates parameter only. 
 #' @param locations list of location codes. Default to all locations with available forecasts.
-#' @param types Character vector specifying type of forecasts to load: “quantile”
-#' or “point”. Default to all valid forecast types.
+#' @param types Character vector specifying type of forecasts to load: `"quantile"`
+#' and/or `"point"`. Default to all valid forecast types.
 #' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death').
-#' Default to NULL which stands for all valid targets.
+#' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
+#' Default to `NULL` which stands for all valid targets.
 #' @param source string specifying where forecasts will be loaded from: either
-#' "local_hub_repo" or "zoltar". Default to "zoltar"
+#' `"local_hub_repo"` or `"zoltar"`. Default to `"zoltar"`.
 #' @param hub_repo_path path to local clone of the forecast hub
 #' repository
 #' @param data_processed_subpath folder within the hub_repo_path that contains
-#' forecast submission files.  Defaults to "data-processed/", which is
+#' forecast submission files.  Default to `"data-processed/"`, which is
 #' appropriate for the covid19-forecast-hub repository.
 #' @param as_of character for date time to load forecasts submitted as of this time from Zoltar.
-#' Ignored if \code{source} is \code{"local_hub_repo"}.
+#' Ignored if `source = "local_hub_repo"`.
 #' It could use the format of one of the three examples:
-#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+#' `"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC"`.
 #' If you would like to set a timezone, it has to be UTC now.
-#' If not, helper function will append the default timezone to your input based on hub parameter.
+#' If not, helper function will append the default timezone to your input based on `hub` parameter.
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are "US" and "ECDC"
-#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
+#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' @param verbose logical to print out diagnostic messages. Default is `TRUE`.
 #'
-#' @return data frame with columns model, forecast_date, location, horizon,
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
-#' location_name, population, geo_type, geo_value, abbreviation
+#' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
+#' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
+#' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @examples
-#' \dontrun{
-#' forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
-#'  dates = "2020-12-07",
+#' # load forecasts from US forecast hub
+#' load_forecasts(models = "COVIDhub-ensemble",
+#'  forecast_date = "2020-12-07",
 #'  locations = "US",
 #'  types = c("point","quantile"),
 #'  targets = paste(1:4, "wk ahead inc case"),
 #'  source = "zoltar",
 #'  verbose = FALSE,
 #'  as_of = NULL)
-#'
-#' forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
+#' 
+#' # load forecasts from ECDC forecast hub
+#' load_forecasts(models = "ILM-EKF",
 #'  hub = c("ECDC","US"),
 #'  dates = "2021-03-08",
 #'  locations = "GB",
 #'  targets = paste(1:4, "wk ahead inc death"),
 #'  source = "zoltar")
-#' }
 #'
 #' @export
 load_forecasts <- function (

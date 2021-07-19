@@ -8,10 +8,10 @@ preprocess_hospitalization(save_location = "./data-truth")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./data-truth"}
+Default to \code{"./data-truth"}}
 }
 \value{
-data frame of cumulative and incident hospitalization data
+data.frame of cumulative and incident hospitalization data
 }
 \description{
 Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs

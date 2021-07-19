@@ -11,7 +11,7 @@ preprocess_visualization_truth(
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./visualization/vis-master/covid-csv-tools/dist/truth"}
+Default to \code{"./visualization/vis-master/covid-csv-tools/dist/truth"}}
 }
 \description{
 Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for visualization

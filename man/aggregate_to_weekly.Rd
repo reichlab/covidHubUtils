@@ -7,10 +7,12 @@
 aggregate_to_weekly(data)
 }
 \arguments{
-\item{data}{data frame with columns model, location, target_variable, target_end_date and value}
+\item{data}{data.frame with columns \code{model}, \code{location},
+\code{target_variable}, \code{target_end_date} and \code{value}}
 }
 \value{
-data frame with the same set of input columns and weekly aggregated data in value column
+data.frame with the same set of input columns and weekly
+aggregated data in \code{value} column
 }
 \description{
 If the last week is not complete, drop all observations from the

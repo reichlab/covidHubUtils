@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_model_designations.R
 \name{get_model_designations}
 \alias{get_model_designations}
-\title{Get models and their designations}
+\title{Get model designations from metadata}
 \usage{
 get_model_designations(models, source, hub_repo_path, as_of = Sys.Date())
 }
@@ -12,17 +12,17 @@ which to retrieve designations. If not provided, the function returns model
 designations for all models.}
 
 \item{source}{string specifying where forecasts will be loaded from:
-either "local_hub_repo" or "zoltar"}
+either \code{"local_hub_repo"} or \code{"zoltar"}}
 
-\item{hub_repo_path}{path to local clone of the reichlab/covid19-forecast-hub
+\item{hub_repo_path}{path to local clone of the \code{reichlab/covid19-forecast-hub}
 repository}
 
 \item{as_of}{optional date specifying the version. Only support versioned
-model designations in "local_hub_repo"}
+model designations in \code{"local_hub_repo"}}
 }
 \value{
-data frame with columns \code{model} and \code{designation}
+data.frame with columns \code{model} and \code{designation}
 }
 \description{
-Get models and their designations
+Get model designations from metadata
 }

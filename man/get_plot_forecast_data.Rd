@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_plot_forecast_data.R
 \name{get_plot_forecast_data}
 \alias{get_plot_forecast_data}
-\title{Combines load_truth() and pivot_forecasts_wider(), returns the data.}
+\title{Combine \code{\link[=load_truth]{load_truth()}} and \code{\link[=pivot_forecasts_wider]{pivot_forecasts_wider()}}}
 \usage{
 get_plot_forecast_data(
   forecast_data,
@@ -20,50 +20,51 @@ get_plot_forecast_data(
 )
 }
 \arguments{
-\item{forecast_data}{forecasts data frame from load_forecast().
-It has columns model, forecast_date,location, target, type, quantile,
-value, horizon and target_end_date.}
+\item{forecast_data}{required data.frame with forecasts in the format returned
+by \code{\link[=load_forecasts]{load_forecasts()}}.
+It has columns \code{model}, \code{forecast_date}, \code{location}, \code{target}, \code{type}, \code{quantile},
+\code{value}, \code{horizon} and \code{target_end_date}.}
 
-\item{truth_data}{optional data frame from one truth source in the format returned
-by load_truth(). It needs to have columns model, target_variable,
-target_end_date, location and value.
-Model column can be "Observed Data (a truth source)".}
+\item{truth_data}{optional data.frame from one truth source in the format returned
+by \code{\link[=load_truth]{load_truth()}}. It needs to have columns \code{model}, \code{target_variable},
+\code{target_end_date}, \code{location} and \code{value}.
+\code{Model} column can be "Observed Data (a truth source)".}
 
 \item{models_to_plot}{characters of model abbreviations}
 
 \item{forecast_dates_to_plot}{date string vectors for forecast dates to plot.
-Default to all forecast dates available in forecast_data.}
+Default to all forecast dates available in \code{forecast_data}.}
 
 \item{horizons_to_plot}{forecasts are plotted for the horizon time steps after
 the forecast date.}
 
-\item{quantiles_to_plot}{vector of quanitles to include in the plot}
+\item{quantiles_to_plot}{vector of quantiles to include in the plot}
 
 \item{locations_to_plot}{optional character vector of location fips codes.
-Default to all locations available in forecast_data.}
+Default to all locations available in \code{forecast_data}.}
 
-\item{plot_truth}{boolean to indicate whether truth data should be plotted.
-Default to TRUE.}
+\item{plot_truth}{logical to indicate whether truth data should be plotted.
+Default to \code{TRUE}.}
 
 \item{truth_source}{character specifying where the truth data will
-be loaded from if truth_data is not provided. Currently support "JHU",
-"USAFacts", "NYTimes" and "HealthData".
-Optional if truth_data is provided.}
+be loaded from if truth_data is not provided. Currently support \code{"JHU"},
+\code{"USAFacts"}, \code{"NYTimes"} and \code{"HealthData"}.
+Optional if \code{truth_data} is provided.}
 
 \item{target_variable_to_plot}{string specifying target type. It should be one of
-"cum death", "inc case", "inc death" and "inc hosp".}
+\code{"cum death"}, \code{"inc case"}, \code{"inc death"} and \code{"inc hosp"}.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
-in real time as of the truth_as_of date.}
+in real time as of the \code{truth_as_of} date.}
 
-\item{hub}{character, which hub to use. Default is "US", other option is
-"ECDC"}
+\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
+\code{"ECDC"}}
 }
 \value{
-data frame with columns model,
-forecast_date, location,  target_variable, type, quantile, value, horizon and
-target_end_date.
+data.frame with columns \code{model},
+\code{forecast_date}, \code{location}, \code{target_variable}, \code{type}, \code{quantile}, \code{value},
+\code{horizon} and \code{target_end_date}.
 }
 \description{
-Combines load_truth() and pivot_forecasts_wider(), returns the data.
+Combine \code{\link[=load_truth]{load_truth()}} and \code{\link[=pivot_forecasts_wider]{pivot_forecasts_wider()}}
 }

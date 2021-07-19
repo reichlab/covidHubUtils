@@ -8,7 +8,7 @@ get_zoltar_project_url(hub = c("US", "ECDC"), zoltar_connection = NULL)
 }
 \arguments{
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}}
 
 \item{zoltar_connection}{an authenticated Zoltar connecton}
 }
