@@ -175,7 +175,6 @@ score_forecasts <- function(
         dplyr::filter(target_variable == var))
       scoringutils::eval_forecasts(
         data = joint_df_target,
-        by = observation_cols,
         summarise_by = c(observation_cols, "range"),
         ## the below interval_score_arguments should ensure that WIS is computed correctly
         interval_score_arguments = list(weigh = TRUE, count_median_twice = FALSE)
@@ -234,7 +233,6 @@ score_forecasts <- function(
   if ("quantile_coverage" %in% metrics) {
     sq <- scoringutils::eval_forecasts(
       data = joint_df,
-      by = observation_cols,
       summarise_by = c(observation_cols, "quantile"),
       interval_score_arguments = list(weigh = TRUE, count_median_twice = FALSE)
     ) %>%
@@ -312,5 +310,5 @@ score_forecasts <- function(
   }
 
 
-  scores
+  return(scores)
 }
