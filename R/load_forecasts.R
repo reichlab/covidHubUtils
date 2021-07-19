@@ -94,7 +94,6 @@ load_forecasts <- function (
     all_forecast_dates <- dates
   }
   
-  
   if (source == "local_hub_repo") {
     # validate hub repo path
     if (missing(hub_repo_path) | !dir.exists(hub_repo_path)) {
