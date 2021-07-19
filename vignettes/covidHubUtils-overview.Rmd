@@ -61,22 +61,24 @@ devtools::install_github("reichlab/covidHubUtils")
 
 One of the key features of the COVID-19 Forecast Hub is making millions of rows of forecast data available in a standard format for easy analysis and visualization. The `covidHubUtils` package allows for users to download data into an R session either by reading files from a local clone of [the COVID-19 Forecast Hub repository](https://github.com/reichlab/covid19-forecast-hub) or by downloading data from the Zoltar API. (While Zoltar currently requires a user account to download data via the API, we have created a specific user account for `covidHubUtils` so that a user account is not needed.) 
 
-We have identified two central use cases for downloading data:
+We have identified two central use cases for downloading data using `load_forecasts()`:
 
-1. Downloading the "latest" forecasts for a particular model or models as of a given date. This is achieved by using the `load_latest_forecasts()` function.
-2. Downloading all available forecasts for a particular model or models for a set of dates. This is achieved by using the `load_forecasts()` function.
+1. Downloading the "latest" forecasts for selected models that might be submitted in a short period of time. This is achieved by using `dates` and `date_window_size` parameters.
+
+2. Downloading all available forecasts for selected models that are submitted on a set of dates. This is achieved by using a vector of dates in `dates` parameter.
 
 Below are some examples of reading in data. We start by loading the `covidHubUtils` package and the `tidyverse`.
 
 ```{r message=FALSE}
 library(covidHubUtils)
+library(doParallel)
 library(tidyverse)
 theme_set(theme_bw())
 ```
 
 ## Load and plot single forecast
 
-The following code loads forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `date_window_size` parameter specifies the range of days to look at for a forecast. All queries below are looking for the most recent forecast from COVIDhub-ensemble in the span of 2021-03-02 through 2021-03-08. By default, window size is set to 0 to look for the latest forecast on `dates` only. In this way, `dates` minus 6 days will cover a full week, starting from 6 days before the `dates` and going up through the `dates`.
+The following code loads forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `date_window_size` parameter specifies the range of days to look at for a forecast. `date_window_size` will be applied to every date in `dates` parameter to create a list of potential forecast dates to look at. All queries below are looking for the most recent forecast from COVIDhub-ensemble in the span of 2021-03-02 through 2021-03-08. In this case, for each day in `dates`, `date_window_size = 6` covers a full week, starting from 6 days before a date and going up through the user-provided date. By default, `date_window_size` is set to 0 to use all forecast dates in `dates` only.
 
 We also provide examples to load incident hospitalization forecasts and incident death forecasts here by changing `targets` to the desired quantity. 
 
@@ -440,7 +442,9 @@ truth_data <- load_truth(
 
 forecasts_multiple <- load_forecasts(
   models = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-  dates = as.Date(c("2020-12-14", "2020-12-15")) + seq(0, 35, 7),
+  dates = as.Date("2020-12-15") + seq(0, 35, 7),
+  # for each date in `dates`, also look at the day before it
+  date_window_size = 1,
   locations = "US",
   types = c("point", "quantile"),
   targets = paste(1:4, "wk ahead inc death"),
