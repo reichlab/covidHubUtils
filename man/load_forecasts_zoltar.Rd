@@ -19,9 +19,12 @@ load_forecasts_zoltar(
 \item{models}{Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.}
 
-\item{forecast_dates}{The forecast date of forecasts to retrieve.
+\item{forecast_dates}{A list of forecast dates to retrieve forecasts.
 Default to all valid forecast dates in Zoltar.
-The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
+If this is a 1-D list, this function will return all available forecasts
+submitted on these dates.
+If this is a 2-D list, this function will return the latest forecasts
+for each sub-list of dates.}
 
 \item{locations}{list of fips. Default to all locations with available forecasts in Zoltar.}
 

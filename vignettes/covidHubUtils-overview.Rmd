@@ -61,145 +61,173 @@ devtools::install_github("reichlab/covidHubUtils")
 
 One of the key features of the COVID-19 Forecast Hub is making millions of rows of forecast data available in a standard format for easy analysis and visualization. The `covidHubUtils` package allows for users to download data into an R session either by reading files from a local clone of [the COVID-19 Forecast Hub repository](https://github.com/reichlab/covid19-forecast-hub) or by downloading data from the Zoltar API. (While Zoltar currently requires a user account to download data via the API, we have created a specific user account for `covidHubUtils` so that a user account is not needed.) 
 
-We have identified two central use cases for downloading data:
+We have identified two central use cases for downloading data using `load_forecasts()`:
 
-1. Downloading the "latest" forecasts for a particular model or models as of a given date. This is achieved by using the `load_latest_forecasts()` function.
-2. Downloading all available forecasts for a particular model or models for a set of dates. This is achieved by using the `load_forecasts()` function.
+1. Downloading the "latest" forecasts for selected models that might be submitted in a short period of time. This is achieved by using `dates` and `date_window_size` parameters.
+
+2. Downloading all available forecasts for selected models that are submitted on a set of dates. This is achieved by using a vector of dates in `dates` parameter.
 
 Below are some examples of reading in data. We start by loading the `covidHubUtils` package and the `tidyverse`.
 
 ```{r message=FALSE}
 library(covidHubUtils)
+library(doParallel)
 library(tidyverse)
 theme_set(theme_bw())
 ```
 
 ## Load and plot single forecast
 
-The following code loads forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `forecast_date_window_size` parameter specifies the range of days to look at for a forecast. All queries below are looking for the most recent forecast from COVIDhub-ensemble in the span of 2021-03-02 through 2021-03-08. By default, window size is set to 0 to look for the latest forecast on `last_forecast_date` only. In this way, `last_forecast_date` minus 6 days will cover a full week, starting from 6 days before the `last_forecast_date` and going up through the `last_forecast_date`.
+The following code loads forecasts from Zoltar for the COVIDhub-ensemble model. Note that the `date_window_size` parameter specifies the range of days to look at for a forecast. `date_window_size` will be applied to every date in `dates` parameter to create a list of potential forecast dates to look at. All queries below are looking for the most recent forecast from COVIDhub-ensemble in the span of 2021-03-02 through 2021-03-08. In this case, for each day in `dates`, `date_window_size = 6` covers a full week, starting from 6 days before a date and going up through the user-provided date. By default, `date_window_size` is set to 0 to use all forecast dates in `dates` only.
 
 We also provide examples to load incident hospitalization forecasts and incident death forecasts here by changing `targets` to the desired quantity. 
 
-The `verbose` parameter has been explicitly set to `FALSE` to prevent output from the internal helper function in `load_latest_forecasts()`. It is set to `TRUE` by default and all information will be printed in the console.
+The `verbose` parameter has been explicitly set to `FALSE` to prevent output from the internal helper function in `load_forecasts()`. It is set to `TRUE` by default and all information will be printed in the console.
 
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
-forecasts_case <- load_latest_forecasts(models = "COVIDhub-ensemble",
-                                        last_forecast_date = "2021-03-08",
-                                        forecast_date_window_size = 6, 
-                                        locations = "US",
-                                        types = c("point","quantile"),
-                                        targets = inc_case_targets,
-                                        source = "zoltar",
-                                        verbose = FALSE,
-                                        as_of=NULL,
-                                        hub = c("US"))
+forecasts_case <- load_forecasts(
+  models = "COVIDhub-ensemble",
+  dates = "2021-03-08",
+  date_window_size = 6,
+  locations = "US",
+  types = c("point", "quantile"),
+  targets = inc_case_targets,
+  source = "zoltar",
+  verbose = FALSE,
+  as_of = NULL,
+  hub = c("US")
+)
 
 inc_hosp_targets <- paste(0:130, "day ahead inc hosp")
-forecasts_hosp <- load_latest_forecasts(models = "COVIDhub-ensemble",
-                                        last_forecast_date = "2021-03-08",
-                                        forecast_date_window_size = 6, 
-                                        locations = "US",
-                                        types = c("point","quantile"),
-                                        targets = inc_hosp_targets,
-                                        source = "zoltar",
-                                        verbose = FALSE,
-                                        as_of=NULL,
-                                        hub = c("US"))
+forecasts_hosp <- load_forecasts(
+  models = "COVIDhub-ensemble",
+  dates = "2021-03-08",
+  date_window_size = 6,
+  locations = "US",
+  types = c("point", "quantile"),
+  targets = inc_hosp_targets,
+  source = "zoltar",
+  verbose = FALSE,
+  as_of = NULL,
+  hub = c("US")
+)
 
 inc_death_targets <- paste(1:4, "wk ahead inc death")
-forecasts_death <- load_latest_forecasts(models = "COVIDhub-ensemble",
-                                         last_forecast_date = "2021-03-08",
-                                         forecast_date_window_size = 6, 
-                                         locations = "US",
-                                         types = c("point","quantile"),
-                                         targets = inc_death_targets,
-                                         source = "zoltar",
-                                         verbose = FALSE,
-                                         as_of=NULL,
-                                         hub = c("US"))
-
+forecasts_death <- load_forecasts(
+  models = "COVIDhub-ensemble",
+  dates = "2021-03-08",
+  date_window_size = 6,
+  locations = "US",
+  types = c("point", "quantile"),
+  targets = inc_death_targets,
+  source = "zoltar",
+  verbose = FALSE,
+  as_of = NULL,
+  hub = c("US")
+)
 ```
 
 Here are the top rows of the data frame from the query of incident case forecasts. In addition to the essential forecast data, a few columns with location information are also returned. Tables of the other target variables look similar. Note that one row corresponds either to a point or a single quantile prediction. Details of the underlying data format are described in detail [here](https://github.com/reichlab/covid19-forecast-hub/blob/master/data-processed/README.md#forecast-file-format).
 
 ```{r, echo=FALSE, message=FALSE}
 datatable(forecasts_case,
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE,
-                         fixedColumns = list(leftColumns = 2)))
+  extensions = "FixedColumns",
+  options = list(
+    dom = "t", scrollX = TRUE,
+    fixedColumns = list(leftColumns = 2)
+  )
+)
 ```
 
 
 This data can then be plotted directly with a call to `plot_forecasts()`.
 ```{r}
-p <- plot_forecasts(forecast_data = forecasts_case, 
-                    truth_source = "JHU",
-                    target_variable = "inc case",  
-                    intervals = c(.5, .8, .95))
+p <- plot_forecasts(
+  forecast_data = forecasts_case,
+  truth_source = "JHU",
+  target_variable = "inc case",
+  intervals = c(.5, .8, .95)
+)
 
-p_hosp <- plot_forecasts(forecast_data = forecasts_hosp, 
-                         truth_source = "HealthData",
-                         target_variable = "inc hosp",  
-                         intervals = c(.5, .8, .95))
+p_hosp <- plot_forecasts(
+  forecast_data = forecasts_hosp,
+  truth_source = "HealthData",
+  target_variable = "inc hosp",
+  intervals = c(.5, .8, .95)
+)
 
-p_death <- plot_forecasts(forecast_data = forecasts_death, 
-                          truth_source = "JHU",
-                          target_variable = "inc death",  
-                          intervals = c(.5, .8, .95))
-
+p_death <- plot_forecasts(
+  forecast_data = forecasts_death,
+  truth_source = "JHU",
+  target_variable = "inc death",
+  intervals = c(.5, .8, .95)
+)
 ```
 Additionally, you could also modify the resulting plot object by adding `ggplot` components. For example, if you want to change the way the x-axis handles dates, you could add a `ggplot2::scale_x_date()` specification:
 ```{r}
-p + scale_x_date(name=NULL, date_breaks = "1 month", date_labels = "%b") + 
-  theme(axis.ticks.length.x = unit(0.5, "cm"),  axis.text.x = element_text(vjust = 7, hjust = -0.2))
+p + scale_x_date(name = NULL, date_breaks = "1 month", date_labels = "%b") +
+  theme(axis.ticks.length.x = unit(0.5, "cm"), axis.text.x = element_text(vjust = 7, hjust = -0.2))
 ```
 
 ## Versioned forecasts
 
-`load_latest_forecasts()` could also load previous versions of forecasts from Zoltar by using `as_of` parameter. This parameter accepts a date in YYYY-MM-DD format to load forecasts submitted as of this date. It defaults to `NULL` to load the latest version. It is useful to compare the changes implemented in the forecasts. 
+`load_forecasts()` could also load previous versions of forecasts from Zoltar by using `as_of` parameter. This parameter accepts a date in YYYY-MM-DD format to load forecasts submitted as of this date. It defaults to `NULL` to load the latest version. It is useful to compare the changes implemented in the forecasts. 
 
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
-previous_forecasts <- load_latest_forecasts(models = "Columbia_UNC-SurvCon", 
-                                            last_forecast_date = "2021-01-03", 
-                                            source = 'zoltar',
-                                            as_of = "2021-01-04",
-                                            targets = inc_death_targets,
-                                            verbose = FALSE,
-                                            location = 'US')
-new_forecasts <- load_latest_forecasts(models = "Columbia_UNC-SurvCon", 
-                                       last_forecast_date = "2021-01-03", 
-                                       source = 'zoltar',
-                                       targets = inc_death_targets,
-                                       verbose = FALSE,
-                                       location = 'US')
+previous_forecasts <- load_forecasts(
+  models = "Columbia_UNC-SurvCon",
+  dates = "2021-01-03",
+  source = "zoltar",
+  as_of = "2021-01-04",
+  targets = inc_death_targets,
+  verbose = FALSE,
+  location = "US"
+)
+new_forecasts <- load_forecasts(
+  models = "Columbia_UNC-SurvCon",
+  dates = "2021-01-03",
+  source = "zoltar",
+  targets = inc_death_targets,
+  verbose = FALSE,
+  location = "US"
+)
 ```
 
 The data frame and the plot below shows the difference between these two versions of forecasts.
 
 ```{r echo = FALSE, message=FALSE}
 datatable(previous_forecasts %>%
-            dplyr::left_join(new_forecasts, by = c("model", "forecast_date", "location", "horizon", "temporal_resolution", "target_variable", "target_end_date", "type", "quantile",  "location_name", "population", "geo_type", "geo_value", "abbreviation", "full_location_name")) %>%
-            dplyr:: rename(previous_value = value.x,
-                           new_value = value.y) %>%
-            dplyr::select(-previous_value, -new_value, dplyr::everything()),
-  extensions = 'FixedColumns',
-  options = list(dom = 't', scrollX = TRUE, 
-                 fixedColumns = list(leftColumns = 2))) %>%
-  formatStyle(c('previous_value', 'new_value'), backgroundColor = 'lightgrey')
+  dplyr::left_join(new_forecasts, by = c("model", "forecast_date", "location", "horizon", "temporal_resolution", "target_variable", "target_end_date", "type", "quantile", "location_name", "population", "geo_type", "geo_value", "abbreviation", "full_location_name")) %>%
+  dplyr::rename(
+    previous_value = value.x,
+    new_value = value.y
+  ) %>%
+  dplyr::select(-previous_value, -new_value, dplyr::everything()),
+extensions = "FixedColumns",
+options = list(
+  dom = "t", scrollX = TRUE,
+  fixedColumns = list(leftColumns = 2)
+)
+) %>%
+  formatStyle(c("previous_value", "new_value"), backgroundColor = "lightgrey")
 ```
 
 ```{r}
-p_as_of <- plot_forecasts(forecast_data = previous_forecasts, 
-                          truth_source = "JHU",
-                          target_variable = "inc death",  
-                          intervals = c(.5, .8, .95))
-p_correct <- plot_forecasts(forecast_data = new_forecasts, 
-                            truth_source = "JHU",
-                            target_variable = "inc death",  
-                            intervals = c(.5, .8, .95))
+p_as_of <- plot_forecasts(
+  forecast_data = previous_forecasts,
+  truth_source = "JHU",
+  target_variable = "inc death",
+  intervals = c(.5, .8, .95)
+)
+p_correct <- plot_forecasts(
+  forecast_data = new_forecasts,
+  truth_source = "JHU",
+  target_variable = "inc death",
+  intervals = c(.5, .8, .95)
+)
 ```
 
 ## Query the US or the European Forecast Hubs
@@ -210,26 +238,33 @@ Here is an example for loading forecasts from the European Forecast Hub (ECDC).
 ```{r message=FALSE}
 # Load forecasts that were submitted in a time window from zoltar
 inc_case_targets <- paste(1:4, "wk ahead inc case")
-forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
-                                        hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
-                                        forecast_date_window_size = 0,
-                                        locations = c("GB"),
-                                        targets = paste(1:4, "wk ahead inc death"),
-                                        source = "zoltar",
-                                        verbose=FALSE)
+forecasts_ECDC <- load_forecasts(
+  models = c("ILM-EKF"),
+  hub = c("ECDC", "US"),
+  dates = "2021-03-08",
+  date_window_size = 0,
+  locations = c("GB"),
+  targets = paste(1:4, "wk ahead inc death"),
+  source = "zoltar",
+  verbose = FALSE
+)
 
 
-datatable(forecasts_ECDC, 
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE,
-                         fixedColumns = list(leftColumns = 2)))
- 
-p_ECDC <- plot_forecasts(forecast_data = forecasts_ECDC, 
-                         truth_source = "JHU",
-                         target_variable = "inc death",  
-                         intervals = c(.5, .8, .95),
-                         hub = c("ECDC"))
+datatable(forecasts_ECDC,
+  extensions = "FixedColumns",
+  options = list(
+    dom = "t", scrollX = TRUE,
+    fixedColumns = list(leftColumns = 2)
+  )
+)
 
+p_ECDC <- plot_forecasts(
+  forecast_data = forecasts_ECDC,
+  truth_source = "JHU",
+  target_variable = "inc death",
+  intervals = c(.5, .8, .95),
+  hub = c("ECDC")
+)
 ```
 
 ## Plot multiple models
@@ -239,27 +274,32 @@ Some additional arguments in `plot_forecasts()` are helpful for creating a reaso
 The following code looks at three models' forecasts of incident deaths at one time point for one location. Note the use of the `fill_by_model` option which allows colors to vary by model and the `facet` command which is passed to ggplot.
 
 ```{r}
-fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
-                              last_forecast_date = "2021-03-08",
-                              source = "zoltar",
-                              forecast_date_window_size = 6,
-                              locations = "US",
-                              types = c("quantile", "point"), 
-                              verbose = FALSE,
-                              targets = paste(1:4, "wk ahead inc death"))
+fdat <- load_forecasts(
+  models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
+  dates = "2021-03-08",
+  source = "zoltar",
+  date_window_size = 6,
+  locations = "US",
+  types = c("quantile", "point"),
+  verbose = FALSE,
+  targets = paste(1:4, "wk ahead inc death")
+)
 
-p <- plot_forecasts(fdat, 
-                    target_variable = "inc death", 
-                    truth_source = "JHU",
-                    intervals = c(.5, .95), 
-                    facet = .~model,
-                    fill_by_model = TRUE, 
-                    plot=FALSE) 
+p <- plot_forecasts(fdat,
+  target_variable = "inc death",
+  truth_source = "JHU",
+  intervals = c(.5, .95),
+  facet = . ~ model,
+  fill_by_model = TRUE,
+  plot = FALSE
+)
 
 p +
-  scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
-  theme(axis.ticks.length.x = unit(0.5, "cm"),
-    axis.text.x = element_text(vjust = 7, hjust = -0.2))
+  scale_x_date(name = NULL, date_breaks = "1 months", date_labels = "%b") +
+  theme(
+    axis.ticks.length.x = unit(0.5, "cm"),
+    axis.text.x = element_text(vjust = 7, hjust = -0.2)
+  )
 ```
 
 
@@ -268,28 +308,33 @@ p +
 The following code looks at three models' forecasts of incident deaths for multiple locations submitted at the same forecast time point. Note the use of the `facet_scales` option which is passed to `ggplot` and allows the y-axes to be on different scales.
 
 ```{r}
-fdat <- load_latest_forecasts(models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
-                              last_forecast_date = "2021-03-08",
-                              source = "zoltar",
-                              forecast_date_window_size = 6,
-                              locations = c("19", "48", "46"),
-                              types = c("quantile", "point"), 
-                              verbose = FALSE,
-                              targets = paste(1:4, "wk ahead inc death"))
+fdat <- load_forecasts(
+  models = c("Karlen-pypm", "UMass-MechBayes", "CU-select"),
+  dates = "2021-03-08",
+  source = "zoltar",
+  date_window_size = 6,
+  locations = c("19", "48", "46"),
+  types = c("quantile", "point"),
+  verbose = FALSE,
+  targets = paste(1:4, "wk ahead inc death")
+)
 
-p <- plot_forecasts(fdat, 
-                    target_variable = "inc death", 
-                    intervals = c(.5, .95), 
-                    truth_source = "JHU",
-                    facet = location~model,
-                    facet_scales = "free_y",
-                    fill_by_model = TRUE, 
-                    plot=FALSE)
+p <- plot_forecasts(fdat,
+  target_variable = "inc death",
+  intervals = c(.5, .95),
+  truth_source = "JHU",
+  facet = location ~ model,
+  facet_scales = "free_y",
+  fill_by_model = TRUE,
+  plot = FALSE
+)
 
 p +
-  scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
-  theme(axis.ticks.length.x = unit(0.5, "cm"),
-    axis.text.x = element_text(vjust = 7, hjust = -0.2))
+  scale_x_date(name = NULL, date_breaks = "1 months", date_labels = "%b") +
+  theme(
+    axis.ticks.length.x = unit(0.5, "cm"),
+    axis.text.x = element_text(vjust = 7, hjust = -0.2)
+  )
 ```
 
 
@@ -298,24 +343,29 @@ p +
 The following code looks at three models' forecasts of incident deaths at one time point for multiple locations. Note the use of the `facet_scales` option which is passed to `ggplot` and allows the y-axes to be on different scales.
 
 ```{r message=FALSE}
-fdat <- load_forecasts(models = c("Karlen-pypm", "UMass-MechBayes"),
-                       forecast_dates = seq.Date(as.Date("2020-12-13"), as.Date("2021-03-14"), by = "28 days"),
-                       locations = "US",
-                       types = c("quantile", "point"), 
-                       targets = paste(1:4, "wk ahead inc death"),
-                       verbose = FALSE)
+fdat <- load_forecasts(
+  models = c("Karlen-pypm", "UMass-MechBayes"),
+  dates = seq.Date(as.Date("2020-12-13"), as.Date("2021-03-14"), by = "28 days"),
+  locations = "US",
+  types = c("quantile", "point"),
+  targets = paste(1:4, "wk ahead inc death"),
+  verbose = FALSE
+)
 
-p <- plot_forecasts(fdat, 
-                    target_variable = "inc death", 
-                    truth_source = "JHU",
-                    intervals = c(.5, .95), 
-                    facet = .~model,
-                    fill_by_model = TRUE,
-                    plot = FALSE) 
+p <- plot_forecasts(fdat,
+  target_variable = "inc death",
+  truth_source = "JHU",
+  intervals = c(.5, .95),
+  facet = . ~ model,
+  fill_by_model = TRUE,
+  plot = FALSE
+)
 
-p + scale_x_date(name=NULL, date_breaks = "1 months", date_labels = "%b") +
-  theme(axis.ticks.length.x = unit(0.5, "cm"),
-    axis.text.x = element_text(vjust = 7, hjust = -0.2))
+p + scale_x_date(name = NULL, date_breaks = "1 months", date_labels = "%b") +
+  theme(
+    axis.ticks.length.x = unit(0.5, "cm"),
+    axis.text.x = element_text(vjust = 7, hjust = -0.2)
+  )
 ```
 
 # Working with truth data
@@ -325,36 +375,45 @@ By default `plot_forecasts()` uses JHU CSSE data as the "Observed Data" in the a
 Here is an example of a call to `plot_forecasts()` that simply specifies an alternate truth source, which must be one of "JHU", "USAFacts", or "NYTimes".
 
 ```{r}
-plot_forecasts(forecast_data = forecasts_case, 
-               target_variable = "inc case",  
-               locations = "US",
-               truth_source = "USAFacts",
-               intervals = c(.5, .8, .95))
+plot_forecasts(
+  forecast_data = forecasts_case,
+  target_variable = "inc case",
+  locations = "US",
+  truth_source = "USAFacts",
+  intervals = c(.5, .8, .95)
+)
 ```
 
 Alternatively, truth data can be loaded in from one of those sources independently and stored in your active R session and passed to the `plot_forecasts()` function.
 ```{r}
-truth_data <- load_truth(truth_source = "JHU",
-                         target_variable = "inc case",
-                         locations = "US")
+truth_data <- load_truth(
+  truth_source = "JHU",
+  target_variable = "inc case",
+  locations = "US"
+)
 ```
 
 
 Truth data comes in the following tabular format.
 ```{r, echo=FALSE}
-datatable(truth_data, 
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE,
-                         fixedColumns = list(leftColumns = 3)))
+datatable(truth_data,
+  extensions = "FixedColumns",
+  options = list(
+    dom = "t", scrollX = TRUE,
+    fixedColumns = list(leftColumns = 3)
+  )
+)
 ```
 
 And can be used in conjunction with a call to `plot_forecasts()`
 ```{r}
-plot_forecasts(forecast_data = forecasts_case, 
-               target_variable = "inc case",  
-               truth_data = truth_data,
-               truth_source = "USAFacts",
-               intervals = c(.5, .8, .95))
+plot_forecasts(
+  forecast_data = forecasts_case,
+  target_variable = "inc case",
+  truth_data = truth_data,
+  truth_source = "USAFacts",
+  intervals = c(.5, .8, .95)
+)
 ```
 
 
@@ -375,29 +434,39 @@ The following code scores forecasts by the corresponding truth data loaded earli
 ```{r}
 inc_case_targets <- paste(1:4, "wk ahead inc case")
 
-truth_data <- load_truth(truth_source = "JHU",
-                         target_variable = "inc death",
-                         locations = "US")
+truth_data <- load_truth(
+  truth_source = "JHU",
+  target_variable = "inc death",
+  locations = "US"
+)
 
-forecasts_multiple <- load_forecasts(models = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-                      forecast_dates = as.Date(c("2020-12-14", "2020-12-15")) + seq(0, 35, 7),
-                      locations = "US",
-                      types = c("point","quantile"),
-                      targets = paste(1:4, "wk ahead inc death"),
-                      source = "zoltar",
-                      verbose = FALSE,
-                      as_of=NULL,
-                      hub = c("US"))
+forecasts_multiple <- load_forecasts(
+  models = c("COVIDhub-baseline", "COVIDhub-ensemble"),
+  dates = as.Date("2020-12-15") + seq(0, 35, 7),
+  # for each date in `dates`, also look at the day before it
+  date_window_size = 1,
+  locations = "US",
+  types = c("point", "quantile"),
+  targets = paste(1:4, "wk ahead inc death"),
+  source = "zoltar",
+  verbose = FALSE,
+  as_of = NULL,
+  hub = c("US")
+)
 
-scores <- score_forecasts(forecasts = forecasts_multiple,
-                          return_format = "wide",
-                          truth = truth_data)
+scores <- score_forecasts(
+  forecasts = forecasts_multiple,
+  return_format = "wide",
+  truth = truth_data
+)
 
-datatable(scores, 
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE,
-                         fixedColumns = list(leftColumns = 2)))
-
+datatable(scores,
+  extensions = "FixedColumns",
+  options = list(
+    dom = "t", scrollX = TRUE,
+    fixedColumns = list(leftColumns = 2)
+  )
+)
 ```
 
 
@@ -405,18 +474,24 @@ This is the example for European Forecast Hub:
 ```{r}
 
 truth <- load_truth("JHU",
-                    hub = c("ECDC","US"),    
-                    target_variable = "inc death", 
-                    locations = "GB")
+  hub = c("ECDC", "US"),
+  target_variable = "inc death",
+  locations = "GB"
+)
 
-scores_ECDC <- score_forecasts(forecasts = forecasts_ECDC,
-                               return_format = "wide",
-                               truth = truth)
+scores_ECDC <- score_forecasts(
+  forecasts = forecasts_ECDC,
+  return_format = "wide",
+  truth = truth
+)
 
 datatable(scores_ECDC,
-          extensions = 'FixedColumns',
-          options = list(dom = 't', scrollX = TRUE,
-                         fixedColumns = list(leftColumns = 2)))
+  extensions = "FixedColumns",
+  options = list(
+    dom = "t", scrollX = TRUE,
+    fixedColumns = list(leftColumns = 2)
+  )
+)
 ```
 
 ## Visualize forecast scores
@@ -441,10 +516,12 @@ The following snippet of code produce a bar plot for WIS score components in abs
 ```{r}
 scores %>%
   dplyr::group_by(model) %>%
-  dplyr::summarise(sharpness = mean(sharpness), 
-                   overprediction = mean(overprediction), 
-                   underprediction = mean(underprediction)) %>%
-  scoringutils::wis_components() 
+  dplyr::summarise(
+    sharpness = mean(sharpness),
+    overprediction = mean(overprediction),
+    underprediction = mean(underprediction)
+  ) %>%
+  scoringutils::wis_components()
 ```
 
 
