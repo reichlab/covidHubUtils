@@ -26,6 +26,14 @@ jobs:
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
         shell: Rscript {0}
+      - name: Checkout covidData
+        uses: actions/checkout@v2
+        with:
+          repository: reichlab/covidData
+          path: covidData
+      - name: Install covidData
+        run: make recent_data
+        working-directory: ./covidData/code/data-processing
       - name: Check
         run: |
           rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-vignettes"),error_on = c("error"))
