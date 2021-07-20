@@ -5,6 +5,9 @@
 \alias{covidHubUtils}
 \alias{covidHubUtils-package}
 \title{covidHubUtils - Utility functions for the COVID-19 forecast hub}
+\description{
+Utility functions for the COVID-19 forecast hub
+}
 \author{
 Evan L. Ray \href{mailto:elray@umass.edu}{elray@umass.edu}
 }

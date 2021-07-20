@@ -1,0 +1,38 @@
+name: R CMD Check
+on: pull_request
+jobs:
+  r_cmd_check:
+    name: R CMD Check
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - name: Cache R packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: r-${{ hashFiles('DESCRIPTION') }}
+      - name: Install dependencies
+        run: |
+          install.packages(c("remotes","devtools", "rcmdcheck", "rmarkdown","tidyverse","DT","here"))
+          remotes::install_deps(dependencies = NA)
+        shell: Rscript {0}
+      - name: Install zoltr and scoringutils
+        run: |
+          devtools::install_github("reichlab/zoltr")
+          devtools::install_github("epiforecasts/scoringutils")
+          devtools::install()
+        shell: Rscript {0}
+      - name: Check
+        run: |
+          rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-vignettes"),error_on = c("error"))
+        shell: Rscript {0}
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
