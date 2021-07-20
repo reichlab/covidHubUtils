@@ -1,4 +1,5 @@
 # covidHubUtils
+[![R-CMD-check](https://github.com/reichlab/covidHubUtils/workflows/R-CMD-check/badge.svg)](https://github.com/reichlab/covidHubUtils/actions)
 Utility functions for the COVID-19 forecast hub
 
 # Installation
