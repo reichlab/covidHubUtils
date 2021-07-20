@@ -1,8 +1,7 @@
-name: R CMD Check
+name: R-CMD-check
 on: pull_request
 jobs:
-  r_cmd_check:
-    name: R CMD Check
+  R-CMD-check:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
