@@ -5,6 +5,7 @@
 #' @importFrom dplyr `%>%`
 #' @name covidHubUtils
 #' @aliases covidHubUtils covidHubUtils-package
+#' @description Utility functions for the COVID-19 forecast hub
 NULL
 
 

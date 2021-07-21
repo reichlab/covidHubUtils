@@ -19,15 +19,15 @@ the file names are in the format "*YYYY-MM-DD-<model_name>.csv".}
 
 \item{locations}{list of fips. Default to all locations with available forecasts.}
 
-\item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types.}
+\item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
+and/or \code{"point"}. Default to all valid forecast types.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
-Default to NULL which stands for all valid targets.}
+\code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
+Default to \code{NULL} which stands for all valid targets.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

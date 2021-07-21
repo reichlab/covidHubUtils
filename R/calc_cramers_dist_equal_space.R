@@ -17,18 +17,23 @@
 #' of equal length. The approximation methods are formulated based on
 #' two collections of quantiles corresponding to equally-spaced
 #' probability levels. The approximation formula for "approximation1" is
-#' \deqn{ \text{CD}(F,G) \approx \left\{\frac{1}{K(K+1)}\sum^{2K-1}_{i=1}b_i(b_i+1)(q_{i+1}-q_i)\right }{ (non-Latex version) }
+#' \deqn{ \text{CD}(F,G) \approx \left\{\frac{1}{K(K+1)}\sum^{2K-1}_{i=1}b_i(b_i+1)(q_{i+1}-q_i)\right\} 
+#' }{ 1/K(K+1) * sum^{2K-1}_{i=1} b_i(b_i+1)(q_{i+1}-q_i) }
 #' and the approximation formula for "approximation2" is
-#' \deqn{ \text{CD}(F,G) \approx \left\{\frac{1}{(K+1)^2}\sum^{2K-1}_{i=1}b_i^2(q_{i+1}-q_i)\right. }{ (non-Latex version) }
+#' \deqn{ \text{CD}(F,G) \approx \left\{\frac{1}{(K+1)^2}\sum^{2K-1}_{i=1}b_i^2(q_{i+1}-q_i)\right\} 
+#' }{ 1/(K+1)^2 * sum^{2K-1}_{i=1}b_i^2(q_{i+1}-q_i) }
 #' where \eqn{q_i} is an element in a vector of an ordered pooled quantiles
 #' of `q_F` and `q_G` and \eqn{b_i} is an element of a vector of the absolute
 #' values of cumulative sums of \eqn{\mathbf{a}}, whose element is 1 if
 #' \eqn{q_i} is a quantile of F or -1 if \eqn{q_i} is a quantile of G.
-#' @example
+#' The "approximation1" formula reduces to the WIS if G is a point mass, while 
+#' the "approximation2" formula is a direct approximation of the integral
+#' via a step function.
+#' @examples
 #' f_vector <- 1:9
-#' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
-#' g_vector <- seq(2,18,2)
-#' calc_cramers_dist_equal_space(f_vector,tau_F_vector,g_vector,tau_G_vector, "approximation1")
+#' tau_F_vector <- tau_G_vector <- seq(0.1, 0.9, 0.1)
+#' g_vector <- seq(2, 18, 2)
+#' calc_cramers_dist_equal_space(f_vector, tau_F_vector, g_vector, tau_G_vector, "approximation1")
 #' @export
 #'
 #'

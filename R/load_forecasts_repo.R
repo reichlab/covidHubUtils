@@ -1,9 +1,10 @@
 #' Load all available forecasts submitted on forecast_dates from local hub repo.
 #'
-#' The function will throw an error when no forecasts are submitted on
-#' any dates in forecast_dates for selected models, locations, types and target.
+#' This function will throw an error when no forecasts are submitted on
+#' any dates in `forecast_dates` for selected `models`,
+#' `locations`, `types` and `target`.
 #'
-#' This function will drop rows with NULLs in value column.
+#' This function will drop rows with `NULL` in `value` column.
 #'
 #' @param file_path path to the data-processed folder within a local clone of the hub repo
 #' @param models Character vector of model abbreviations.
@@ -16,17 +17,18 @@
 #' for each sub-list of dates.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates.
 #' @param locations list of fips. Default to all locations with available forecasts.
-#' @param types Character vector specifying type of forecasts to load: “quantile”
-#' or “point”. Default to all valid forecast types.
+#' @param types Character vector specifying type of forecasts to load: `"quantile"`
+#' and/or `"point"`. Default to all valid forecast types.
 #' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death').
-#' Default to NULL which stands for all valid targets.
+#' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
+#' Default to `NULL` which stands for all valid targets.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are "US" and "ECDC"
-#' @param verbose whether or not to print out diagnostic messages. Default is TRUE
-#' @return data frame with columns model, forecast_date, location, horizon,
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
-#' location_name, population, geo_type, geo_value, abbreviation
+#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' @param verbose logical to print out diagnostic messages. Default is `TRUE`
+#'
+#' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
+#' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
+#' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @export
 load_forecasts_repo <- function(

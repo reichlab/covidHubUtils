@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_forecasts_zoltar.R
 \name{load_forecasts_zoltar}
 \alias{load_forecasts_zoltar}
-\title{Load all available forecasts submitted on forecast_dates from Zoltar.}
+\title{Load all available forecasts submitted on \code{forecast_dates} from Zoltar.}
 \usage{
 load_forecasts_zoltar(
   models = NULL,
@@ -28,32 +28,32 @@ for each sub-list of dates.}
 
 \item{locations}{list of fips. Default to all locations with available forecasts in Zoltar.}
 
-\item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types in Zoltar.}
+\item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
+and/or \code{"point"}. Default to all valid forecast types in Zoltar.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
+\code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
 Default to all valid targets in Zoltar.}
 
 \item{as_of}{character for date time to load forecasts submitted as of this time.
 It could use the format of one of the three examples:
-"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+\verb{"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".}
 If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on hub parameter.
-Default to NULL to load the latest version.}
+If not, helper function will append the default timezone to your input based on \code{hub} parameter.
+Default to \code{NULL} to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
-\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
+\item{verbose}{logical for printing messages on zoltar job status. Default to \code{TRUE}.}
 }
 \value{
-data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation
+data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
+\code{temporal_resolution}, \code{target_variable}, \code{target_end_date}, \code{type}, \code{quantile}, \code{value},
+\code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
 This function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in forecast_dates for selected models,
-locations, types and target.
+no forecasts are submitted on any dates in \code{forecast_dates} for selected \code{models},
+\code{locations}, \code{types} and \code{target}.
 }

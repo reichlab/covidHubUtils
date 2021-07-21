@@ -1,8 +1,8 @@
-#' Load all available forecasts submitted on forecast_dates from Zoltar.
+#' Load all available forecasts submitted on `forecast_dates` from Zoltar.
 #'
 #' This function will throw a warning and return an empty data frame when
-#' no forecasts are submitted on any dates in forecast_dates for selected models,
-#' locations, types and target.
+#' no forecasts are submitted on any dates in `forecast_dates` for selected `models`,
+#' `locations`, `types` and `target`.
 #'
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
@@ -13,24 +13,24 @@
 #' If this is a 2-D list, this function will return the latest forecasts
 #' for each sub-list of dates.
 #' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
-#' @param types Character vector specifying type of forecasts to load: “quantile”
-#' or “point”. Default to all valid forecast types in Zoltar.
+#' @param types Character vector specifying type of forecasts to load: `"quantile"`
+#' and/or `"point"`. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
-#' c('1 wk ahead cum death', '2 wk ahead cum death').
+#' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
 #' Default to all valid targets in Zoltar.
 #' @param as_of character for date time to load forecasts submitted as of this time.
 #' It could use the format of one of the three examples:
-#' "2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+#' `"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".`
 #' If you would like to set a timezone, it has to be UTC now.
-#' If not, helper function will append the default timezone to your input based on hub parameter.
-#' Default to NULL to load the latest version.
+#' If not, helper function will append the default timezone to your input based on `hub` parameter.
+#' Default to `NULL` to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are "US" and "ECDC"
-#' @param verbose a boolean for printing messages on zoltar job status. Default to TRUE.
+#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #'
-#' @return data frame with columns model, forecast_date, location, horizon,
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value,
-#' location_name, population, geo_type, geo_value, abbreviation
+#' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
+#' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
+#' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @export
 load_forecasts_zoltar <- function(

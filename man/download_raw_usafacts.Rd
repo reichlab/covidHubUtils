@@ -8,7 +8,7 @@ download_raw_usafacts(save_location = "./data-truth/usafacts/raw/")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./data-truth/usafacts/raw/"}
+Default to \code{"./data-truth/usafacts/raw/"}}
 }
 \value{
 data frame of cases and deaths raw truth data
