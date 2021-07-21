@@ -28,6 +28,9 @@
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #'
+#' @importFrom doParallel registerDoParallel
+#' @importFrom foreach foreach %dopar%
+#' 
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
 #' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
@@ -56,7 +59,9 @@ load_forecasts_zoltar <- function(
     zoltar_connection = zoltar_connection,
     project_url = project_url
   )$timezero_date
-
+  
+  `%dopar%` <- foreach::`%dopar%`
+  
   if (!is.null(forecast_dates) & length(forecast_dates) > 1) {
     # set 4 workers
     doParallel::registerDoParallel(cores = 4)

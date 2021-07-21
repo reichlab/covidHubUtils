@@ -25,7 +25,11 @@ load_latest_forecasts_zoltar <- function(models = NULL,
       "This function has been superseded by the latest load_forecasts_zoltar(). Please switch your code to using the new function."
   )
 
-
+  
+  if (!is.null(forecast_dates)){
+    forecast_dates <- list(forecast_dates)
+  }
+  
   forecast <- load_forecasts_zoltar(
     models = models,
     forecast_dates = forecast_dates,
