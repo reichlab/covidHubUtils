@@ -146,7 +146,7 @@ load_truth <- function(truth_source = NULL,
     # extra checks for truth source if target is inc hosp
     if ("inc hosp" %in% target_variable) {
       if (!"ECDC" %in% truth_source) {
-        warning("Warning in load_truth: Incident hopsitalization truth data is only available from ECDC.
+        warning("Warning in load_truth: Incident hospitalization truth data is only available from ECDC.
               Will be loading data from ECDC instead.")
         truth_source <- c(truth_source, "ECDC")
       }
