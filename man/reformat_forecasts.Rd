@@ -3,22 +3,22 @@
 \name{reformat_forecasts}
 \alias{reformat_forecasts}
 \title{Reformat forecast data frame returned from zoltar query
-This function will throw a warning and return an empty data frame with
-columns model, forecast_date, location, type, quantile and value, when
-no forecasts are available in zoltar_query_result.}
+This function will throw a warning and return an empty data.frame with
+columns \code{model}, \code{forecast_date}, \code{location}, \code{type}, \code{quantile} and \code{value}, when
+no forecasts are available in \code{zoltar_query_result}.}
 \usage{
 reformat_forecasts(zoltar_query_result)
 }
 \arguments{
-\item{zoltar_query_result}{dataframe returned by zoltr::do_zoltar_query}
+\item{zoltar_query_result}{dataframe returned by \link[zoltr:do_zoltar_query]{zoltr::do_zoltar_query}}
 }
 \value{
-data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value
+data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
+\code{temporal_resolution}, \code{target_variable}, \code{target_end_date}, \code{type}, \code{quantile}, \code{value}
 }
 \description{
 Reformat forecast data frame returned from zoltar query
-This function will throw a warning and return an empty data frame with
-columns model, forecast_date, location, type, quantile and value, when
-no forecasts are available in zoltar_query_result.
+This function will throw a warning and return an empty data.frame with
+columns \code{model}, \code{forecast_date}, \code{location}, \code{type}, \code{quantile} and \code{value}, when
+no forecasts are available in \code{zoltar_query_result}.
 }

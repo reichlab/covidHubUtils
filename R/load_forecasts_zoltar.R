@@ -128,14 +128,14 @@ load_forecasts_zoltar <- function(
 
 
 #' Reformat forecast data frame returned from zoltar query
-#' This function will throw a warning and return an empty data frame with
-#' columns model, forecast_date, location, type, quantile and value, when
-#' no forecasts are available in zoltar_query_result.
+#' This function will throw a warning and return an empty data.frame with
+#' columns `model`, `forecast_date`, `location`, `type`, `quantile` and `value`, when
+#' no forecasts are available in `zoltar_query_result`.
 #'
-#' @param zoltar_query_result dataframe returned by zoltr::do_zoltar_query
+#' @param zoltar_query_result dataframe returned by [zoltr::do_zoltar_query]
 #'
-#' @return data frame with columns model, forecast_date, location, horizon,
-#' temporal_resolution, target_variable, target_end_date, type, quantile, value
+#' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
+#' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`
 #'
 #' @export
 reformat_forecasts <- function(zoltar_query_result) {

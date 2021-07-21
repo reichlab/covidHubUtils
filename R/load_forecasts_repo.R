@@ -120,7 +120,6 @@ load_forecasts_repo <- function(
       verbose = verbose
     )
   }
-
   # read in the forecast files
   forecasts <- load_forecast_files_repo(
     file_paths = forecast_files,
