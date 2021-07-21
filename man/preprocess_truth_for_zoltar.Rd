@@ -9,13 +9,13 @@ preprocess_truth_for_zoltar(target, issue_date = NULL)
 }
 \arguments{
 \item{target}{string specifying target.
-Currently only support "Cumulative Deaths" and "Incident Deaths".}
+Currently only support \code{"Cumulative Deaths"} and \code{"Incident Deaths"}.}
 
 \item{issue_date}{optional date specifying issue date of truth data.
-Default to NULL which will load the latest truth data from covidData.}
+Default to \code{NULL} which will load the latest truth data from \code{covidData}.}
 }
 \value{
-data frame with timezero, unit, target and value
+data.frame with timezero, unit, target and value
 }
 \description{
 Generate versioned truth data for zoltar for a specified target

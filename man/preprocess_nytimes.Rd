@@ -8,7 +8,7 @@ preprocess_nytimes(save_location = "./data-truth/nytimes/")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save raw truth data.
-Default to "./data-truth/nytimes/raw/"}
+Default to \code{"./data-truth/nytimes/raw/"}}
 }
 \description{
 Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs

@@ -3,15 +3,17 @@
 \name{save_truth_for_zoltar}
 \alias{save_truth_for_zoltar}
 \title{Generate the most up to date truth data for zoltar
+and save the differences between the new version and old version.
 It only includes national and state-level truth data.}
 \usage{
 save_truth_for_zoltar(save_location = "./data-truth")
 }
 \arguments{
 \item{save_location}{character specifying the location of to save zoltar truth data.
-Default to "./data-truth"}
+Default to \code{"./data-truth"}}
 }
 \description{
 Generate the most up to date truth data for zoltar
+and save the differences between the new version and old version.
 It only includes national and state-level truth data.
 }

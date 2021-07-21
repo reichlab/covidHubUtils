@@ -29,48 +29,48 @@ The function will throw an error if all dates in this parameter are invalid fore
 
 \item{locations}{list of location codes. Default to all locations with available forecasts.}
 
-\item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types.}
+\item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
+and/or \code{"point"}. Default to all valid forecast types.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
-Default to NULL which stands for all valid targets.}
+\code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
+Default to \code{NULL} which stands for all valid targets.}
 
 \item{source}{string specifying where forecasts will be loaded from: either
-"local_hub_repo" or "zoltar". Default to "zoltar"}
+\code{"local_hub_repo"} or \code{"zoltar"}. Default to \code{"zoltar"}.}
 
 \item{hub_repo_path}{path to local clone of the forecast hub
 repository}
 
 \item{data_processed_subpath}{folder within the hub_repo_path that contains
-forecast submission files.  Defaults to "data-processed/", which is
+forecast submission files.  Default to \code{"data-processed/"}, which is
 appropriate for the covid19-forecast-hub repository.}
 
 \item{as_of}{character for date time to load forecasts submitted as of this time from Zoltar.
-Ignored if \code{source} is \code{"local_hub_repo"}.
+Ignored if \code{source = "local_hub_repo"}.
 It could use the format of one of the three examples:
-"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+\verb{"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC"}.
 If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on hub parameter.
+If not, helper function will append the default timezone to your input based on \code{hub} parameter.
 Default to NULL to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
-\item{verbose}{whether or not to print out diagnostic messages. Default is TRUE}
+\item{verbose}{logical to print out diagnostic messages. Default is \code{TRUE}.}
 }
 \value{
-data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation
+data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
+\code{temporal_resolution}, \code{target_variable}, \code{target_end_date}, \code{type}, \code{quantile}, \code{value},
+\code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
 Load all available forecasts submitted on forecast_dates from Zoltar
 or local hub repo.
 }
 \examples{
-\dontrun{
-forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
+# load forecasts from US forecast hub
+load_forecasts(models = "COVIDhub-ensemble",
  forecast_date = "2020-12-07",
  locations = "US",
  types = c("point","quantile"),
@@ -79,12 +79,12 @@ forecasts_US <- load_forecasts(models = "COVIDhub-ensemble",
  verbose = FALSE,
  as_of = NULL)
 
-forecasts_ECDC <- load_forecasts(models = "ILM-EKF",
+# load forecasts from ECDC forecast hub
+load_forecasts(models = "ILM-EKF",
  hub = c("ECDC","US"),
  forecast_date = "2021-03-08",
  locations = "GB",
  targets = paste(1:4, "wk ahead inc death"),
  source = "zoltar")
-}
 
 }
