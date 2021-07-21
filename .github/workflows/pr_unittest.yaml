@@ -26,10 +26,6 @@ jobs:
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
         shell: Rscript {0}
-      - name: Check 
-        run: |
-          devtools::check(args = c("--no-tests", "--no-vignettes"), force_suggests = FALSE, error_on = c("error"))
-        shell: Rscript {0}
       - name: Run unit tests
         run: |
           devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)

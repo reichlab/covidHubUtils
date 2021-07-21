@@ -26,15 +26,14 @@
 #' of `q_F` and `q_G` and \eqn{b_i} is an element of a vector of the absolute
 #' values of cumulative sums of \eqn{\mathbf{a}}, whose element is 1 if
 #' \eqn{q_i} is a quantile of F or -1 if \eqn{q_i} is a quantile of G.
-#' 
 #' The "approximation1" formula reduces to the WIS if G is a point mass, while 
 #' the "approximation2" formula is a direct approximation of the integral
 #' via a step function.
 #' @examples
 #' f_vector <- 1:9
-#' tau_F_vector <- tau_G_vector <- seq(0.1,0.9,0.1)
-#' g_vector <- seq(2,18,2)
-#' calc_cramers_dist_equal_space(f_vector,tau_F_vector,g_vector,tau_G_vector, "approximation1")
+#' tau_F_vector <- tau_G_vector <- seq(0.1, 0.9, 0.1)
+#' g_vector <- seq(2, 18, 2)
+#' calc_cramers_dist_equal_space(f_vector, tau_F_vector, g_vector, tau_G_vector, "approximation1")
 #' @export
 #'
 #'
