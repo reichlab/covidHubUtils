@@ -81,7 +81,7 @@ forecasts that are submitted within window size for each day in \code{dates}.
 # load forecasts from US forecast hub
 load_forecasts(
   models = "COVIDhub-ensemble",
-  forecast_date = "2020-12-07",
+  dates = "2020-12-07",
   locations = "US",
   types = c("point", "quantile"),
   targets = paste(1:4, "wk ahead inc case"),
