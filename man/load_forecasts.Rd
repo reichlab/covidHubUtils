@@ -79,21 +79,24 @@ forecasts that are submitted within window size for each day in \code{dates}.
 }
 \examples{
 # load forecasts from US forecast hub
-load_forecasts(models = "COVIDhub-ensemble",
- forecast_date = "2020-12-07",
- locations = "US",
- types = c("point","quantile"),
- targets = paste(1:4, "wk ahead inc case"),
- source = "zoltar",
- verbose = FALSE,
- as_of = NULL)
+load_forecasts(
+  models = "COVIDhub-ensemble",
+  forecast_date = "2020-12-07",
+  locations = "US",
+  types = c("point", "quantile"),
+  targets = paste(1:4, "wk ahead inc case"),
+  source = "zoltar",
+  verbose = FALSE,
+  as_of = NULL
+)
 
 # load forecasts from ECDC forecast hub
-load_forecasts(models = "ILM-EKF",
- hub = c("ECDC","US"),
- dates = "2021-03-08",
- locations = "GB",
- targets = paste(1:4, "wk ahead inc death"),
- source = "zoltar")
-
+load_forecasts(
+  models = "ILM-EKF",
+  hub = c("ECDC", "US"),
+  dates = "2021-03-08",
+  locations = "GB",
+  targets = paste(1:4, "wk ahead inc death"),
+  source = "zoltar"
+)
 }

@@ -1,46 +1,27 @@
-#' Load all available forecasts submitted on `forecast_dates` from
-#' a local clone of `reichlab/covid19-forecast-hub` repo.
+#' Load the most recent forecasts of all that were submitted
+#' on `forecast_dates` from a local clone of `reichlab/covid19-forecast-hub` repo.
 #'
-#' This function will throw an error when no forecasts are submitted on
-#' any dates in `forecast_dates` for selected `models`,
-#' `locations`, `types` and `target`.
+#' This function will drop rows with NULLs in value column.
 #'
-#' This function will drop rows with `NULL` in `value` column.
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
+#' Please use [load_forecasts_repo()] instead.
 #'
-#' @param file_path path to the data-processed folder within a local clone of the hub repo
-#' @param models Character vector of model abbreviations.
-#' Default all models that submitted forecasts meeting the other criteria.
-#' @param forecast_dates A list of forecast dates to retrieve forecasts.
-#' Default to all valid forecast dates.
-#' If this is a 1-D list, this function will return all available forecasts
-#' submitted on these dates.
-#' If this is a 2-D list, this function will return the latest forecasts
-#' for each sub-list of dates.
-#' The function will throw an error if all dates in this parameter are invalid forecast dates.
-#' @param locations list of fips. Default to all locations with available forecasts.
-#' @param types Character vector specifying type of forecasts to load: `"quantile"`
-#' and/or `"point"`. Default to all valid forecast types.
-#' @param targets character vector of targets to retrieve, for example
-#' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
-#' Default to `NULL` which stands for all valid targets.
-#' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
-#' @param verbose logical to print out diagnostic messages. Default is `TRUE`
-#'
-#' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
-#' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
-#' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
+#' @inheritParams load_forecasts_repo
 #'
 #' @export
-load_forecasts_repo <- function(
-                                file_path,
-                                models = NULL,
-                                forecast_dates = NULL,
-                                locations = NULL,
-                                types = NULL,
-                                targets = NULL,
-                                hub = c("US", "ECDC"),
-                                verbose = TRUE) {
+load_latest_forecasts_repo <- function(file_path,
+                                       models = NULL,
+                                       forecast_dates,
+                                       locations = NULL,
+                                       types = NULL,
+                                       targets = NULL,
+                                       hub = c("US", "ECDC"),
+                                       verbose = TRUE) {
+  lifecycle::deprecate_warn("0.1.5",
+    "load_latest_forecasts_repo()",
+    details =
+      "This function has been superseded by the latest load_forecasts_repo(). Please switch your code to using the new function."
+  )
 
   # validate file path to data-processed folder
   if (!dir.exists(file_path)) {
@@ -94,34 +75,16 @@ load_forecasts_repo <- function(
     targets <- all_valid_targets
   }
 
-  # validate forecast_dates
-  if (!is.null(forecast_dates) & length(forecast_dates) > 1) {
-    # get paths to all forecast files
-    forecast_files <- purrr::map(forecast_dates,
-      get_forecast_file_path,
-      models = models,
-      file_path = file_path,
-      latest = TRUE,
-      verbose = verbose
-    )
-    # drop duplicates
-    forecast_files <- unique(unlist(forecast_files, use.names = FALSE))
-  } else {
-    if (!is.null(forecast_dates)) {
-      forecast_dates <- forecast_dates[[1]]
-    } else {
-      forecast_dates <- seq(as.Date("2020-01-25"), Sys.Date(), by = "days")
-    }
+  # get some default for that?
+  forecast_dates <- as.Date(forecast_dates)
 
-    forecast_files <- get_forecast_file_path(
-      models = models,
-      file_path = file_path,
-      forecast_dates = forecast_dates,
-      latest = FALSE,
-      verbose = verbose
-    )
-  }
-  # read in the forecast files
+  # get paths to all forecast files
+  forecast_files <- get_forecast_file_path(models, file_path,
+    forecast_dates,
+    latest = TRUE,
+    verbose = verbose
+  )
+
   forecasts <- load_forecast_files_repo(
     file_paths = forecast_files,
     locations = locations,
@@ -129,6 +92,7 @@ load_forecasts_repo <- function(
     targets = targets,
     hub = hub
   )
+
   return(forecasts)
 }
 
@@ -142,9 +106,7 @@ load_forecasts_repo <- function(
 #'
 #' @return a list of paths to forecast files submitted on a range of forecast dates from selected models
 
-get_forecast_file_path <- function(models,
-                                   file_path,
-                                   forecast_dates,
+get_forecast_file_path <- function(models, file_path, forecast_dates,
                                    latest = FALSE,
                                    verbose = TRUE) {
   forecast_files <- purrr::map(
@@ -187,7 +149,7 @@ get_forecast_file_path <- function(models,
 #'
 #' @param file_paths paths to csv forecast files to read in.  It is expected that
 #' the file names are in the format "*YYYY-MM-DD-<model_name>.csv".
-#' @inheritParams load_forecasts_repo
+#' @inheritParams load_latest_forecasts_repo
 #' @return data frame with columns model, forecast_date, location, horizon,
 #' temporal_resolution, target_variable, target_end_date, type, quantile, value,
 #' location_name, population, geo_type, geo_value, abbreviation
