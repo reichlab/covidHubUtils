@@ -6,12 +6,10 @@
 #'
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
-#' @param forecast_dates A list of forecast dates to retrieve forecasts.
-#' Default to all valid forecast dates in Zoltar.
-#' If this is a 1-D list, this function will return all available forecasts
-#' submitted on these dates.
-#' If this is a 2-D list, this function will return the latest forecasts
+#' @param forecast_dates A 2 dimensional list of forecast dates to retrieve forecasts.
+#' This function will return the latest forecasts
 #' for each sub-list of dates.
+#' Default to  `NULL` which would include all valid forecast dates in Zoltar.
 #' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types in Zoltar.
@@ -55,6 +53,11 @@ load_forecasts_zoltar <- function(
     zoltar_connection = zoltar_connection
   )
   # get all valid timezeros in project
+  all_models <- zoltr::models(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url)
+  
+  # get all valid timezeros in project
   all_valid_timezeros <- zoltr::timezeros(
     zoltar_connection = zoltar_connection,
     project_url = project_url
@@ -62,52 +65,51 @@ load_forecasts_zoltar <- function(
   
   `%dopar%` <- foreach::`%dopar%`
   
-  if (!is.null(forecast_dates) & length(forecast_dates) > 1) {
+  if (!is.null(forecast_dates)) {
     # set 4 workers
     doParallel::registerDoParallel(cores = 4)
-    forecasts <- foreach::foreach(i = 1:length(forecast_dates), .combine = rbind) %dopar% {
-      # take intersection of forecast_dates[[i]] and all_valid_timezeros
-      valid_forecast_dates <- intersect(
-        as.character(forecast_dates[[i]]),
-        as.character(all_valid_timezeros)
-      )
+    forecasts <- foreach::foreach(i = 1:length(models), .combine = rbind) %dopar% {
+      
+      curr_model <- models[i]
+      
+      model_url <- all_models[all_models$model_abbr == curr_model,]$url
+      
+      model_forecasts_history <- zoltr::forecasts(zoltar_connection = zoltar_connection,
+                                                  model_url = model_url)$timezero_date
+      
+      #get the latest of each subset of forecast_dates
+      latest_dates <- purrr::map(forecast_dates,
+                                function(a_list){
+                                  max(intersect(
+                                    as.character(a_list),
+                                    as.character(model_forecasts_history)))
+                                  })
+      
+      # unlist and drop duplicates
+      latest_dates <- unique(unlist(latest_dates, use.names = FALSE))
 
-      if (length(valid_forecast_dates) == 0) {
+      if (length(latest_dates) == 0) {
         stop("Error in load_forecasts: All forecast_dates are invalid.")
       }
 
-      # one query for each valid date in forecast_dates[[i]],
-      # with all models relevant for that date
       forecast <- zoltr::do_zoltar_query(
         zoltar_connection = zoltar_connection,
         project_url = project_url,
         query_type = "forecasts",
         units = locations,
-        timezeros = valid_forecast_dates,
-        models = models,
+        timezeros = latest_dates,
+        models = curr_model,
         targets = targets,
         types = types,
         verbose = verbose,
         as_of = date_to_datetime(as_of, hub)
       )
 
-      forecast <- forecast %>%
-        reformat_forecasts() %>%
-        # return the latest
-        dplyr::group_by(model) %>%
-        dplyr::filter(forecast_date == max(forecast_date)) %>%
-        dplyr::ungroup()
+      forecast <- reformat_forecasts(forecast)
     }
     # shut down workers
     doParallel::stopImplicitCluster()
   } else {
-    if (!is.null(forecast_dates)) {
-      forecast_dates <- intersect(
-        as.character(forecast_dates[[1]]),
-        as.character(all_valid_timezeros)
-      )
-    }
-
     # load forecasts submitted on all dates
     forecasts <- zoltr::do_zoltar_query(
       zoltar_connection = zoltar_connection,

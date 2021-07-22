@@ -20,14 +20,11 @@ load_latest_forecasts_repo(
 \item{file_path}{path to the data-processed folder within a local clone of the hub repo}
 
 \item{models}{Character vector of model abbreviations.
-Default all models that submitted forecasts meeting the other criteria.}
-
-\item{forecast_dates}{A list of forecast dates to retrieve forecasts.
-Default to all valid forecast dates.
-If this is a 1-D list, this function will return all available forecasts
-submitted on these dates.
-If this is a 2-D list, this function will return the latest forecasts
+Default all models that submitted forecasts meeting the other criteria.
+#' @param forecast_dates A 2 dimensional list of forecast dates to retrieve forecasts.
+This function will return the latest forecasts
 for each sub-list of dates.
+Default to  \code{NULL} which would include all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates.}
 
 \item{locations}{list of fips. Default to all locations with available forecasts.}

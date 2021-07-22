@@ -84,16 +84,12 @@ load_forecasts <- function(
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
 
   if (!is.null(dates)) {
-    if (date_window_size != 0) {
-      # 2d array
-      all_forecast_dates <- purrr::map(
-        dates, function(date) {
-          return(as.Date(date) + seq(from = -date_window_size, to = 0))
+    # 2d array
+    all_forecast_dates <- purrr::map(
+      dates, function(date) {
+        return(as.Date(date) + seq(from = -date_window_size, to = 0))
         }
       )
-    } else {
-      all_forecast_dates <- list(dates)
-    }
   } else {
     all_forecast_dates <- dates
   }

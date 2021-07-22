@@ -10,12 +10,10 @@
 #' @param file_path path to the data-processed folder within a local clone of the hub repo
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
-#' @param forecast_dates A list of forecast dates to retrieve forecasts.
-#' Default to all valid forecast dates.
-#' If this is a 1-D list, this function will return all available forecasts
-#' submitted on these dates.
-#' If this is a 2-D list, this function will return the latest forecasts
+#' #' @param forecast_dates A 2 dimensional list of forecast dates to retrieve forecasts.
+#' This function will return the latest forecasts
 #' for each sub-list of dates.
+#' Default to  `NULL` which would include all valid forecast dates.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates.
 #' @param locations list of fips. Default to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
@@ -95,7 +93,7 @@ load_forecasts_repo <- function(
   }
 
   # validate forecast_dates
-  if (!is.null(forecast_dates) & length(forecast_dates) > 1) {
+  if (!is.null(forecast_dates)) {
     # get paths to all forecast files
     forecast_files <- purrr::map(forecast_dates,
       get_forecast_file_path,
@@ -107,11 +105,7 @@ load_forecasts_repo <- function(
     # drop duplicates
     forecast_files <- unique(unlist(forecast_files, use.names = FALSE))
   } else {
-    if (!is.null(forecast_dates)) {
-      forecast_dates <- forecast_dates[[1]]
-    } else {
-      forecast_dates <- seq(as.Date("2020-01-25"), Sys.Date(), by = "days")
-    }
+    forecast_dates <- seq(as.Date("2020-01-25"), Sys.Date(), by = "days")
 
     forecast_files <- get_forecast_file_path(
       models = models,
