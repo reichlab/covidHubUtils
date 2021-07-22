@@ -164,7 +164,7 @@ test_that("handles `inc hosp` and `HealthData` source in US hub correctly when l
 
 test_that("handles `ECDC`source in ECDC hub correctly when loading from remote 
           hub repo", {
-  # return warning and weekly data when temporal resolution is daily
+  # for case/death data, return warning and weekly data when temporal resolution is daily
   expect_warning(actual <- load_truth(
     truth_source = c("ECDC"),
     target_variable = c("inc case", "inc death"),
@@ -172,16 +172,18 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
     hub = c("ECDC")
   ))
   
+  expect_equal(unique(actual$target_end_date), 
+               seq(min(actual$target_end_date), 
+                   max(actual$target_end_date), 7))
+  expect_equal(unique(weekdays(actual$target_end_date)),
+               "Saturday")
+  expect_equal(unique(weekdays(actual$week_start)),
+               "Monday")
   expect_equal(
     unique(actual$target_end_date),
     seq(
       min(actual$target_end_date),
       max(actual$target_end_date), 7
     )
-  )
-  
-  expect_equal(
-    unique(weekdays(actual$target_end_date)),
-    "Monday"
   )
 })
