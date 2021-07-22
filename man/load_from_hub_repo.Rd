@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_truth.R
 \name{load_from_hub_repo}
 \alias{load_from_hub_repo}
-\title{load truth data from covidData}
+\title{load truth data from a local clone of forecast hub repo}
 \usage{
 load_from_hub_repo(
   target_variable,
@@ -38,5 +38,5 @@ Currently only supports "local_hub_repo" or "remote_hub_repo".}
 a data frame with columns location, target_end_date, target_variable and value
 }
 \description{
-load truth data from covidData
+load truth data from a local clone of forecast hub repo
 }
