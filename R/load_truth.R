@@ -176,7 +176,7 @@ load_truth <- function(truth_source = NULL,
   )
 
   # validate temporal resolution
-  if (is.null(temporal_resolution) & hub == "US") {
+  if (is.null(temporal_resolution) & hub[1] == "US") {
     # only relevant for US hub
     if (length(target_variable) == 1) {
       if (target_variable == "inc hosp") {
@@ -195,7 +195,7 @@ load_truth <- function(truth_source = NULL,
     }
   
   if (all("ECDC" %in% truth_source) & 
-      (target_variable %in% c("inc case", "inc death")) &
+      (any(target_variable %in% c("inc case", "inc death"))) &
       (temporal_resolution == "daily")) {
     warning("Warning in load_truth: ECDC case and death data will be weekly.")
   }
@@ -511,9 +511,9 @@ load_from_hub_repo <- function(target_variable,
   # ECDC case/death already in weeks
   if (!"week_start" %in% names(truth_data)) {
     if (temporal_resolution == "weekly" & 
-         ((hub == "ECDC") | 
+         ((hub[1] == "ECDC") |
           # in the US, only loading daily incident hospitalization truth data
-          (hub == "US" & target_variable != "inc hosp"))) {
+          (hub[1] == "US" & target_variable != "inc hosp"))) {
       if (unlist(strsplit(target_variable, " "))[1] == "cum") {
         # only keep weekly data
         truth_data <- dplyr::filter(
