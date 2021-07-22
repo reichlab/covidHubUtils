@@ -32,7 +32,7 @@ test_that("default selections from remote hub repo", {
     )
   ))
   # ECDC hub
-  actual_ecdc <- load_truth(hub = c("ECDC"))
+  expect_warning(actual_ecdc <- load_truth(hub = c("ECDC")))
   # weekly
   expected_ecdc_inc_case <- load_truth(
     truth_source = c("JHU"),
@@ -45,11 +45,19 @@ test_that("default selections from remote hub repo", {
     target_variable = c("inc death"),
     hub = c("ECDC")
   )
+  # daily
+  expected_ecdc_inc_hosp <- load_truth(
+    truth_source = c("ECDC"),
+    target_variable = c("inc hosp"),
+    hub = c("ECDC")
+  )
+
   expect_true(dplyr::all_equal(
     actual_ecdc,
     dplyr::bind_rows(
       expected_ecdc_inc_case,
-      expected_ecdc_inc_death
+      expected_ecdc_inc_death,
+      expected_ecdc_inc_hosp
     )
   ))
 })
@@ -171,14 +179,22 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
     temporal_resolution = "daily",
     hub = c("ECDC")
   ))
-  
-  expect_equal(unique(actual$target_end_date), 
-               seq(min(actual$target_end_date), 
-                   max(actual$target_end_date), 7))
-  expect_equal(unique(weekdays(actual$target_end_date)),
-               "Saturday")
-  expect_equal(unique(weekdays(actual$week_start)),
-               "Monday")
+
+  expect_equal(
+    unique(actual$target_end_date),
+    seq(
+      min(actual$target_end_date),
+      max(actual$target_end_date), 7
+    )
+  )
+  expect_equal(
+    unique(weekdays(actual$target_end_date)),
+    "Saturday"
+  )
+  expect_equal(
+    unique(weekdays(actual$week_start)),
+    "Monday"
+  )
   expect_equal(
     unique(actual$target_end_date),
     seq(

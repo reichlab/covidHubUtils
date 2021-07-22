@@ -1,7 +1,7 @@
 #' Load truth data under multiple target variables
 #' from multiple truth sources
 #' using files in reichlab/covid19-forecast-hub.
-#' 
+#'
 #' "inc hosp" is only available from "HealthData" and "ECDC" and this function is not loading
 #' data for other target variables from "HealthData".
 #'
@@ -75,6 +75,21 @@ load_truth <- function(truth_source = NULL,
                        local_repo_path = NULL,
                        hub = c("US", "ECDC")) {
 
+  # validate data location
+  if (!is.null(data_location)) {
+    data_location <- match.arg(data_location,
+      choices = c(
+        "remote_hub_repo",
+        "local_hub_repo",
+        "covidData"
+      ),
+      several.ok = FALSE
+    )
+  } else {
+    data_location <- "remote_hub_repo"
+  }
+
+
   # preparations and validation checks that are different for US and ECDC hub
   if (hub[1] == "US") {
     if (is.null(target_variable)) {
@@ -92,7 +107,6 @@ load_truth <- function(truth_source = NULL,
       )
     }
 
-    # NEED TO CHANGE WHEN THERE IS A TARGET VAR
     if (is.null(truth_source)) {
       truth_source <- c("JHU", "HealthData")
     } else {
@@ -123,18 +137,24 @@ load_truth <- function(truth_source = NULL,
     # store path of remote repo
     remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
   } else if (hub[1] == "ECDC") {
+    ecdc_default <- FALSE
     if (is.null(target_variable)) {
+      ecdc_default <- TRUE
       target_variable <- c("inc case", "inc death", "inc hosp")
     } else {
-      # validate target variable 
-      target_variable <- match.arg(target_variable, 
-                                   choices = c("inc case",
-                                               "inc death",
-                                               "inc hosp"), 
-                                   several.ok = TRUE)
+      # validate target variable
+      target_variable <- match.arg(target_variable,
+        choices = c(
+          "inc case",
+          "inc death",
+          "inc hosp"
+        ),
+        several.ok = TRUE
+      )
     }
-    
+
     if (is.null(truth_source)) {
+      ecdc_default <- TRUE & ecdc_default
       truth_source <- c("JHU")
     } else {
       # validate truth source
@@ -145,10 +165,14 @@ load_truth <- function(truth_source = NULL,
     }
     # extra checks for truth source if target is inc hosp
     if ("inc hosp" %in% target_variable) {
-      if (!"ECDC" %in% truth_source) {
+      if (!"ECDC" %in% truth_source & data_location != "covidData") {
         warning("Warning in load_truth: Incident hospitalization truth data is only available from ECDC.
               Will be loading data from ECDC instead.")
         truth_source <- c(truth_source, "ECDC")
+        if (!ecdc_default) {
+          warning("Warning in load_truth: ECDC is added to truth_source.
+              Will also be loading data for all selected target_variable from ECDC.")
+        }
       }
     }
 
@@ -181,37 +205,23 @@ load_truth <- function(truth_source = NULL,
     if (length(target_variable) == 1) {
       if (target_variable == "inc hosp") {
         temporal_resolution <- "daily"
-        } else {
+      } else {
         temporal_resolution <- "weekly"
       }
     } else {
       temporal_resolution <- "weekly"
     }
-  
-    } else {
-    temporal_resolution <- match.arg(temporal_resolution, 
-                                     choices = c("daily","weekly"), 
-                                     several.ok = FALSE)
-    }
-  
-  if (all("ECDC" %in% truth_source) & 
-      (any(target_variable %in% c("inc case", "inc death"))) &
-      (temporal_resolution == "daily")) {
-    warning("Warning in load_truth: ECDC case and death data will be weekly.")
-  }
-
-  # validate data location
-  if (!is.null(data_location)) {
-    data_location <- match.arg(data_location,
-      choices = c(
-        "remote_hub_repo",
-        "local_hub_repo",
-        "covidData"
-      ),
+  } else {
+    temporal_resolution <- match.arg(temporal_resolution,
+      choices = c("weekly", "daily"),
       several.ok = FALSE
     )
-  } else {
-    data_location <- "remote_hub_repo"
+  }
+
+  if (all("ECDC" %in% truth_source) &
+    (any(target_variable %in% c("inc case", "inc death"))) &
+    (temporal_resolution == "daily")) {
+    warning("Warning in load_truth: ECDC case and death data will be weekly.")
   }
 
   # validate truth source for covidData
@@ -222,7 +232,14 @@ load_truth <- function(truth_source = NULL,
       }
     } else if (hub[1] == "ECDC") {
       if ("ECDC" %in% truth_source) {
-        stop("Error in load_truth: The truth source you selected is not supported in for ECDC data in covidData.")
+        if ("inc hosp" %in% target_variable) {
+          target_variable <- target_variable[target_variable != "inc hosp"]
+          truth_source <- truth_source[truth_source != "ECDC"]
+          warning("Warning in load_truth: inc hosp data from ECDC is not available in covidData.
+                  Will skip the query for this specific truth data.")
+        } else {
+          stop("Error in load_truth: The truth source you selected is not supported in for ECDC data in covidData.")
+        }
       }
     }
   }
@@ -249,49 +266,63 @@ load_truth <- function(truth_source = NULL,
 
   # get all combinations of elements in truth_source and target_variable
   all_combinations <- tidyr::crossing(truth_source, target_variable)
+  if (hub[1] == "ECDC") {
+    if (ecdc_default) {
+      # take out ECDC - inc case and ECDC - inc death
+      all_combinations <- all_combinations %>%
+        dplyr::filter(
+          (truth_source == "ECDC" & target_variable == "inc hosp") |
+            (truth_source != "ECDC")
+        )
+    }
+  }
+
+  if (nrow(all_combinations) == 0) {
+    return(data.frame())
+  }
 
   # load truth data for each combination of truth_source and target_variable
   truth <- purrr::map2_dfr(
     all_combinations$truth_source, all_combinations$target_variable,
     function(source, target) {
       if ((source %in% c("HealthData", "ECDC") & target == "inc hosp") |
-          (source != "HealthData" & target != "inc hosp")) {
+        (source != "HealthData" & target != "inc hosp")) {
         if (data_location == "covidData") {
-            if (target == "inc hosp") {
-              temporal_resolution <- "daily"
-            }
-            if (is.null(locations)) {
-              selected_locations <- valid_location_codes
-            } else {
-              selected_locations <- locations
-            }
-  
-            data <- load_from_coviddata(
-              target_variable = target,
-              truth_source = source,
-              locations = selected_locations,
-              as_of = as_of,
-              temporal_resolution = temporal_resolution,
-              truth_end_date = truth_end_date,
-              hub = hub
-            )
-            return(data)
+          if (target == "inc hosp") {
+            temporal_resolution <- "daily"
+          }
+          if (is.null(locations)) {
+            selected_locations <- valid_location_codes
+          } else {
+            selected_locations <- locations
+          }
+
+          data <- load_from_coviddata(
+            target_variable = target,
+            truth_source = source,
+            locations = selected_locations,
+            as_of = as_of,
+            temporal_resolution = temporal_resolution,
+            truth_end_date = truth_end_date,
+            hub = hub
+          )
+          return(data)
         } else {
-            data <- load_from_hub_repo(
-              target_variable = target,
-              truth_source = source,
-              repo_path = repo_path,
-              temporal_resolution = temporal_resolution,
-              truth_end_date = truth_end_date,
-              data_location = data_location,
-              hub = hub
-            )
-            return(data)
+          data <- load_from_hub_repo(
+            target_variable = target,
+            truth_source = source,
+            repo_path = repo_path,
+            temporal_resolution = temporal_resolution,
+            truth_end_date = truth_end_date,
+            data_location = data_location,
+            hub = hub
+          )
+          return(data)
         }
       }
     }
   )
-  
+
   # filter to only include specified locations
   if (!is.null(locations)) {
     truth <- dplyr::filter(truth, location %in% locations)
@@ -447,7 +478,7 @@ load_from_coviddata <- function(target_variable,
   return(truth_data)
 }
 
-#' load truth data from covidData
+#' load truth data from a local clone of forecast hub repo
 #'
 #' @param target_variable string specifying target type It should be one or more of
 #' "cum death", "inc case", "inc death", "inc hosp".
@@ -486,34 +517,39 @@ load_from_hub_repo <- function(target_variable,
     # add inc_cum and death_case columns
     dplyr::mutate(
       model = paste0("Observed Data (", truth_source, ")"),
-      target_variable = target_variable)
-  
+      target_variable = target_variable
+    )
+
   # Date columns: ECDC case/death is in ISO weeks
   if ("week_start" %in% names(truth_data)) {
     truth_data <- truth_data %>%
-      dplyr::mutate(week_start = as.Date(week_start),
-                    target_end_date = week_start + 5) %>% # to match epiweek
-      dplyr::select(model, target_variable, 
-                    week_start, target_end_date, # include ISO week start
-                    location, value)
-  } else { 
+      dplyr::mutate(
+        week_start = as.Date(week_start),
+        target_end_date = week_start + 5
+      ) %>% # to match epiweek
+      dplyr::select(
+        model, target_variable,
+        week_start, target_end_date, # include ISO week start
+        location, value
+      )
+  } else {
     # for daily data, rename date column
     truth_data <- truth_data %>%
       dplyr::mutate(date = as.Date(date)) %>%
       dplyr::rename(target_end_date = date) %>%
       dplyr::select(model, target_variable, target_end_date, location, value)
   }
-  
+
   truth_data <- truth_data %>%
     dplyr::filter(target_end_date >= as.Date("2020-01-25"))
 
   # optional aggregation step based on temporal resolution
   # ECDC case/death already in weeks
   if (!"week_start" %in% names(truth_data)) {
-    if (temporal_resolution == "weekly" & 
-         ((hub[1] == "ECDC") |
-          # in the US, only loading daily incident hospitalization truth data
-          (hub[1] == "US" & target_variable != "inc hosp"))) {
+    if (temporal_resolution == "weekly" &
+      ((hub[1] == "ECDC") |
+        # in the US, only loading daily incident hospitalization truth data
+        (hub[1] == "US" & target_variable != "inc hosp"))) {
       if (unlist(strsplit(target_variable, " "))[1] == "cum") {
         # only keep weekly data
         truth_data <- dplyr::filter(
