@@ -16,7 +16,7 @@ devtools::install_github("reichlab/covidHubUtils")
 
 # Getting Started
 
-For those starting out we recommend you begin with the [Getting Started vignette](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/covidHubUtils-overview.html).
+For those starting out we recommend you begin with the [Getting Started vignette](http://reichlab.io/covidHubUtils/articles/covidHubUtils-overview.html).
 
 # Features
 
@@ -62,6 +62,7 @@ If you would like to contribute your work, please follow this list to create a p
 - Update `NEWS.md` by adding a short summary of your changes under “Changes since last release.”
 - Update `README.md` if you created a new function or add a new parameter to existing functions.
 - Update `DESCRIPTION` when you are using a new dependency in your script.
+- Add yourself as a contributor in `DESCRIPTION`.
 - Make sure your pull request passes all checks in Github Action.
 
 
