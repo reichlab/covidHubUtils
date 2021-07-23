@@ -41,13 +41,5 @@ load_latest_forecasts_zoltar <- function(models = NULL,
     hub = hub
   )
 
-  if (nrow(forecast) != 0) {
-    # filter to get the latest forecast for each model
-    forecast <- forecast %>%
-      dplyr::group_by(model) %>%
-      dplyr::filter(forecast_date == max(forecast_date)) %>%
-      dplyr::ungroup()
-  }
-
   return(forecast)
 }

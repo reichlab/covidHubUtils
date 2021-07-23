@@ -75,7 +75,6 @@ load_latest_forecasts_repo <- function(file_path,
     targets <- all_valid_targets
   }
 
-  # get some default for that?
   forecast_dates <- as.Date(forecast_dates)
 
   # get paths to all forecast files
