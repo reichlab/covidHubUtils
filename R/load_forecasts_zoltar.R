@@ -28,14 +28,14 @@
 #'
 #' @importFrom doParallel registerDoParallel
 #' @importFrom foreach foreach %dopar%
+#' @importFrom parallel makeCluster stopCluster
 #' 
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
 #' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @export
-load_forecasts_zoltar <- function(
-                                  models = NULL,
+load_forecasts_zoltar <- function(models = NULL,
                                   forecast_dates = NULL,
                                   locations = NULL,
                                   types = NULL,
@@ -67,7 +67,8 @@ load_forecasts_zoltar <- function(
   
   if (!is.null(forecast_dates)) {
     # set 4 workers
-    doParallel::registerDoParallel(cores = 4)
+    cl <- parallel::makeCluster(2, setup_strategy = "sequential")
+    doParallel::registerDoParallel(cl)
     forecasts <- foreach::foreach(i = 1:length(models), .combine = rbind) %dopar% {
       
       curr_model <- models[i]
@@ -108,7 +109,7 @@ load_forecasts_zoltar <- function(
       forecast <- reformat_forecasts(forecast)
     }
     # shut down workers
-    doParallel::stopImplicitCluster()
+    parallel::stopCluster(cl)
   } else {
     # load forecasts submitted on all dates
     forecasts <- zoltr::do_zoltar_query(
@@ -124,6 +125,10 @@ load_forecasts_zoltar <- function(
       as_of = date_to_datetime(as_of, hub)
     )
     forecasts <- reformat_forecasts(forecasts)
+  }
+  
+  if (nrow(forecasts) == 0) {
+    warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
   }
 
   # append location, population information
@@ -147,7 +152,7 @@ load_forecasts_zoltar <- function(
 #' @export
 reformat_forecasts <- function(zoltar_query_result) {
   if (nrow(zoltar_query_result) == 0) {
-    warning("Warning in do_zoltar_query: Forecasts are not available.\n Please check your parameters.")
+    warning("Warning in reformat_forecasts: Forecasts are not available.\n Please check your parameters.")
     # convert value column to double and select columns
     zoltar_query_result <- zoltar_query_result %>%
       dplyr::mutate(value = as.double(value)) %>%
