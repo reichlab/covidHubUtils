@@ -15,6 +15,7 @@
 - In `score_forecasts()` add `metrics` parameter which is a character vector of the metrics to
 be returned with options "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"
 - Update `get_model_designations()` to handle spaces in `hub_repo_path` parameters.
+- Add `get_model_metadata()` based off of `get_model_designations()` but to retrieve all fields in metadata. 
 
 ## covidHubUtils 0.1.5
 
