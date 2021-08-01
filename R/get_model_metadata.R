@@ -95,7 +95,7 @@ get_model_metadata <- function(models,
       }
     )
     model_info <- model_info %>%
-      rename(
+      dplyr::rename(
         model = model_abbr,
         designation = team_model_designation
       )
