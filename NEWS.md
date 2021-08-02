@@ -10,7 +10,8 @@
 - Add `preprocess_visualization_truth()` to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests
 - Add `calc_cramers_dist_equal_space()`, `calc_cramers_dist_equal_space()`, and `calc_cramers_dist_one_model_pair()` to calculate forecast similarities based on the approximation of Cramer's distance.
 - In `score_forecasts()` calculate one-sided quantile coverage denoted quantile_coverage0.xx.
-- Allow `load_truth()` to load truth data from covidData. Note `as_of` parameter is only supported when `data_location = "covidData"`.
+- Allow `load_truth()` to load truth data from covidData. `as_of` parameter is only supported when `data_location = "covidData"`. Otherwise, this function will return warning.
+- Supports daily and weekly incident hospitalization data from `ECDC` source in `load_truth()`. 
 - Add `aggregate_to_weekly()` function.
 - In `score_forecasts()` add `metrics` parameter which is a character vector of the metrics to
 be returned with options "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"

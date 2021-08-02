@@ -67,7 +67,7 @@
 #'     "JHU_CSSE-DECOM", "CovidAnalytics-DELPHI",
 #'     "LANL-GrowthRate", "Microsoft-DeepSTIA"
 #'   ),
-#'   last_forecast_date = Sys.Date(),
+#'   last_forecast_date = "2021-07-21",
 #'   forecast_date_window_size = 6,
 #'   locations = "US",
 #'   types = c("point", "quantile"),
