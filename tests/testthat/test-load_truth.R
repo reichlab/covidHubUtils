@@ -203,3 +203,12 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
     )
   )
 })
+
+test_that("expects warnings when loading versioned data from hub repo", {
+  expect_warning(data <- load_truth(
+    truth_source = "JHU", 
+    target_variable = "inc case", 
+    locations = "US", 
+    as_of = "2020-11-23"
+  ))
+})
