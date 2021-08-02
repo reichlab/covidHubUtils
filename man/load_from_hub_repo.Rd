@@ -16,26 +16,26 @@ load_from_hub_repo(
 }
 \arguments{
 \item{target_variable}{string specifying target type It should be one or more of
-"cum death", "inc case", "inc death", "inc hosp".}
+\code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.}
 
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".}
+be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.}
 
 \item{repo_path}{path to local clone or remote of the corresponding prediction hub repository.}
 
 \item{temporal_resolution}{string specifying temporal resolution
-to include: one of 'daily' or 'weekly'}
+to include: one of \code{'daily'} or \code{'weekly'}}
 
-\item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.}
+\item{truth_end_date}{date to include the last available truth point in \code{'yyyy-mm-dd'} format.}
 
 \item{data_location}{character specifying the location of truth data.
-Currently only supports "local_hub_repo" or "remote_hub_repo".}
+Currently only supports \code{"local_hub_repo"} or \code{"remote_hub_repo"}.}
 
-\item{hub}{character, which hub to use. Default is "US", other option is
-"ECDC"}
+\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
+\code{"ECDC"}}
 }
 \value{
-a data frame with columns location, target_end_date, target_variable and value
+a data.frame with columns \code{location}, \code{target_end_date}, \code{target_variable} and \code{value}
 }
 \description{
 load truth data from a local clone of forecast hub repo

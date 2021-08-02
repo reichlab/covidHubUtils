@@ -1,23 +1,31 @@
-#' Load truth data under multiple target variables
-#' from multiple truth sources
-#' using files in reichlab/covid19-forecast-hub.
+#' Load truth data under multiple target variables from multiple truth sources
 #'
-#' `"inc hosp"` is only available from `"HealthData"` and `"ECDC"` and this function is not loading
+#' @description
+#' By default, for the US hub, the resulting data.frame contains data for weekly incident cases (JHU),
+#' weekly incident deaths (JHU) and daily incident hospitalization (HealthData) at all county, state and
+#' national level. For the ECDC hub, the default resulting data.frame contains data for weekly incident cases (JHU),
+#' weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries.
+#'
+#' @details
+#' \itemize{
+#'   \item`"inc hosp"` is only available from `"HealthData"` and `"ECDC"` and this function is not loading
 #' data for other target variables from `"HealthData"`.
 #'
-#' When loading data for multiple target variables, `temporal_resolution` will be applied
+#'   \item When loading data for multiple target variables for the US hub, `temporal_resolution` will be applied
 #' to all target variables but `"inc hosp"`. In that case, the function will return
 #' daily incident hospitalization counts along with other data.
 #'
-#' Weekly temporal resolution will be applied to `"inc hosp"` if the user specifies `"inc hosp"`
-#' as the only `target_variable`.
+#'   \item For the US hub, weekly temporal resolution will be applied to `"inc hosp"` if the user specifies `"inc hosp"`
+#' as the only `target_variable`.On the other hand, `temporal_resolution` will
+#' be applied to `"inc hosp"` in all cases for the ECDC hub.
 #'
-#' When loading weekly data, if there are not enough observations for a week, the corresponding
+#'  \item When loading weekly data, if there are not enough observations for a week, the corresponding
 #' weekly count would be `NA` in resulting data frame.
-#' 
-#' `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
+#'
+#'  \item `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
 #' will return a warning.
-#' 
+#' }
+#'
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
 #' If `NULL`, default for US hub is `c("JHU", "HealthData")`.
@@ -49,8 +57,13 @@
 #' @param hub character, which hub to use. Default is `"US"`, other option is
 #' `"ECDC"`
 #'
-#' @return data.frame with columns `model`, `inc_cum`, `death_case`, `target_end_date`,
-#' `location`, `value`, `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
+#' @return data.frame with columns `model`, `target_variable`, `target_end_date`,
+#' `location`, `value`, `location_name`, `population` and extra information in these cases
+#' \itemize{
+#'   \item If `hub = "US"`, it returns extra columns `geo_type`, `geo_value`, `abbreviation` and `full_location_name`.
+#'   \item If `truth_source = "ECDC"`, this function returns extra columns `week_start`. However, when `target_variable` is only
+#' `inc hosp`, there are no extra columns appended to the resulting data frame.
+#' }
 #'
 #' @examples
 #' library(covidHubUtils)
@@ -91,9 +104,9 @@ load_truth <- function(truth_source = NULL,
   } else {
     data_location <- "remote_hub_repo"
   }
-  
+
   # warning for as_of
-  if (data_location != "covidData" & !is.null(as_of)){
+  if (data_location != "covidData" & !is.null(as_of)) {
     if (as_of != Sys.Date()) {
       warning("Warning in load_truth: as_of parameter is only supported when data_location is covidData.
               Will be loading the latest data as of today.")
@@ -415,18 +428,20 @@ get_truth_path <- function(source,
 #'
 #' @param target_variable string specifying target type It should be one or more of
 #' "cum death", "inc case", "inc death", "inc hosp".
+#' @param truth_source character vector specifying where the truths will
+#' be loaded from: currently support `"JHU"` and `"HealthData`".
 #' @param locations vector of valid location code.
-#' US hub is using FIPS code and ECDC hub is using country name abbreviation.
+#' The US hub is using FIPS code and the ECDC hub is using country name abbreviation.
 #' @param as_of character vector of "as of" dates to use for querying truths in
-#' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
-#' available data with an issue date on or before the given \code{as_of} date are returned.
+#' format `'yyyy-mm-dd'`. For each spatial unit and temporal reporting unit, the last
+#' available data with an issue date on or before the given `as_of` date are returned.
 #' @param temporal_resolution string specifying temporal resolution
-#' to include: one of 'daily' or 'weekly'
-#' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format.
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
+#' to include: one of `'daily'` or `'weekly'`
+#' @param truth_end_date date to include the last available truth point in `'yyyy-mm-dd'` format.
+#' @param hub character, which hub to use. Default is `"US"`, other option is
+#' `"ECDC"`
 #'
-#' @return a data frame with columns location, target_end_date, target_variable and value
+#' @return a data.frame with columns `location`, `target_end_date`, `target_variable` and `value`
 #'
 load_from_coviddata <- function(target_variable,
                                 truth_source,
@@ -491,18 +506,18 @@ load_from_coviddata <- function(target_variable,
 #' load truth data from a local clone of forecast hub repo
 #'
 #' @param target_variable string specifying target type It should be one or more of
-#' "cum death", "inc case", "inc death", "inc hosp".
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData"` and `"ECDC"`.
 #' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
 #' @param temporal_resolution string specifying temporal resolution
-#' to include: one of 'daily' or 'weekly'
-#' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format.
+#' to include: one of `'daily'` or `'weekly'`
+#' @param truth_end_date date to include the last available truth point in `'yyyy-mm-dd'` format.
 #' @param data_location character specifying the location of truth data.
-#' Currently only supports "local_hub_repo" or "remote_hub_repo".
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
-#' @return a data frame with columns location, target_end_date, target_variable and value
+#' Currently only supports `"local_hub_repo"` or `"remote_hub_repo"`.
+#' @param hub character, which hub to use. Default is `"US"`, other option is
+#' `"ECDC"`
+#' @return a data.frame with columns `location`, `target_end_date`, `target_variable` and `value`
 #'
 load_from_hub_repo <- function(target_variable,
                                truth_source,
