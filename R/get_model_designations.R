@@ -20,6 +20,8 @@ get_model_designations <- function(models,
                                    as_of = Sys.Date()) {
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
 
+  warning("get_model_designations() will be deprecated soon. please use get_model_metadata() instead.")
+  
   if (as_of != Sys.Date() & source != "local_hub_repo") {
     stop("Error in get_model_designations: Currently only support versioned model designation in local hub repo.")
   }
