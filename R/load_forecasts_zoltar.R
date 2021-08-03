@@ -67,7 +67,7 @@ load_forecasts_zoltar <- function(models = NULL,
   `%dopar%` <- foreach::`%dopar%`
 
   if (!is.null(forecast_dates)) {
-    # set 4 workers
+    # set 2 workers
     cl <- parallel::makeCluster(2, setup_strategy = "sequential")
     doParallel::registerDoParallel(cl)
     forecasts <- foreach::foreach(i = 1:length(models), .combine = rbind) %dopar% {
