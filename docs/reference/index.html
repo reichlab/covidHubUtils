@@ -254,6 +254,12 @@ of epidemic week from a specified date</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="get_model_metadata.html">get_model_metadata()</a></code> </p>
+        </td>
+        <td><p>Get Hub model metadata</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_plot_forecast_data.html">get_plot_forecast_data()</a></code> </p>
         </td>
         <td><p>Combine <code>load_truth()</code> and <code>pivot_forecasts_wider()</code></p></td>
@@ -343,7 +349,7 @@ or local hub repo.</p></td>
         <td>
           <p><code><a href="load_from_hub_repo.html">load_from_hub_repo()</a></code> </p>
         </td>
-        <td><p>load truth data from covidData</p></td>
+        <td><p>load truth data from a local clone of forecast hub repo</p></td>
       </tr><tr>
         
         <td>
@@ -370,9 +376,7 @@ from reichlab/covid19-forecast-hub repo.</p></td>
         <td>
           <p><code><a href="load_truth.html">load_truth()</a></code> </p>
         </td>
-        <td><p>Load truth data under multiple target variables
-from multiple truth sources
-using files in <code>reichlab/covid19-forecast-hub</code>.</p></td>
+        <td><p>Load truth data under multiple target variables from multiple truth sources</p></td>
       </tr><tr>
         
         <td>
@@ -437,6 +441,7 @@ purpose and write to JSON files</p></td>
           <p><code><a href="save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> </p>
         </td>
         <td><p>Generate the most up to date truth data for zoltar
+and save the differences between the new version and old version.
 It only includes national and state-level truth data.</p></td>
       </tr><tr>
         

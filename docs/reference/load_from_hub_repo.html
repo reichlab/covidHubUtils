@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>load truth data from covidData — load_from_hub_repo • covidHubUtils</title>
+<title>load truth data from a local clone of forecast hub repo — load_from_hub_repo • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="load truth data from covidData — load_from_hub_repo" />
-<meta property="og:description" content="load truth data from covidData" />
+<meta property="og:title" content="load truth data from a local clone of forecast hub repo — load_from_hub_repo" />
+<meta property="og:description" content="load truth data from a local clone of forecast hub repo" />
 
 
 
@@ -120,13 +120,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>load truth data from covidData</h1>
+    <h1>load truth data from a local clone of forecast hub repo</h1>
     
     <div class="hidden name"><code>load_from_hub_repo.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>load truth data from covidData</p>
+    <p>load truth data from a local clone of forecast hub repo</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_from_hub_repo</span><span class='op'>(</span>
@@ -145,12 +145,12 @@
     <tr>
       <th>target_variable</th>
       <td><p>string specifying target type It should be one or more of
-"cum death", "inc case", "inc death", "inc hosp".</p></td>
+<code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code>, <code>"inc hosp"</code>.</p></td>
     </tr>
     <tr>
       <th>truth_source</th>
       <td><p>character vector specifying where the truths will
-be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".</p></td>
+be loaded from: currently support <code>"JHU"</code>, <code>"USAFacts"</code>, <code>"NYTimes"</code>, <code>"HealthData"</code> and <code>"ECDC"</code>.</p></td>
     </tr>
     <tr>
       <th>repo_path</th>
@@ -159,27 +159,27 @@ be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and
     <tr>
       <th>temporal_resolution</th>
       <td><p>string specifying temporal resolution
-to include: one of 'daily' or 'weekly'</p></td>
+to include: one of <code>'daily'</code> or <code>'weekly'</code></p></td>
     </tr>
     <tr>
       <th>truth_end_date</th>
-      <td><p>date to include the last available truth point in 'yyyy-mm-dd' format.</p></td>
+      <td><p>date to include the last available truth point in <code>'yyyy-mm-dd'</code> format.</p></td>
     </tr>
     <tr>
       <th>data_location</th>
       <td><p>character specifying the location of truth data.
-Currently only supports "local_hub_repo" or "remote_hub_repo".</p></td>
+Currently only supports <code>"local_hub_repo"</code> or <code>"remote_hub_repo"</code>.</p></td>
     </tr>
     <tr>
       <th>hub</th>
-      <td><p>character, which hub to use. Default is "US", other option is
-"ECDC"</p></td>
+      <td><p>character, which hub to use. Default is <code>"US"</code>, other option is
+<code>"ECDC"</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data frame with columns location, target_end_date, target_variable and value</p>
+    <p>a data.frame with columns <code>location</code>, <code>target_end_date</code>, <code>target_variable</code> and <code>value</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
