@@ -15,8 +15,8 @@
 #' look for recent forecasts. Default to 0, which means to only look
 #' at the last_forecast_date only.
 #' @param locations list of fips. Defaults to all locations with available forecasts.
-#' @param types Character vector specifying type of forecasts to load: “quantile”
-#' or “point”. Defaults to all types  with available forecasts
+#' @param types Character vector specifying type of forecasts to load: "quantile"
+#' or "point". Defaults to all types  with available forecasts
 #' @param targets character vector of targets to retrieve, for example
 #' c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.
 #' @param source string specifying where forecasts will be loaded from: either
