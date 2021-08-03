@@ -6,9 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load truth data under multiple target variables
-from multiple truth sources
-using files in reichlab/covid19-forecast-hub. — load_truth • covidHubUtils</title>
+<title>Load truth data under multiple target variables from multiple truth sources — load_truth • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -41,11 +39,11 @@ using files in reichlab/covid19-forecast-hub. — load_truth • covidHubUtils</
 
 
 
-<meta property="og:title" content="Load truth data under multiple target variables
-from multiple truth sources
-using files in reichlab/covid19-forecast-hub. — load_truth" />
-<meta property="og:description" content="&quot;inc hosp&quot; is only available from &quot;HeatlthData&quot; and this function is not loading
-data for other target variables from &quot;HealthData&quot;." />
+<meta property="og:title" content="Load truth data under multiple target variables from multiple truth sources — load_truth" />
+<meta property="og:description" content="By default, for the US hub, the resulting data.frame contains data for weekly incident cases (JHU),
+weekly incident deaths (JHU) and daily incident hospitalization (HealthData) at all county, state and
+national level. For the ECDC hub, the default resulting data.frame contains data for weekly incident cases (JHU),
+weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries." />
 
 
 
@@ -125,16 +123,16 @@ data for other target variables from &quot;HealthData&quot;." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load truth data under multiple target variables
-from multiple truth sources
-using files in <code>reichlab/covid19-forecast-hub</code>.</h1>
+    <h1>Load truth data under multiple target variables from multiple truth sources</h1>
     
     <div class="hidden name"><code>load_truth.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>"inc hosp"</code> is only available from <code>"HeatlthData"</code> and this function is not loading
-data for other target variables from <code>"HealthData"</code>.</p>
+    <p>By default, for the US hub, the resulting data.frame contains data for weekly incident cases (JHU),
+weekly incident deaths (JHU) and daily incident hospitalization (HealthData) at all county, state and
+national level. For the ECDC hub, the default resulting data.frame contains data for weekly incident cases (JHU),
+weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_truth</span><span class='op'>(</span>
@@ -213,17 +211,31 @@ repository. Only used when data_location is <code>"local_hub_repo"</code></p></t
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.frame with columns <code>model</code>, <code>inc_cum</code>, <code>death_case</code>, <code>target_end_date</code>,
-<code>location</code>, <code>value</code>, <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
+    <p>data.frame with columns <code>model</code>, <code>target_variable</code>, <code>target_end_date</code>,
+<code>location</code>, <code>value</code>, <code>location_name</code>, <code>population</code> and extra information in these cases</p><ul>
+<li><p>If <code>hub = "US"</code>, it returns extra columns <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code> and <code>full_location_name</code>.</p></li>
+<li><p>If <code>truth_source = "ECDC"</code>, this function returns extra columns <code>week_start</code>. However, when <code>target_variable</code> is only
+<code>inc hosp</code>, there are no extra columns appended to the resulting data frame.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>When loading data for multiple <code>target_variables</code>, <code>temporal_resolution</code> will be applied
-to all target variables but <code>"inc hosp"</code>. In that case, this function will return
-daily incident hospitalization counts along with other data.</p>
-<p>Weekly temporal resolution will be applied to <code>"inc hosp"</code> if the user specifies <code>"inc hosp"</code>
-as the only <code>target_variable</code>.</p>
-<p>When loading weekly data, if there are not enough observations for a week, the corresponding
-weekly count would be <code>NA</code> in resulting data frame.</p>
+    
+<ul>
+<li><p><code>"inc hosp"</code> is only available from <code>"HealthData"</code> and <code>"ECDC"</code> and this function is not loading
+data for other target variables from <code>"HealthData"</code>.</p></li>
+<li><p>When loading data for multiple target variables for the US hub, <code>temporal_resolution</code> will be applied
+to all target variables but <code>"inc hosp"</code>. In that case, the function will return
+daily incident hospitalization counts along with other data.</p></li>
+<li><p>For the US hub, weekly temporal resolution will be applied to <code>"inc hosp"</code> if the user specifies <code>"inc hosp"</code>
+as the only <code>target_variable</code>.On the other hand, <code>temporal_resolution</code> will
+be applied to <code>"inc hosp"</code> in all cases for the ECDC hub.</p></li>
+<li><p>When loading weekly data, if there are not enough observations for a week, the corresponding
+weekly count would be <code>NA</code> in resulting data frame.</p></li>
+<li><p><code>as_of</code> is only supported when <code>data_location = "covidData"</code>. Otherwise, this function
+will return a warning.</p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>covidHubUtils</span><span class='op'>)</span></span>
@@ -257,20 +269,20 @@ weekly count would be <code>NA</code> in resulting data frame.</p>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 512,564 x 11</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 532,898 x 11</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    model target_variable target_end_date location value location_name population</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Obse… inc hosp        2020-07-21      19          33 Iowa             3<span style='text-decoration: underline;'>155</span>070</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Obse… inc hosp        2020-07-21      72           0 Puerto Rico      3<span style='text-decoration: underline;'>754</span>939</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Obse… inc hosp        2020-07-19      01         136 Alabama          4<span style='text-decoration: underline;'>903</span>185</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Obse… inc hosp        2020-07-19      19          23 Iowa             3<span style='text-decoration: underline;'>155</span>070</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Obse… inc hosp        2020-07-17      19          20 Iowa             3<span style='text-decoration: underline;'>155</span>070</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Obse… inc hosp        2020-07-17      53          26 Washington       7<span style='text-decoration: underline;'>614</span>893</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Obse… inc hosp        2020-07-16      41          11 Oregon           4<span style='text-decoration: underline;'>217</span>737</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Obse… inc hosp        2020-07-15      15           2 Hawaii           1<span style='text-decoration: underline;'>415</span>872</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Obse… inc hosp        2021-06-13      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Obse… inc hosp        2020-07-25      09           8 Connecticut      3<span style='text-decoration: underline;'>565</span>287</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Obse… inc hosp        2020-08-23      28          82 Mississippi      2<span style='text-decoration: underline;'>976</span>149</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 512,554 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Obse… inc hosp        2020-07-17      48         847 Texas           28<span style='text-decoration: underline;'>995</span>881</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Obse… inc hosp        2020-07-16      40          47 Oklahoma         3<span style='text-decoration: underline;'>956</span>971</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Obse… inc hosp        2020-07-15      09          11 Connecticut      3<span style='text-decoration: underline;'>565</span>287</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Obse… inc hosp        2021-02-16      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Obse… inc hosp        2021-02-15      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Obse… inc hosp        2021-07-03      78           1 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 532,888 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;, full_location_name &lt;chr&gt;</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># load for ECDC</span></span>
@@ -295,20 +307,20 @@ weekly count would be <code>NA</code> in resulting data frame.</p>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 4,928 x 7</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    model target_variable target_end_date location value location_name population</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Obse… inc case        2020-01-25      AT           0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Obse… inc case        2020-02-01      AT           0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Obse… inc case        2020-02-08      AT           0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Obse… inc case        2020-02-15      AT           0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Obse… inc case        2020-02-22      AT           0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Obse… inc case        2020-02-29      AT           9 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Obse… inc case        2020-03-07      AT          70 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Obse… inc case        2020-03-14      AT         576 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Obse… inc case        2020-03-21      AT        <span style='text-decoration: underline;'>2</span>159 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Obse… inc case        2020-03-28      AT        <span style='text-decoration: underline;'>5</span>457 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 4,918 more rows</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 5,120 x 7</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    model location target_end_date target_variable value location_name population</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Obse… AT       2020-01-25      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Obse… AT       2020-02-01      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Obse… AT       2020-02-08      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Obse… AT       2020-02-15      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Obse… AT       2020-02-22      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Obse… AT       2020-02-29      inc case            9 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Obse… AT       2020-03-07      inc case           70 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Obse… AT       2020-03-14      inc case          576 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Obse… AT       2020-03-21      inc case         <span style='text-decoration: underline;'>2</span>159 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Obse… AT       2020-03-28      inc case         <span style='text-decoration: underline;'>5</span>457 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 5,110 more rows</span></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
