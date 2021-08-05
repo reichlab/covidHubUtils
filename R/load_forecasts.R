@@ -44,10 +44,13 @@
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @examples
-#' # load forecasts from US forecast hub
+#' # Load forecasts from US forecast hub
+#' # This call only loads the latest forecast submitted on "2021-07-26" in 
+#' # a 12-day window w.r.t "2021-7-30".
 #' load_forecasts(
 #'   models = "COVIDhub-ensemble",
-#'   dates = "2020-12-07",
+#'   dates = "2021-07-30",
+#'   date_window_size = 11,
 #'   locations = "US",
 #'   types = c("point", "quantile"),
 #'   targets = paste(1:4, "wk ahead inc case"),
@@ -56,11 +59,14 @@
 #'   as_of = NULL
 #' )
 #'
-#' # load forecasts from ECDC forecast hub
+#' # Load forecasts from ECDC forecast hub
+#' # This function call loads the latest forecasts in each 2-day window 
+#' # w.r.t "2021-03-08" and "2021-07-27".
 #' load_forecasts(
 #'   models = "ILM-EKF",
 #'   hub = c("ECDC", "US"),
-#'   dates = "2021-03-08",
+#'   dates = c("2021-03-08", "2021-07-27"),
+#'   date_window_size = 1,
 #'   locations = "GB",
 #'   targets = paste(1:4, "wk ahead inc death"),
 #'   source = "zoltar"

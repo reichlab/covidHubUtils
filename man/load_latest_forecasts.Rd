@@ -35,8 +35,8 @@ at the last_forecast_date only.}
 
 \item{locations}{list of fips. Defaults to all locations with available forecasts.}
 
-\item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to all types  with available forecasts}
+\item{types}{Character vector specifying type of forecasts to load: "quantile"
+or "point". Defaults to all types  with available forecasts}
 
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}

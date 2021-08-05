@@ -20,8 +20,9 @@ load_latest_forecasts_repo(
 \item{file_path}{path to the data-processed folder within a local clone of the hub repo}
 
 \item{models}{Character vector of model abbreviations.
-Default all models that submitted forecasts meeting the other criteria.
-#' @param forecast_dates A 2 dimensional list of forecast dates to retrieve forecasts.
+Default all models that submitted forecasts meeting the other criteria.}
+
+\item{forecast_dates}{A 2 dimensional list of forecast dates to retrieve forecasts.
 This function will return the latest forecasts
 for each sub-list of dates.
 Default to  \code{NULL} which would include all valid forecast dates.
