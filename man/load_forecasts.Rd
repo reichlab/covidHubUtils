@@ -28,9 +28,9 @@ Default all models that submitted forecasts meeting the other criteria.}
 A vector of one or more Date objects or character strings in format “YYYY-MM-DD”
 Default to all valid forecast dates.}
 
-\item{date_window_size}{The number of days across which to
-look for the most recent forecasts for each date in dates parameter.
-Default to 0, which means to only look at the dates parameter only.}
+\item{date_window_size}{The number of days across each date in \code{dates} parameter to
+look for the most recent forecasts.
+Default to 0, which means to only look at the \code{dates} parameter only.}
 
 \item{locations}{list of location codes. Default to all locations with available forecasts.}
 
