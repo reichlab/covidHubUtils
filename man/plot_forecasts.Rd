@@ -25,6 +25,7 @@ plot_forecasts(
   fill_by_model = FALSE,
   fill_transparency = 1,
   truth_as_of = NULL,
+  top_layer = c("truth", "forecast"),
   title = "default",
   subtitle = "default",
   show_caption = TRUE
@@ -40,8 +41,8 @@ It needs to have columns \code{model}, \code{target_variable},
 \code{target_end_date}, \verb{location and value}.
 \code{Model} column can be \code{"Observed Data (a truth source)"}.}
 
-\item{hub}{character, which hub to use.
-Default is \code{"US"}, other option is \code{"ECDC"}.}
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
 \item{models}{vector of strings specifying models to plot.
 Default to all models in \code{forecast_data}.}
@@ -97,6 +98,9 @@ If \code{FALSE}, only blues will be used for all models. Default to \code{FALSE}
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the \code{truth_as_of} date (not using this parameter when truth data
 is from github repo)}
+
+\item{top_layer}{character vector, where the first element indicates the top layer
+of the resulting plot. Possible options are \code{"forecast"} and \code{"truth"}.}
 
 \item{title}{optional text for the title of the plot. If left as \code{"default"},
 the title will be automatically generated. If \code{"none"}, no title will be plotted.}
@@ -155,7 +159,8 @@ plot_forecasts(
   forecast_data = ecdc_forecasts,
   hub = c("ECDC", "US"),
   locations = "GB",
-  truth_source = "JHU"
+  truth_source = "JHU",
+  top_layer = c("forecast")
 )
 
 }
