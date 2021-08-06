@@ -4,6 +4,8 @@ jobs:
   run-unit-tests:
     name: run unit tests
     runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
