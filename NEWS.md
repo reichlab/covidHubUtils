@@ -1,23 +1,69 @@
-## Changes since last release
-- Update `load_forecasts_repo()` and `load_latest_forecasts_repo()` to use local data objects to validate `targets` parameter.
-- Update `score_forecasts()` to return the `true_value` in function output
-- Add `hub` parameter in `plot_forecasts()` and `get_plot_forecast_data()`.
-- Update validation for `locations`, `truth_source` and `target_variable` in `plot_forecasts()` and `get_plot_forecast_data()`.
-- Add a column that appends state abbreviation to county names in US hub locations data object.
-- `load_truth()` now supports multiple target variables and has a new set of default values for `target_variable` and `truth_source` based on `hub` parameter.
-- `load_forecasts_repo()`, `load_latest_forecasts_repo()` and `load_forecast_files_repo()` drop rows with NULLs in `value` column in forecast files.
-- Add `date_to_datetime()` that converts a date to a date time in the corresponding timezone based on `hub` and returns that date time in UTC timezone. This function is used when the user is using `as_of` parameter to load forecasts from zoltar only.
-- Add `preprocess_visualization_truth()` to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests
-- Add `calc_cramers_dist_equal_space()`, `calc_cramers_dist_equal_space()`, and `calc_cramers_dist_one_model_pair()` to calculate forecast similarities based on the approximation of Cramer's distance.
-- In `score_forecasts()` calculate one-sided quantile coverage denoted quantile_coverage0.xx.
-- Allow `load_truth()` to load truth data from covidData. `as_of` parameter is only supported when `data_location = "covidData"`. Otherwise, this function will return warning.
-- Supports daily and weekly incident hospitalization data from `ECDC` source in `load_truth()`. 
-- Add `aggregate_to_weekly()` function.
-- In `score_forecasts()` add `metrics` parameter which is a character vector of the metrics to
+## covidHubUtils 0.1.6
+
+This is a release focusing on new features in most of the major functions.
+
+covidHubUtils now requires additional R packages `doParallel`, `parallel` and `foreach`.
+
+### Feature updates
+- Update `load_forecasts()` and deprecate `load_latest_forecasts()`.
+  
+  + The new implementation of `load_forecasts()` combines the functionality of the previous version of 
+  `load_forecasts()` and `load_latest_forecasts()`. Details about this change are in `load_forecasts()` documentation.
+  
+  + Rename `forecast_dates` to `dates`.
+  
+  + Add `date_window_size` to specify the number of days across each date in `dates` parameter to
+look for the most recent forecasts.
+
+  + Use local data objects to validate `targets` parameter when `source = "local_hub_repo"`.
+  
+  + Drop rows with NULLs in `value` column in forecast files when `source = "local_hub_repo"`.
+  
+  + Add helper function`date_to_datetime()` that converts a date to a date time in the corresponding timezone based on `hub` and returns that date time in UTC timezone. This function is used when the user is using `as_of` parameter to load forecasts from zoltar only.
+  
+  + Add helper function `reformat_forecasts()` to format dataframe returned by a zoltar query.
+
+- Update `plot_forecasts()`
+  
+  + Add `hub` parameter to plot forecasts from US and ECDC hub.
+  
+  + Update validation for `locations`, `truth_source` and `target_variable` parameters.
+  
+  + Add `top_layer` parameter to switch layers of forecasts and truth data.
+  
+- Update `load_truth()`
+
+  + Support multiple target variables and has a new set of default values for `target_variable` and `truth_source` based on `hub` parameter. There are special cases for weekly aggregations when `"inc hosp"` is in `target_variable`. Please refer to the detail tab in function documentation.
+  
+  + Support loading truth data from `covidData`. `as_of` parameter is only supported when `data_location = "covidData"`. Otherwise, this function will return warnings.
+  
+  + Add daily and weekly incident hospitalization data from `ECDC` source in `load_truth()`. 
+  
+  + Refactor code and add helper functions `load_from_hub_repo()`, `load_from_coviddata()` and `aggregate_to_weekly()` 
+
+- Update `score_forecasts()`
+  
+  + Return `true_value` in function output.
+  
+  + Calculate one-sided quantile coverage denoted quantile_coverage0.xx.
+  
+  + Add `metrics` parameter which is a character vector of the metrics to
 be returned with options "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"
+
+- Update `save_truth_for_zoltar()` to return differences between the new version and the current version of truth on zoltar server.
+
 - Update `get_model_designations()` to handle spaces in `hub_repo_path` parameters.
+
 - Add `get_model_metadata()` based off of `get_model_designations()` but to retrieve all fields in metadata. 
-- Add `top_layer` parameter in `plot_forecasts()` to switch layers of forecasts and truth data.
+
+- Add `preprocess_visualization_truth()` to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests
+
+- Add `calc_cramers_dist_equal_space()`, `calc_cramers_dist_equal_space()`, and `calc_cramers_dist_one_model_pair()` to calculate forecast similarities based on the approximation of Cramer's distance.
+
+### Package updates
+- There is no backwards compatibility.
+- Add a column that appends state abbreviation to county names in US hub locations data object.
+- New pkgdown site
 
 ## covidHubUtils 0.1.5
 
@@ -48,7 +94,7 @@ This is a release focusing on updates that provide better interface with Zoltar 
   + Refactor to improve efficiency.
   
 - Update `plot_forecast()`
-
+  
   + Load `"inc hosp"` truth data from remote hub repository. The user does not need to provide `truth_data` parameter to plot daily incident hospitalization forecasts.
   
   + `target_variable` is now optional when `forecast_data` only has one target variable.

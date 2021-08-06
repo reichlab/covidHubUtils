@@ -12,9 +12,9 @@
 #' @param dates The forecast date of forecasts to retrieve.
 #' A vector of one or more Date objects or character strings in format “YYYY-MM-DD”
 #' Default to all valid forecast dates.
-#' @param date_window_size The number of days across which to
-#' look for the most recent forecasts for each date in dates parameter.
-#' Default to 0, which means to only look at the dates parameter only.
+#' @param date_window_size The number of days across each date in `dates` parameter to
+#' look for the most recent forecasts.
+#' Default to 0, which means to only look at the `dates` parameter only.
 #' @param locations list of location codes. Default to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types.
