@@ -9,6 +9,10 @@ The `covidHubUtils` package relies on a small number of packages, including many
 ```r
 devtools::install_github("reichlab/zoltr")
 ```
+Some additional functionalities in `covidHubUtils` also rely on `covidData`. Because there are daily data updates in `covidData`, please install the latest version of it before using related functions in `covidHubUtils`:
+``` r
+devtools::install_github("reichlab/covidData")
+```
 The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `devtools` package:
 ``` r
 devtools::install_github("reichlab/covidHubUtils")
@@ -63,6 +67,7 @@ If you would like to contribute your work, please follow this list to create a p
 - Update `README.md` if you created a new function or add a new parameter to existing functions.
 - Update `DESCRIPTION` when you are using a new dependency in your script.
 - Add yourself as a contributor in `DESCRIPTION`.
+- **Optional:** You could also run `devtools::check()` or `devtools::test()` locally. Some tests require `covidData`. To get accurate test results, please make sure to install the latest daily updates from `covidData` by using `devtools::install_github("reichlab/covidData")`. 
 - Make sure your pull request passes all checks in Github Action.
 
 
