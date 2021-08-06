@@ -17,6 +17,7 @@
 be returned with options "abs_error", "wis", "wis_components","interval_coverage", and "quantile_coverage"
 - Update `get_model_designations()` to handle spaces in `hub_repo_path` parameters.
 - Add `get_model_metadata()` based off of `get_model_designations()` but to retrieve all fields in metadata. 
+- Add `top_layer` parameter in `plot_forecasts()` to switch layers of forecasts and truth data.
 
 ## covidHubUtils 0.1.5
 
