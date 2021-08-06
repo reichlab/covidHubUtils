@@ -25,11 +25,10 @@ jobs:
       
       - name: Install zoltr and scoringutils
         run: |
-          Rscript -e 'devtools::install_github("reichlab/zoltr")'
-          Rscript -e 'devtools::install_github("epiforecasts/scoringutils")'
-          Rscript -e 'devtools::install()'
-        with:
-          auth_token: ${{ secrets.GITHUB_TOKEN }}
+          devtools::install_github("reichlab/zoltr")
+          devtools::install_github("epiforecasts/scoringutils")
+          devtools::install()
+        shell: Rscript {0}
 
       - name: Build site
         run: |
