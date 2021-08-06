@@ -25,19 +25,19 @@ jobs:
       
       - name: Install zoltr and scoringutils
         run: |
-          devtools::install_github("reichlab/zoltr")
-          devtools::install_github("epiforecasts/scoringutils")
-          devtools::install()
-        shell: Rscript {0}
+          Rscript -e 'devtools::install_github("reichlab/zoltr")'
+          Rscript -e 'devtools::install_github("epiforecasts/scoringutils")'
+          Rscript -e 'devtools::install()'
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build site
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
           Rscript -e 'pkgdown::build_site()'
       
       - name: Commit changes
         uses: EndBug/add-and-commit@v7
+        
         with: 
           add: 'docs'
           message: "Build pkgdown site"
