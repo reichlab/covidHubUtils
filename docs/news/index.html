@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -121,13 +121,76 @@
       
     </div>
 
+    <div id="covidhubutils-016" class="section level2">
+<h2 class="hasAnchor">
+<a href="#covidhubutils-016" class="anchor"></a>covidHubUtils 0.1.6</h2>
+<p>This is a release focusing on new features in most of the major functions.</p>
+<p>covidHubUtils now requires additional R packages <code>doParallel</code>, <code>parallel</code> and <code>foreach</code>.</p>
+<div id="feature-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#feature-updates" class="anchor"></a>Feature updates</h3>
+<ul>
+<li>
+<p>Update <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and deprecate <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code>.</p>
+<ul>
+<li><p>The new implementation of <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> combines the functionality of the previous version of <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code>. Details about this change are in <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> documentation.</p></li>
+<li><p>Rename <code>forecast_dates</code> to <code>dates</code>.</p></li>
+<li><p>Add <code>date_window_size</code> to specify the number of days across each date in <code>dates</code> parameter to look for the most recent forecasts.</p></li>
+<li><p>Use local data objects to validate <code>targets</code> parameter when <code>source = "local_hub_repo"</code>.</p></li>
+<li><p>Drop rows with NULLs in <code>value</code> column in forecast files when <code>source = "local_hub_repo"</code>.</p></li>
+<li><p>Add helper function<code><a href="../reference/date_to_datetime.html">date_to_datetime()</a></code> that converts a date to a date time in the corresponding timezone based on <code>hub</code> and returns that date time in UTC timezone. This function is used when the user is using <code>as_of</code> parameter to load forecasts from zoltar only.</p></li>
+<li><p>Add helper function <code><a href="../reference/reformat_forecasts.html">reformat_forecasts()</a></code> to format dataframe returned by a zoltar query.</p></li>
+</ul>
+</li>
+<li>
+<p>Update <code><a href="../reference/plot_forecasts.html">plot_forecasts()</a></code></p>
+<ul>
+<li><p>Add <code>hub</code> parameter to plot forecasts from US and ECDC hub.</p></li>
+<li><p>Update validation for <code>locations</code>, <code>truth_source</code> and <code>target_variable</code> parameters.</p></li>
+<li><p>Add <code>top_layer</code> parameter to switch layers of forecasts and truth data.</p></li>
+</ul>
+</li>
+<li>
+<p>Update <code><a href="../reference/load_truth.html">load_truth()</a></code></p>
+<ul>
+<li><p>Support multiple target variables and has a new set of default values for <code>target_variable</code> and <code>truth_source</code> based on <code>hub</code> parameter. There are special cases for weekly aggregations when <code>"inc hosp"</code> is in <code>target_variable</code>. Please refer to the detail tab in function documentation.</p></li>
+<li><p>Support loading truth data from <code>covidData</code>. <code>as_of</code> parameter is only supported when <code>data_location = "covidData"</code>. Otherwise, this function will return warnings.</p></li>
+<li><p>Add daily and weekly incident hospitalization data from <code>ECDC</code> source in <code><a href="../reference/load_truth.html">load_truth()</a></code>.</p></li>
+<li><p>Refactor code and add helper functions <code><a href="../reference/load_from_hub_repo.html">load_from_hub_repo()</a></code>, <code><a href="../reference/load_from_coviddata.html">load_from_coviddata()</a></code> and <code><a href="../reference/aggregate_to_weekly.html">aggregate_to_weekly()</a></code></p></li>
+</ul>
+</li>
+<li>
+<p>Update <code><a href="../reference/score_forecasts.html">score_forecasts()</a></code></p>
+<ul>
+<li><p>Return <code>true_value</code> in function output.</p></li>
+<li><p>Calculate one-sided quantile coverage denoted quantile_coverage0.xx.</p></li>
+<li><p>Add <code>metrics</code> parameter which is a character vector of the metrics to be returned with options “abs_error”, “wis”, “wis_components”,“interval_coverage”, and “quantile_coverage”</p></li>
+</ul>
+</li>
+<li><p>Update <code><a href="../reference/save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> to return differences between the new version and the current version of truth on zoltar server.</p></li>
+<li><p>Update <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code> to handle spaces in <code>hub_repo_path</code> parameters.</p></li>
+<li><p>Add <code><a href="../reference/get_model_metadata.html">get_model_metadata()</a></code> based off of <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code> but to retrieve all fields in metadata.</p></li>
+<li><p>Add <code><a href="../reference/preprocess_visualization_truth.html">preprocess_visualization_truth()</a></code> to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests</p></li>
+<li><p>Add <code><a href="../reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code>, <code><a href="../reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code>, and <code><a href="../reference/calc_cramers_dist_one_model_pair.html">calc_cramers_dist_one_model_pair()</a></code> to calculate forecast similarities based on the approximation of Cramer’s distance.</p></li>
+</ul>
+</div>
+<div id="package-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#package-updates" class="anchor"></a>Package updates</h3>
+<ul>
+<li>There is no backwards compatibility.</li>
+<li>Add a column that appends state abbreviation to county names in US hub locations data object.</li>
+<li>New pkgdown site</li>
+</ul>
+</div>
+</div>
     <div id="covidhubutils-015" class="section level2">
 <h2 class="hasAnchor">
 <a href="#covidhubutils-015" class="anchor"></a>covidHubUtils 0.1.5</h2>
 <p>This is a release for renaming <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> to <code><a href="../reference/plot_forecasts.html">plot_forecasts()</a></code>. <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> is still available to use but will return deprecation warnings to the user.</p>
-<div id="package-updates" class="section level3">
+<div id="package-updates-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-1" class="anchor"></a>Package updates</h3>
 <ul>
 <li>There is backwards compatibility.</li>
 </ul>
@@ -137,9 +200,9 @@
 <h2 class="hasAnchor">
 <a href="#covidhubutils-014" class="anchor"></a>covidHubUtils 0.1.4</h2>
 <p>This is a release focusing on updates that provide better interface with Zoltar and European COVID-19 Forecast Hub. The release also contains new feature updates and bug fixes in other util functions.</p>
-<div id="feature-updates" class="section level3">
+<div id="feature-updates-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates" class="anchor"></a>Feature updates</h3>
+<a href="#feature-updates-1" class="anchor"></a>Feature updates</h3>
 <ul>
 <li>
 <p>Update <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code></p>
@@ -174,9 +237,9 @@
 <li><p>Add optional <code>as_of</code> parameter in <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code>. Currently only support versioned model designation in local hub repo.</p></li>
 </ul>
 </div>
-<div id="package-updates-1" class="section level3">
+<div id="package-updates-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-1" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-2" class="anchor"></a>Package updates</h3>
 <ul>
 <li>There is no backwards compatibility.</li>
 <li>Add Nikos I. Bosse and Ariane Stark to author/contributor list</li>
@@ -203,9 +266,9 @@
 <li><p><code><a href="../reference/preprocess_hospitalization.html">preprocess_hospitalization()</a></code> is now implemented to create standard cumulative and incident hospitalization truth csv files.</p></li>
 </ul>
 </div>
-<div id="feature-updates-1" class="section level3">
+<div id="feature-updates-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-1" class="anchor"></a>Feature updates</h3>
+<a href="#feature-updates-2" class="anchor"></a>Feature updates</h3>
 <ul>
 <li>
 <p>Update <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code></p>
@@ -220,9 +283,9 @@
 <li><p>Update <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code> to return <code>NA</code> when model designations for outdated models are not available on Zoltar.</p></li>
 </ul>
 </div>
-<div id="package-updates-2" class="section level3">
+<div id="package-updates-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-2" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-3" class="anchor"></a>Package updates</h3>
 <ul>
 <li>There is no backwards compatibility.</li>
 <li>Minor updates to overview vignette.</li>
@@ -233,9 +296,9 @@
 <h2 class="hasAnchor">
 <a href="#covidhubutils-012" class="anchor"></a>covidHubUtils 0.1.2</h2>
 <p>This is a release focusing on new features in scoring functions and plotting functions.</p>
-<div id="feature-updates-2" class="section level3">
+<div id="feature-updates-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-2" class="anchor"></a>Feature updates</h3>
+<a href="#feature-updates-3" class="anchor"></a>Feature updates</h3>
 <ul>
 <li>
 <p>Update <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code></p>
@@ -255,9 +318,9 @@
 </li>
 </ul>
 </div>
-<div id="package-updates-3" class="section level3">
+<div id="package-updates-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-3" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-4" class="anchor"></a>Package updates</h3>
 <ul>
 <li>There is no backwards compatibility.</li>
 <li>Add Khoa Le and Yuxin David Huang to author/contributor list</li>
@@ -269,9 +332,9 @@
 <h2 class="hasAnchor">
 <a href="#covidhubutils-011" class="anchor"></a>covidHubUtils 0.1.1</h2>
 <p>This is a release focusing on new features in plotting functions.</p>
-<div id="feature-updates-3" class="section level3">
+<div id="feature-updates-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-3" class="anchor"></a>Feature updates</h3>
+<a href="#feature-updates-4" class="anchor"></a>Feature updates</h3>
 <ul>
 <li>
 <p><code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> now supports faceted plots of multiple models, locations and forecast dates for one target variable.</p>
@@ -283,9 +346,9 @@
 </li>
 </ul>
 </div>
-<div id="package-updates-4" class="section level3">
+<div id="package-updates-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-4" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-5" class="anchor"></a>Package updates</h3>
 <ul>
 <li>There is no backwards compatibility due to argument changes in <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code>.</li>
 </ul>
@@ -295,17 +358,17 @@
 <h2 class="hasAnchor">
 <a href="#covidhubutils-01" class="anchor"></a>covidHubUtils 0.1</h2>
 <p>This is the first version of the package with a 0.x release.</p>
-<div id="feature-updates-4" class="section level3">
+<div id="feature-updates-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-4" class="anchor"></a>Feature updates</h3>
+<a href="#feature-updates-5" class="anchor"></a>Feature updates</h3>
 <ul>
 <li>details on new features will be listed here for future updates</li>
 <li>current key features include loading and plotting forecast and truth data</li>
 </ul>
 </div>
-<div id="package-updates-5" class="section level3">
+<div id="package-updates-6" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-5" class="anchor"></a>Package updates</h3>
+<a href="#package-updates-6" class="anchor"></a>Package updates</h3>
 <ul>
 <li>details on other changes will be listed here for future updates</li>
 <li>added initial author/contributor list</li>
