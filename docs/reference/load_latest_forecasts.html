@@ -44,11 +44,9 @@ forecast_date_window_size days of the last_forecast_date — load_latest_forecas
 <meta property="og:title" content="Load covid forecasts from local hub repo or Zoltar.
 Return the most recent forecast from each model within
 forecast_date_window_size days of the last_forecast_date — load_latest_forecasts" />
-<meta property="og:description" content="Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date" />
+<meta property="og:description" content="#' 
 
-
+Please use load_forecasts() instead." />
 
 
 
@@ -64,15 +62,9 @@ forecast_date_window_size days of the last_forecast_date" />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -93,6 +85,12 @@ forecast_date_window_size days of the last_forecast_date" />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,12 +132,12 @@ forecast_date_window_size days of the last_forecast_date</h1>
     </div>
 
     <div class="ref-description">
-    <p>Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date</p>
+    <p>#' <a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a>
+
+Please use <code><a href='load_forecasts.html'>load_forecasts()</a></code> instead.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
   models <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>last_forecast_date</span>,
   forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,
@@ -152,7 +150,7 @@ forecast_date_window_size days of the last_forecast_date</p>
   as_of <span class='op'>=</span> <span class='cn'>NULL</span>,
   hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,8 +178,8 @@ at the last_forecast_date only.</p></td>
     </tr>
     <tr>
       <th>types</th>
-      <td><p>Character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to all types  with available forecasts</p></td>
+      <td><p>Character vector specifying type of forecasts to load: "quantile"
+or "point". Defaults to all types  with available forecasts</p></td>
     </tr>
     <tr>
       <th>targets</th>
@@ -232,38 +230,56 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,</span>
-<span class='r-in'> last_forecast_date <span class='op'>=</span> <span class='st'>"2020-12-07"</span>,</span>
-<span class='r-in'> forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>, </span>
-<span class='r-in'> locations <span class='op'>=</span> <span class='st'>"US"</span>,</span>
-<span class='r-in'> types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>,<span class='st'>"quantile"</span><span class='op'>)</span>,</span>
-<span class='r-in'> targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,</span>
-<span class='r-in'> source <span class='op'>=</span> <span class='st'>"zoltar"</span>,</span>
-<span class='r-in'> verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
-<span class='r-in'> as_of<span class='op'>=</span><span class='cn'>NULL</span>,</span>
-<span class='r-in'> hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'> </span>
-<span class='r-in'><span class='va'>forecasts_ECDC</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span>models<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
-<span class='r-in'> hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>, </span>
-<span class='r-in'> last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
-<span class='r-in'> forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,</span>
-<span class='r-in'> locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,</span>
-<span class='r-in'> targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
-<span class='r-in'> source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span></span>
-<span class='r-in'> </span>
-<span class='r-in'><span class='fu'>load_latest_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"Columbia_UNC-SurvCon"</span>, </span>
-<span class='r-in'> last_forecast_date <span class='op'>=</span> <span class='st'>"2021-01-03"</span>, </span>
-<span class='r-in'> source <span class='op'>=</span> <span class='st'>'zoltar'</span>,</span>
-<span class='r-in'> as_of <span class='op'>=</span> <span class='st'>"2021-01-04"</span>,</span>
-<span class='r-in'> verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
-<span class='r-in'> location <span class='op'>=</span> <span class='st'>'US'</span><span class='op'>)</span></span>
-<span class='r-in'> </span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-in'>  </span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
+  models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,
+  last_forecast_date <span class='op'>=</span> <span class='st'>"2020-12-07"</span>,
+  forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>,
+  locations <span class='op'>=</span> <span class='st'>"US"</span>,
+  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,
+  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,
+  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  as_of <span class='op'>=</span> <span class='cn'>NULL</span>,
+  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `load_latest_forecasts()` was deprecated in covidHubUtils 0.1.5.</span>
+#&gt; <span class='warning'>This function has been superseded by the latest load_forecasts(). Please switch your code to using the new function.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `load_latest_forecasts_zoltar()` was deprecated in covidHubUtils 0.1.5.</span>
+#&gt; <span class='warning'>This function has been superseded by the latest load_forecasts_zoltar(). Please switch your code to using the new function.</span></div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='input'>
+<span class='va'>forecasts_ECDC</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
+  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,
+  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,
+  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,
+  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,
+  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,
+  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,
+  source <span class='op'>=</span> <span class='st'>"zoltar"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span></div><div class='input'>
+<span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
+  models <span class='op'>=</span> <span class='st'>"Columbia_UNC-SurvCon"</span>,
+  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-01-03"</span>,
+  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
+  as_of <span class='op'>=</span> <span class='st'>"2021-01-04"</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  location <span class='op'>=</span> <span class='st'>"US"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 448 × 16</span>
+#&gt;    model                forecast_date location horizon temporal_resolu… target_variable
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          
+#&gt; <span style='color: #BCBCBC;'> 1</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 2</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 3</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 4</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 5</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 6</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 7</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 8</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'> 9</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #BCBCBC;'>10</span> Columbia_UNC-SurvCon 2021-01-03    US       1       wk               cum death      
+#&gt; <span style='color: #949494;'># … with 438 more rows, and 10 more variables: target_end_date &lt;date&gt;,</span>
+#&gt; <span style='color: #949494;'>#   type &lt;chr&gt;, quantile &lt;dbl&gt;, value &lt;dbl&gt;, location_name &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   full_location_name &lt;chr&gt;</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -275,11 +291,11 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p></p>
+  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -287,8 +303,6 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 
   
 
-
-  
 
   </body>
 </html>

@@ -2,7 +2,8 @@
 % Please edit documentation in R/load_latest_forecasts_zoltar.R
 \name{load_latest_forecasts_zoltar}
 \alias{load_latest_forecasts_zoltar}
-\title{Load the most recent forecasts submitted in a time window from zoltar.}
+\title{Load the most recent forecasts of all that were submitted
+on \code{forecast_dates} from Zoltar.}
 \usage{
 load_latest_forecasts_zoltar(
   models = NULL,
@@ -17,41 +18,40 @@ load_latest_forecasts_zoltar(
 }
 \arguments{
 \item{models}{Character vector of model abbreviations.
-Default to NULL so that forecasts for all models that submitted forecasts
-meeting the other criteria are returned.}
+Default all models that submitted forecasts meeting the other criteria.}
 
-\item{forecast_dates}{date vector to load the most recent forecast from.
-Default to all valid forecast dates in Zoltar.
-The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
+\item{forecast_dates}{A 2 dimensional list of forecast dates to retrieve forecasts.
+This function will return the latest forecasts
+for each sub-list of dates.
+Default to  \code{NULL} which would include all valid forecast dates in Zoltar.}
 
-\item{locations}{list of valid location codes. Default to all locations with available forecasts in Zoltar.}
+\item{locations}{list of fips. Default to all locations with available forecasts in Zoltar.}
 
-\item{types}{character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types in Zoltar.}
+\item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
+and/or \code{"point"}. Default to all valid forecast types in Zoltar.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
+\code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
 Default to all valid targets in Zoltar.}
 
 \item{as_of}{character for date time to load forecasts submitted as of this time.
 It could use the format of one of the three examples:
-"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+\verb{"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".}
 If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on hub parameter.
-Default to NULL to load the latest version.}
+If not, helper function will append the default timezone to your input based on \code{hub} parameter.
+Default to \code{NULL} to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
-\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
-}
-\value{
-data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation
+\item{verbose}{logical for printing messages on zoltar job status. Default to \code{TRUE}.}
 }
 \description{
-The function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in forecast_dates for selected models,
-locations, types and target.
+This function will throw a warning and return an empty data frame when
+no forecasts are submitted on any dates in \code{forecast_dates} for selected \code{models},
+\code{locations}, \code{types} and \code{target}.
+}
+\details{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
+Please use \code{\link[=load_forecasts_zoltar]{load_forecasts_zoltar()}} instead.
 }

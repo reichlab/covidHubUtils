@@ -6,9 +6,10 @@
 #'
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
-#' @param forecast_dates The forecast date of forecasts to retrieve.
-#' Default to all valid forecast dates in Zoltar.
-#' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
+#' @param forecast_dates A 2 dimensional list of forecast dates to retrieve forecasts.
+#' This function will return the latest forecasts
+#' for each sub-list of dates.
+#' Default to  `NULL` which would include all valid forecast dates in Zoltar.
 #' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types in Zoltar.
@@ -25,13 +26,16 @@
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #'
+#' @importFrom doParallel registerDoParallel
+#' @importFrom foreach foreach %dopar%
+#' @importFrom parallel makeCluster stopCluster
+#'
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
 #' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`,
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @export
-load_forecasts_zoltar <- function(
-                                  models = NULL,
+load_forecasts_zoltar <- function(models = NULL,
                                   forecast_dates = NULL,
                                   locations = NULL,
                                   types = NULL,
@@ -43,70 +47,141 @@ load_forecasts_zoltar <- function(
   # set up Zoltar connection
   zoltar_connection <- setup_zoltar_connection(staging = FALSE)
 
-  if (!is.null(forecast_dates)) {
-    # construct Zoltar project url
-    project_url <- get_zoltar_project_url(
-      hub = hub,
-      zoltar_connection = zoltar_connection
-    )
-
-    # get all valid timezeros in project
-    all_valid_timezeros <- zoltr::timezeros(
-      zoltar_connection = zoltar_connection,
-      project_url = project_url
-    )$timezero_date
-
-    # take intersection of forecast_dates and all_valid_timezeros
-    valid_forecast_dates <- intersect(
-      as.character(forecast_dates),
-      as.character(all_valid_timezeros)
-    )
-    if (length(valid_forecast_dates) == 0) {
-      stop("Error in load_forecasts: All forecast_dates are invalid.")
-    }
-  }
-
-  forecasts <- zoltr::do_zoltar_query(
-    zoltar_connection = zoltar_connection,
-    project_url = project_url,
-    query_type = "forecasts",
-    units = locations,
-    timezeros = valid_forecast_dates,
-    models = models,
-    targets = targets,
-    types = types,
-    verbose = verbose,
-    as_of = date_to_datetime(as_of, hub)
+  # construct Zoltar project url
+  project_url <- get_zoltar_project_url(
+    hub = hub,
+    zoltar_connection = zoltar_connection
   )
-  if (nrow(forecasts) == 0) {
-    warning("Warning in do_zoltar_query: Forecasts are not available.\n Please check your parameters.")
-    # convert value column to double and select columns
-    forecasts <- forecasts %>%
-      dplyr::mutate(value = as.double(value)) %>%
-      dplyr::rename(location = unit, forecast_date = timezero, type = class) %>%
-      dplyr::select(model, forecast_date, location, type, quantile, value)
+  # get all valid timezeros in project
+  all_models <- zoltr::models(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url
+  )
+
+  # get all valid timezeros in project
+  all_valid_timezeros <- zoltr::timezeros(
+    zoltar_connection = zoltar_connection,
+    project_url = project_url
+  )$timezero_date
+
+  `%dopar%` <- foreach::`%dopar%`
+
+  if (!is.null(forecast_dates)) {
+    # set 2 workers
+    cl <- parallel::makeCluster(2, setup_strategy = "sequential")
+    doParallel::registerDoParallel(cl)
+    forecasts <- foreach::foreach(i = 1:length(models), .combine = rbind) %dopar% {
+      curr_model <- models[i]
+
+      model_url <- all_models[all_models$model_abbr == curr_model, ]$url
+
+      model_forecasts_history <- zoltr::forecasts(
+        zoltar_connection = zoltar_connection,
+        model_url = model_url
+      )$timezero_date
+
+      # get the latest of each subset of forecast_dates
+      latest_dates <- purrr::map(
+        forecast_dates,
+        function(a_list) {
+          max(intersect(
+            as.character(a_list),
+            as.character(model_forecasts_history)
+          ))
+        }
+      )
+
+      # unlist and drop duplicates
+      latest_dates <- unique(unlist(latest_dates, use.names = FALSE))
+
+      if (length(latest_dates) == 0) {
+        stop("Error in load_forecasts: All forecast_dates are invalid.")
+      }
+
+      forecast <- zoltr::do_zoltar_query(
+        zoltar_connection = zoltar_connection,
+        project_url = project_url,
+        query_type = "forecasts",
+        units = locations,
+        timezeros = latest_dates,
+        models = curr_model,
+        targets = targets,
+        types = types,
+        verbose = verbose,
+        as_of = date_to_datetime(as_of, hub)
+      )
+
+      forecast <- reformat_forecasts(forecast)
+    }
+    # shut down workers
+    parallel::stopCluster(cl)
   } else {
-    forecasts <- forecasts %>%
-      # keep only required columns
-      dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
-      dplyr::rename(
-        location = unit, forecast_date = timezero,
-        type = class
-      ) %>%
-      # create horizon and target_end_date columns
-      tidyr::separate(target,
-        into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
-        remove = FALSE, extra = "merge"
-      ) %>%
-      dplyr::mutate(target_end_date = as.Date(
-        calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
-      )) %>%
-      dplyr::select(
-        model, forecast_date, location, horizon, temporal_resolution,
-        target_variable, target_end_date, type, quantile, value
-      ) %>%
-      join_with_hub_locations(hub = hub)
+    # load forecasts submitted on all dates
+    forecasts <- zoltr::do_zoltar_query(
+      zoltar_connection = zoltar_connection,
+      project_url = project_url,
+      query_type = "forecasts",
+      units = locations,
+      timezeros = forecast_dates,
+      models = models,
+      targets = targets,
+      types = types,
+      verbose = verbose,
+      as_of = date_to_datetime(as_of, hub)
+    )
+    forecasts <- reformat_forecasts(forecasts)
   }
+
+  if (nrow(forecasts) == 0) {
+    warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
+  }
+
+  # append location, population information
+  forecasts <- forecasts %>%
+    join_with_hub_locations(hub = hub)
 
   return(forecasts)
+}
+
+
+#' Reformat forecast data frame returned from zoltar query
+#' This function will throw a warning and return an empty data.frame with
+#' columns `model`, `forecast_date`, `location`, `type`, `quantile` and `value`, when
+#' no forecasts are available in `zoltar_query_result`.
+#'
+#' @param zoltar_query_result dataframe returned by [zoltr::do_zoltar_query]
+#'
+#' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
+#' `temporal_resolution`, `target_variable`, `target_end_date`, `type`, `quantile`, `value`
+#'
+#' @export
+reformat_forecasts <- function(zoltar_query_result) {
+  if (nrow(zoltar_query_result) == 0) {
+    warning("Warning in reformat_forecasts: Forecasts are not available.\n Please check your parameters.")
+    # convert value column to double and select columns
+    zoltar_query_result <- zoltar_query_result %>%
+      dplyr::mutate(value = as.double(value))
+  }
+
+  zoltar_query_result <- zoltar_query_result %>%
+    # keep only required columns
+    dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
+    dplyr::rename(
+      location = unit, forecast_date = timezero,
+      type = class
+    ) %>%
+    # create horizon and target_end_date columns
+    tidyr::separate(target,
+      into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
+      remove = FALSE, extra = "merge"
+    ) %>%
+    dplyr::mutate(target_end_date = as.Date(
+      calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
+    )) %>%
+    dplyr::select(
+      model, forecast_date, location, horizon, temporal_resolution,
+      target_variable, target_end_date, type, quantile, value
+    )
+
+  return(zoltar_query_result)
 }

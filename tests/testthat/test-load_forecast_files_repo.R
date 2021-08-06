@@ -15,9 +15,14 @@ test_that("load_forecast_files_repo works", {
     all_forecasts %>%
       dplyr::distinct(model, forecast_date) %>%
       dplyr::arrange(model, forecast_date),
-    tidyr::expand_grid(
-      model = c("COVIDhub-baseline", "COVIDhub-ensemble", "model-model1"),
-      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14"))
+    dplyr::tibble(
+      model = c("COVIDhub-baseline", "COVIDhub-baseline", "COVIDhub-baseline",
+                "COVIDhub-ensemble", "COVIDhub-ensemble", "COVIDhub-ensemble",
+                "model-model1","model-model1"),
+      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14", "2021-06-21 ",
+                                       "2020-12-07", "2020-12-14", "2021-05-03 ",
+                                       "2020-12-07", "2020-12-14"
+                                       ))
     )
   )
 })

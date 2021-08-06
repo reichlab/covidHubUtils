@@ -35,8 +35,8 @@ at the last_forecast_date only.}
 
 \item{locations}{list of fips. Defaults to all locations with available forecasts.}
 
-\item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to all types  with available forecasts}
+\item{types}{Character vector specifying type of forecasts to load: "quantile"
+or "point". Defaults to all types  with available forecasts}
 
 \item{targets}{character vector of targets to retrieve, for example
 c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets.}
@@ -70,40 +70,39 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation
 }
 \description{
-Load covid forecasts from local hub repo or Zoltar.
-Return the most recent forecast from each model within
-forecast_date_window_size days of the last_forecast_date
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
+Please use \code{\link[=load_forecasts]{load_forecasts()}} instead.
 }
 \examples{
-\dontrun{
+forecasts <- load_latest_forecasts(
+  models = "COVIDhub-ensemble",
+  last_forecast_date = "2020-12-07",
+  forecast_date_window_size = 6,
+  locations = "US",
+  types = c("point", "quantile"),
+  targets = paste(1:4, "wk ahead inc case"),
+  source = "zoltar",
+  verbose = FALSE,
+  as_of = NULL,
+  hub = c("US")
+)
 
+forecasts_ECDC <- load_latest_forecasts(
+  models = c("ILM-EKF"),
+  hub = c("ECDC", "US"),
+  last_forecast_date = "2021-03-08",
+  forecast_date_window_size = 0,
+  locations = c("GB"),
+  targets = paste(1:4, "wk ahead inc death"),
+  source = "zoltar"
+)
 
-forecasts <- load_latest_forecasts(models = "COVIDhub-ensemble",
- last_forecast_date = "2020-12-07",
- forecast_date_window_size = 6, 
- locations = "US",
- types = c("point","quantile"),
- targets = paste(1:4, "wk ahead inc case"),
- source = "zoltar",
- verbose = FALSE,
- as_of=NULL,
- hub = c("US"))
- 
-forecasts_ECDC <- load_latest_forecasts(models=c("ILM-EKF"),
- hub = c("ECDC","US"), 
- last_forecast_date = "2021-03-08",
- forecast_date_window_size = 0,
- locations = c("GB"),
- targets = paste(1:4, "wk ahead inc death"),
- source = "zoltar")
- 
-load_latest_forecasts(models = "Columbia_UNC-SurvCon", 
- last_forecast_date = "2021-01-03", 
- source = 'zoltar',
- as_of = "2021-01-04",
- verbose = FALSE,
- location = 'US')
- 
-}
-  
+load_latest_forecasts(
+  models = "Columbia_UNC-SurvCon",
+  last_forecast_date = "2021-01-03",
+  source = "zoltar",
+  as_of = "2021-01-04",
+  verbose = FALSE,
+  location = "US"
+)
 }

@@ -44,8 +44,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -57,15 +55,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,6 +78,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -324,14 +322,15 @@ without rows having NULLs in value column.</p></td>
         <td>
           <p><code><a href="load_forecasts.html">load_forecasts()</a></code> </p>
         </td>
-        <td><p>Load all available forecasts submitted on forecast_dates from Zoltar
+        <td><p>Load all available forecasts submitted around forecast dates from Zoltar
 or local hub repo.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="load_forecasts_repo.html">load_forecasts_repo()</a></code> </p>
         </td>
-        <td><p>Load all available forecasts submitted on forecast_dates from local hub repo.</p></td>
+        <td><p>Load all available forecasts submitted on <code>forecast_dates</code> from
+a local clone of <code>reichlab/covid19-forecast-hub</code> repo.</p></td>
       </tr><tr>
         
         <td>
@@ -363,14 +362,15 @@ forecast_date_window_size days of the last_forecast_date</p></td>
         <td>
           <p><code><a href="load_latest_forecasts_repo.html">load_latest_forecasts_repo()</a></code> </p>
         </td>
-        <td><p>Load the most recent forecast submitted in a time window
-from reichlab/covid19-forecast-hub repo.</p></td>
+        <td><p>Load the most recent forecasts of all that were submitted
+on <code>forecast_dates</code> from a local clone of <code>reichlab/covid19-forecast-hub</code> repo.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="load_latest_forecasts_zoltar.html">load_latest_forecasts_zoltar()</a></code> </p>
         </td>
-        <td><p>Load the most recent forecasts submitted in a time window from zoltar.</p></td>
+        <td><p>Load the most recent forecasts of all that were submitted
+on <code>forecast_dates</code> from Zoltar.</p></td>
       </tr><tr>
         
         <td>
@@ -438,6 +438,15 @@ purpose and write to JSON files</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="reformat_forecasts.html">reformat_forecasts()</a></code> </p>
+        </td>
+        <td><p>Reformat forecast data frame returned from zoltar query
+This function will throw a warning and return an empty data.frame with
+columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>type</code>, <code>quantile</code> and <code>value</code>, when
+no forecasts are available in <code>zoltar_query_result</code>.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> </p>
         </td>
         <td><p>Generate the most up to date truth data for zoltar
@@ -470,11 +479,11 @@ It only includes national and state-level truth data.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p></p>
+  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -482,8 +491,6 @@ It only includes national and state-level truth data.</p></td>
 
   
 
-
-  
 
   </body>
 </html>
