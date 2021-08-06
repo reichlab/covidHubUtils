@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load all available forecasts submitted on forecast_dates from Zoltar
+<title>Load all available forecasts submitted around forecast dates from Zoltar
 or local hub repo. — load_forecasts • covidHubUtils</title>
 
 
@@ -40,10 +40,10 @@ or local hub repo. — load_forecasts • covidHubUtils</title>
 
 
 
-<meta property="og:title" content="Load all available forecasts submitted on forecast_dates from Zoltar
+<meta property="og:title" content="Load all available forecasts submitted around forecast dates from Zoltar
 or local hub repo. — load_forecasts" />
-<meta property="og:description" content="Load all available forecasts submitted on forecast_dates from Zoltar
-or local hub repo." />
+<meta property="og:description" content="If date_window_size is 0, this function returns all available forecasts
+submitted on every day in dates." />
 
 
 
@@ -121,20 +121,21 @@ or local hub repo." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load all available forecasts submitted on forecast_dates from Zoltar
+    <h1>Load all available forecasts submitted around forecast dates from Zoltar
 or local hub repo.</h1>
     
     <div class="hidden name"><code>load_forecasts.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Load all available forecasts submitted on forecast_dates from Zoltar
-or local hub repo.</p>
+    <p>If <code>date_window_size</code> is 0, this function returns all available forecasts
+submitted on every day in <code>dates</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>load_forecasts</span><span class='op'>(</span>
   models <span class='op'>=</span> <span class='cn'>NULL</span>,
-  forecast_dates <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dates <span class='op'>=</span> <span class='cn'>NULL</span>,
+  date_window_size <span class='op'>=</span> <span class='fl'>0</span>,
   locations <span class='op'>=</span> <span class='cn'>NULL</span>,
   types <span class='op'>=</span> <span class='cn'>NULL</span>,
   targets <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -155,10 +156,16 @@ or local hub repo.</p>
 Default all models that submitted forecasts meeting the other criteria.</p></td>
     </tr>
     <tr>
-      <th>forecast_dates</th>
+      <th>dates</th>
       <td><p>The forecast date of forecasts to retrieve.
-Default to all valid forecast dates.
-The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.</p></td>
+A vector of one or more Date objects or character strings in format “YYYY-MM-DD”
+Default to all valid forecast dates.</p></td>
+    </tr>
+    <tr>
+      <th>date_window_size</th>
+      <td><p>The number of days across which to
+look for the most recent forecasts for each date in dates parameter.
+Default to 0, which means to only look at the dates parameter only.</p></td>
     </tr>
     <tr>
       <th>locations</th>
@@ -217,42 +224,56 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
     <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
 <code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
 <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If <code>date_window_size</code> is not 0, this function will look for all the latest
+forecasts that are submitted within window size for each day in <code>dates</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># load forecasts from US forecast hub</span>
-<span class='fu'>load_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,
- forecast_date <span class='op'>=</span> <span class='st'>"2020-12-07"</span>,
- locations <span class='op'>=</span> <span class='st'>"US"</span>,
- types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>,<span class='st'>"quantile"</span><span class='op'>)</span>,
- targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,
- source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
- verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
- as_of <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79827/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79827/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79827/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79827/data/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 32 × 16</span>
+    <pre class="examples"><div class='input'><span class='co'># Load forecasts from US forecast hub</span>
+<span class='co'># This call only loads the latest forecast submitted on "2021-07-26" in </span>
+<span class='co'># a 12-day window w.r.t "2021-7-30".</span>
+<span class='fu'>load_forecasts</span><span class='op'>(</span>
+  models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,
+  dates <span class='op'>=</span> <span class='st'>"2021-07-30"</span>,
+  date_window_size <span class='op'>=</span> <span class='fl'>11</span>,
+  locations <span class='op'>=</span> <span class='st'>"US"</span>,
+  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,
+  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,
+  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  as_of <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 32 × 16</span>
 #&gt;    model             forecast_date location horizon temporal_resolu… target_variable
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          
-#&gt; <span style='color: #BCBCBC;'> 1</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 2</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 3</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 4</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 5</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 6</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 7</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 8</span> COVIDhub-ensemble 2020-12-07    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 9</span> COVIDhub-ensemble 2020-12-07    US       2       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'>10</span> COVIDhub-ensemble 2020-12-07    US       2       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 1</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 2</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 3</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 4</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 5</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 6</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 7</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 8</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'> 9</span> COVIDhub-ensemble 2021-07-26    US       2       wk               inc case       
+#&gt; <span style='color: #BCBCBC;'>10</span> COVIDhub-ensemble 2021-07-26    US       2       wk               inc case       
 #&gt; <span style='color: #949494;'># … with 22 more rows, and 10 more variables: target_end_date &lt;date&gt;,</span>
 #&gt; <span style='color: #949494;'>#   type &lt;chr&gt;, quantile &lt;dbl&gt;, value &lt;dbl&gt;, location_name &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   full_location_name &lt;chr&gt;</span></div><div class='input'>
-<span class='co'># load forecasts from ECDC forecast hub</span>
-<span class='fu'>load_forecasts</span><span class='op'>(</span>models <span class='op'>=</span> <span class='st'>"ILM-EKF"</span>,
- hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>,<span class='st'>"US"</span><span class='op'>)</span>,
- forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,
- locations <span class='op'>=</span> <span class='st'>"GB"</span>,
- targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,
- source <span class='op'>=</span> <span class='st'>"zoltar"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span></div><div class='output co'>#&gt; <span class='message'>polling for status change. job_url=https://zoltardata.com/api/job/79829/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79829/</span></div><div class='output co'>#&gt; <span class='message'>QUEUED</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79829/</span></div><div class='output co'>#&gt; <span class='message'>SUCCESS</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/job/79829/data/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 96 × 12</span>
+<span class='co'># Load forecasts from ECDC forecast hub</span>
+<span class='co'># This function call loads the latest forecasts in each 2-day window </span>
+<span class='co'># w.r.t "2021-03-08" and "2021-07-27".</span>
+<span class='fu'>load_forecasts</span><span class='op'>(</span>
+  models <span class='op'>=</span> <span class='st'>"ILM-EKF"</span>,
+  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,
+  dates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2021-03-08"</span>, <span class='st'>"2021-07-27"</span><span class='op'>)</span>,
+  date_window_size <span class='op'>=</span> <span class='fl'>1</span>,
+  locations <span class='op'>=</span> <span class='st'>"GB"</span>,
+  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,
+  source <span class='op'>=</span> <span class='st'>"zoltar"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 192 × 12</span>
 #&gt;    model   forecast_date location horizon temporal_resolution target_variable
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          
 #&gt; <span style='color: #BCBCBC;'> 1</span> ILM-EKF 2021-03-08    GB       1       wk                  inc death      
@@ -265,10 +286,9 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
 #&gt; <span style='color: #BCBCBC;'> 8</span> ILM-EKF 2021-03-08    GB       1       wk                  inc death      
 #&gt; <span style='color: #BCBCBC;'> 9</span> ILM-EKF 2021-03-08    GB       1       wk                  inc death      
 #&gt; <span style='color: #BCBCBC;'>10</span> ILM-EKF 2021-03-08    GB       1       wk                  inc death      
-#&gt; <span style='color: #949494;'># … with 86 more rows, and 6 more variables: target_end_date &lt;date&gt;,</span>
+#&gt; <span style='color: #949494;'># … with 182 more rows, and 6 more variables: target_end_date &lt;date&gt;,</span>
 #&gt; <span style='color: #949494;'>#   type &lt;chr&gt;, quantile &lt;dbl&gt;, value &lt;dbl&gt;, location_name &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   population &lt;int&gt;</span></div><div class='input'>
-</div></pre>
+#&gt; <span style='color: #949494;'>#   population &lt;int&gt;</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

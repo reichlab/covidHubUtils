@@ -150,24 +150,23 @@ the file names are in the format "*YYYY-MM-DD-&lt;model_name&gt;.csv".</p></td>
     </tr>
     <tr>
       <th>locations</th>
-      <td><p>list of valid location codes. Defaults to all locations with
-available forecasts.</p></td>
+      <td><p>list of fips. Default to all locations with available forecasts.</p></td>
     </tr>
     <tr>
       <th>types</th>
-      <td><p>character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to all types  with available forecasts</p></td>
+      <td><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
+and/or <code>"point"</code>. Default to all valid forecast types.</p></td>
     </tr>
     <tr>
       <th>targets</th>
       <td><p>character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
-with available forecasts.</p></td>
+<code><a href='https://rdrr.io/r/base/c.html'>c('1 wk ahead cum death', '2 wk ahead cum death')</a></code>.
+Default to <code>NULL</code> which stands for all valid targets.</p></td>
     </tr>
     <tr>
       <th>hub</th>
       <td><p>character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"</p></td>
+from which to load forecasts. Possible options are <code>"US"</code> and <code>"ECDC"</code>.</p></td>
     </tr>
     </table>
 

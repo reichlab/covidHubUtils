@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load all available forecasts submitted on forecast_dates from local hub repo. — load_forecasts_repo • covidHubUtils</title>
+<title>Load all available forecasts submitted on forecast_dates from
+a local clone of reichlab/covid19-forecast-hub repo. — load_forecasts_repo • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -39,7 +40,8 @@
 
 
 
-<meta property="og:title" content="Load all available forecasts submitted on forecast_dates from local hub repo. — load_forecasts_repo" />
+<meta property="og:title" content="Load all available forecasts submitted on forecast_dates from
+a local clone of reichlab/covid19-forecast-hub repo. — load_forecasts_repo" />
 <meta property="og:description" content="This function will throw an error when no forecasts are submitted on
 any dates in forecast_dates for selected models,
 locations, types and target." />
@@ -120,7 +122,8 @@ locations, types and target." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load all available forecasts submitted on forecast_dates from local hub repo.</h1>
+    <h1>Load all available forecasts submitted on <code>forecast_dates</code> from
+a local clone of <code>reichlab/covid19-forecast-hub</code> repo.</h1>
     
     <div class="hidden name"><code>load_forecasts_repo.Rd</code></div>
     </div>
@@ -156,8 +159,10 @@ Default all models that submitted forecasts meeting the other criteria.</p></td>
     </tr>
     <tr>
       <th>forecast_dates</th>
-      <td><p>The forecast date of forecasts to retrieve.
-Default to all valid forecast dates.
+      <td><p>A 2 dimensional list of forecast dates to retrieve forecasts.
+This function will return the latest forecasts
+for each sub-list of dates.
+Default to  <code>NULL</code> which would include all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates.</p></td>
     </tr>
     <tr>

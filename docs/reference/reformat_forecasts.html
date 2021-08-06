@@ -6,7 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load all available forecasts submitted on forecast_dates from Zoltar. — load_forecasts_zoltar • covidHubUtils</title>
+<title>Reformat forecast data frame returned from zoltar query
+This function will throw a warning and return an empty data.frame with
+columns model, forecast_date, location, type, quantile and value, when
+no forecasts are available in zoltar_query_result. — reformat_forecasts • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -39,10 +42,14 @@
 
 
 
-<meta property="og:title" content="Load all available forecasts submitted on forecast_dates from Zoltar. — load_forecasts_zoltar" />
-<meta property="og:description" content="This function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in forecast_dates for selected models,
-locations, types and target." />
+<meta property="og:title" content="Reformat forecast data frame returned from zoltar query
+This function will throw a warning and return an empty data.frame with
+columns model, forecast_date, location, type, quantile and value, when
+no forecasts are available in zoltar_query_result. — reformat_forecasts" />
+<meta property="og:description" content="Reformat forecast data frame returned from zoltar query
+This function will throw a warning and return an empty data.frame with
+columns model, forecast_date, location, type, quantile and value, when
+no forecasts are available in zoltar_query_result." />
 
 
 
@@ -120,83 +127,36 @@ locations, types and target." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load all available forecasts submitted on <code>forecast_dates</code> from Zoltar.</h1>
+    <h1>Reformat forecast data frame returned from zoltar query
+This function will throw a warning and return an empty data.frame with
+columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>type</code>, <code>quantile</code> and <code>value</code>, when
+no forecasts are available in <code>zoltar_query_result</code>.</h1>
     
-    <div class="hidden name"><code>load_forecasts_zoltar.Rd</code></div>
+    <div class="hidden name"><code>reformat_forecasts.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in <code>forecast_dates</code> for selected <code>models</code>,
-<code>locations</code>, <code>types</code> and <code>target</code>.</p>
+    <p>Reformat forecast data frame returned from zoltar query
+This function will throw a warning and return an empty data.frame with
+columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>type</code>, <code>quantile</code> and <code>value</code>, when
+no forecasts are available in <code>zoltar_query_result</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_forecasts_zoltar</span><span class='op'>(</span>
-  models <span class='op'>=</span> <span class='cn'>NULL</span>,
-  forecast_dates <span class='op'>=</span> <span class='cn'>NULL</span>,
-  locations <span class='op'>=</span> <span class='cn'>NULL</span>,
-  types <span class='op'>=</span> <span class='cn'>NULL</span>,
-  targets <span class='op'>=</span> <span class='cn'>NULL</span>,
-  as_of <span class='op'>=</span> <span class='cn'>NULL</span>,
-  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>,
-  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>reformat_forecasts</span><span class='op'>(</span><span class='va'>zoltar_query_result</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>models</th>
-      <td><p>Character vector of model abbreviations.
-Default all models that submitted forecasts meeting the other criteria.</p></td>
-    </tr>
-    <tr>
-      <th>forecast_dates</th>
-      <td><p>A 2 dimensional list of forecast dates to retrieve forecasts.
-This function will return the latest forecasts
-for each sub-list of dates.
-Default to  <code>NULL</code> which would include all valid forecast dates in Zoltar.</p></td>
-    </tr>
-    <tr>
-      <th>locations</th>
-      <td><p>list of fips. Default to all locations with available forecasts in Zoltar.</p></td>
-    </tr>
-    <tr>
-      <th>types</th>
-      <td><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
-and/or <code>"point"</code>. Default to all valid forecast types in Zoltar.</p></td>
-    </tr>
-    <tr>
-      <th>targets</th>
-      <td><p>character vector of targets to retrieve, for example
-<code><a href='https://rdrr.io/r/base/c.html'>c('1 wk ahead cum death', '2 wk ahead cum death')</a></code>.
-Default to all valid targets in Zoltar.</p></td>
-    </tr>
-    <tr>
-      <th>as_of</th>
-      <td><p>character for date time to load forecasts submitted as of this time.
-It could use the format of one of the three examples:
-<code>"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".</code>
-If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on <code>hub</code> parameter.
-Default to <code>NULL</code> to load the latest version.</p></td>
-    </tr>
-    <tr>
-      <th>hub</th>
-      <td><p>character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are <code>"US"</code> and <code>"ECDC"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>logical for printing messages on zoltar job status. Default to <code>TRUE</code>.</p></td>
+      <th>zoltar_query_result</th>
+      <td><p>dataframe returned by <a href='http://reichlab.io/zoltr/reference/do_zoltar_query.html'>zoltr::do_zoltar_query</a></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
-<code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
-<code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
+<code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
