@@ -48,8 +48,6 @@ weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all E
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -61,15 +59,9 @@ weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all E
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -90,6 +82,12 @@ weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all E
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -135,7 +133,7 @@ national level. For the ECDC hub, the default resulting data.frame contains data
 weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_truth</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>load_truth</span><span class='op'>(</span>
   truth_source <span class='op'>=</span> <span class='cn'>NULL</span>,
   target_variable <span class='op'>=</span> <span class='cn'>NULL</span>,
   as_of <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -145,7 +143,7 @@ weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all E
   data_location <span class='op'>=</span> <span class='cn'>NULL</span>,
   local_repo_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,15 +152,15 @@ weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all E
       <th>truth_source</th>
       <td><p>character vector specifying where the truths will
 be loaded from: currently support <code>"JHU"</code>, <code>"USAFacts"</code>, <code>"NYTimes"</code>, <code>"HealthData</code>" and <code>"ECDC"</code>.
-If <code>NULL</code>, default for US hub is <code>c("JHU", "HealthData")</code>.
-If <code>NULL</code>, default for ECDC hub is <code>c("JHU")</code>.</p></td>
+If <code>NULL</code>, default for US hub is <code><a href='https://rdrr.io/r/base/c.html'>c("JHU", "HealthData")</a></code>.
+If <code>NULL</code>, default for ECDC hub is <code><a href='https://rdrr.io/r/base/c.html'>c("JHU")</a></code>.</p></td>
     </tr>
     <tr>
       <th>target_variable</th>
       <td><p>string specifying target type It should be one or more of
 <code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code>, <code>"inc hosp"</code>.
-If <code>NULL</code>, default for US hub is <code>c("inc case", "inc death", "inc hosp")</code>.
-If <code>NULL</code>, default for ECDC hub is <code>c("inc case", "inc death")</code>.</p></td>
+If <code>NULL</code>, default for US hub is <code><a href='https://rdrr.io/r/base/c.html'>c("inc case", "inc death", "inc hosp")</a></code>.
+If <code>NULL</code>, default for ECDC hub is <code><a href='https://rdrr.io/r/base/c.html'>c("inc case", "inc death")</a></code>.</p></td>
     </tr>
     <tr>
       <th>as_of</th>
@@ -238,90 +236,78 @@ will return a warning.</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>covidHubUtils</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># load for US</span></span>
-<span class='r-in'><span class='fu'>load_truth</span><span class='op'>(</span></span>
-<span class='r-in'>  truth_source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"JHU"</span>, <span class='st'>"HealthData"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  target_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"inc case"</span>, <span class='st'>"inc death"</span>, <span class='st'>"inc hosp"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 532,898 x 11</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    model target_variable target_end_date location value location_name population</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Obse… inc hosp        2020-07-21      19          33 Iowa             3<span style='text-decoration: underline;'>155</span>070</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Obse… inc hosp        2020-07-21      72           0 Puerto Rico      3<span style='text-decoration: underline;'>754</span>939</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Obse… inc hosp        2020-07-19      19          23 Iowa             3<span style='text-decoration: underline;'>155</span>070</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Obse… inc hosp        2020-07-17      19          20 Iowa             3<span style='text-decoration: underline;'>155</span>070</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Obse… inc hosp        2020-07-17      48         847 Texas           28<span style='text-decoration: underline;'>995</span>881</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Obse… inc hosp        2020-07-16      40          47 Oklahoma         3<span style='text-decoration: underline;'>956</span>971</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Obse… inc hosp        2020-07-15      09          11 Connecticut      3<span style='text-decoration: underline;'>565</span>287</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Obse… inc hosp        2021-02-16      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Obse… inc hosp        2021-02-15      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Obse… inc hosp        2021-07-03      78           1 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 532,888 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;, full_location_name &lt;chr&gt;</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># load for ECDC</span></span>
-<span class='r-in'><span class='fu'>load_truth</span><span class='op'>(</span></span>
-<span class='r-in'>  truth_source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"JHU"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  target_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"inc case"</span>, <span class='st'>"inc death"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  hub <span class='op'>=</span> <span class='st'>"ECDC"</span></span>
-<span class='r-in'><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 5,120 x 7</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    model location target_end_date target_variable value location_name population</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Obse… AT       2020-01-25      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Obse… AT       2020-02-01      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Obse… AT       2020-02-08      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Obse… AT       2020-02-15      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Obse… AT       2020-02-22      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Obse… AT       2020-02-29      inc case            9 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Obse… AT       2020-03-07      inc case           70 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Obse… AT       2020-03-14      inc case          576 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Obse… AT       2020-03-21      inc case         <span style='text-decoration: underline;'>2</span>159 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Obse… AT       2020-03-28      inc case         <span style='text-decoration: underline;'>5</span>457 Austria          8<span style='text-decoration: underline;'>809</span>212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 5,110 more rows</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>covidHubUtils</span><span class='op'>)</span>
+
+<span class='co'># load for US</span>
+<span class='fu'>load_truth</span><span class='op'>(</span>
+  truth_source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"JHU"</span>, <span class='st'>"HealthData"</span><span class='op'>)</span>,
+  target_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"inc case"</span>, <span class='st'>"inc death"</span>, <span class='st'>"inc hosp"</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>20908</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
+#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
+#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
+#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1782400</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
+#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
+#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
+#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1782400</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
+#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
+#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
+#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 532,898 × 11</span>
+#&gt;    model target_variable target_end_date location value location_name population
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> Obse… inc hosp        2020-07-21      19          33 Iowa             3<span style='text-decoration: underline;'>155</span>070
+#&gt; <span style='color: #BCBCBC;'> 2</span> Obse… inc hosp        2020-07-21      72           0 Puerto Rico      3<span style='text-decoration: underline;'>754</span>939
+#&gt; <span style='color: #BCBCBC;'> 3</span> Obse… inc hosp        2020-07-19      19          23 Iowa             3<span style='text-decoration: underline;'>155</span>070
+#&gt; <span style='color: #BCBCBC;'> 4</span> Obse… inc hosp        2020-07-17      19          20 Iowa             3<span style='text-decoration: underline;'>155</span>070
+#&gt; <span style='color: #BCBCBC;'> 5</span> Obse… inc hosp        2020-07-17      48         847 Texas           28<span style='text-decoration: underline;'>995</span>881
+#&gt; <span style='color: #BCBCBC;'> 6</span> Obse… inc hosp        2020-07-16      40          47 Oklahoma         3<span style='text-decoration: underline;'>956</span>971
+#&gt; <span style='color: #BCBCBC;'> 7</span> Obse… inc hosp        2020-07-15      09          11 Connecticut      3<span style='text-decoration: underline;'>565</span>287
+#&gt; <span style='color: #BCBCBC;'> 8</span> Obse… inc hosp        2021-02-16      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268
+#&gt; <span style='color: #BCBCBC;'> 9</span> Obse… inc hosp        2021-02-15      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268
+#&gt; <span style='color: #BCBCBC;'>10</span> Obse… inc hosp        2021-07-03      78           1 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268
+#&gt; <span style='color: #949494;'># … with 532,888 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;, full_location_name &lt;chr&gt;</span></div><div class='input'>
+<span class='co'># load for ECDC</span>
+<span class='fu'>load_truth</span><span class='op'>(</span>
+  truth_source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"JHU"</span><span class='op'>)</span>,
+  target_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"inc case"</span>, <span class='st'>"inc death"</span><span class='op'>)</span>,
+  hub <span class='op'>=</span> <span class='st'>"ECDC"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>17952</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
+#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
+#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
+#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>17952</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
+#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
+#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
+#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 5,120 × 7</span>
+#&gt;    model location target_end_date target_variable value location_name population
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> Obse… AT       2020-01-25      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 2</span> Obse… AT       2020-02-01      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 3</span> Obse… AT       2020-02-08      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 4</span> Obse… AT       2020-02-15      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 5</span> Obse… AT       2020-02-22      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 6</span> Obse… AT       2020-02-29      inc case            9 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 7</span> Obse… AT       2020-03-07      inc case           70 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 8</span> Obse… AT       2020-03-14      inc case          576 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'> 9</span> Obse… AT       2020-03-21      inc case         <span style='text-decoration: underline;'>2</span>159 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #BCBCBC;'>10</span> Obse… AT       2020-03-28      inc case         <span style='text-decoration: underline;'>5</span>457 Austria          8<span style='text-decoration: underline;'>809</span>212
+#&gt; <span style='color: #949494;'># … with 5,110 more rows</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -333,11 +319,11 @@ will return a warning.</p></li>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p></p>
+  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -345,8 +331,6 @@ will return a warning.</p></li>
 
   
 
-
-  
 
   </body>
 </html>

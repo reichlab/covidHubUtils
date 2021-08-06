@@ -44,8 +44,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -57,15 +55,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,6 +78,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -125,154 +123,194 @@
 
     <div id="covidhubutils-015" class="section level2">
 <h2 class="hasAnchor">
-<a href="#covidhubutils-015" class="anchor" aria-hidden="true"></a>covidHubUtils 0.1.5</h2>
+<a href="#covidhubutils-015" class="anchor"></a>covidHubUtils 0.1.5</h2>
 <p>This is a release for renaming <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> to <code><a href="../reference/plot_forecasts.html">plot_forecasts()</a></code>. <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> is still available to use but will return deprecation warnings to the user.</p>
 <div id="package-updates" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates" class="anchor" aria-hidden="true"></a>Package updates</h3>
-<ul><li>There is backwards compatibility.</li>
-</ul></div>
+<a href="#package-updates" class="anchor"></a>Package updates</h3>
+<ul>
+<li>There is backwards compatibility.</li>
+</ul>
+</div>
 </div>
     <div id="covidhubutils-014" class="section level2">
 <h2 class="hasAnchor">
-<a href="#covidhubutils-014" class="anchor" aria-hidden="true"></a>covidHubUtils 0.1.4</h2>
+<a href="#covidhubutils-014" class="anchor"></a>covidHubUtils 0.1.4</h2>
 <p>This is a release focusing on updates that provide better interface with Zoltar and European COVID-19 Forecast Hub. The release also contains new feature updates and bug fixes in other util functions.</p>
 <div id="feature-updates" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates" class="anchor" aria-hidden="true"></a>Feature updates</h3>
-<ul><li>
+<a href="#feature-updates" class="anchor"></a>Feature updates</h3>
+<ul>
+<li>
 <p>Update <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code></p>
-<ul><li><p>Add <code>hub</code> parameter to specify the forecast hub for which data should be loaded.</p></li>
+<ul>
+<li><p>Add <code>hub</code> parameter to specify the forecast hub for which data should be loaded.</p></li>
 <li><p>Add <code>as_of</code> parameter to improve interface with the Zoltar query.</p></li>
 <li><p>Add <code>verbose</code> parameter to specify whether to print out diagnostic messages.</p></li>
 <li><p>Support <code>source = local_hub_repo</code> in <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code>. However, loading versioned forecast files is only available through zoltar.</p></li>
 <li><p>All models inputed into <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code> must be available in the selected <code>source</code>.</p></li>
 <li><p>Refactor to improve efficiency.</p></li>
-</ul></li>
+</ul>
+</li>
 <li>
 <p>Update <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code></p>
-<ul><li><p>Load <code>"inc hosp"</code> truth data from remote hub repository. The user does not need to provide <code>truth_data</code> parameter to plot daily incident hospitalization forecasts.</p></li>
+<ul>
+<li><p>Load <code>"inc hosp"</code> truth data from remote hub repository. The user does not need to provide <code>truth_data</code> parameter to plot daily incident hospitalization forecasts.</p></li>
 <li><p><code>target_variable</code> is now optional when <code>forecast_data</code> only has one target variable.</p></li>
 <li><p>Add a new parameter <code>use_median_as_point</code> that defaults to FALSE. “TRUE” uses the median quantile and “FALSE” uses the point forecasts.</p></li>
 <li><p>The function now errors when trying to plot multiple locations without a facet formula.</p></li>
 <li><p>Fix bug that model legend is missing when the user is only plotting quantile forecasts.</p></li>
 <li><p>Update quantile forecast color so that color transparency will not be overwritten by <code>fill_transparency</code> when plotting more than five models.</p></li>
-</ul></li>
+</ul>
+</li>
 <li>
 <p>Update <code><a href="../reference/load_truth.html">load_truth()</a></code></p>
-<ul><li><p>Add <code>hub</code> parameter to specify the forecast hub for which data should be loaded.</p></li>
+<ul>
+<li><p>Add <code>hub</code> parameter to specify the forecast hub for which data should be loaded.</p></li>
 <li><p>Add <code>"inc hosp"</code> target variable and <code>"HealthData"</code> source.</p></li>
-</ul></li>
+</ul>
+</li>
 <li><p><code><a href="../reference/score_forecasts.html">score_forecasts()</a></code> has new parameter <code>use_median_as_point</code> that defaults to FALSE. “TRUE” uses the median quantile when calculating absolute error and “FALSE” uses the point forecasts for absolute error.</p></li>
 <li><p>Add optional <code>as_of</code> parameter in <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code>. Currently only support versioned model designation in local hub repo.</p></li>
-</ul></div>
+</ul>
+</div>
 <div id="package-updates-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-1" class="anchor" aria-hidden="true"></a>Package updates</h3>
-<ul><li>There is no backwards compatibility.</li>
+<a href="#package-updates-1" class="anchor"></a>Package updates</h3>
+<ul>
+<li>There is no backwards compatibility.</li>
 <li>Add Nikos I. Bosse and Ariane Stark to author/contributor list</li>
 <li>Add hub_locations_ecde.rda to data folder</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="covidhubutils-013" class="section level2">
 <h2 class="hasAnchor">
-<a href="#covidhubutils-013" class="anchor" aria-hidden="true"></a>covidHubUtils 0.1.3</h2>
+<a href="#covidhubutils-013" class="anchor"></a>covidHubUtils 0.1.3</h2>
 <p>This is a release focusing on new scoring function and truth-processing functions. The release also contains new feature updates and bug fixes in other util functions.</p>
 <p>covidHubUtils now requires the <code>scoringutils</code> package version to be at least 0.1.5.</p>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
-<a href="#breaking-changes" class="anchor" aria-hidden="true"></a>Breaking changes</h3>
-<ul><li>
-<p><code><a href="../reference/score_forecasts.html">score_forecasts()</a></code> is now implemented for quantile-format forecasts to compute absolute error, weighted interval score, sharpness, overprediction, underprediction, and prediction interval coverage at any specified quantile. Minimally one should have the <code>forecasts</code> dataframe produced by <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and the truth dataframe produced by <code><a href="../reference/load_truth.html">load_truth()</a></code> to calculate scores. If one desires to specify a subset of all available scores, one should consult <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</p>
-<ul><li>wis calculation changed to reflect preferred weighting scheme for interval scores.</li>
-</ul></li>
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
+<ul>
+<li>
+<p><code><a href="../reference/score_forecasts.html">score_forecasts()</a></code> is now implemented for quantile-format forecasts to compute absolute error, weighted interval score, sharpness, overprediction, underprediction, and prediction interval coverage at any specified quantile. Minimally one should have the <code>forecasts</code> dataframe produced by <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and the truth dataframe produced by <code><a href="../reference/load_truth.html">load_truth()</a></code> to calculate scores. If one desires to specify a subset of all available scores, one should consult <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</p>
+<ul>
+<li>wis calculation changed to reflect preferred weighting scheme for interval scores.</li>
+</ul>
+</li>
 <li><p><code><a href="../reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> and <code><a href="../reference/save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> are now implemented to create standard cumulative and incident death truth csv files for Zoltar.</p></li>
 <li><p><code><a href="../reference/preprocess_hospitalization.html">preprocess_hospitalization()</a></code> is now implemented to create standard cumulative and incident hospitalization truth csv files.</p></li>
-</ul></div>
+</ul>
+</div>
 <div id="feature-updates-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-1" class="anchor" aria-hidden="true"></a>Feature updates</h3>
-<ul><li>
+<a href="#feature-updates-1" class="anchor"></a>Feature updates</h3>
+<ul>
+<li>
 <p>Update <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code></p>
-<ul><li><p>Update default value of <code>forecast_date_window_size</code> to 0 in<code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code> so that it looks for forecasts on the <code>latest_forecast_date</code> only.</p></li>
+<ul>
+<li><p>Update default value of <code>forecast_date_window_size</code> to 0 in<code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code> so that it looks for forecasts on the <code>latest_forecast_date</code> only.</p></li>
 <li><p>Refactor <code><a href="../reference/load_latest_forecasts_repo.html">load_latest_forecasts_repo()</a></code>, splitting out functionality for reading in forecasts into a new exported function <code><a href="../reference/load_forecast_files_repo.html">load_forecast_files_repo()</a></code> that loads specific forecast files.</p></li>
 <li><p>Standardize data format and columns types of the output.</p></li>
 <li><p>Fix validation bug for <code>forecast_dates</code> when loading forecasts from zoltar. Loading functions will throw an error if all dates in <code>forecast_dates</code> are invalid forecast dates in Zoltar.</p></li>
-</ul></li>
+</ul>
+</li>
 <li><p>Update <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> to use more user-friendly color palettes when plotting a small number of intervals.</p></li>
 <li><p>Update <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code> to return <code>NA</code> when model designations for outdated models are not available on Zoltar.</p></li>
-</ul></div>
+</ul>
+</div>
 <div id="package-updates-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-2" class="anchor" aria-hidden="true"></a>Package updates</h3>
-<ul><li>There is no backwards compatibility.</li>
+<a href="#package-updates-2" class="anchor"></a>Package updates</h3>
+<ul>
+<li>There is no backwards compatibility.</li>
 <li>Minor updates to overview vignette.</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="covidhubutils-012" class="section level2">
 <h2 class="hasAnchor">
-<a href="#covidhubutils-012" class="anchor" aria-hidden="true"></a>covidHubUtils 0.1.2</h2>
+<a href="#covidhubutils-012" class="anchor"></a>covidHubUtils 0.1.2</h2>
 <p>This is a release focusing on new features in scoring functions and plotting functions.</p>
 <div id="feature-updates-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-2" class="anchor" aria-hidden="true"></a>Feature updates</h3>
-<ul><li>
+<a href="#feature-updates-2" class="anchor"></a>Feature updates</h3>
+<ul>
+<li>
 <p>Update <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code></p>
-<ul><li><p>Set <code>truth_source</code> to be optional when the user provides <code>truth_data</code>. However, it is still needed when <code>show_caption = TRUE</code>.</p></li>
+<ul>
+<li><p>Set <code>truth_source</code> to be optional when the user provides <code>truth_data</code>. However, it is still needed when <code>show_caption = TRUE</code>.</p></li>
 <li><p>Remove format validation for <code>model</code> column in user-provided <code>truth_data</code>.</p></li>
 <li><p>Support daily hospitalization plot. When <code>target_variable = "inc hosp"</code>, the user needs to provided <code>truth_data</code>. Otherwise, an error will be thrown.</p></li>
 <li><p>Add <code>facet_nrow</code>, <code>facet_ncol</code>, <code>fill_transparency</code>, <code>title</code> and <code>subtitle</code>.</p></li>
-</ul></li>
+</ul>
+</li>
 <li>
 <p>Update <code><a href="../reference/get_plot_forecast_data.html">get_plot_forecast_data()</a></code></p>
-<ul><li><p>Remove format validation for <code>model</code> column in user-provided <code>truth_data</code>.</p></li>
+<ul>
+<li><p>Remove format validation for <code>model</code> column in user-provided <code>truth_data</code>.</p></li>
 <li><p>When <code>target_variable = "inc hosp"</code>, the user needs to provided <code>truth_data</code>. Otherwise, an error will be thrown.</p></li>
-</ul></li>
-</ul></div>
+</ul>
+</li>
+</ul>
+</div>
 <div id="package-updates-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-3" class="anchor" aria-hidden="true"></a>Package updates</h3>
-<ul><li>There is no backwards compatibility.</li>
+<a href="#package-updates-3" class="anchor"></a>Package updates</h3>
+<ul>
+<li>There is no backwards compatibility.</li>
 <li>Add Khoa Le and Yuxin David Huang to author/contributor list</li>
 <li>Create covidHubUtils-overview vignette</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="covidhubutils-011" class="section level2">
 <h2 class="hasAnchor">
-<a href="#covidhubutils-011" class="anchor" aria-hidden="true"></a>covidHubUtils 0.1.1</h2>
+<a href="#covidhubutils-011" class="anchor"></a>covidHubUtils 0.1.1</h2>
 <p>This is a release focusing on new features in plotting functions.</p>
 <div id="feature-updates-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-3" class="anchor" aria-hidden="true"></a>Feature updates</h3>
-<ul><li>
+<a href="#feature-updates-3" class="anchor"></a>Feature updates</h3>
+<ul>
+<li>
 <p><code><a href="../reference/plot_forecast.html">plot_forecast()</a></code> now supports faceted plots of multiple models, locations and forecast dates for one target variable.</p>
-<ul><li><p>In <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code>, <code>facet</code> and <code>facet_scales</code> are equivalent to <code>facets</code> and <code>scales</code> in <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code>. <code>facet</code> takes facet formula, for example <code>facet = ~ model</code>. <code>facet_scales</code> are expecting the same values for <code>scales</code> in <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code>, such as <code>"fixed"</code>, <code>"free_y"</code>, <code>"free_x"</code> or <code>"free"</code>.</p></li>
+<ul>
+<li><p>In <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code>, <code>facet</code> and <code>facet_scales</code> are equivalent to <code>facets</code> and <code>scales</code> in <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">ggplot2::facet_wrap()</a></code>. <code>facet</code> takes facet formula, for example <code>facet = ~ model</code>. <code>facet_scales</code> are expecting the same values for <code>scales</code> in <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">ggplot2::facet_wrap()</a></code>, such as <code>"fixed"</code>, <code>"free_y"</code>, <code>"free_x"</code> or <code>"free"</code>.</p></li>
 <li><p>If <code>fill_by_model = TRUE</code>, each model will be represented by a unique color. If <code>fill_by model = FALSE</code>, all models and selected prediction intervals will be represented by blue colors.</p></li>
 <li><p>For simplicity, prediction interval legends will be grey in faceted plots. Morever, when the user selects more than 5 models, only 95% predicition interval is included. Otherwise, all selected prediction intervals will be plotted.</p></li>
-</ul></li>
-</ul></div>
+</ul>
+</li>
+</ul>
+</div>
 <div id="package-updates-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-4" class="anchor" aria-hidden="true"></a>Package updates</h3>
-<ul><li>There is no backwards compatibility due to argument changes in <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code>.</li>
-</ul></div>
+<a href="#package-updates-4" class="anchor"></a>Package updates</h3>
+<ul>
+<li>There is no backwards compatibility due to argument changes in <code><a href="../reference/plot_forecast.html">plot_forecast()</a></code>.</li>
+</ul>
+</div>
 </div>
     <div id="covidhubutils-01" class="section level2">
 <h2 class="hasAnchor">
-<a href="#covidhubutils-01" class="anchor" aria-hidden="true"></a>covidHubUtils 0.1</h2>
+<a href="#covidhubutils-01" class="anchor"></a>covidHubUtils 0.1</h2>
 <p>This is the first version of the package with a 0.x release.</p>
 <div id="feature-updates-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#feature-updates-4" class="anchor" aria-hidden="true"></a>Feature updates</h3>
-<ul><li>details on new features will be listed here for future updates</li>
+<a href="#feature-updates-4" class="anchor"></a>Feature updates</h3>
+<ul>
+<li>details on new features will be listed here for future updates</li>
 <li>current key features include loading and plotting forecast and truth data</li>
-</ul></div>
+</ul>
+</div>
 <div id="package-updates-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#package-updates-5" class="anchor" aria-hidden="true"></a>Package updates</h3>
-<ul><li>details on other changes will be listed here for future updates</li>
+<a href="#package-updates-5" class="anchor"></a>Package updates</h3>
+<ul>
+<li>details on other changes will be listed here for future updates</li>
 <li>added initial author/contributor list</li>
-</ul></div>
+</ul>
+</div>
 </div>
   </div>
 
@@ -287,11 +325,11 @@
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p></p>
+  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -299,8 +337,6 @@
 
   
 
-
-  
 
   </body>
 </html>
