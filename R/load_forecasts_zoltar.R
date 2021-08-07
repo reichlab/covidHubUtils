@@ -52,7 +52,7 @@ load_forecasts_zoltar <- function(models = NULL,
     hub = hub,
     zoltar_connection = zoltar_connection
   )
-  # get all valid timezeros in project
+  # get information about all models in project
   all_models <- zoltr::models(
     zoltar_connection = zoltar_connection,
     project_url = project_url
@@ -67,6 +67,11 @@ load_forecasts_zoltar <- function(models = NULL,
   `%dopar%` <- foreach::`%dopar%`
 
   if (!is.null(forecast_dates)) {
+    
+    if (is.null(models)){
+      models <- all_models$model_abbr
+    }
+    
     # set 2 workers
     cl <- parallel::makeCluster(2, setup_strategy = "sequential")
     doParallel::registerDoParallel(cl)
@@ -93,25 +98,23 @@ load_forecasts_zoltar <- function(models = NULL,
 
       # unlist and drop duplicates
       latest_dates <- unique(unlist(latest_dates, use.names = FALSE))
-
-      if (length(latest_dates) == 0) {
-        stop("Error in load_forecasts: All forecast_dates are invalid.")
+      
+      if (length(latest_dates) != 0 & !is.na(latest_dates)) {
+        forecast <- zoltr::do_zoltar_query(
+          zoltar_connection = zoltar_connection,
+          project_url = project_url,
+          query_type = "forecasts",
+          units = locations,
+          timezeros = latest_dates,
+          models = curr_model,
+          targets = targets,
+          types = types,
+          verbose = verbose,
+          as_of = date_to_datetime(as_of, hub)
+        )
+  
+        forecast <- reformat_forecasts(forecast)
       }
-
-      forecast <- zoltr::do_zoltar_query(
-        zoltar_connection = zoltar_connection,
-        project_url = project_url,
-        query_type = "forecasts",
-        units = locations,
-        timezeros = latest_dates,
-        models = curr_model,
-        targets = targets,
-        types = types,
-        verbose = verbose,
-        as_of = date_to_datetime(as_of, hub)
-      )
-
-      forecast <- reformat_forecasts(forecast)
     }
     # shut down workers
     parallel::stopCluster(cl)
