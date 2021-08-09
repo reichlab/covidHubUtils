@@ -98,8 +98,9 @@ load_forecasts_zoltar <- function(models = NULL,
 
       # unlist and drop duplicates
       latest_dates <- unique(unlist(latest_dates, use.names = FALSE))
+      latest_dates <- latest_dates[!is.na(latest_dates)]
       
-      if (length(latest_dates) != 0 & !is.na(latest_dates)) {
+      if (length(latest_dates) != 0) {
         forecast <- zoltr::do_zoltar_query(
           zoltar_connection = zoltar_connection,
           project_url = project_url,
@@ -134,15 +135,19 @@ load_forecasts_zoltar <- function(models = NULL,
     )
     forecasts <- reformat_forecasts(forecasts)
   }
-
-  if (nrow(forecasts) == 0) {
+  
+  if (!is.null(forecasts)){
+    if (nrow(forecasts) > 0) {
+      # append location, population information
+      forecasts <- forecasts %>%
+        join_with_hub_locations(hub = hub)
+    } else {
+      warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
+    }
+  }else {
     warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
   }
-
-  # append location, population information
-  forecasts <- forecasts %>%
-    join_with_hub_locations(hub = hub)
-
+  
   return(forecasts)
 }
 
