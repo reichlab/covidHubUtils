@@ -10,8 +10,8 @@
 #' It needs to have columns `model`, `target_variable`,
 #' `target_end_date`, `location and value`.
 #' `Model` column can be `"Observed Data (a truth source)"`.
-#' @param hub character, which hub to use.
-#' Default is `"US"`, other option is `"ECDC"`.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #' @param models vector of strings specifying models to plot.
 #' Default to all models in `forecast_data`.
 #' @param target_variable string specifying target type. It should be one of
@@ -50,6 +50,8 @@
 #' @param truth_as_of the plot includes the truth data that would have been
 #' in real time as of the `truth_as_of` date (not using this parameter when truth data
 #' is from github repo)
+#' @param top_layer character vector, where the first element indicates the top layer
+#' of the resulting plot. Possible options are `"forecast"` and `"truth"`.
 #' @param title optional text for the title of the plot. If left as `"default"`,
 #' the title will be automatically generated. If `"none"`, no title will be plotted.
 #' @param subtitle optional text for the subtitle of the plot. If left as `"default"`,
@@ -101,7 +103,8 @@
 #'   forecast_data = ecdc_forecasts,
 #'   hub = c("ECDC", "US"),
 #'   locations = "GB",
-#'   truth_source = "JHU"
+#'   truth_source = "JHU",
+#'   top_layer = c("forecast")
 #' )
 #'
 #' @export
@@ -125,6 +128,7 @@ plot_forecasts <- function(forecast_data,
                            fill_by_model = FALSE,
                            fill_transparency = 1.0,
                            truth_as_of = NULL,
+                           top_layer = c("truth", "forecast"),
                            title = "default",
                            subtitle = "default",
                            show_caption = TRUE) {
@@ -472,98 +476,195 @@ plot_forecasts <- function(forecast_data,
   # generate plot
   graph <- ggplot2::ggplot(data = plot_data_forecast, ggplot2::aes(x = target_end_date))
 
-  # plot selected prediction intervals
-  if (!is.null(intervals)) {
-    graph <- graph +
-      ggplot2::geom_ribbon(
-        data = plot_data_forecast %>%
-          dplyr::filter(type == "quantile"),
-        mapping = ggplot2::aes(
-          ymin = lower,
-          ymax = upper,
-          group = interaction(
-            `Prediction Interval`, model,
-            location, forecast_date
+  # plot point forecasts and truth
+  if (top_layer[1] == "truth"){
+    # plot selected prediction intervals
+    if (!is.null(intervals)) {
+      graph <- graph +
+        ggplot2::geom_ribbon(
+          data = plot_data_forecast %>%
+            dplyr::filter(type == "quantile"),
+          mapping = ggplot2::aes(
+            ymin = lower,
+            ymax = upper,
+            group = interaction(
+              `Prediction Interval`, model,
+              location, forecast_date
+            ),
+            fill = interaction(`Prediction Interval`, model)
           ),
-          fill = interaction(`Prediction Interval`, model)
-        ),
-        alpha = fill_transparency, show.legend = FALSE
-      ) +
-      ggplot2::scale_fill_manual(name = "Prediction Interval", values = interval_colors) +
-      # create a transparent layer with grey colors to get prediction interval legend
-      ggnewscale::new_scale_fill() +
-      ggplot2::geom_ribbon(
-        data = plot_data_forecast %>%
-          dplyr::filter(type == "quantile"),
-        mapping = ggplot2::aes(
-          ymin = lower,
-          ymax = upper,
-          fill = `Prediction Interval`
-        ),
-        alpha = 0
-      ) +
-      ggplot2::scale_fill_manual(name = "Prediction Interval", values = ribbon_colors) +
-      # create a transparent layer for models legend when point forecasts are not plotted
-      # models legend will be covered if point forecasts are plotted
+          alpha = fill_transparency, show.legend = FALSE
+        ) +
+        ggplot2::scale_fill_manual(name = "Prediction Interval", values = interval_colors) +
+        # create a transparent layer with grey colors to get prediction interval legend
+        ggnewscale::new_scale_fill() +
+        ggplot2::geom_ribbon(
+          data = plot_data_forecast %>%
+            dplyr::filter(type == "quantile"),
+          mapping = ggplot2::aes(
+            ymin = lower,
+            ymax = upper,
+            fill = `Prediction Interval`
+          ),
+          alpha = 0
+        ) +
+        ggplot2::scale_fill_manual(name = "Prediction Interval", values = ribbon_colors) +
+        # create a transparent layer for models legend when point forecasts are not plotted
+        # models legend will be covered if point forecasts are plotted
+        ggplot2::geom_line(
+          data = plot_data_forecast %>%
+            dplyr::filter(type == "quantile"),
+          mapping = ggplot2::aes(y = upper, colour = model), alpha = 0
+        ) +
+        ggplot2::scale_color_manual(name = "Model", values = forecast_colors) +
+        # reset alpha in legend fill
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(alpha = 1))
+        )
+    }
+    graph <- graph +
+      # forecast
       ggplot2::geom_line(
         data = plot_data_forecast %>%
-          dplyr::filter(type == "quantile"),
-        mapping = ggplot2::aes(y = upper, colour = model), alpha = 0
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          group = interaction(model, location, forecast_date),
+          color = model
+        )
       ) +
-      ggplot2::scale_color_manual(name = "Model", values = forecast_colors) +
-      # reset alpha in legend fill
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(override.aes = list(alpha = 1))
+      ggplot2::geom_point(
+        data = plot_data_forecast %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          color = model
+        )
+      ) +
+      ggplot2::scale_color_manual(
+        name = "Model",
+        values = forecast_colors
+      ) +
+      # truth
+      ggnewscale::new_scale_color() +
+      ggplot2::geom_line(
+        data = plot_data_truth %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          color = truth_model
+        )
+      ) +
+      ggplot2::geom_point(
+        data = plot_data_truth %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          color = truth_model
+        )
+      ) +
+      ggplot2::scale_color_manual(name = "Truth", values = "black")
+  } else if (top_layer[1] == "forecast"){
+    graph <- graph +
+      # truth
+      ggplot2::geom_line(
+        data = plot_data_truth %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          color = truth_model
+        )
+      ) +
+      ggplot2::geom_point(
+        data = plot_data_truth %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          color = truth_model
+        )
+      ) +
+      ggplot2::scale_color_manual(
+        name = "Truth", 
+        values = "black"
+        ) +
+      ggnewscale::new_scale_color()
+    
+    # plot selected prediction intervals
+    if (!is.null(intervals)) {
+      graph <- graph +
+        ggplot2::geom_ribbon(
+          data = plot_data_forecast %>%
+            dplyr::filter(type == "quantile"),
+          mapping = ggplot2::aes(
+            ymin = lower,
+            ymax = upper,
+            group = interaction(
+              `Prediction Interval`, model,
+              location, forecast_date
+            ),
+            fill = interaction(`Prediction Interval`, model)
+          ),
+          alpha = fill_transparency, show.legend = FALSE
+        ) +
+        ggplot2::scale_fill_manual(name = "Prediction Interval", values = interval_colors) +
+        # create a transparent layer with grey colors to get prediction interval legend
+        ggnewscale::new_scale_fill() +
+        ggplot2::geom_ribbon(
+          data = plot_data_forecast %>%
+            dplyr::filter(type == "quantile"),
+          mapping = ggplot2::aes(
+            ymin = lower,
+            ymax = upper,
+            fill = `Prediction Interval`
+          ),
+          alpha = 0
+        ) +
+        ggplot2::scale_fill_manual(name = "Prediction Interval", values = ribbon_colors) +
+        # create a transparent layer for models legend when point forecasts are not plotted
+        # models legend will be covered if point forecasts are plotted
+        ggplot2::geom_line(
+          data = plot_data_forecast %>%
+            dplyr::filter(type == "quantile"),
+          mapping = ggplot2::aes(y = upper, colour = model), alpha = 0
+        ) +
+        ggplot2::scale_color_manual(name = "Model", values = forecast_colors) +
+        # reset alpha in legend fill
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(alpha = 1))
+        )
+    }
+    graph <- graph +
+      #forecast
+      ggplot2::geom_line(
+        data = plot_data_forecast %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          group = interaction(model, location, forecast_date),
+          color = model
+        )
+      ) +
+      ggplot2::geom_point(
+        data = plot_data_forecast %>%
+          dplyr::filter(!is.na(point)),
+        mapping = ggplot2::aes(
+          x = target_end_date,
+          y = point,
+          color = model
+        )
+      ) +
+      ggplot2::scale_color_manual(
+        name = "Model",
+        values = forecast_colors
       )
   }
-
-  # plot point forecasts and truth
-  graph <- graph +
-    # forecast
-    ggplot2::geom_line(
-      data = plot_data_forecast %>%
-        dplyr::filter(!is.na(point)),
-      mapping = ggplot2::aes(
-        x = target_end_date,
-        y = point,
-        group = interaction(model, location, forecast_date),
-        color = model
-      )
-    ) +
-    ggplot2::geom_point(
-      data = plot_data_forecast %>%
-        dplyr::filter(!is.na(point)),
-      mapping = ggplot2::aes(
-        x = target_end_date,
-        y = point,
-        color = model
-      )
-    ) +
-    ggplot2::scale_color_manual(
-      name = "Model",
-      values = forecast_colors
-    ) +
-    # truth
-    ggnewscale::new_scale_color() +
-    ggplot2::geom_line(
-      data = plot_data_truth %>%
-        dplyr::filter(!is.na(point)),
-      mapping = ggplot2::aes(
-        x = target_end_date,
-        y = point,
-        color = truth_model
-      )
-    ) +
-    ggplot2::geom_point(
-      data = plot_data_truth %>%
-        dplyr::filter(!is.na(point)),
-      mapping = ggplot2::aes(
-        x = target_end_date,
-        y = point,
-        color = truth_model
-      )
-    ) +
-    ggplot2::scale_color_manual(name = "Truth", values = "black")
 
   # add facets
   if (!is.null(facet)) {

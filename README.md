@@ -9,6 +9,10 @@ The `covidHubUtils` package relies on a small number of packages, including many
 ```r
 devtools::install_github("reichlab/zoltr")
 ```
+Some additional functionalities in `covidHubUtils` also rely on `covidData`. Because there are daily data updates in `covidData`, please install the latest version of it before using related functions in `covidHubUtils`:
+``` r
+devtools::install_github("reichlab/covidData")
+```
 The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `devtools` package:
 ``` r
 devtools::install_github("reichlab/covidHubUtils")
@@ -31,7 +35,7 @@ For those starting out we recommend you begin with the [Getting Started vignette
 - `load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)`: Load truth data for specified target variable and locations from covid19-forecast-hub repository. **Note:** Only support national level and state level truth data for `"inc hosp"` from `"HealthData"` source.
 
 ### Plotting Forecasts
-- `plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. To see more example plots, please to go [vignettes/demo](https://htmlpreview.github.io/?https://github.com/reichlab/covidHubUtils/blob/master/vignettes/demo.html).
+- `plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)`: Plot forecasts with optional truth data for multiple models, locations and forecast dates. 
  
 ### Scoring Forecasts
 - `score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))` Calculate specified scores for each combination of `model`, `forecast_date`, `location`, `horizon`, `temporal_resolution`, `target_variable`, and `target_end_date` in the `forecasts` data frame. Please see [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
@@ -63,6 +67,7 @@ If you would like to contribute your work, please follow this list to create a p
 - Update `README.md` if you created a new function or add a new parameter to existing functions.
 - Update `DESCRIPTION` when you are using a new dependency in your script.
 - Add yourself as a contributor in `DESCRIPTION`.
+- **Optional:** You could also run `devtools::check()` or `devtools::test()` locally. Some tests require `covidData`. To get accurate test results, please make sure to install the latest daily updates from `covidData` by using `devtools::install_github("reichlab/covidData")`. 
 - Make sure your pull request passes all checks in Github Action.
 
 

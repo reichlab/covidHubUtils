@@ -42,8 +42,8 @@ It needs to have columns \code{model}, \code{target_variable},
 \code{target_end_date}, \verb{location and value}.
 \code{Model} column can be \code{"Observed Data (a truth source)"}.}
 
-\item{hub}{character, which hub to use.
-Default is \code{"US"}, other option is \code{"ECDC"}.}
+\item{hub}{character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
 \item{models}{vector of strings specifying models to plot.
 Default to all models in \code{forecast_data}.}

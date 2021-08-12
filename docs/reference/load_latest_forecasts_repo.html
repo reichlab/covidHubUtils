@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load the most recent forecast submitted in a time window
-from reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo • covidHubUtils</title>
+<title>Load the most recent forecasts of all that were submitted
+on forecast_dates from a local clone of reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -40,11 +40,9 @@ from reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo • covi
 
 
 
-<meta property="og:title" content="Load the most recent forecast submitted in a time window
-from reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo" />
+<meta property="og:title" content="Load the most recent forecasts of all that were submitted
+on forecast_dates from a local clone of reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo" />
 <meta property="og:description" content="This function will drop rows with NULLs in value column." />
-
-
 
 
 
@@ -60,15 +58,9 @@ from reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo" />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -82,13 +74,19 @@ from reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -122,8 +120,8 @@ from reichlab/covid19-forecast-hub repo. — load_latest_forecasts_repo" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load the most recent forecast submitted in a time window
-from reichlab/covid19-forecast-hub repo.</h1>
+    <h1>Load the most recent forecasts of all that were submitted
+on <code>forecast_dates</code> from a local clone of <code>reichlab/covid19-forecast-hub</code> repo.</h1>
     
     <div class="hidden name"><code>load_latest_forecasts_repo.Rd</code></div>
     </div>
@@ -132,7 +130,7 @@ from reichlab/covid19-forecast-hub repo.</h1>
     <p>This function will drop rows with NULLs in value column.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>load_latest_forecasts_repo</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>load_latest_forecasts_repo</span><span class='op'>(</span>
   <span class='va'>file_path</span>,
   models <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>forecast_dates</span>,
@@ -141,58 +139,59 @@ from reichlab/covid19-forecast-hub repo.</h1>
   targets <span class='op'>=</span> <span class='cn'>NULL</span>,
   hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file_path</th>
-      <td><p>path to local copy of the data-processed folder of a
-forecast hub repo.</p></td>
+      <td><p>path to the data-processed folder within a local clone of the hub repo</p></td>
     </tr>
     <tr>
       <th>models</th>
-      <td><p>character vector of model abbreviations.
-If missing, forecasts for all models that submitted forecasts
-meeting the other criteria are returned.</p></td>
+      <td><p>Character vector of model abbreviations.
+Default all models that submitted forecasts meeting the other criteria.</p></td>
     </tr>
     <tr>
       <th>forecast_dates</th>
-      <td><p>date vector to load the most recent forecast from</p></td>
+      <td><p>A 2 dimensional list of forecast dates to retrieve forecasts.
+This function will return the latest forecasts
+for each sub-list of dates.
+Default to  <code>NULL</code> which would include all valid forecast dates.
+The function will throw an error if all dates in this parameter are invalid forecast dates.</p></td>
     </tr>
     <tr>
       <th>locations</th>
-      <td><p>list of valid location codes. Defaults to all locations with
-available forecasts.</p></td>
+      <td><p>list of fips. Default to all locations with available forecasts.</p></td>
     </tr>
     <tr>
       <th>types</th>
-      <td><p>character vector specifying type of forecasts to load: “quantile”
-or “point”. Defaults to all types  with available forecasts</p></td>
+      <td><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
+and/or <code>"point"</code>. Default to all valid forecast types.</p></td>
     </tr>
     <tr>
       <th>targets</th>
       <td><p>character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death'). Defaults to all targets
-with available forecasts.</p></td>
+<code><a href='https://rdrr.io/r/base/c.html'>c('1 wk ahead cum death', '2 wk ahead cum death')</a></code>.
+Default to <code>NULL</code> which stands for all valid targets.</p></td>
     </tr>
     <tr>
       <th>hub</th>
       <td><p>character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"</p></td>
+from which to load forecasts. Possible options are <code>"US"</code> and <code>"ECDC"</code>.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>whether or not to print out diagnostic messages. Default is TRUE</p></td>
+      <td><p>logical to print out diagnostic messages. Default is <code>TRUE</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a>
+
+Please use <code><a href='load_forecasts_repo.html'>load_forecasts_repo()</a></code> instead.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -205,11 +204,11 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p></p>
+  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -217,8 +216,6 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 
   
 
-
-  
 
   </body>
 </html>

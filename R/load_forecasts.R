@@ -1,11 +1,20 @@
-#' Load all available forecasts submitted on forecast_dates from Zoltar
+#' Load all available forecasts submitted around forecast dates from Zoltar
 #' or local hub repo.
+#'
+#' If \code{date_window_size} is 0, this function returns all available forecasts
+#' submitted on every day in \code{dates}.
+#'
+#' If \code{date_window_size} is not 0, this function will look for all the latest
+#' forecasts that are submitted within window size for each day in \code{dates}.
 #'
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
-#' @param forecast_dates The forecast date of forecasts to retrieve.
+#' @param dates The forecast date of forecasts to retrieve.
+#' A vector of one or more Date objects or character strings in format “YYYY-MM-DD”
 #' Default to all valid forecast dates.
-#' The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.
+#' @param date_window_size The number of days across each date in `dates` parameter to
+#' look for the most recent forecasts.
+#' Default to 0, which means to only look at the `dates` parameter only.
 #' @param locations list of location codes. Default to all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types.
@@ -35,40 +44,61 @@
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @examples
-#' # load forecasts from US forecast hub
-#' load_forecasts(models = "COVIDhub-ensemble",
-#'  forecast_date = "2020-12-07",
-#'  locations = "US",
-#'  types = c("point","quantile"),
-#'  targets = paste(1:4, "wk ahead inc case"),
-#'  source = "zoltar",
-#'  verbose = FALSE,
-#'  as_of = NULL)
-#' 
-#' # load forecasts from ECDC forecast hub
-#' load_forecasts(models = "ILM-EKF",
-#'  hub = c("ECDC","US"),
-#'  forecast_date = "2021-03-08",
-#'  locations = "GB",
-#'  targets = paste(1:4, "wk ahead inc death"),
-#'  source = "zoltar")
+#' # Load forecasts from US forecast hub
+#' # This call only loads the latest forecast submitted on "2021-07-26" in 
+#' # a 12-day window w.r.t "2021-7-30".
+#' load_forecasts(
+#'   models = "COVIDhub-ensemble",
+#'   dates = "2021-07-30",
+#'   date_window_size = 11,
+#'   locations = "US",
+#'   types = c("point", "quantile"),
+#'   targets = paste(1:4, "wk ahead inc case"),
+#'   source = "zoltar",
+#'   verbose = FALSE,
+#'   as_of = NULL
+#' )
 #'
+#' # Load forecasts from ECDC forecast hub
+#' # This function call loads the latest forecasts in each 2-day window 
+#' # w.r.t "2021-03-08" and "2021-07-27".
+#' load_forecasts(
+#'   models = "ILM-EKF",
+#'   hub = c("ECDC", "US"),
+#'   dates = c("2021-03-08", "2021-07-27"),
+#'   date_window_size = 1,
+#'   locations = "GB",
+#'   targets = paste(1:4, "wk ahead inc death"),
+#'   source = "zoltar"
+#' )
 #' @export
-load_forecasts <- function (
-  models = NULL,
-  forecast_dates = NULL,
-  locations = NULL,
-  types = NULL,
-  targets = NULL,
-  source = "zoltar",
-  hub_repo_path,
-  data_processed_subpath = "data-processed/",
-  as_of = NULL,
-  hub = c("US", "ECDC"),
-  verbose = TRUE) {
+load_forecasts <- function(
+                           models = NULL,
+                           dates = NULL,
+                           date_window_size = 0,
+                           locations = NULL,
+                           types = NULL,
+                           targets = NULL,
+                           source = "zoltar",
+                           hub_repo_path,
+                           data_processed_subpath = "data-processed/",
+                           as_of = NULL,
+                           hub = c("US", "ECDC"),
+                           verbose = TRUE) {
 
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
+
+  if (!is.null(dates) & date_window_size > 0) {
+    # 2d array
+    all_forecast_dates <- purrr::map(
+      dates, function(date) {
+        return(as.Date(date) + seq(from = -date_window_size, to = 0))
+        }
+      )
+  } else {
+    all_forecast_dates <- dates
+  }
 
   if (source == "local_hub_repo") {
     # validate hub repo path
@@ -76,8 +106,8 @@ load_forecasts <- function (
       stop("Error in load_forecasts: Please provide a vaid path to hub repo.")
     }
 
-    if (!is.null(as_of)){
-      if (as_of != Sys.Date()){
+    if (!is.null(as_of)) {
+      if (as_of != Sys.Date()) {
         stop("Error in load_forecasts: as_of parameter is not available for `local_hub_repo` source now.")
       }
     }
@@ -85,23 +115,27 @@ load_forecasts <- function (
     # path to data-processed folder in hub repo
     data_processed <- file.path(hub_repo_path, data_processed_subpath)
 
-    forecasts <- load_forecasts_repo(file_path = data_processed,
-                                     models = models,
-                                     forecast_dates = forecast_dates,
-                                     locations = locations,
-                                     types = types,
-                                     targets = targets,
-                                     verbose = verbose,
-                                     hub = hub)
+    forecasts <- load_forecasts_repo(
+      file_path = data_processed,
+      models = models,
+      forecast_dates = all_forecast_dates,
+      locations = locations,
+      types = types,
+      targets = targets,
+      verbose = verbose,
+      hub = hub
+    )
   } else {
-    forecasts <- load_forecasts_zoltar(models = models,
-                                       forecast_dates = forecast_dates,
-                                       locations = locations,
-                                       types = types,
-                                       targets = targets,
-                                       as_of = as_of,
-                                       verbose = verbose,
-                                       hub = hub)
+    forecasts <- load_forecasts_zoltar(
+      models = models,
+      forecast_dates = all_forecast_dates,
+      locations = locations,
+      types = types,
+      targets = targets,
+      as_of = as_of,
+      verbose = verbose,
+      hub = hub
+    )
   }
   return(forecasts)
 }

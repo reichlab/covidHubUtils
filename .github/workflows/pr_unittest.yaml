@@ -4,6 +4,8 @@ jobs:
   run-unit-tests:
     name: run unit tests
     runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -34,6 +36,7 @@ jobs:
           devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-get_model_metadata.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_forecasts.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
