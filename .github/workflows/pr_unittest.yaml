@@ -27,7 +27,7 @@ jobs:
           install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
-      - name: Install zoltr, zoltpy and scoringutils
+      - name: Install zoltr and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
           devtools::install_github("epiforecasts/scoringutils")
@@ -37,7 +37,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: reichlab/zoltpy
-          token: ${{secrets.GH_TOKEN}}
           path: zoltpy
       - name: Setup pipenv for zoltpy
         run: 
