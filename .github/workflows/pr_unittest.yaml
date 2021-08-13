@@ -12,6 +12,11 @@ jobs:
           fetch-depth: 0
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
       - name: Cache R packages
         uses: actions/cache@v1
         with:
@@ -25,10 +30,15 @@ jobs:
       - name: Install zoltr, zoltpy and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
-          devtools::install_github("reichlab/zoltpy")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
         shell: Rscript {0}
+      - name: Checkout zoltpy
+          uses: actions/checkout@v2
+          with:
+            repository: reichlab/zoltpy
+            token: ${{secrets.GH_TOKEN}}
+            path: zoltpy
       - name: Setup pipenv for zoltpy
         run: 
           pip3 install --user pipenv
