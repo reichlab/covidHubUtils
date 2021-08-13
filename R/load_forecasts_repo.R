@@ -49,6 +49,7 @@ load_forecasts_repo <- function(
   # validate models
   all_valid_models <- list.dirs(file_path, full.names = FALSE)
   all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
+  
   if (!is.null(models)) {
     models <- unlist(purrr::map(models, function(model) {
       match.arg(model, choices = all_valid_models)
@@ -56,6 +57,8 @@ load_forecasts_repo <- function(
   } else {
     models <- all_valid_models
   }
+  
+  models <- sort(models, method = "radix")
 
   # get valid location codes
   if (hub[1] == "US") {

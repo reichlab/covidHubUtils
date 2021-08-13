@@ -70,6 +70,7 @@ load_forecasts_zoltar <- function(models = NULL,
     
     if (is.null(models)){
       models <- all_models$model_abbr
+      models <- sort(models, method = "radix")
     }
     
     # set 2 workers
