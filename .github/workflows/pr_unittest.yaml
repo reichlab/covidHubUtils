@@ -34,11 +34,11 @@ jobs:
           devtools::install()
         shell: Rscript {0}
       - name: Checkout zoltpy
-          uses: actions/checkout@v2
-          with:
-            repository: reichlab/zoltpy
-            token: ${{secrets.GH_TOKEN}}
-            path: zoltpy
+        uses: actions/checkout@v2
+        with:
+          repository: reichlab/zoltpy
+          token: ${{secrets.GH_TOKEN}}
+          path: zoltpy
       - name: Setup pipenv for zoltpy
         run: 
           pip3 install --user pipenv
