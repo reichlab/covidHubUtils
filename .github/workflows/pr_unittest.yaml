@@ -46,8 +46,8 @@ jobs:
           pip install requests
           pip install numpy
           pip install --user pipenv
-          echo "DJANGO_SETTINGS_MODULE=forecast_repo.settings.local_sqlite3" >.env
-          echo "MAX_NUM_QUERY_ROWS=20_000_000" >>.env
+          echo "DJANGO_SETTINGS_MODULE=forecast_repo.settings.local_sqlite3" > $GITHUB_ENV
+          echo "MAX_NUM_QUERY_ROWS=20_000_000"" >> $GITHUB_ENV
           pipenv install
           pipenv shell
         working-directory: ./zoltpy
