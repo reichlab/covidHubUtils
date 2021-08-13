@@ -115,14 +115,20 @@ load_forecasts_repo <- function(
       verbose = verbose
     )
   }
-  # read in the forecast files
-  forecasts <- load_forecast_files_repo(
-    file_paths = forecast_files,
-    locations = locations,
-    types = types,
-    targets = targets,
-    hub = hub
-  )
+
+  if (!is.null(forecast_files)) {
+    # read in the forecast files
+    forecasts <- load_forecast_files_repo(
+      file_paths = forecast_files,
+      locations = locations,
+      types = types,
+      targets = targets,
+      hub = hub
+    )
+  } else{
+    forecasts <- NULL
+  }
+
   return(forecasts)
 }
 
