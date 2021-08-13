@@ -14,6 +14,8 @@ load_forecasts(
   targets = NULL,
   source = "zoltar",
   hub_repo_path,
+  local_zoltpy_path,
+  zoltar_module_path,
   data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
@@ -41,11 +43,16 @@ and/or \code{"point"}. Default to all valid forecast types.}
 \code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
 Default to \code{NULL} which stands for all valid targets.}
 
-\item{source}{string specifying where forecasts will be loaded from: either
-\code{"local_hub_repo"} or \code{"zoltar"}. Default to \code{"zoltar"}.}
+\item{source}{string specifying where forecasts will be loaded from: one of
+\code{"local_hub_repo"}, \code{"zoltar"} and \code{"local_zoltar"}. Default to \code{"zoltar"}.}
 
 \item{hub_repo_path}{path to local clone of the forecast hub
-repository}
+repository
+#' @param local_zoltpy_path path to local clone of zolpy repository.
+Only needed when \code{source} is \verb{"local_zoltar}.}
+
+\item{zoltar_module_path}{path to local zoltar module.
+Only needed when \code{source} is \verb{"local_zoltar}.}
 
 \item{data_processed_subpath}{folder within the hub_repo_path that contains
 forecast submission files.  Default to \code{"data-processed/"}, which is
@@ -79,7 +86,7 @@ forecasts that are submitted within window size for each day in \code{dates}.
 }
 \examples{
 # Load forecasts from US forecast hub
-# This call only loads the latest forecast submitted on "2021-07-26" in 
+# This call only loads the latest forecast submitted on "2021-07-26" in
 # a 12-day window w.r.t "2021-7-30".
 load_forecasts(
   models = "COVIDhub-ensemble",
@@ -94,7 +101,7 @@ load_forecasts(
 )
 
 # Load forecasts from ECDC forecast hub
-# This function call loads the latest forecasts in each 2-day window 
+# This function call loads the latest forecasts in each 2-day window
 # w.r.t "2021-03-08" and "2021-07-27".
 load_forecasts(
   models = "ILM-EKF",

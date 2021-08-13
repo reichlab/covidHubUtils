@@ -21,10 +21,14 @@
 #' @param targets character vector of targets to retrieve, for example
 #' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
 #' Default to `NULL` which stands for all valid targets.
-#' @param source string specifying where forecasts will be loaded from: either
-#' `"local_hub_repo"` or `"zoltar"`. Default to `"zoltar"`.
+#' @param source string specifying where forecasts will be loaded from: one of
+#' `"local_hub_repo"`, `"zoltar"` and `"local_zoltar"`. Default to `"zoltar"`.
 #' @param hub_repo_path path to local clone of the forecast hub
 #' repository
+#' #' @param local_zoltpy_path path to local clone of zolpy repository.
+#' Only needed when `source` is `"local_zoltar`.
+#' @param zoltar_module_path path to local zoltar module.
+#' Only needed when `source` is `"local_zoltar`.
 #' @param data_processed_subpath folder within the hub_repo_path that contains
 #' forecast submission files.  Default to `"data-processed/"`, which is
 #' appropriate for the covid19-forecast-hub repository.
@@ -45,7 +49,7 @@
 #'
 #' @examples
 #' # Load forecasts from US forecast hub
-#' # This call only loads the latest forecast submitted on "2021-07-26" in 
+#' # This call only loads the latest forecast submitted on "2021-07-26" in
 #' # a 12-day window w.r.t "2021-7-30".
 #' load_forecasts(
 #'   models = "COVIDhub-ensemble",
@@ -60,7 +64,7 @@
 #' )
 #'
 #' # Load forecasts from ECDC forecast hub
-#' # This function call loads the latest forecasts in each 2-day window 
+#' # This function call loads the latest forecasts in each 2-day window
 #' # w.r.t "2021-03-08" and "2021-07-27".
 #' load_forecasts(
 #'   models = "ILM-EKF",
@@ -81,21 +85,23 @@ load_forecasts <- function(
                            targets = NULL,
                            source = "zoltar",
                            hub_repo_path,
+                           local_zoltpy_path,
+                           zoltar_module_path,
                            data_processed_subpath = "data-processed/",
                            as_of = NULL,
                            hub = c("US", "ECDC"),
                            verbose = TRUE) {
 
   # validate source
-  source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
+  source <- match.arg(source, choices = c("local_hub_repo", "zoltar", "local_zoltar"))
 
   if (!is.null(dates) & date_window_size > 0) {
     # 2d array
     all_forecast_dates <- purrr::map(
       dates, function(date) {
         return(as.Date(date) + seq(from = -date_window_size, to = 0))
-        }
-      )
+      }
+    )
   } else {
     all_forecast_dates <- dates
   }
@@ -125,7 +131,7 @@ load_forecasts <- function(
       verbose = verbose,
       hub = hub
     )
-  } else {
+  } else if (source == "zoltar") {
     forecasts <- load_forecasts_zoltar(
       models = models,
       forecast_dates = all_forecast_dates,
@@ -136,6 +142,24 @@ load_forecasts <- function(
       verbose = verbose,
       hub = hub
     )
+  } else if (source == "local_zoltar") {
+    if (missing(local_zoltpy_path) | missing(zoltar_module_path)) {
+      stop("Error in load_forecasts: Please provide local_zoltpy_path and zoltar_module_path.")
+    }
+
+    forecasts <- load_forecasts_local_zoltar(
+      models = models,
+      forecast_dates = all_forecast_dates,
+      locations = locations,
+      types = types,
+      targets = targets,
+      as_of = as_of,
+      verbose = verbose,
+      hub = hub,
+      local_zoltpy_path = local_zoltpy_path,
+      zoltar_module_path = zoltar_module_path
+    )
   }
+
   return(forecasts)
 }

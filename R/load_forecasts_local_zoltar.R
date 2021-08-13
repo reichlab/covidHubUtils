@@ -44,6 +44,9 @@ load_forecasts_local_zoltar <- function(models = NULL,
                                         local_zoltpy_path,
                                         zoltar_module_path) {
  
+  # set up Zoltar connection
+  zoltar_connection <- setup_zoltar_connection(staging = FALSE)
+  
   # construct Zoltar project url
   project_url <- get_zoltar_project_url(
     hub = hub,
@@ -105,7 +108,7 @@ load_forecasts_local_zoltar <- function(models = NULL,
       if (length(latest_dates) != 0) {
         # create a json file as filter
         filter <- list(
-          models = c(models),
+          models = c(curr_model),
           timezeros = c(latest_dates)
         )
         
@@ -125,12 +128,12 @@ load_forecasts_local_zoltar <- function(models = NULL,
           filter <- c(filter, as_of = c(date_to_datetime(as_of, hub)))
         }
   
-        temp_filter_filepath <- tempfile(pattern = "filter", fileext = ".json")
-  
+        temp_filter_filepath <- tempfile(pattern = paste("filter", Sys.getpid(), sep=""), fileext = ".json")
+      
         jsonlite::write_json(filter, temp_filter_filepath)
         
-        temp_result_filepath <- tempfile(pattern = "query", fileext = ".csv")
-  
+        temp_result_filepath <- tempfile(pattern = paste("query", Sys.getpid(), sep=""), fileext = ".csv")
+        
         query_command <- paste0(
           "pipenv run python3 cli/bulk_data_query.py ",
           zoltar_module_path, " ",
@@ -188,7 +191,7 @@ load_forecasts_local_zoltar <- function(models = NULL,
     
   }
   
-  system(query_command)
+  setwd(original_wd)
 
   if (!is.null(forecasts)) {
     if (nrow(forecasts) > 0) {

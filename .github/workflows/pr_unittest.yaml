@@ -22,12 +22,21 @@ jobs:
           install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
-      - name: Install zoltr and scoringutils
+      - name: Install zoltr, zoltpy and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
+          devtools::install_github("reichlab/zoltpy")
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
         shell: Rscript {0}
+      - name: Setup pipenv for zoltpy
+        run: 
+          pip3 install --user pipenv
+          echo DJANGO_SETTINGS_MODULE=forecast_repo.settings.local_sqlite3 >.env
+          echo MAX_NUM_QUERY_ROWS=20_000_000 >>.env
+          pipenv install
+          pipenv shell
+        working-directory: ./zoltpy
       - name: Run unit tests
         run: |
           devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
@@ -37,6 +46,7 @@ jobs:
           devtools::test_active_file("tests/testthat/test-get_model_metadata.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_forecasts.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_forecasts_local_zoltar.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
