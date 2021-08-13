@@ -40,7 +40,12 @@ jobs:
           path: zoltpy
       - name: Setup pipenv for zoltpy
         run: 
-          pip3 install --user pipenv
+          python -m pip install --upgrade pip
+          pip install click
+          pip install pandas
+          pip install requests
+          pip install numpy
+          pip install --user pipenv
           echo DJANGO_SETTINGS_MODULE=forecast_repo.settings.local_sqlite3 >.env
           echo MAX_NUM_QUERY_ROWS=20_000_000 >>.env
           pipenv install
