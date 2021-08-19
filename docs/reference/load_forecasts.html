@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load all available forecasts submitted around forecast dates from Zoltar
-or local hub repo. — load_forecasts • covidHubUtils</title>
+<title>Load all available forecasts submitted around forecast dates from Zoltar,
+local Zoltar module or local hub repo. — load_forecasts • covidHubUtils</title>
 
 
 <!-- jquery -->
@@ -40,8 +40,8 @@ or local hub repo. — load_forecasts • covidHubUtils</title>
 
 
 
-<meta property="og:title" content="Load all available forecasts submitted around forecast dates from Zoltar
-or local hub repo. — load_forecasts" />
+<meta property="og:title" content="Load all available forecasts submitted around forecast dates from Zoltar,
+local Zoltar module or local hub repo. — load_forecasts" />
 <meta property="og:description" content="If date_window_size is 0, this function returns all available forecasts
 submitted on every day in dates." />
 
@@ -121,8 +121,8 @@ submitted on every day in dates." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load all available forecasts submitted around forecast dates from Zoltar
-or local hub repo.</h1>
+    <h1>Load all available forecasts submitted around forecast dates from Zoltar,
+local Zoltar module or local hub repo.</h1>
     
     <div class="hidden name"><code>load_forecasts.Rd</code></div>
     </div>
@@ -141,6 +141,8 @@ submitted on every day in <code>dates</code>.</p>
   targets <span class='op'>=</span> <span class='cn'>NULL</span>,
   source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
   <span class='va'>hub_repo_path</span>,
+  <span class='va'>local_zoltpy_path</span>,
+  <span class='va'>zoltar_module_path</span>,
   data_processed_subpath <span class='op'>=</span> <span class='st'>"data-processed/"</span>,
   as_of <span class='op'>=</span> <span class='cn'>NULL</span>,
   hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>,
@@ -184,13 +186,20 @@ Default to <code>NULL</code> which stands for all valid targets.</p></td>
     </tr>
     <tr>
       <th>source</th>
-      <td><p>string specifying where forecasts will be loaded from: either
-<code>"local_hub_repo"</code> or <code>"zoltar"</code>. Default to <code>"zoltar"</code>.</p></td>
+      <td><p>string specifying where forecasts will be loaded from: one of
+<code>"local_hub_repo"</code>, <code>"zoltar"</code> and <code>"local_zoltar"</code>. Default to <code>"zoltar"</code>.</p></td>
     </tr>
     <tr>
       <th>hub_repo_path</th>
       <td><p>path to local clone of the forecast hub
-repository</p></td>
+repository
+#' @param local_zoltpy_path path to local clone of zolpy repository.
+Only needed when <code>source</code> is <code>"local_zoltar</code>.</p></td>
+    </tr>
+    <tr>
+      <th>zoltar_module_path</th>
+      <td><p>path to local zoltar module w.r.t. <code>local_zoltpy_path</code>.
+Only needed when <code>source</code> is <code>"local_zoltar</code>.</p></td>
     </tr>
     <tr>
       <th>data_processed_subpath</th>
@@ -226,12 +235,12 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
 <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If <code>date_window_size</code> is not 0, this function will look for all the latest
-forecasts that are submitted within window size for each day in <code>dates</code>.</p>
+    <p>If<code>date_window_size</code>  is not 0, this function will look for all the latest
+forecasts that are submitted within window size for each day in  <code>dates</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load forecasts from US forecast hub</span>
-<span class='co'># This call only loads the latest forecast submitted on "2021-07-26" in </span>
+<span class='co'># This call only loads the latest forecast submitted on "2021-07-26" in</span>
 <span class='co'># a 12-day window w.r.t "2021-7-30".</span>
 <span class='fu'>load_forecasts</span><span class='op'>(</span>
   models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,
@@ -262,7 +271,7 @@ forecasts that are submitted within window size for each day in <code>dates</cod
 #&gt; <span style='color: #949494;'>#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   full_location_name &lt;chr&gt;</span></div><div class='input'>
 <span class='co'># Load forecasts from ECDC forecast hub</span>
-<span class='co'># This function call loads the latest forecasts in each 2-day window </span>
+<span class='co'># This function call loads the latest forecasts in each 2-day window</span>
 <span class='co'># w.r.t "2021-03-08" and "2021-07-27".</span>
 <span class='fu'>load_forecasts</span><span class='op'>(</span>
   models <span class='op'>=</span> <span class='st'>"ILM-EKF"</span>,
