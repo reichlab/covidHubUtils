@@ -1,3 +1,6 @@
+## Changes since last release
+- Support loading data from local zoltar module in `load_forecasts()` when `source = "local_zoltar"`. Please follow instructions in  `load_forecasts_local_zoltar()` to set up required environment for this functionality.
+
 ## covidHubUtils 0.1.6
 
 This is a release focusing on new features in most of the major functions.

@@ -2,8 +2,8 @@
 % Please edit documentation in R/load_forecasts.R
 \name{load_forecasts}
 \alias{load_forecasts}
-\title{Load all available forecasts submitted around forecast dates from Zoltar
-or local hub repo.}
+\title{Load all available forecasts submitted around forecast dates from Zoltar,
+local Zoltar module or local hub repo.}
 \usage{
 load_forecasts(
   models = NULL,
@@ -51,7 +51,7 @@ repository
 #' @param local_zoltpy_path path to local clone of zolpy repository.
 Only needed when \code{source} is \verb{"local_zoltar}.}
 
-\item{zoltar_module_path}{path to local zoltar module.
+\item{zoltar_module_path}{path to local zoltar module w.r.t. \code{local_zoltpy_path}.
 Only needed when \code{source} is \verb{"local_zoltar}.}
 
 \item{data_processed_subpath}{folder within the hub_repo_path that contains
@@ -81,8 +81,8 @@ If \code{date_window_size} is 0, this function returns all available forecasts
 submitted on every day in \code{dates}.
 }
 \details{
-If \code{date_window_size} is not 0, this function will look for all the latest
-forecasts that are submitted within window size for each day in \code{dates}.
+If\code{date_window_size}  is not 0, this function will look for all the latest
+forecasts that are submitted within window size for each day in  \code{dates}.
 }
 \examples{
 # Load forecasts from US forecast hub

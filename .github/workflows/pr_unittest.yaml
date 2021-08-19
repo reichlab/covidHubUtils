@@ -12,11 +12,6 @@ jobs:
           fetch-depth: 0
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
       - name: Cache R packages
         uses: actions/cache@v1
         with:
@@ -33,24 +28,6 @@ jobs:
           devtools::install_github("epiforecasts/scoringutils")
           devtools::install()
         shell: Rscript {0}
-      - name: Checkout zoltpy
-        uses: actions/checkout@v2
-        with:
-          repository: reichlab/zoltpy
-          path: zoltpy
-      - name: Setup pipenv for zoltpy
-        run: 
-          python -m pip install --upgrade pip
-          pip install click
-          pip install pandas
-          pip install requests
-          pip install numpy
-          pip install --user pipenv
-          echo "DJANGO_SETTINGS_MODULE=forecast_repo.settings.local_sqlite3" > $GITHUB_ENV
-          echo "MAX_NUM_QUERY_ROWS=20_000_000" >> $GITHUB_ENV
-          pipenv install
-          pipenv shell
-        working-directory: ./zoltpy
       - name: Run unit tests
         run: |
           devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
@@ -60,7 +37,6 @@ jobs:
           devtools::test_active_file("tests/testthat/test-get_model_metadata.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_forecasts.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-load_forecasts_local_zoltar.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)

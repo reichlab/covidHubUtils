@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_forecasts_local_zoltar.R
 \name{load_forecasts_local_zoltar}
 \alias{load_forecasts_local_zoltar}
-\title{Load the most recent forecasts submitted in a time window from zoltar.}
+\title{Load all available forecasts submitted on \code{forecast_dates} from local Zoltar module.}
 \usage{
 load_forecasts_local_zoltar(
   models = NULL,
@@ -19,45 +19,60 @@ load_forecasts_local_zoltar(
 }
 \arguments{
 \item{models}{Character vector of model abbreviations.
-Default to NULL so that forecasts for all models that submitted forecasts
-meeting the other criteria are returned.}
+Default all models that submitted forecasts meeting the other criteria.}
 
-\item{forecast_dates}{date vector to load the most recent forecast from.
-Default to all valid forecast dates in Zoltar.
-The function will throw an error if all dates in this parameter are invalid forecast dates in Zoltar.}
+\item{forecast_dates}{A 2 dimensional list of forecast dates to retrieve forecasts.
+This function will return the latest forecasts
+for each sub-list of dates.
+Default to  \code{NULL} which would include all valid forecast dates in Zoltar.}
 
-\item{locations}{list of valid location codes. Default to all locations with available forecasts in Zoltar.}
+\item{locations}{list of fips. Default to all locations with available forecasts in Zoltar.}
 
-\item{types}{character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types in Zoltar.}
+\item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
+and/or \code{"point"}. Default to all valid forecast types in Zoltar.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
+\code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
 Default to all valid targets in Zoltar.}
 
 \item{as_of}{character for date time to load forecasts submitted as of this time.
 It could use the format of one of the three examples:
-"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".
+\verb{"2021-01-01", "2020-01-01 01:01:01" and "2020-01-01 01:01:01 UTC".}
 If you would like to set a timezone, it has to be UTC now.
-If not, helper function will append the default timezone to your input based on hub parameter.
-Default to NULL to load the latest version.}
+If not, helper function will append the default timezone to your input based on \code{hub} parameter.
+Default to \code{NULL} to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
-\item{verbose}{a boolean for printing messages on zoltar job status. Default to TRUE.}
+\item{verbose}{logical for printing messages on zoltar job status. Default to \code{TRUE}.}
 
-\item{local_zoltpy_path}{path to local clone of zolpy repository.}
+\item{local_zoltpy_path}{path to local clone of \code{zolpy} repository.}
 
-\item{zoltar_module_path}{path to local zoltar module}
+\item{zoltar_module_path}{path to local zoltar module w.r.t. \code{local_zoltpy_path}}
 }
 \value{
-data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation
+data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
+\code{temporal_resolution}, \code{target_variable}, \code{target_end_date}, \code{type}, \code{quantile}, \code{value},
+\code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
-The function will throw a warning and return an empty data frame when
-no forecasts are submitted on any dates in forecast_dates for selected models,
-locations, types and target.
+Please follow these steps to set up required environment prior to using this function
+for the first time:
+\itemize{
+\item Create a local clone of \code{reichlab/zoltpy} repository.
+\item Set the \code{DJANGO_SETTINGS_MODULE} environment variable
+to \code{forecast_repo.settings.local_sqlite3} and  \verb{MAX_NUM_QUERY_ROWS=20_000_000}
+or another number
+\item Call \verb{pipenv install} from the directory of local zolpy in command line.
+}
+}
+\details{
+\itemize{
+\item This function will throw an error when no forecasts are submitted on
+any dates in \code{forecast_dates} for selected \code{models},
+\code{locations}, \code{types} and \code{target}.
+\item By default. \code{test-load_forecasts_local_zoltar()} is skipped. Please modify
+\code{local_zoltpy_path} and \code{zoltar_module_path} on top of the unit test file to run tests.
+}
 }
