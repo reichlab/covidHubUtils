@@ -220,6 +220,7 @@ score_forecasts <- function(
           -dplyr::starts_with("underprediction_"),
           -dplyr::starts_with("overprediction_")
         ) %>%
+        dplyr::rename("dispersion" = "sharpness")%>%
         dplyr::select(
           1:8, dplyr::starts_with("coverage_"),
           dplyr::starts_with("abs_error"),
@@ -312,3 +313,4 @@ score_forecasts <- function(
 
   return(scores)
 }
+
