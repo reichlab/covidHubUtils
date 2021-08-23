@@ -379,7 +379,7 @@ test_that("abs error is correct, point and median forecasts same", {
 
 })
 
-test_that("sharpness is NaN, point forecast only, use_median_as_point FALSE", {
+test_that("dispersion is NaN, point forecast only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
 
   target_end_dates <- lubridate::ymd(20200101) + c(7, 14, 7)
@@ -425,10 +425,10 @@ test_that("sharpness is NaN, point forecast only, use_median_as_point FALSE", {
 
   expected <- rep(NaN, length(point_forecast))
 
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
-test_that("sharpness is zero, median only, use_median_as_point TRUE", {
+test_that("dispersion is zero, median only, use_median_as_point TRUE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -478,10 +478,10 @@ test_that("sharpness is zero, median only, use_median_as_point TRUE", {
     use_median_as_point = TRUE
   )
   expected <- rep(0, length(y))
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
-test_that("sharpness errors, median only, use_median_as_point FALSE", {
+test_that("dispersion errors, median only, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -537,7 +537,7 @@ test_that("sharpness errors, median only, use_median_as_point FALSE", {
   ))
 })
 
-test_that("sharpness is NA, 1 interval only, use_median_as_point TRUE", {
+test_that("Dispersion is NA, 1 interval only, use_median_as_point TRUE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -587,10 +587,10 @@ test_that("sharpness is NA, 1 interval only, use_median_as_point TRUE", {
     use_median_as_point = TRUE
   )
   expected <- rep(NA_real_, length(y))  
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
-test_that("sharpness errors, 2 intervals and median no point, use_median_as_point FALSE", {
+test_that("Dispersion errors, 2 intervals and median no point, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -644,7 +644,7 @@ test_that("sharpness errors, 2 intervals and median no point, use_median_as_poin
   ))
 })
 
-test_that("sharpness is correct, 2 intervals and median no point, use_median_as_point TRUE", {
+test_that("dispersion is correct, 2 intervals and median no point, use_median_as_point TRUE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -698,10 +698,10 @@ test_that("sharpness is correct, 2 intervals and median no point, use_median_as_
       abs(forecast_quantiles_matrix[, 4] - forecast_quantiles_matrix[, 2]) * (alpha2 / 2)
   )
 
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
-test_that("sharpness is correct, 2 intervals, median and point, use_median_as_point FALSE", {
+test_that("Dispersion is correct, 2 intervals, median and point, use_median_as_point FALSE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -762,10 +762,10 @@ test_that("sharpness is correct, 2 intervals, median and point, use_median_as_po
       abs(forecast_quantiles_matrix[, 4] - forecast_quantiles_matrix[, 2]) * (alpha2 / 2)
   )
 
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
-test_that("sharpness is correct, 2 intervals, median and point, use_median_as_point TRUE", {
+test_that("Dispersion is correct, 2 intervals, median and point, use_median_as_point TRUE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -826,10 +826,10 @@ test_that("sharpness is correct, 2 intervals, median and point, use_median_as_po
       abs(forecast_quantiles_matrix[, 4] - forecast_quantiles_matrix[, 2]) * (alpha2 / 2)
   )
 
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
-test_that("sharpness is correct, 2 models different num. quantiles, 1 interval and median no point, and just median, use_median_as_point TRUE", {
+test_that("Dispersion is correct, 2 models different num. quantiles, 1 interval and median no point, and just median, use_median_as_point TRUE", {
   y <- c(1, -15, 22)
   forecast_quantiles_matrix <- rbind(
     c(-1, 0, 1, 2, 3),
@@ -924,7 +924,7 @@ test_that("sharpness is correct, 2 models different num. quantiles, 1 interval a
   expected_2 <- rep(NA_real_,length(y))
   expected <- c(expected_1,expected_2)
   
-  expect_equal(actual$sharpness, expected)
+  expect_equal(actual$dispersion, expected)
 })
 
 test_that("overprediction is NaN, point forecast only, use_median_as_point FALSE", {
@@ -2618,7 +2618,7 @@ test_that("wis is sum of components, median only, use_median_as_point TRUE", {
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
   
-  expected <- rowSums(actual[,c("sharpness","overprediction","underprediction")])
+  expected <- rowSums(actual[,c("dispersion","overprediction","underprediction")])
   
   expect_equal(actual$wis, expected)
 })
@@ -2675,7 +2675,7 @@ test_that("wis is sum of components (NA), 1 interval only, use_median_as_point T
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
   
-  expected <- rowSums(actual[,c("sharpness","overprediction","underprediction")])
+  expected <- rowSums(actual[,c("dispersion","overprediction","underprediction")])
   
   expect_equal(actual$wis, expected)
 })
@@ -2729,7 +2729,7 @@ test_that("wis is sum of components, 2 intervals and median no point, use_median
   
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
-  expected <- rowSums(actual[,c("sharpness","overprediction","underprediction")])
+  expected <- rowSums(actual[,c("dispersion","overprediction","underprediction")])
   
   expect_equal(actual$wis, expected)
 })
@@ -2785,7 +2785,7 @@ test_that("wis is sum of components, 2 intervals, median and point, use_median_a
   
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = TRUE)
-  expected <- rowSums(actual[,c("sharpness","overprediction","underprediction")])
+  expected <- rowSums(actual[,c("dispersion","overprediction","underprediction")])
   
   expect_equal(actual$wis, expected)
 })
@@ -2841,7 +2841,7 @@ test_that("wis is sum of components, 2 intervals, median and point, use_median_a
   
   actual <- score_forecasts(forecasts = test_forecasts, truth = test_truth, 
                             use_median_as_point = FALSE)
-  expected <- rowSums(actual[,c("sharpness","overprediction","underprediction")])
+  expected <- rowSums(actual[,c("dispersion","overprediction","underprediction")])
   
   expect_equal(actual$wis, expected)
 })
@@ -2932,7 +2932,7 @@ test_that("wis is sum of components, 2 models different num. quantiles, 1 interv
     forecasts = test_forecasts, truth = test_truth,
     use_median_as_point = TRUE
   )
-  expected <- rowSums(actual[,c("sharpness","overprediction","underprediction")])
+  expected <- rowSums(actual[,c("dispersion","overprediction","underprediction")])
   
   expect_equal(actual$wis, expected)
 })
@@ -4039,7 +4039,7 @@ test_that("correct columns included when metrics parameter excludes `abs_error`"
   
   expect_false("abs_error" %in% cols)
   expect_true("wis" %in% cols)
-  expect_true("sharpness" %in% cols)
+  expect_true("dispersion" %in% cols)
   expect_true("overprediction" %in% cols)
   expect_true("underprediction" %in% cols)
   expect_true("n_interval_scores" %in% cols)
@@ -4113,7 +4113,7 @@ test_that("correct columns included when metrics parameter excludes `wis`", {
   
   expect_true("abs_error" %in% cols)
   expect_false("wis" %in% cols)
-  expect_true("sharpness" %in% cols)
+  expect_true("dispersion" %in% cols)
   expect_true("overprediction" %in% cols)
   expect_true("underprediction" %in% cols)
   expect_true("n_interval_scores" %in% cols)
@@ -4187,7 +4187,7 @@ test_that("correct columns included when metrics parameter excludes `wis_compone
   
   expect_true("abs_error" %in% cols)
   expect_true("wis" %in% cols)
-  expect_false("sharpness" %in% cols)
+  expect_false("dispersion" %in% cols)
   expect_false("overprediction" %in% cols)
   expect_false("underprediction" %in% cols)
   expect_true("n_interval_scores" %in% cols)
@@ -4261,7 +4261,7 @@ test_that("correct columns included when metrics parameter excludes `interval_co
   
   expect_true("abs_error" %in% cols)
   expect_true("wis" %in% cols)
-  expect_true("sharpness" %in% cols)
+  expect_true("dispersion" %in% cols)
   expect_true("overprediction" %in% cols)
   expect_true("underprediction" %in% cols)
   expect_false("n_interval_scores" %in% cols)
@@ -4335,7 +4335,7 @@ test_that("correct columns included when metrics parameter excludes `quantile_co
   
   expect_true("abs_error" %in% cols)
   expect_true("wis" %in% cols)
-  expect_true("sharpness" %in% cols)
+  expect_true("dispersion" %in% cols)
   expect_true("overprediction" %in% cols)
   expect_true("underprediction" %in% cols)
   expect_true("n_interval_scores" %in% cols)
