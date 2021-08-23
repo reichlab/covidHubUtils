@@ -420,7 +420,7 @@ plot_forecasts(
 
 # Working with scored forecasts 
 
-In addition to querying forecasts and truth data, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at any provided quantiles, the absolute error based on a median estimate, the weighted interval score (WIS) of the forecast, and a component-wise breakdown of WIS into sharpness, overprediction and underprediction. 
+In addition to querying forecasts and truth data, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at any provided quantiles, the absolute error based on a median estimate, the weighted interval score (WIS) of the forecast, and a component-wise breakdown of WIS into dispersion, overprediction and underprediction. 
 
 These scores could be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in-depth explanation about the methodologies.
 
@@ -517,7 +517,7 @@ The following snippet of code produce a bar plot for WIS score components in abs
 scores %>%
   dplyr::group_by(model) %>%
   dplyr::summarise(
-    sharpness = mean(sharpness),
+    dispersion = mean(dispersion),
     overprediction = mean(overprediction),
     underprediction = mean(underprediction)
   ) %>%
