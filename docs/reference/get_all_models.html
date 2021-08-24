@@ -127,7 +127,7 @@
     <p>Get all valid model names</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_all_models</span><span class='op'>(</span>source <span class='op'>=</span> <span class='st'>"zoltar"</span>, <span class='va'>hub_repo_path</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_all_models</span><span class='op'>(</span>source <span class='op'>=</span> <span class='st'>"zoltar"</span>, hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>, <span class='va'>hub_repo_path</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +136,11 @@
       <th>source</th>
       <td><p>string specifying where to get all valid model names
 Currently support <code>"local_hub_repo"</code>, <code>"remote_hub_repo"</code> and <code>"zoltar"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>hub</th>
+      <td><p>character vector, where the first element indicates the hub
+from which to load forecasts. Possible options are "US" and "ECDC"</p></td>
     </tr>
     <tr>
       <th>hub_repo_path</th>
