@@ -42,8 +42,17 @@ local Zoltar module or local hub repo. — load_forecasts • covidHubUtils</tit
 
 <meta property="og:title" content="Load all available forecasts submitted around forecast dates from Zoltar,
 local Zoltar module or local hub repo. — load_forecasts" />
-<meta property="og:description" content="If date_window_size is 0, this function returns all available forecasts
-submitted on every day in dates." />
+<meta property="og:description" content="
+
+If date_window_size is 0, this function returns all available forecasts
+submitted on every day in dates.
+Ifdate_window_size  is not 0, this function will look for all the latest
+forecasts that are submitted within window size for each day in  dates.
+If source is local_zoltar, a valid sqlite3 object is required.
+Please follow the instruction in load_forecasts_local_zoltar() to set up
+required environment.
+
+" />
 
 
 
@@ -128,8 +137,17 @@ local Zoltar module or local hub repo.</h1>
     </div>
 
     <div class="ref-description">
-    <p>If <code>date_window_size</code> is 0, this function returns all available forecasts
-submitted on every day in <code>dates</code>.</p>
+    
+<ul>
+<li><p>If <code>date_window_size</code> is 0, this function returns all available forecasts
+submitted on every day in <code>dates</code>.</p></li>
+<li><p>If<code>date_window_size</code>  is not 0, this function will look for all the latest
+forecasts that are submitted within window size for each day in  <code>dates</code>.</p></li>
+<li><p>If <code>source</code> is <code>local_zoltar</code>, a valid sqlite3 object is required.
+Please follow the instruction in <code><a href='load_forecasts_local_zoltar.html'>load_forecasts_local_zoltar()</a></code> to set up
+required environment.</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>load_forecasts</span><span class='op'>(</span>
@@ -233,10 +251,6 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
     <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
 <code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
 <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If<code>date_window_size</code>  is not 0, this function will look for all the latest
-forecasts that are submitted within window size for each day in  <code>dates</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load forecasts from US forecast hub</span>
