@@ -77,12 +77,18 @@ data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \co
 \code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
-If \code{date_window_size} is 0, this function returns all available forecasts
+\itemize{
+\item If \code{date_window_size} is 0, this function returns all available forecasts
 submitted on every day in \code{dates}.
-}
-\details{
-If\code{date_window_size}  is not 0, this function will look for all the latest
+
+\item If\code{date_window_size}  is not 0, this function will look for all the latest
 forecasts that are submitted within window size for each day in  \code{dates}.
+
+\item If \code{source} is \code{local_zoltar}, a valid sqlite3 object is required.
+Please follow the instruction in \code{\link[=load_forecasts_local_zoltar]{load_forecasts_local_zoltar()}} to set up
+required environment.
+
+}
 }
 \examples{
 # Load forecasts from US forecast hub
