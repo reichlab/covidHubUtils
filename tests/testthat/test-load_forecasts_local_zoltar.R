@@ -5,7 +5,10 @@ library(dplyr)
 library(lubridate)
 
 # Need to change these to valid paths
+# path from your covidHubUtils folder to your local clone of zoltpy
 local_zoltpy_path <- NA
+# path from your local clone of zoltpy to
+# covidHubUtils/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3
 zoltar_module_path <- NA
 
 skip_if_no_zoltpy_or_sqlite <- function() {

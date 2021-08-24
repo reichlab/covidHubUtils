@@ -1,12 +1,20 @@
 #' Load all available forecasts submitted around forecast dates from Zoltar,
 #' local Zoltar module or local hub repo.
 #'
-#' If `date_window_size` is 0, this function returns all available forecasts
+#' @description
+#' \itemize{
+#'   \item If `date_window_size` is 0, this function returns all available forecasts
 #' submitted on every day in `dates`.
 #'
-#' If`date_window_size`  is not 0, this function will look for all the latest
+#'   \item If`date_window_size`  is not 0, this function will look for all the latest
 #' forecasts that are submitted within window size for each day in  `dates`.
 #'
+#'   \item If `source` is `local_zoltar`, a valid sqlite3 object is required. 
+#' Please follow the instruction in [load_forecasts_local_zoltar()] to set up 
+#' required environment.
+#' 
+#' }
+#' 
 #' @param models Character vector of model abbreviations.
 #' Default all models that submitted forecasts meeting the other criteria.
 #' @param dates The forecast date of forecasts to retrieve.
