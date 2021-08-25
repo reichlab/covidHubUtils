@@ -3,7 +3,7 @@
 - Sort `models` parameter in `load_forecasts()` and `load_latest_forecasts()` so that the resulting data frame is 
 locale-independent
 - Add `hub` parameter in `get_all_models()`. It does not support loading model names for ECDC hub from remote hub repo for now. 
-- Rename sharoness score as dispersion.
+- Rename sharpness score as dispersion.
 
 ## covidHubUtils 0.1.6
 
