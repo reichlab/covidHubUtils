@@ -1,7 +1,7 @@
 #' Score forecasts
 #'
 #' @param forecasts required data.frame with forecasts in the format returned
-#' by [load_forecast()]
+#' by [load_forecasts()]
 #' @param truth required data.frame with forecasts in the format returned
 #' by [load_truth()]
 #' @param return_format string: `"long"` returns long format with a column for
@@ -220,7 +220,7 @@ score_forecasts <- function(
           -dplyr::starts_with("underprediction_"),
           -dplyr::starts_with("overprediction_")
         ) %>%
-        dplyr::rename("dispersion" = "sharpness")%>%
+        dplyr::rename(dispersion = sharpness)%>%
         dplyr::select(
           1:8, dplyr::starts_with("coverage_"),
           dplyr::starts_with("abs_error"),
@@ -313,4 +313,4 @@ score_forecasts <- function(
 
   return(scores)
 }
-
+ 

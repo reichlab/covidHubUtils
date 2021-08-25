@@ -521,7 +521,22 @@ scores %>%
     overprediction = mean(overprediction),
     underprediction = mean(underprediction)
   ) %>%
-  scoringutils::wis_components()
+  data.table::as.data.table()%>%
+  data.table::melt(.,
+                             measure.vars = c("overprediction",
+                                              "underprediction",
+                                              "dispersion"),
+                             variable.name = "wis_component_name",
+                             value.name = "component_value")%>%
+  ggplot2::ggplot(., ggplot2::aes_string(x = "model")) +
+    ggplot2::geom_col(position = "stack",
+                      ggplot2::aes(y = component_value, fill = wis_component_name)) +
+    ggplot2::labs(x = "model", y = "WIS contributions") +
+    ggplot2::theme_light() +
+    ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
+                   axis.text.x = ggplot2::element_text(angle = 90,
+                                                       vjust = 1,
+                                                       hjust=1))
 ```
 
 
