@@ -501,6 +501,7 @@ We use plotting functions from `scoringutils` to visualize different scoring met
 The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install the most up-to-date development version of `scoringutils` from GitHub:
 ``` {r}
 devtools::install_github("epiforecasts/scoringutils")
+
 ```
 
 Heatmaps are a great way to visualize your data over a large number of models. The following code provides a skeleton for visualizing the WIS score of multiple models over the 4 horizons:
