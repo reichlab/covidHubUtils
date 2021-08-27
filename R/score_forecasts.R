@@ -1,9 +1,9 @@
 #' Score forecasts
 #'
 #' @param forecasts required data.frame with forecasts in the format returned
-#' by [load_forecasts()]
+#' by \code{\link{load_forecasts}} 
 #' @param truth required data.frame with forecasts in the format returned
-#' by [load_truth()]
+#' by \code{\link{load_truth}}
 #' @param return_format string: `"long"` returns long format with a column for
 #' `"score_name"` and a column for `"score_value"`; `"wide"` returns wide format with
 #' a separate column for each score. Defaults to `"wide"`.
