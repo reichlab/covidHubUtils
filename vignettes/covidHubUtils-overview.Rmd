@@ -420,7 +420,7 @@ plot_forecasts(
 
 # Working with scored forecasts 
 
-In addition to querying forecasts and truth data, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at any provided quantiles, the absolute error based on a median estimate, the weighted interval score (WIS) of the forecast, and a component-wise breakdown of WIS into sharpness, overprediction and underprediction. 
+In addition to querying forecasts and truth data, `covidHubUtils` has the capability to evaluate the forecasts based on metrics including the prediction interval coverage at any provided quantiles, the absolute error based on a median estimate, the weighted interval score (WIS) of the forecast, and a component-wise breakdown of WIS into dispersion, overprediction and underprediction. 
 
 These scores could be used to compare the accuracy and precision of forecasts across models, locations, horizons, and submission weeks. You can access the [evaluation paper](https://www.medrxiv.org/content/10.1101/2021.02.03.21250974v1) to read an in-depth explanation about the methodologies.
 
@@ -501,6 +501,7 @@ We use plotting functions from `scoringutils` to visualize different scoring met
 The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install the most up-to-date development version of `scoringutils` from GitHub:
 ``` {r}
 devtools::install_github("epiforecasts/scoringutils")
+
 ```
 
 Heatmaps are a great way to visualize your data over a large number of models. The following code provides a skeleton for visualizing the WIS score of multiple models over the 4 horizons:
@@ -517,11 +518,26 @@ The following snippet of code produce a bar plot for WIS score components in abs
 scores %>%
   dplyr::group_by(model) %>%
   dplyr::summarise(
-    sharpness = mean(sharpness),
+    dispersion = mean(dispersion),
     overprediction = mean(overprediction),
     underprediction = mean(underprediction)
   ) %>%
-  scoringutils::wis_components()
+  data.table::as.data.table()%>%
+  data.table::melt(.,
+                             measure.vars = c("overprediction",
+                                              "underprediction",
+                                              "dispersion"),
+                             variable.name = "wis_component_name",
+                             value.name = "component_value")%>%
+  ggplot2::ggplot(., ggplot2::aes_string(x = "model")) +
+    ggplot2::geom_col(position = "stack",
+                      ggplot2::aes(y = component_value, fill = wis_component_name)) +
+    ggplot2::labs(x = "model", y = "WIS contributions") +
+    ggplot2::theme_light() +
+    ggplot2::theme(panel.spacing = ggplot2::unit(4, "mm"),
+                   axis.text.x = ggplot2::element_text(angle = 90,
+                                                       vjust = 1,
+                                                       hjust=1))
 ```
 
 
