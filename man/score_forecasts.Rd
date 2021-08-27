@@ -15,10 +15,10 @@ score_forecasts(
 }
 \arguments{
 \item{forecasts}{required data.frame with forecasts in the format returned
-by \code{\link{load_forecasts()}}}
+by \code{\link{load_forecasts}}}
 
 \item{truth}{required data.frame with forecasts in the format returned
-by \code{\link{load_truth()}}}
+by \code{\link{load_truth}}}
 
 \item{return_format}{string: \code{"long"} returns long format with a column for
 \code{"score_name"} and a column for \code{"score_value"}; \code{"wide"} returns wide format with
