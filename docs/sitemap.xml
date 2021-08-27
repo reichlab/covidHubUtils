@@ -109,6 +109,9 @@
     <loc>/reference/load_forecasts.html</loc>
   </url>
   <url>
+    <loc>/reference/load_forecasts_local_zoltar.html</loc>
+  </url>
+  <url>
     <loc>/reference/load_forecasts_repo.html</loc>
   </url>
   <url>
@@ -158,6 +161,9 @@
   </url>
   <url>
     <loc>/reference/preprocess_visualization_truth.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reformat_forecasts.html</loc>
   </url>
   <url>
     <loc>/reference/save_truth_for_zoltar.html</loc>

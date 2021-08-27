@@ -46,6 +46,8 @@ supported with specified facet formula." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -57,9 +59,15 @@ supported with specified facet formula." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,12 +88,6 @@ supported with specified facet formula." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -129,7 +131,7 @@ supported with specified facet formula." />
 supported with specified facet formula.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_forecasts</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>plot_forecasts</span><span class='op'>(</span>
   <span class='va'>forecast_data</span>,
   truth_data <span class='op'>=</span> <span class='cn'>NULL</span>,
   hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>,
@@ -154,7 +156,7 @@ supported with specified facet formula.</p>
   title <span class='op'>=</span> <span class='st'>"default"</span>,
   subtitle <span class='op'>=</span> <span class='st'>"default"</span>,
   show_caption <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,7 +222,7 @@ Default to forecast_dates present in the data.</p></td>
       <th>intervals</th>
       <td><p>values indicating which central prediction interval levels
 to plot. <code>NULL</code> means only plotting point forecasts.
-If not provided, it will default to <code><a href='https://rdrr.io/r/base/c.html'>c(.5, .8, .95)</a></code>.
+If not provided, it will default to <code>c(.5, .8, .95)</code>.
 When plotting 6 models or more, the plot will be reduced to show .95 interval only.</p></td>
     </tr>
     <tr>
@@ -292,66 +294,82 @@ the subtitle will be automatically generated. If <code>"none"</code>, no subtitl
     <p>invisible ggplot object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># load forecasts from US forecast hub</span>
-<span class='va'>us_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span>
-  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"COVIDhub-baseline"</span>,
-    <span class='st'>"JHU_CSSE-DECOM"</span>, <span class='st'>"CovidAnalytics-DELPHI"</span>,
-    <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span>
-  <span class='op'>)</span>,
-  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-07-21"</span>,
-  forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>,
-  locations <span class='op'>=</span> <span class='st'>"US"</span>,
-  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,
-  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,
-  source <span class='op'>=</span> <span class='st'>"zoltar"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='input'><span class='co'># plot </span>
-<span class='fu'>plot_forecasts</span><span class='op'>(</span>
-  forecast_data <span class='op'>=</span> <span class='va'>us_forecasts</span>,
-  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"COVIDhub-baseline"</span>, <span class='st'>"JHU_CSSE-DECOM"</span>,
-    <span class='st'>"CovidAnalytics-DELPHI"</span>, <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span>
-  <span class='op'>)</span>,
-  target_variable <span class='op'>=</span> <span class='st'>"inc case"</span>, locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>, intervals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.95</span><span class='op'>)</span>,
-  horizon <span class='op'>=</span> <span class='fl'>4</span>, truth_source <span class='op'>=</span> <span class='st'>"JHU"</span>, plot <span class='op'>=</span> <span class='cn'>TRUE</span>, fill_by_model <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  facet <span class='op'>=</span> <span class='op'>~</span><span class='va'>model</span>, facet_scales <span class='op'>=</span> <span class='st'>"fixed"</span>, title <span class='op'>=</span> <span class='st'>"default"</span>,
-  show_caption <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1849600</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
-#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
-#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
-#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
-#&gt; <span class='message'>which will replace the existing scale.</span></div><div class='img'><img src='plot_forecasts-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># load forecasts from ECDC forecast hub</span>
-<span class='va'>ecdc_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span>
-  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,
-  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,
-  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,
-  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,
-  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,
-  source <span class='op'>=</span> <span class='st'>"zoltar"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span></div><div class='input'><span class='co'>#plot</span>
-<span class='fu'>plot_forecasts</span><span class='op'>(</span>
-  forecast_data <span class='op'>=</span> <span class='va'>ecdc_forecasts</span>,
-  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,
-  locations <span class='op'>=</span> <span class='st'>"GB"</span>,
-  truth_source <span class='op'>=</span> <span class='st'>"JHU"</span>,
-  top_layer <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"forecast"</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>18624</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
-#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
-#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
-#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
-#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
-#&gt; <span class='message'>which will replace the existing scale.</span></div><div class='img'><img src='plot_forecasts-2.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># load forecasts from US forecast hub</span></span>
+<span class='r-in'><span class='va'>us_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"COVIDhub-baseline"</span>,</span>
+<span class='r-in'>    <span class='st'>"JHU_CSSE-DECOM"</span>, <span class='st'>"CovidAnalytics-DELPHI"</span>,</span>
+<span class='r-in'>    <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-07-21"</span>,</span>
+<span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>,</span>
+<span class='r-in'>  locations <span class='op'>=</span> <span class='st'>"US"</span>,</span>
+<span class='r-in'>  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
+<span class='r-in'><span class='co'># plot </span></span>
+<span class='r-in'><span class='fu'>plot_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  forecast_data <span class='op'>=</span> <span class='va'>us_forecasts</span>,</span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"COVIDhub-ensemble"</span>, <span class='st'>"COVIDhub-baseline"</span>, <span class='st'>"JHU_CSSE-DECOM"</span>,</span>
+<span class='r-in'>    <span class='st'>"CovidAnalytics-DELPHI"</span>, <span class='st'>"LANL-GrowthRate"</span>, <span class='st'>"Microsoft-DeepSTIA"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  target_variable <span class='op'>=</span> <span class='st'>"inc case"</span>, locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>, intervals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.95</span><span class='op'>)</span>,</span>
+<span class='r-in'>  horizon <span class='op'>=</span> <span class='fl'>4</span>, truth_source <span class='op'>=</span> <span class='st'>"JHU"</span>, plot <span class='op'>=</span> <span class='cn'>TRUE</span>, fill_by_model <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  facet <span class='op'>=</span> <span class='op'>~</span><span class='va'>model</span>, facet_scales <span class='op'>=</span> <span class='st'>"fixed"</span>, title <span class='op'>=</span> <span class='st'>"default"</span>,</span>
+<span class='r-in'>  show_caption <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Scale for 'colour' is already present. Adding another scale for 'colour',</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> which will replace the existing scale.</span>
+<span class='r-plt'><img src='plot_forecasts-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># load forecasts from ECDC forecast hub</span></span>
+<span class='r-in'><span class='va'>ecdc_forecasts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_latest_forecasts.html'>load_latest_forecasts</a></span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>, last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
+<span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/models/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span>
+<span class='r-in'><span class='co'>#plot</span></span>
+<span class='r-in'><span class='fu'>plot_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  forecast_data <span class='op'>=</span> <span class='va'>ecdc_forecasts</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  locations <span class='op'>=</span> <span class='st'>"GB"</span>,</span>
+<span class='r-in'>  truth_source <span class='op'>=</span> <span class='st'>"JHU"</span>,</span>
+<span class='r-in'>  top_layer <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"forecast"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> cols(</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   location_name = <span style='color: #BB0000;'>col_character()</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   date = <span style='color: #0000BB;'>col_date(format = "")</span>,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   value = <span style='color: #00BB00;'>col_double()</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> )</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Scale for 'colour' is already present. Adding another scale for 'colour',</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> which will replace the existing scale.</span>
+<span class='r-plt'><img src='plot_forecasts-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -363,11 +381,11 @@ the subtitle will be automatically generated. If <code>"none"</code>, no subtitl
 
       <footer>
       <div class="copyright">
-  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
+  <p><p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -375,6 +393,8 @@ the subtitle will be automatically generated. If <code>"none"</code>, no subtitl
 
   
 
+
+  
 
   </body>
 </html>
