@@ -1,4 +1,4 @@
-#' Load the most recent forecasts of all that were submitted
+ #' Load the most recent forecasts of all that were submitted
 #' on `forecast_dates` from a local clone of `reichlab/covid19-forecast-hub` repo.
 #'
 #' This function will drop rows with NULLs in value column.
