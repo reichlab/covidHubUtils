@@ -67,14 +67,18 @@ load_forecasts_zoltar <- function(models = NULL,
   `%dopar%` <- foreach::`%dopar%`
 
   if (!is.null(forecast_dates)) {
-    
-    if (is.null(models)){
+    if (is.null(models)) {
       models <- all_models$model_abbr
       models <- sort(models, method = "radix")
     }
-    
+
     # set 2 workers
-    cl <- parallel::makeCluster(2, setup_strategy = "sequential", outfile = "")
+    if (verbose) {
+      cl <- parallel::makeCluster(2, setup_strategy = "sequential", outfile = "")
+    } else {
+      cl <- parallel::makeCluster(2, setup_strategy = "sequential")
+    }
+
     doParallel::registerDoParallel(cl)
     forecasts <- foreach::foreach(i = 1:length(models), .combine = rbind) %dopar% {
       curr_model <- models[i]
@@ -92,8 +96,9 @@ load_forecasts_zoltar <- function(models = NULL,
         function(a_list) {
           intersection <- intersect(
             as.character(a_list),
-            as.character(model_forecasts_history))
-          if (length(intersection) > 0){
+            as.character(model_forecasts_history)
+          )
+          if (length(intersection) > 0) {
             max(intersection)
           }
         }
@@ -102,7 +107,7 @@ load_forecasts_zoltar <- function(models = NULL,
       # unlist and drop duplicates
       latest_dates <- unique(unlist(latest_dates, use.names = FALSE))
       latest_dates <- latest_dates[!is.na(latest_dates)]
-      
+
       if (length(latest_dates) != 0) {
         forecast <- zoltr::do_zoltar_query(
           zoltar_connection = zoltar_connection,
@@ -116,16 +121,20 @@ load_forecasts_zoltar <- function(models = NULL,
           verbose = verbose,
           as_of = date_to_datetime(as_of, hub)
         )
-        
-        if (nrow(forecast) == 0  & verbose){
-          warning(paste0("Warning in load_forecasts_zoltar: Forecasts are not available for current model ",
-                         curr_model))
-        } 
+
+        if (nrow(forecast) == 0 & verbose) {
+          warning(paste0(
+            "Warning in load_forecasts_zoltar: Forecasts are not available for current model ",
+            curr_model
+          ))
+        }
         forecast <- reformat_forecasts(forecast, verbose)
       } else {
-        if (verbose){
-          warning(paste0("Warning in load_forecasts_zoltar: No available forecast dates for current model ",
-                         curr_model))
+        if (verbose) {
+          warning(paste0(
+            "Warning in load_forecasts_zoltar: No available forecast dates for current model ",
+            curr_model
+          ))
         }
       }
     }
@@ -148,18 +157,20 @@ load_forecasts_zoltar <- function(models = NULL,
     )
     forecasts <- reformat_forecasts(forecasts, verbose)
   }
-  
-  if (!is.null(forecasts) && !is.null(nrow(forecasts))){
+
+  if (!is.null(forecasts) && !is.null(nrow(forecasts))) {
     if (nrow(forecasts) > 0 && "location" %in% colnames(forecasts)) {
       # append location, population information
       forecasts <- forecasts %>%
         join_with_hub_locations(hub = hub)
     } else {
       forecasts <- NULL
+      warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
     }
   } else {
     forecasts <- NULL
-  }  
+    warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
+  }
   return(forecasts)
 }
 
@@ -178,7 +189,7 @@ load_forecasts_zoltar <- function(models = NULL,
 #' @export
 reformat_forecasts <- function(zoltar_query_result, verbose = TRUE) {
   if (nrow(zoltar_query_result) == 0) {
-    if (verbose){
+    if (verbose) {
       warning("Warning in reformat_forecasts: Forecasts are not available.\n Please check your parameters.")
     }
     # convert value column to double and select columns
