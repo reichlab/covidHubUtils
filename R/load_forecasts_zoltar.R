@@ -1,6 +1,6 @@
 #' Load all available forecasts submitted on `forecast_dates` from Zoltar.
 #'
-#' This function will throw a warning and return NULL when
+#' This function will throw a warning and return empty data.frame when
 #' no forecasts are submitted on any dates in `forecast_dates` for selected `models`,
 #' `locations`, `types` and `target`.
 #'
@@ -164,11 +164,11 @@ load_forecasts_zoltar <- function(models = NULL,
       forecasts <- forecasts %>%
         join_with_hub_locations(hub = hub)
     } else {
-      forecasts <- NULL
+      forecasts <- data.frame()
       warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
     }
   } else {
-    forecasts <- NULL
+    forecasts <- data.frame()
     warning("Warning in load_forecasts_zoltar: Forecasts are not available.\n Please check your parameters.")
   }
   return(forecasts)

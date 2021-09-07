@@ -51,7 +51,7 @@ data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \co
 \code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
-This function will throw a warning and return NULL when
+This function will throw a warning and return empty data.frame when
 no forecasts are submitted on any dates in \code{forecast_dates} for selected \code{models},
 \code{locations}, \code{types} and \code{target}.
 }
