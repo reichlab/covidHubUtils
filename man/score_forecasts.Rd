@@ -8,72 +8,81 @@ score_forecasts(
   forecasts,
   truth,
   return_format = "wide",
+  metrics = c("abs_error", "wis", "wis_components", "interval_coverage",
+    "quantile_coverage"),
   use_median_as_point = FALSE
 )
 }
 \arguments{
 \item{forecasts}{required data.frame with forecasts in the format returned
-by load_forecasts}
+by \code{\link{load_forecasts}}}
 
 \item{truth}{required data.frame with forecasts in the format returned
-by load_truth}
+by \code{\link{load_truth}}}
 
-\item{return_format}{string: "long" returns long format with a column for
-"score_name" and a column for "score_value"; "wide" returns wide format with
-a separate column for each score. Defaults to "wide".}
+\item{return_format}{string: \code{"long"} returns long format with a column for
+\code{"score_name"} and a column for \code{"score_value"}; \code{"wide"} returns wide format with
+a separate column for each score. Defaults to \code{"wide"}.}
 
-\item{use_median_as_point}{logical: "TRUE" uses the median as the point
-forecast when scoring; "FALSE" uses the point forecasts from the data when
-scoring. Defaults to "FALSE"}
+\item{metrics}{character vector of the metrics to be returned with options
+\code{"abs_error"}, \code{"wis"}, \code{"wis_components"},\code{"interval_coverage"}, and \code{"quantile_coverage"}}
+
+\item{use_median_as_point}{logical: \code{TRUE} uses the median as the point
+forecast when scoring; \code{FALSE} uses the point forecasts from the data when
+scoring. Defaults to \code{FALSE}}
 }
 \value{
 data.frame with scores. The result will have some columns that
 define the observation, namely, \code{model}, \code{forecast_date}, \code{location},
 \code{horizon}, \code{temporal_resolution}, \code{target_variable}, \code{horizon}, and
 \code{target_end_date}.
-Other columns will contain scores:
+Other columns will contain scores dependent on metrics parameter:
 \itemize{
-\item \code{true_value} is the observed truth at that \code{location} and \code{target_end_date}
+\item \code{true_value} is the observed truth at that \code{location} and \code{target_end_date} (always returned)
 \item \code{abs_error} is the absolute error based on median estimate if
 use_median_as_point is TRUE, and absolute error based on point forecast
 if use_median_as_point is FALSE
 \item \code{wis} is the weighted interval score
-\item \code{sharpness} the component of WIS made up of interval widths
+\item \code{dispersions} the component of WIS made up of interval widths
 \item \code{overprediction} the component of WIS made up of overprediction of intervals
 \item \code{underprediction} the component of WIS made up of underprediction of intervals
 \item \code{coverage_X} are prediction interval coverage at alpha level X
 \item \code{quantile_coverage_0.X} are one-sided quantile coverage at quantile X
-If return_format is "long", also contains columns score_name and score_value
-where score_name is the type of score calculated and score_value has the numeric
-value of the score.
-If return_format is "wide", each calculated score is in its own column.
 }
+
+If return_format is \code{"long"}, also contains columns score_name and score_value
+where \code{score_name} is the type of score calculated and \code{score_value} has the numeric
+value of the score.
+If return_format is \code{"wide"}, each calculated score is in its own column.
 }
 \description{
 Score forecasts
 }
 \examples{
-\dontrun{
-forecasts <- load_latest_forecasts(models=c("COVIDhub-ensemble", "UMass-MechBayes"),
+forecasts <- load_latest_forecasts(
+  models = c("COVIDhub-ensemble", "UMass-MechBayes"),
   last_forecast_date = "2020-12-14",
   forecast_date_window_size = 7,
   locations = c("US"),
   targets = paste(1:4, "wk ahead inc death"),
-  source = "zoltar")
-  truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
-scores <- score_forecasts(forecasts, truth)
-}
-\dontrun{
-forecasts <- load_latest_forecasts(models=c("ILM-EKF"),
-  hub = c("ECDC","US"), last_forecast_date = "2021-03-08",
+  source = "zoltar"
+)
+truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
+score_forecasts(forecasts, truth)
+
+forecasts <- load_latest_forecasts(
+  models = c("ILM-EKF"),
+  hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
   forecast_date_window_size = 0,
   locations = c("GB"),
   targets = paste(1:4, "wk ahead inc death"),
-  source = "zoltar")
-truth <- load_truth("JHU",hub = c("ECDC","US"), 
-  target_variable = "inc death", locations = "GB")
-scores <- score_forecasts(forecasts, truth)
-}
+  source = "zoltar"
+)
+truth <- load_truth("JHU",
+  hub = c("ECDC", "US"),
+  target_variable = "inc death", locations = "GB"
+)
+score_forecasts(forecasts, truth)
 
 }
 \references{

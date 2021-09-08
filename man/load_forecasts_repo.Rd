@@ -2,7 +2,8 @@
 % Please edit documentation in R/load_forecasts_repo.R
 \name{load_forecasts_repo}
 \alias{load_forecasts_repo}
-\title{Load all available forecasts submitted on forecast_dates from local hub repo.}
+\title{Load all available forecasts submitted on \code{forecast_dates} from
+a local clone of \code{reichlab/covid19-forecast-hub} repo.}
 \usage{
 load_forecasts_repo(
   file_path,
@@ -21,33 +22,36 @@ load_forecasts_repo(
 \item{models}{Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.}
 
-\item{forecast_dates}{The forecast date of forecasts to retrieve.
-Default to all valid forecast dates.
+\item{forecast_dates}{A 2 dimensional list of forecast dates to retrieve forecasts.
+This function will return the latest forecasts
+for each sub-list of dates.
+Default to  \code{NULL} which would include all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates.}
 
 \item{locations}{list of fips. Default to all locations with available forecasts.}
 
-\item{types}{Character vector specifying type of forecasts to load: “quantile”
-or “point”. Default to all valid forecast types.}
+\item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
+and/or \code{"point"}. Default to all valid forecast types.}
 
 \item{targets}{character vector of targets to retrieve, for example
-c('1 wk ahead cum death', '2 wk ahead cum death').
-Default to NULL which stands for all valid targets.}
+\code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
+Default to \code{NULL} which stands for all valid targets.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
 
-\item{verbose}{whether or not to print out diagnostic messages. Default is TRUE}
+\item{verbose}{logical to print out diagnostic messages. Default is \code{TRUE}}
 }
 \value{
-data frame with columns model, forecast_date, location, horizon,
-temporal_resolution, target_variable, target_end_date, type, quantile, value,
-location_name, population, geo_type, geo_value, abbreviation
+data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
+\code{temporal_resolution}, \code{target_variable}, \code{target_end_date}, \code{type}, \code{quantile}, \code{value},
+\code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
-The function will throw an error when no forecasts are submitted on
-any dates in forecast_dates for selected models, locations, types and target.
+This function will throw an error when no forecasts are submitted on
+any dates in \code{forecast_dates} for selected \code{models},
+\code{locations}, \code{types} and \code{target}.
 }
 \details{
-This function will drop rows with NULLs in value column.
+This function will drop rows with \code{NULL} in \code{value} column.
 }

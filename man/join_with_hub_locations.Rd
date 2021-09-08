@@ -11,7 +11,7 @@ join_with_hub_locations(data, hub = c("US", "ECDC"))
 \item{data}{data frame to append location data}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}}
 }
 \value{
 original data with corresponding location information
