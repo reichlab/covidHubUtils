@@ -88,9 +88,9 @@ get_model_metadata <- function(models,
           recent_commit_sha, ":./", model_metadata_path
         )
         
-        tmp <- as.data.frame(yaml::yaml.load(system(read_command, intern = TRUE)),
-                      stringsAsFactors = FALSE
-        )
+        metadata_list <- yaml::yaml.load(system(read_command, intern = TRUE))
+        metadata_list <- metadata_list[!sapply(metadata_list, is.null)]
+        tmp <- as.data.frame(metadata_list, stringsAsFactors = FALSE)
         return(tmp)
       }
     )

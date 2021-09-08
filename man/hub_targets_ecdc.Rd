@@ -5,7 +5,7 @@
 \alias{hub_targets_ecdc}
 \title{Available targets in the ECDC Hub}
 \format{
-An object of class \code{character} of length 441.
+An object of class \code{character} of length 60.
 }
 \usage{
 hub_targets_ecdc
