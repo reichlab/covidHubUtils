@@ -142,7 +142,7 @@ columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <
 no forecasts are available in <code>zoltar_query_result</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>reformat_forecasts</span><span class='op'>(</span><span class='va'>zoltar_query_result</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>reformat_forecasts</span><span class='op'>(</span><span class='va'>zoltar_query_result</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,6 +150,10 @@ no forecasts are available in <code>zoltar_query_result</code>.</p>
     <tr>
       <th>zoltar_query_result</th>
       <td><p>dataframe returned by <a href='http://reichlab.io/zoltr/reference/do_zoltar_query.html'>zoltr::do_zoltar_query</a></p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical for printing error messages when checking <code>zoltar_query_result</code>. Default to <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
