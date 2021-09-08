@@ -4,6 +4,7 @@
 locale-independent
 - Add `hub` parameter in `get_all_models()`. It does not support loading model names for ECDC hub from remote hub repo for now. 
 - Rename sharpness score as dispersion. 
+- Update warning messages and error messages in `load_forecasts_zoltar()`.
 - Fix bug resulting in error in `get_model_metadata` when a metadata file has NULL fields.
 
 ## covidHubUtils 0.1.6

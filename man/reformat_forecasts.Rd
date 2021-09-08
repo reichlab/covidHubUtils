@@ -7,10 +7,12 @@ This function will throw a warning and return an empty data.frame with
 columns \code{model}, \code{forecast_date}, \code{location}, \code{type}, \code{quantile} and \code{value}, when
 no forecasts are available in \code{zoltar_query_result}.}
 \usage{
-reformat_forecasts(zoltar_query_result)
+reformat_forecasts(zoltar_query_result, verbose = TRUE)
 }
 \arguments{
 \item{zoltar_query_result}{dataframe returned by \link[zoltr:do_zoltar_query]{zoltr::do_zoltar_query}}
+
+\item{verbose}{logical for printing error messages when checking \code{zoltar_query_result}. Default to \code{TRUE}.}
 }
 \value{
 data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
