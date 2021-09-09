@@ -59,20 +59,38 @@ get_model_designations <- function(models,
           attr(search_time, "tzone") <- "UTC"
           search_time_timestamp <- as.numeric(search_time)
 
-          # find git commits related to a specified metadata file before search_time
-          commits_command <- paste0(
+          # find regular git commits related to a specified metadata file before search_time
+          regular_commits_command <- paste0(
             "cd ", hub_repo_path,
             "; git log --date=unix --pretty=format:'%H %ad' --before='",
             as.character(search_time), "' --follow -- ",
             model_metadata_path
           )
-
+          
+          # find merge git commits related to a specified metadata file before search_time
+          pr_commits_command <- paste0(
+            "cd ", hub_repo_path,
+            "; git log --first-parent master --date=unix --pretty=format:'%H %ad' --before='",
+            as.character(search_time), "' --follow -- ",
+            model_metadata_path
+          )
+          
           # invoke command and parse result
-          all_commits <- system(commits_command, intern = TRUE) %>%
+          all_regular_commits <- system(regular_commits_command, intern = TRUE) %>%
             stringr::str_split_fixed(" ", 2) %>%
             as.data.frame() %>%
             dplyr::rename(sha = V1, date = V2)
-
+          
+          # invoke command and parse result
+          all_pr_commits <- system(pr_commits_command, intern = TRUE) %>%
+            stringr::str_split_fixed(" ", 2) %>%
+            as.data.frame() %>%
+            dplyr::rename(sha = V1, date = V2)
+          
+          # combine all regular commits and merge commits
+          all_commits <- rbind(all_regular_commits, all_pr_commits) %>%
+            dplyr::arrange(desc(date))
+          
           if (nrow(all_commits) == 0) {
             print(paste0("Currently checking commits for: ", model_metadata_path, " before ", search_time))
             stop("Error in get_model_designations: Commits to model metadata are not available by as_of date.\n Please check your parameters.")

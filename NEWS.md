@@ -6,6 +6,7 @@ locale-independent
 - Rename sharpness score as dispersion. 
 - Update warning messages and error messages in `load_forecasts_zoltar()`.
 - Fix bug resulting in error in `get_model_metadata` when a metadata file has NULL fields.
+- Fix bug in `get_model_metadata` and `get_model_designations` to include merge commits.
 
 ## covidHubUtils 0.1.6
 
