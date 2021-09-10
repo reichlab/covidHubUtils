@@ -31,8 +31,31 @@
 #' @return forecast dataframe augmented by columns reference_date and
 #' relative_horizon
 #' 
+#' @examples
+#' library(tidyverse)
+#' library(covidHubUtils)
+#' hub_repo_path <- "~/covid/covid19-forecast-hub"
+#' dates <- seq.Date(as.Date("2021-05-01"), as.Date("2021-06-01"), by = 1)
+#' forecasts <- load_forecasts(
+#'   models = get_all_models(source = "local_hub_repo", hub_repo_path = hub_repo_path),
+#'   dates = dates[!(weekdays(dates) %in% c("Monday", "Sunday"))],
+#'   date_window_size = 0,
+#'   locations = "US",
+#'   types = "quantile",
+#'   source = "local_hub_repo",
+#'   hub_repo_path = hub_repo_path,
+#'   verbose = FALSE,
+#'   as_of = NULL,
+#'   hub = c("US")
+#' ) %>% filter(quantile == .5)
+#' forecasts
+#' forecasts %>% distinct(model)
+#' forecasts %>% align_forecasts()
+#' forecasts %>% align_forecasts(drop_nonpos_relative_horizons = FALSE) %>% 
+#'   filter(relative_horizon <= 0)
+#'
 #' @export
-standardize_forecasts <- function(
+align_forecasts <- function(
   forecasts,
   reference_dates = list("wk" = NULL, "day" = NULL),
   reference_weekday = list("wk" = "Saturday", "day" = "Monday"),
@@ -48,20 +71,27 @@ standardize_forecasts <- function(
                 "must be named lists with entries for 'wk' and 'day'."))
   }
   
-  purrr::map_dfr(
+  aligned_forecasts <- purrr::map_dfr(
     unique(forecasts$temporal_resolution),
     function(temporal_res) {
-      standardize_forecasts_one_temporal_resolution(
+      align_forecasts_one_temporal_resolution(
         forecasts = forecasts %>%
           dplyr::filter(temporal_resolution == temporal_res),
         reference_dates = reference_dates[[temporal_res]],
         reference_weekday = reference_weekday[[temporal_res]],
+        reference_windows = reference_windows[[temporal_res]],
         drop_nonpos_relative_horizons = drop_nonpos_relative_horizons
       )
     }
   )
+  return(
+    # use join to retain order of original dataframe
+    dplyr::right_join(forecasts, aligned_forecasts, by = names(forecasts)) %>% 
+    # place columns in a convenient order
+    dplyr::relocate(reference_date, .after = forecast_date) %>% 
+    dplyr::relocate(relative_horizon, .after = horizon)
+  )
 }
-
 
 #' Internal function that add reference dates and relative horizons
 #' to a dataframe of forecasts. This function requires that the forecasts
@@ -94,7 +124,7 @@ standardize_forecasts <- function(
 #'
 #' @return forecast dataframe augmented by columns reference_date and
 #' relative_horizon
-standardize_forecasts_one_temporal_resolution <- function(
+align_forecasts_one_temporal_resolution <- function(
   forecasts,
   reference_dates,
   reference_weekday,
@@ -123,11 +153,17 @@ standardize_forecasts_one_temporal_resolution <- function(
     # ensure we have dates
     reference_dates <- as.Date(reference_dates)
   } else {
-    # every date spanning our forecasts -/+ a little time
+    # every date from that of first forecast - diameter of first window
+    # to that of last forecast + diameter of last window
     all_dates <- seq(
-      min(forecasts$forecast_date) + min(sort(reference_windows[[1]])),
-      max(forecasts$forecast_date) +
-        max(sort(reference_windows[[length(reference_windows)]])),
+      min(forecasts$forecast_date) - (
+        max(sort(reference_windows[[1]])) -
+        min(sort(reference_windows[[1]]))
+      ),
+      max(forecasts$forecast_date) + (
+        max(sort(reference_windows[[length(reference_windows)]])) -
+        min(sort(reference_windows[[length(reference_windows)]])) 
+      ),
       by = 1
     )
 
@@ -143,7 +179,7 @@ standardize_forecasts_one_temporal_resolution <- function(
     forecast_date = purrr::map2(
       reference_date, 
       reference_windows, 
-      ~.x+.y
+            ~.x+.y
     )
   ) %>% unnest(cols = forecast_date)
 
@@ -164,7 +200,7 @@ standardize_forecasts_one_temporal_resolution <- function(
   # join with the reference date lookup table above
   # and calculate the relative horizon
   forecasts <- forecasts %>% 
-    dplyr::left_join(ref_df) %>% 
+    dplyr::left_join(ref_df, by = "forecast_date") %>% 
     dplyr::mutate(
       ts_days = ifelse(temporal_resolution == "wk", 7, 1),
       relative_horizon = 
@@ -172,7 +208,7 @@ standardize_forecasts_one_temporal_resolution <- function(
     ) %>%
     dplyr::select(-ts_days)
 
-  if (drop_nonpos_horizons) {
+  if (drop_nonpos_relative_horizons) {
     forecasts <- forecasts %>%
       dplyr::filter(relative_horizon > 0)
   }
