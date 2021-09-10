@@ -56,6 +56,7 @@ standardize_forecasts <- function(
           dplyr::filter(temporal_resolution == temporal_res),
         reference_dates = reference_dates[[temporal_res]],
         reference_weekday = reference_weekday[[temporal_res]],
+        reference_windows = reference_windows[[temporal_res]],
         drop_nonpos_relative_horizons = drop_nonpos_relative_horizons
       )
     }
@@ -143,7 +144,7 @@ standardize_forecasts_one_temporal_resolution <- function(
     forecast_date = purrr::map2(
       reference_date, 
       reference_windows, 
-      ~.x+.y
+            ~.x+.y
     )
   ) %>% unnest(cols = forecast_date)
 
@@ -172,7 +173,7 @@ standardize_forecasts_one_temporal_resolution <- function(
     ) %>%
     dplyr::select(-ts_days)
 
-  if (drop_nonpos_horizons) {
+  if (drop_nonpos_relative_horizons) {
     forecasts <- forecasts %>%
       dplyr::filter(relative_horizon > 0)
   }
