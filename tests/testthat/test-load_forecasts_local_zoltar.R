@@ -1,4 +1,4 @@
-context("load_forecasts")
+context("load_forecasts_local_zoltar")
 
 library(covidHubUtils)
 library(dplyr)
@@ -69,5 +69,28 @@ test_that("load_forecast from local zoltar works with one dates not available", 
     )
   )
 
+  expect_true(unique(all_forecasts$location) == "US")
+})
+
+test_that("load_forecast from local zoltar works without specified dates", {
+  skip_if_no_zoltpy_or_sqlite()
+  all_forecasts <- covidHubUtils::load_forecasts(
+    models = c("COVIDhub-ensemble", "COVIDhub-baseline"),
+    locations = "US",
+    source = "local_zoltar",
+    local_zoltpy_path = local_zoltpy_path,
+    zoltar_module_path = zoltar_module_path
+  )
+  
+  expect_identical(
+    all_forecasts %>%
+      dplyr::distinct(model, forecast_date) %>%
+      dplyr::arrange(model, forecast_date),
+    tidyr::expand_grid(
+      model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
+      forecast_date = lubridate::ymd(c("2021-07-26", "2021-08-02"))
+    )
+  )
+  
   expect_true(unique(all_forecasts$location) == "US")
 })

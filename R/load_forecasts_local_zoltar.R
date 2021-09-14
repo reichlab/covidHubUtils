@@ -123,25 +123,25 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
       if (length(latest_dates) != 0) {
         # create a json file as filter
-        filter <- list(
-          models = c(curr_model),
-          timezeros = c(latest_dates)
+        filter <- c(
+          models = list(curr_model),
+          timezeros = list(latest_dates)
         )
 
         if (!is.null(locations)) {
-          filter <- c(filter, units = c(locations))
+          filter <- c(filter, units = list(locations))
         }
 
         if (!is.null(types)) {
-          filter <- c(filter, types = c(types))
+          filter <- c(filter, types = list(types))
         }
 
         if (!is.null(targets)) {
-          filter <- c(filter, targets = c(targets))
+          filter <- c(filter, targets = list(targets))
         }
 
         if (!is.null(as_of)) {
-          filter <- c(filter, as_of = c(date_to_datetime(as_of, hub)))
+          filter <- c(filter, as_of = list(date_to_datetime(as_of, hub)))
         }
 
         temp_filter_filepath <- tempfile(pattern = paste("filter", Sys.getpid(), sep = ""), fileext = ".json")
@@ -171,22 +171,22 @@ load_forecasts_local_zoltar <- function(models = NULL,
     filter <- list()
 
     if (!is.null(models)) {
-      filter <- c(filter, models = c(models))
+      filter <- c(filter, models = list(models))
     }
     if (!is.null(locations)) {
-      filter <- c(filter, units = c(locations))
+      filter <- c(filter, units = list(locations))
     }
 
     if (!is.null(types)) {
-      filter <- c(filter, types = c(types))
+      filter <- c(filter, types = list(types))
     }
 
     if (!is.null(targets)) {
-      filter <- c(filter, targets = c(targets))
+      filter <- c(filter, targets = list(targets))
     }
 
     if (!is.null(as_of)) {
-      filter <- c(filter, as_of = c(date_to_datetime(as_of, hub)))
+      filter <- c(filter, as_of = list(date_to_datetime(as_of, hub)))
     }
 
     temp_filter_filepath <- tempfile(pattern = "filter", fileext = ".json")
