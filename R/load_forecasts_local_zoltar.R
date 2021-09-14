@@ -202,6 +202,8 @@ load_forecasts_local_zoltar <- function(models = NULL,
       temp_result_filepath
     )
 
+    system(query_command)
+    
     forecasts <- readr::read_csv(temp_result_filepath) %>%
       reformat_forecasts()
   }
