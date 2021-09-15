@@ -24,7 +24,7 @@
 #' `-6:0` for forecasts at a daily temporal resolution so that all forecasts
 #' with a `forecast_date` in the week leading up to a particular Monday will be
 #' assigned a reference date of that Monday.
-#' @param drop_nonpos_horizons boolean indicating whether forecasts that have a
+#' @param drop_nonpos_relative_horizons boolean indicating whether forecasts that have a
 #' non-positive horizon relative to the reference date should be dropped.
 #' Defaults to `TRUE`
 #'
@@ -32,9 +32,10 @@
 #' relative_horizon
 #' 
 #' @examples
+#' \dontrun{
 #' library(tidyverse)
 #' library(covidHubUtils)
-#' hub_repo_path <- "~/covid/covid19-forecast-hub"
+#' hub_repo_path <- "../covid19-forecast-hub"
 #' dates <- seq.Date(as.Date("2021-05-01"), as.Date("2021-06-01"), by = 1)
 #' forecasts <- load_forecasts(
 #'   models = get_all_models(source = "local_hub_repo", hub_repo_path = hub_repo_path),
@@ -53,6 +54,7 @@
 #' forecasts %>% align_forecasts()
 #' forecasts %>% align_forecasts(drop_nonpos_relative_horizons = FALSE) %>% 
 #'   filter(relative_horizon <= 0)
+#'}
 #'
 #' @export
 align_forecasts <- function(
@@ -118,7 +120,7 @@ align_forecasts <- function(
 #' the function defaults to `-4:2`. This is appropriate for forecasts of
 #' weekly targets, in which case we might like to assign a forecast issued on
 #' a Monday to have a reference date of the previous Saturday.
-#' @param drop_nonpos_horizons boolean indicating whether forecasts that have a
+#' @param drop_nonpos_relative_horizons boolean indicating whether forecasts that have a
 #' non-positive horizon relative to the reference date should be dropped.
 #' Defaults to `TRUE`
 #'
