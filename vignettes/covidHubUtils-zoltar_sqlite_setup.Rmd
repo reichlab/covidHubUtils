@@ -15,25 +15,28 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Instructions
-We now support loading forecast from a local zoltar sqlite file in `covidHubUtils`. To use this functionality, you need to set `source = "local_zoltar"` and provide `local_zoltpy_path` and `zoltar_sqlite_file` parameters in `covidHubUtils::load_forecasts()`.
+We now support loading forecast from a local zoltar sqlite file in `covidHubUtils`. To use this functionality, you need to set `source = "local_zoltar"` and provide the `local_zoltpy_path` and `zoltar_sqlite_file` parameters in `load_forecasts()`.
 
-Please follow these steps to set up the required environment prior to using this functionnality for the first time:
+Please follow these steps to set up the required environment prior to using this functionality for the first time:
 
-1. Please contact us to create a sqlite file that contains forecast you want to work with.
-2. Install Python 3.6+.
-3. Install pipenv globally, without `--user`, by using:
+> Note: This feature is [currently beta](https://docs.zoltardata.com/forecasts/#download-the-zoltar-database-for-local-use-beta), so please [contact us](https://docs.zoltardata.com/#contact) to create an sqlite file for you that contains the forecasts you want to work with.  
+ 
+1. Install Python 3.6+.
+2. Install pipenv globally (i.e., without `--user`) via:
 ```bash
 pip3 install pipenv
 ```
-4. Set up your R environment so that the `PATH` environment variable includes both the `python3` and `pipenv` commands. You can read more about R and environment variables [here](https://db.rstudio.com/best-practices/managing-credentials/#use-environment-variables).
 
-5. Clone `zoltpy` package from [here](https://github.com/reichlab/zoltpy).
-6. In the cloned `zoltpy` directory, run:
+3. Set up your R environment so that the `PATH` environment variable includes both the `python3` and `pipenv` commands. You can read more about R and environment variables [here](https://db.rstudio.com/best-practices/managing-credentials/#use-environment-variables).
+
+4. Clone the `zoltpy` package from [here](https://github.com/reichlab/zoltpy).
+5. In the cloned `zoltpy` directory, run:
 ```bash
 pipenv install
 ```
-7. Test installation
-    - Download a `zoltar` sqlite file form [here](https://github.com/reichlab/covidHubUtils/blob/master/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3)
+
+6. Test installation
+    - Download a `zoltar` sqlite file form [here](https://github.com/reichlab/covidHubUtils/blob/master/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3).
     - Run a test call of `covidHubUtils::load_forecasts()` with your actual absolute or relative paths. For example: 
 ```{r message=FALSE, eval=FALSE}
 covidHubUtils::load_forecasts(
