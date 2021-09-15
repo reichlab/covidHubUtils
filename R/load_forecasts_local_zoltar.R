@@ -1,15 +1,8 @@
 #' Load all available forecasts submitted on `forecast_dates` from local Zoltar module.
 #'
 #' @description
-#' Please follow these steps to set up required environment prior to using this function
-#' for the first time:
-#' \itemize{
-#'   \item Create a local clone of `reichlab/zoltpy` repository.
-#'   \item Set the `DJANGO_SETTINGS_MODULE` environment variable 
-#'   to `forecast_repo.settings.local_sqlite3` and  `MAX_NUM_QUERY_ROWS=20_000_000` 
-#'   or another number
-#'   \item Call `pipenv install` from the directory of local zolpy in command line.
-#' }
+#' Please follow instructions to set up required environment prior to using this function
+#' for the first time
 #'
 #' @details 
 #' \itemize{
@@ -17,7 +10,7 @@
 #' any dates in `forecast_dates` for selected `models`,
 #' `locations`, `types` and `target`.
 #'   \item By default. `test-load_forecasts_local_zoltar()` is skipped. Please modify 
-#' `local_zoltpy_path` and `zoltar_module_path` on top of the unit test file to run tests.
+#' `local_zoltpy_path` and `zoltar_sqlite_file` on top of the unit test file to run tests.
 #'}
 #'
 #' @param models Character vector of model abbreviations.
@@ -40,7 +33,7 @@
 #' Default to `NULL` to load the latest version.
 #' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #' @param local_zoltpy_path path to local clone of `zolpy` repository.
-#' @param zoltar_module_path path to local zoltar module w.r.t. `local_zoltpy_path`
+#' @param zoltar_sqlite_file path to local zoltar module w.r.t. `local_zoltpy_path`
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #'
@@ -58,7 +51,10 @@ load_forecasts_local_zoltar <- function(models = NULL,
                                         hub = c("US", "ECDC"),
                                         verbose = TRUE,
                                         local_zoltpy_path,
-                                        zoltar_module_path) {
+                                        zoltar_sqlite_file) {
+  # set up environment variables
+  Sys.setenv("DJANGO_SETTINGS_MODULE"="forecast_repo.settings.local_sqlite3")
+  Sys.setenv("MAX_NUM_QUERY_ROWS"="20_000_000")
 
   # set up Zoltar connection
   zoltar_connection <- setup_zoltar_connection(staging = FALSE)
@@ -146,29 +142,32 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
         temp_filter_filepath <- tempfile(pattern = paste("filter", Sys.getpid(), sep = ""), fileext = ".json")
 
-        jsonlite::write_json(filter, temp_filter_filepath)
+        jsonlite::write_json(filter, temp_filter_filepath, auto_unbox = TRUE)
 
         temp_result_filepath <- tempfile(pattern = paste("query", Sys.getpid(), sep = ""), fileext = ".csv")
 
         query_command <- paste0(
           "pipenv run python3 cli/bulk_data_query.py ",
-          zoltar_module_path, " ",
+          zoltar_sqlite_file, " ",
           temp_filter_filepath, " ",
           temp_result_filepath
         )
 
         system(query_command)
 
-        forecast <- readr::read_csv(temp_result_filepath) %>%
+        forecast <- readr::read_csv(
+          temp_result_filepath,
+          show_col_types = FALSE) %>%
           reformat_forecasts()
       }
     }
     # shut down workers
+    doParallel::stopImplicitCluster()
     parallel::stopCluster(cl)
   } else {
 
     # create a json file as filter
-    filter <- list()
+    filter <- NULL
 
     if (!is.null(models)) {
       filter <- c(filter, models = list(models))
@@ -191,20 +190,22 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
     temp_filter_filepath <- tempfile(pattern = "filter", fileext = ".json")
 
-    jsonlite::write_json(filter, temp_filter_filepath)
+    jsonlite::write_json(filter, temp_filter_filepath, auto_unbox = TRUE)
 
     temp_result_filepath <- tempfile(pattern = "query", fileext = ".csv")
 
     query_command <- paste0(
       "pipenv run python3 cli/bulk_data_query.py ",
-      zoltar_module_path, " ",
+      zoltar_sqlite_file, " ",
       temp_filter_filepath, " ",
       temp_result_filepath
     )
 
     system(query_command)
     
-    forecasts <- readr::read_csv(temp_result_filepath) %>%
+    forecasts <- readr::read_csv(
+      temp_result_filepath,
+      show_col_types = FALSE) %>%
       reformat_forecasts()
   }
 

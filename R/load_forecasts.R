@@ -35,7 +35,7 @@
 #' repository
 #' #' @param local_zoltpy_path path to local clone of zolpy repository.
 #' Only needed when `source` is `"local_zoltar`.
-#' @param zoltar_module_path path to local zoltar module w.r.t. `local_zoltpy_path`.
+#' @param zoltar_sqlite_file path to local zoltar module w.r.t. `local_zoltpy_path`.
 #' Only needed when `source` is `"local_zoltar`.
 #' @param data_processed_subpath folder within the hub_repo_path that contains
 #' forecast submission files.  Default to `"data-processed/"`, which is
@@ -94,7 +94,7 @@ load_forecasts <- function(
                            source = "zoltar",
                            hub_repo_path,
                            local_zoltpy_path,
-                           zoltar_module_path,
+                           zoltar_sqlite_file,
                            data_processed_subpath = "data-processed/",
                            as_of = NULL,
                            hub = c("US", "ECDC"),
@@ -151,8 +151,8 @@ load_forecasts <- function(
       hub = hub
     )
   } else if (source == "local_zoltar") {
-    if (missing(local_zoltpy_path) | missing(zoltar_module_path)) {
-      stop("Error in load_forecasts: Please provide local_zoltpy_path and zoltar_module_path.")
+    if (missing(local_zoltpy_path) | missing(zoltar_sqlite_file)) {
+      stop("Error in load_forecasts: Please provide local_zoltpy_path and zoltar_sqlite_file.")
     }
 
     forecasts <- load_forecasts_local_zoltar(
@@ -165,7 +165,7 @@ load_forecasts <- function(
       verbose = verbose,
       hub = hub,
       local_zoltpy_path = local_zoltpy_path,
-      zoltar_module_path = zoltar_module_path
+      zoltar_sqlite_file = zoltar_sqlite_file
     )
   }
 
