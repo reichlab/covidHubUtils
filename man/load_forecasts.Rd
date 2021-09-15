@@ -15,7 +15,7 @@ load_forecasts(
   source = "zoltar",
   hub_repo_path,
   local_zoltpy_path,
-  zoltar_module_path,
+  zoltar_sqlite_file,
   data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
@@ -51,7 +51,7 @@ repository
 #' @param local_zoltpy_path path to local clone of zolpy repository.
 Only needed when \code{source} is \verb{"local_zoltar}.}
 
-\item{zoltar_module_path}{path to local zoltar module w.r.t. \code{local_zoltpy_path}.
+\item{zoltar_sqlite_file}{path to local zoltar module w.r.t. \code{local_zoltpy_path}.
 Only needed when \code{source} is \verb{"local_zoltar}.}
 
 \item{data_processed_subpath}{folder within the hub_repo_path that contains
