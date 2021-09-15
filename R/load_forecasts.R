@@ -33,9 +33,10 @@
 #' `"local_hub_repo"`, `"zoltar"` and `"local_zoltar"`. Default to `"zoltar"`.
 #' @param hub_repo_path path to local clone of the forecast hub
 #' repository
-#' #' @param local_zoltpy_path path to local clone of zolpy repository.
+#' @param local_zoltpy_path path to local clone of zolpy repository.
 #' Only needed when `source` is `"local_zoltar`.
-#' @param zoltar_sqlite_file path to local zoltar module w.r.t. `local_zoltpy_path`.
+#' @param zoltar_sqlite_file path to local sqlite file, 
+#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
 #' Only needed when `source` is `"local_zoltar`.
 #' @param data_processed_subpath folder within the hub_repo_path that contains
 #' forecast submission files.  Default to `"data-processed/"`, which is
