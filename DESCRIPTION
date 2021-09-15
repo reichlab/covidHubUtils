@@ -41,6 +41,7 @@ Authors@R: c(
     person(given = "Aaron",
            family = "Gerding",
            role = c("ctb"))
+           )
 Description: 
     A set of utility functions for downloading, plotting, and scoring
     forecast and truth data from the COVID-19 Forecast Hub: 
