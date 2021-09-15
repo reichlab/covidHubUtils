@@ -1,6 +1,6 @@
 ---
 title: "Setup Instructions: Load Forecasts from Local Zoltar sqlite File"
-author: "Serena Wang, Matthew Cornell"
+author: "Serena Wang, Matthew Cornell, Yuxin David Huang"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   html_document:
@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Instructions
-Loading forecasts from a local zoltar sqlite file requires a special setup. Please follow these steps prior to using this function:
+We now support loading forecast from a local zoltar sqlite file in `covidHubUtils`. To use this functionality, you need to set `source = "local_zoltar"` and provide `local_zoltpy_path` and `zoltar_sqlite_file` parameters in `covidHubUtils::load_forecasts()`.
+
+Please follow these steps to set up the required environment prior to using this functionnality for the first time:
 
 1. Please contact us to create a sqlite file that contains forecast you want to work with.
 2. Install Python 3.6+.
@@ -39,5 +41,5 @@ covidHubUtils::load_forecasts(
   locations = "US", 
   source = "local_zoltar", 
   local_zoltpy_path = "<your_zoltpy_dir>", 
-  zoltar_module_path = "<your_db.sqlite3_dir>")
+  zoltar_sqlite_file = "<your_db.sqlite3_dir>")
 ```
