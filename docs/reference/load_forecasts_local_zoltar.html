@@ -40,15 +40,8 @@
 
 
 <meta property="og:title" content="Load all available forecasts submitted on forecast_dates from local Zoltar module. — load_forecasts_local_zoltar" />
-<meta property="og:description" content="Please follow these steps to set up required environment prior to using this function
-for the first time:
-Create a local clone of reichlab/zoltpy repository.
-Set the DJANGO_SETTINGS_MODULE environment variable
-to forecast_repo.settings.local_sqlite3 and  MAX_NUM_QUERY_ROWS=20_000_000
-or another number
-Call pipenv install from the directory of local zolpy in command line.
-
-" />
+<meta property="og:description" content="Please follow instructions to set up required environment prior to using this function
+for the first time" />
 
 
 
@@ -105,6 +98,9 @@ Call pipenv install from the directory of local zolpy in command line.
     <li>
       <a href="../articles/covidHubUtils-overview.html">Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package</a>
     </li>
+    <li>
+      <a href="../articles/covidHubUtils-zoltar_sqlite_setup.html">Setup Instructions: Load Forecasts from Local Zoltar sqlite File</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -132,15 +128,8 @@ Call pipenv install from the directory of local zolpy in command line.
     </div>
 
     <div class="ref-description">
-    <p>Please follow these steps to set up required environment prior to using this function
-for the first time:</p><ul>
-<li><p>Create a local clone of <code>reichlab/zoltpy</code> repository.</p></li>
-<li><p>Set the <code>DJANGO_SETTINGS_MODULE</code> environment variable
-to <code>forecast_repo.settings.local_sqlite3</code> and  <code>MAX_NUM_QUERY_ROWS=20_000_000</code>
-or another number</p></li>
-<li><p>Call <code>pipenv install</code> from the directory of local zolpy in command line.</p></li>
-</ul>
-
+    <p>Please follow instructions to set up required environment prior to using this function
+for the first time</p>
     </div>
 
     <pre class="usage"><span class='fu'>load_forecasts_local_zoltar</span><span class='op'>(</span>
@@ -153,7 +142,7 @@ or another number</p></li>
   hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span>, <span class='st'>"ECDC"</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>local_zoltpy_path</span>,
-  <span class='va'>zoltar_module_path</span>
+  <span class='va'>zoltar_sqlite_file</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -209,7 +198,7 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
       <td><p>path to local clone of <code>zolpy</code> repository.</p></td>
     </tr>
     <tr>
-      <th>zoltar_module_path</th>
+      <th>zoltar_sqlite_file</th>
       <td><p>path to local zoltar module w.r.t. <code>local_zoltpy_path</code></p></td>
     </tr>
     </table>
@@ -227,7 +216,7 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
 any dates in <code>forecast_dates</code> for selected <code>models</code>,
 <code>locations</code>, <code>types</code> and <code>target</code>.</p></li>
 <li><p>By default. <code>test-load_forecasts_local_zoltar()</code> is skipped. Please modify
-<code>local_zoltpy_path</code> and <code>zoltar_module_path</code> on top of the unit test file to run tests.</p></li>
+<code>local_zoltpy_path</code> and <code>zoltar_sqlite_file</code> on top of the unit test file to run tests.</p></li>
 </ul>
 
 
