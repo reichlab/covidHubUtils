@@ -49,7 +49,8 @@ from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}
 
 \item{local_zoltpy_path}{path to local clone of \code{zolpy} repository.}
 
-\item{zoltar_sqlite_file}{path to local zoltar module w.r.t. \code{local_zoltpy_path}}
+\item{zoltar_sqlite_file}{path to local sqlite file,
+either a relative path w.r.t. \code{local_zoltpy_path} or an absolute path.}
 }
 \value{
 data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
@@ -59,6 +60,7 @@ data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \co
 \description{
 Please follow instructions to set up required environment prior to using this function
 for the first time
+See \url{http://reichlab.io/covidHubUtils/articles/covidHubUtils-zoltar_sqlite_setup.html}{vignette} for more details.
 }
 \details{
 \itemize{

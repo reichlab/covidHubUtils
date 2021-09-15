@@ -3,6 +3,8 @@
 #' @description
 #' Please follow instructions to set up required environment prior to using this function
 #' for the first time
+#' See \url{http://reichlab.io/covidHubUtils/articles/covidHubUtils-zoltar_sqlite_setup.html}{vignette} for more details.
+#'
 #'
 #' @details 
 #' \itemize{
@@ -33,7 +35,8 @@
 #' Default to `NULL` to load the latest version.
 #' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #' @param local_zoltpy_path path to local clone of `zolpy` repository.
-#' @param zoltar_sqlite_file path to local zoltar module w.r.t. `local_zoltpy_path`
+#' @param zoltar_sqlite_file path to local sqlite file, 
+#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #'
