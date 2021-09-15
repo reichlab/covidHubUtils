@@ -40,7 +40,7 @@ the function defaults to \code{-4:2}. This is appropriate for forecasts of
 weekly targets, in which case we might like to assign a forecast issued on
 a Monday to have a reference date of the previous Saturday.}
 
-\item{drop_nonpos_horizons}{boolean indicating whether forecasts that have a
+\item{drop_nonpos_relative_horizons}{boolean indicating whether forecasts that have a
 non-positive horizon relative to the reference date should be dropped.
 Defaults to \code{TRUE}}
 }
