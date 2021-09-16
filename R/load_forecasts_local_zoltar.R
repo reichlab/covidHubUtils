@@ -145,7 +145,9 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
         temp_filter_filepath <- tempfile(pattern = paste("filter", Sys.getpid(), sep = ""), fileext = ".json")
 
-        jsonlite::write_json(filter, temp_filter_filepath, auto_unbox = TRUE)
+        filter_json <- jsonlite::toJSON(filter)
+        
+        write(filter_json, temp_filter_filepath)
 
         temp_result_filepath <- tempfile(pattern = paste("query", Sys.getpid(), sep = ""), fileext = ".csv")
 
@@ -192,8 +194,10 @@ load_forecasts_local_zoltar <- function(models = NULL,
     }
 
     temp_filter_filepath <- tempfile(pattern = "filter", fileext = ".json")
-
-    jsonlite::write_json(filter, temp_filter_filepath, auto_unbox = TRUE)
+    
+    filter_json <- jsonlite::toJSON(filter)
+    
+    write(filter_json, temp_filter_filepath)
 
     temp_result_filepath <- tempfile(pattern = "query", fileext = ".csv")
 
