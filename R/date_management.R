@@ -98,9 +98,9 @@ calc_target_week_end_date <- function(forecast_date, horizon) {
 #'
 #' @export
 calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
-  temporal_resolution <- match.arg(temporal_resolution,
-                                   choices = c("wk", "day"),
-                                   several.ok = FALSE)
+  if (!all(temporal_resolution %in% c("wk", "day"))) {
+    stop("Error in calc_target_end_date: Only 'wk' and 'day' are supported for temporal_resolution.")
+  }
   result <- rep(NA_character_)
   inds <- (temporal_resolution == "wk")
   if (length(horizon) == 1) {
