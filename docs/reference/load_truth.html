@@ -100,6 +100,9 @@ weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all E
     <li>
       <a href="../articles/covidHubUtils-overview.html">Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package</a>
     </li>
+    <li>
+      <a href="../articles/covidHubUtils-zoltar_sqlite_setup.html">Setup Instructions: Load Forecasts from Local Zoltar sqlite File</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -243,38 +246,38 @@ will return a warning.</p></li>
   truth_source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"JHU"</span>, <span class='st'>"HealthData"</span><span class='op'>)</span>,
   target_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"inc case"</span>, <span class='st'>"inc death"</span>, <span class='st'>"inc hosp"</span><span class='op'>)</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>22811</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>23581</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
 #&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
 #&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
 #&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
 #&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1894400</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1939200</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
 #&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
 #&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
 #&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
 #&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1894400</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>1939200</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
 #&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
 #&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
 #&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
 #&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 566,801 × 11</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 580,371 × 11</span>
 #&gt;    model target_variable target_end_date location value location_name population
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> Obse… inc hosp        2020-07-21      18           9 Indiana          6<span style='text-decoration: underline;'>732</span>219
-#&gt; <span style='color: #BCBCBC;'> 2</span> Obse… inc hosp        2020-07-21      72           0 Puerto Rico      3<span style='text-decoration: underline;'>754</span>939
-#&gt; <span style='color: #BCBCBC;'> 3</span> Obse… inc hosp        2020-07-20      53          43 Washington       7<span style='text-decoration: underline;'>614</span>893
-#&gt; <span style='color: #BCBCBC;'> 4</span> Obse… inc hosp        2020-07-19      72           1 Puerto Rico      3<span style='text-decoration: underline;'>754</span>939
-#&gt; <span style='color: #BCBCBC;'> 5</span> Obse… inc hosp        2020-07-18      01         125 Alabama          4<span style='text-decoration: underline;'>903</span>185
-#&gt; <span style='color: #BCBCBC;'> 6</span> Obse… inc hosp        2020-07-17      19          20 Iowa             3<span style='text-decoration: underline;'>155</span>070
-#&gt; <span style='color: #BCBCBC;'> 7</span> Obse… inc hosp        2020-07-16      22         163 Louisiana        4<span style='text-decoration: underline;'>648</span>794
-#&gt; <span style='color: #BCBCBC;'> 8</span> Obse… inc hosp        2020-07-15      42          55 Pennsylvania    12<span style='text-decoration: underline;'>801</span>989
-#&gt; <span style='color: #BCBCBC;'> 9</span> Obse… inc hosp        2020-07-14      11           4 District of …     <span style='text-decoration: underline;'>705</span>749
-#&gt; <span style='color: #BCBCBC;'>10</span> Obse… inc hosp        2021-07-02      78           0 Virgin Islan…     <span style='text-decoration: underline;'>107</span>268
-#&gt; <span style='color: #949494;'># … with 566,791 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> Obse… inc hosp        2020-07-17      72           1 Puerto Rico      3<span style='text-decoration: underline;'>754</span>939
+#&gt; <span style='color: #BCBCBC;'> 2</span> Obse… inc hosp        2020-07-16      15           0 Hawaii           1<span style='text-decoration: underline;'>415</span>872
+#&gt; <span style='color: #BCBCBC;'> 3</span> Obse… inc hosp        2020-07-15      15           2 Hawaii           1<span style='text-decoration: underline;'>415</span>872
+#&gt; <span style='color: #BCBCBC;'> 4</span> Obse… inc hosp        2021-01-23      46          10 South Dakota      <span style='text-decoration: underline;'>884</span>659
+#&gt; <span style='color: #BCBCBC;'> 5</span> Obse… inc hosp        2021-01-19      30          30 Montana          1<span style='text-decoration: underline;'>068</span>778
+#&gt; <span style='color: #BCBCBC;'> 6</span> Obse… inc hosp        2021-01-18      16          27 Idaho            1<span style='text-decoration: underline;'>787</span>065
+#&gt; <span style='color: #BCBCBC;'> 7</span> Obse… inc hosp        2021-01-14      16          47 Idaho            1<span style='text-decoration: underline;'>787</span>065
+#&gt; <span style='color: #BCBCBC;'> 8</span> Obse… inc hosp        2021-01-14      33          31 New Hampshire    1<span style='text-decoration: underline;'>359</span>711
+#&gt; <span style='color: #BCBCBC;'> 9</span> Obse… inc hosp        2021-01-14      44          32 Rhode Island     1<span style='text-decoration: underline;'>059</span>361
+#&gt; <span style='color: #BCBCBC;'>10</span> Obse… inc hosp        2021-01-13      33          26 New Hampshire    1<span style='text-decoration: underline;'>359</span>711
+#&gt; <span style='color: #949494;'># … with 580,361 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;, full_location_name &lt;chr&gt;</span></div><div class='input'>
 <span class='co'># load for ECDC</span>
 <span class='fu'>load_truth</span><span class='op'>(</span>
@@ -282,19 +285,19 @@ will return a warning.</p></li>
   target_variable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"inc case"</span>, <span class='st'>"inc death"</span><span class='op'>)</span>,
   hub <span class='op'>=</span> <span class='st'>"ECDC"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>19008</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>19456</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
 #&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
 #&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
 #&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
 #&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>19008</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>19456</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>4</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
 #&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
 #&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (2): location, location_name</span>
 #&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): value</span>
 #&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): date</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
-#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 5,440 × 7</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 5,568 × 7</span>
 #&gt;    model location target_end_date target_variable value location_name population
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> Obse… AT       2020-01-25      inc case            0 Austria          8<span style='text-decoration: underline;'>809</span>212
@@ -307,7 +310,7 @@ will return a warning.</p></li>
 #&gt; <span style='color: #BCBCBC;'> 8</span> Obse… AT       2020-03-14      inc case          576 Austria          8<span style='text-decoration: underline;'>809</span>212
 #&gt; <span style='color: #BCBCBC;'> 9</span> Obse… AT       2020-03-21      inc case         <span style='text-decoration: underline;'>2</span>159 Austria          8<span style='text-decoration: underline;'>809</span>212
 #&gt; <span style='color: #BCBCBC;'>10</span> Obse… AT       2020-03-28      inc case         <span style='text-decoration: underline;'>5</span>457 Austria          8<span style='text-decoration: underline;'>809</span>212
-#&gt; <span style='color: #949494;'># … with 5,430 more rows</span></div></pre>
+#&gt; <span style='color: #949494;'># … with 5,558 more rows</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

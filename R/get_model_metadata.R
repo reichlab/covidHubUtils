@@ -19,7 +19,7 @@
 #' @importFrom yaml yaml.load
 #' @export
 
-get_model_metadata <- function(models, 
+get_model_metadata <- function(models =  NULL, 
                                source = "local_hub_repo", 
                                hub_repo_path, 
                                as_of = Sys.Date()) {

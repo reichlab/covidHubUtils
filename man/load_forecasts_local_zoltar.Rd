@@ -14,7 +14,7 @@ load_forecasts_local_zoltar(
   hub = c("US", "ECDC"),
   verbose = TRUE,
   local_zoltpy_path,
-  zoltar_module_path
+  zoltar_sqlite_file
 )
 }
 \arguments{
@@ -49,7 +49,8 @@ from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}
 
 \item{local_zoltpy_path}{path to local clone of \code{zolpy} repository.}
 
-\item{zoltar_module_path}{path to local zoltar module w.r.t. \code{local_zoltpy_path}}
+\item{zoltar_sqlite_file}{path to local sqlite file,
+either a relative path w.r.t. \code{local_zoltpy_path} or an absolute path.}
 }
 \value{
 data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
@@ -57,15 +58,9 @@ data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \co
 \code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
-Please follow these steps to set up required environment prior to using this function
-for the first time:
-\itemize{
-\item Create a local clone of \code{reichlab/zoltpy} repository.
-\item Set the \code{DJANGO_SETTINGS_MODULE} environment variable
-to \code{forecast_repo.settings.local_sqlite3} and  \verb{MAX_NUM_QUERY_ROWS=20_000_000}
-or another number
-\item Call \verb{pipenv install} from the directory of local zolpy in command line.
-}
+Please follow instructions to set up required environment prior to using this function
+for the first time
+See \url{http://reichlab.io/covidHubUtils/articles/covidHubUtils-zoltar_sqlite_setup.html}{vignette} for more details.
 }
 \details{
 \itemize{
@@ -73,6 +68,6 @@ or another number
 any dates in \code{forecast_dates} for selected \code{models},
 \code{locations}, \code{types} and \code{target}.
 \item By default. \code{test-load_forecasts_local_zoltar()} is skipped. Please modify
-\code{local_zoltpy_path} and \code{zoltar_module_path} on top of the unit test file to run tests.
+\code{local_zoltpy_path} and \code{zoltar_sqlite_file} on top of the unit test file to run tests.
 }
 }
