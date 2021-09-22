@@ -98,6 +98,9 @@ calc_target_week_end_date <- function(forecast_date, horizon) {
 #'
 #' @export
 calc_target_end_date <- function(forecast_date, horizon, temporal_resolution) {
+  temporal_resolution <- match.arg(temporal_resolution,
+                                   choices = c("wk", "day"),
+                                   several.ok = FALSE)
   result <- rep(NA_character_)
   inds <- (temporal_resolution == "wk")
   if (length(horizon) == 1) {
