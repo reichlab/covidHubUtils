@@ -122,11 +122,14 @@ load_forecasts_zoltar <- function(models = NULL,
           as_of = date_to_datetime(as_of, hub)
         )
 
-        if (nrow(forecast) == 0 & verbose) {
-          warning(paste0(
-            "Warning in load_forecasts_zoltar: Forecasts are not available for current model ",
-            curr_model
-          ))
+        if (nrow(forecast) == 0) {
+          if (verbose){
+            warning(paste0(
+              "Warning in load_forecasts_zoltar: Forecasts are not available for current model ",
+              curr_model
+            ))
+            forecast <- data.frame()
+          }
         }
         forecast <- reformat_forecasts(forecast, verbose)
       } else {
@@ -135,6 +138,7 @@ load_forecasts_zoltar <- function(models = NULL,
             "Warning in load_forecasts_zoltar: No available forecast dates for current model ",
             curr_model
           ))
+          forecast <-  data.frame()
         }
       }
     }
@@ -157,7 +161,7 @@ load_forecasts_zoltar <- function(models = NULL,
     )
     forecasts <- reformat_forecasts(forecasts, verbose)
   }
-
+  
   if (!is.null(forecasts) && !is.null(nrow(forecasts))) {
     if (nrow(forecasts) > 0 && "location" %in% colnames(forecasts)) {
       # append location, population information
@@ -192,30 +196,31 @@ reformat_forecasts <- function(zoltar_query_result, verbose = TRUE) {
     if (verbose) {
       warning("Warning in reformat_forecasts: Forecasts are not available.\n Please check your parameters.")
     }
-    # convert value column to double and select columns
+   
+  } else {
     zoltar_query_result <- zoltar_query_result %>%
-      dplyr::mutate(value = as.double(value))
+      # convert value column to double and select columns
+      dplyr::mutate(value = as.double(value)) %>%
+      # keep only required columns
+      dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
+      dplyr::rename(
+        location = unit, forecast_date = timezero,
+        type = class
+      ) %>%
+      # create horizon and target_end_date columns
+      tidyr::separate(target,
+        into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
+        remove = FALSE, extra = "merge"
+      ) %>%
+      dplyr::mutate(target_end_date = as.Date(
+                      calc_target_end_date(forecast_date, 
+                                           as.numeric(horizon), 
+                                           temporal_resolution))) %>%
+      dplyr::select(
+        model, forecast_date, location, horizon, temporal_resolution,
+        target_variable, target_end_date, type, quantile, value
+      )
   }
-
-  zoltar_query_result <- zoltar_query_result %>%
-    # keep only required columns
-    dplyr::select(model, timezero, unit, target, class, quantile, value) %>%
-    dplyr::rename(
-      location = unit, forecast_date = timezero,
-      type = class
-    ) %>%
-    # create horizon and target_end_date columns
-    tidyr::separate(target,
-      into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
-      remove = FALSE, extra = "merge"
-    ) %>%
-    dplyr::mutate(target_end_date = as.Date(
-      calc_target_end_date(forecast_date, as.numeric(horizon), temporal_resolution)
-    )) %>%
-    dplyr::select(
-      model, forecast_date, location, horizon, temporal_resolution,
-      target_variable, target_end_date, type, quantile, value
-    )
 
   return(zoltar_query_result)
 }
