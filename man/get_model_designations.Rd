@@ -4,7 +4,12 @@
 \alias{get_model_designations}
 \title{Get model designations from metadata}
 \usage{
-get_model_designations(models, source, hub_repo_path, as_of = Sys.Date())
+get_model_designations(
+  models = NULL,
+  source,
+  hub_repo_path,
+  as_of = Sys.Date()
+)
 }
 \arguments{
 \item{models}{optional character vector of model abbreviations for

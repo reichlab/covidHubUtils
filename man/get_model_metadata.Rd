@@ -5,7 +5,7 @@
 \title{Get Hub model metadata}
 \usage{
 get_model_metadata(
-  models,
+  models = NULL,
   source = "local_hub_repo",
   hub_repo_path,
   as_of = Sys.Date()
