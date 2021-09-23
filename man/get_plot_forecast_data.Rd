@@ -11,7 +11,7 @@ get_plot_forecast_data(
   forecast_dates_to_plot,
   horizons_to_plot,
   quantiles_to_plot,
-  locations_to_plot,
+  locations_to_plot = NULL,
   plot_truth = TRUE,
   truth_source,
   target_variable_to_plot,
