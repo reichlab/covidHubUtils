@@ -234,6 +234,7 @@ load_forecast_files_repo <- function(file_paths,
 
       single_forecast <- readr::read_csv(
         file_path,
+        lazy = FALSE,
         col_types = readr::cols(
           forecast_date = readr::col_date(format = ""),
           target = readr::col_character(),
