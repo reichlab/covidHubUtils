@@ -52,45 +52,11 @@ test_that("get_model_designations works: zoltar, specified models", {
   expect_true(dplyr::all_equal(actual, expected))
 })
 
-
-test_that("get_model_designations work: local hub repo, specified models, versioned", {
-  actual <- covidHubUtils::get_model_designations(
-    source = "local_hub_repo",
-    hub_repo_path = "test-data/test-get_model_designations",
-    models = c("teamD-modelD", "teamE-modelE"),
-    as_of = as.Date("2021-01-06")
-  )
-
-  expected <- data.frame(
-    model = c("teamD-modelD", "teamE-modelE"),
-    designation = c("other", "primary")
-  )
-
-  expect_true(dplyr::all_equal(actual, expected))
-})
-
-test_that("get_model_designations work: local hub repo, specified models, versioned", {
-  actual <- covidHubUtils::get_model_designations(
-    source = "local_hub_repo",
-    hub_repo_path = "test-data/test-get_model_designations",
-    models = c("teamD-modelD", "teamE-modelE"),
-    as_of = Sys.Date()
-  )
-
-  expected <- data.frame(
-    model = c("teamD-modelD", "teamE-modelE"),
-    designation = c("other", "other")
-  )
-
-  expect_true(dplyr::all_equal(actual, expected))
-})
-
 test_that("get_model_designations work: local hub repo, space in hub repo path", {
   actual <- covidHubUtils::get_model_designations(
     source = "local_hub_repo",
     hub_repo_path = "test-data/test-get_model_designations folder",
-    models = c("teamA-modelA", "teamB-modelB"),
-    as_of = Sys.Date()
+    models = c("teamA-modelA", "teamB-modelB")
   )
 
   expected <- data.frame(

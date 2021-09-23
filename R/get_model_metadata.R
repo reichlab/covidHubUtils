@@ -54,12 +54,8 @@ get_model_metadata <- function(models =  NULL,
         tmp <- as.data.frame(metadata_list, stringsAsFactors = FALSE)
         return(tmp)
       }
-    )
-    model_info <- model_info %>%
-      dplyr::rename(
-        model = model_abbr,
-        designation = team_model_designation
-      )
+    )%>%
+      dplyr::rename(model = model_abbr, designation = team_model_designation)
   }
   return(model_info)
 }
