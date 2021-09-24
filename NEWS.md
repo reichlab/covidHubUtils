@@ -5,6 +5,7 @@ locale-independent
 - Add `hub` parameter in `get_all_models()`. It does not support loading model names for ECDC hub from remote hub repo for now. 
 - Rename sharpness score as dispersion. 
 - Update warning messages and error messages in `load_forecasts_zoltar()`.
+- Remove `as_of` functionality in `get_model_metadata()` and `get_model_designations()`. `as_of` parameter is not available now.
 - Fix bug resulting in error in `get_model_metadata()` when a metadata file has `NULL` fields.
 - Fix bug resulting in empty ouput in `load_forecats_zoltar()` when verbose is `TRUE`.
 - Add validation for `temporal_resolution` in `calc_target_end_date()`.

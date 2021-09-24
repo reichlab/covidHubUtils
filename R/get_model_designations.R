@@ -7,8 +7,6 @@
 #'  either `"local_hub_repo"` or `"zoltar"`
 #' @param hub_repo_path path to local clone of the `reichlab/covid19-forecast-hub`
 #' repository
-#' @param as_of optional date specifying the version. Only support versioned
-#' model designations in `"local_hub_repo"`
 #'
 #' @return data.frame with columns `model` and `designation`
 #' @importFrom stringr str_split_fixed
@@ -16,16 +14,11 @@
 #' @export
 get_model_designations <- function(models = NULL, 
                                    source, 
-                                   hub_repo_path, 
-                                   as_of = Sys.Date()) {
+                                   hub_repo_path) {
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar"))
 
   warning("get_model_designations() will be deprecated soon. please use get_model_metadata() instead.")
   
-  if (as_of != Sys.Date() & source != "local_hub_repo") {
-    stop("Error in get_model_designations: Currently only support versioned model designation in local hub repo.")
-  }
-
   if (source == "local_hub_repo") {
     if (missing(hub_repo_path)) {
       stop("Error in get_model_designations: Please provide a hub_repo_path")
@@ -52,45 +45,11 @@ get_model_designations <- function(models = NULL,
       model_info <- purrr::map_dfr(
         model_metadata_paths,
         function(model_metadata_path) {
-          # create search time in EST based on as_of date
-          search_time <- paste0(as.Date(as_of) + 1, " 00:00:00")
-          search_time <- as.POSIXct(search_time, format = "%Y-%m-%d %H:%M:%S", tz = "EST")
-          # convert search time to UTC timestamp
-          attr(search_time, "tzone") <- "UTC"
-          search_time_timestamp <- as.numeric(search_time)
-
-          # find git commits related to a specified metadata file before search_time
-          commits_command <- paste0(
-            "cd ", hub_repo_path,
-            "; git log --date=unix --pretty=format:'%H %ad' --before='",
-            as.character(search_time), "' --follow -- ",
-            model_metadata_path
-          )
-
-          # invoke command and parse result
-          all_commits <- system(commits_command, intern = TRUE) %>%
-            stringr::str_split_fixed(" ", 2) %>%
-            as.data.frame() %>%
-            dplyr::rename(sha = V1, date = V2)
-
-          if (nrow(all_commits) == 0) {
-            print(paste0("Currently checking commits for: ", model_metadata_path, " before ", search_time))
-            stop("Error in get_model_designations: Commits to model metadata are not available by as_of date.\n Please check your parameters.")
-          }
-
-          recent_commit_sha <- all_commits$sha[1]
-
-          # construct git command to read metadata file
-          read_command <- paste0(
-            "cd ", hub_repo_path, "; git show ",
-            recent_commit_sha, ":./", model_metadata_path
-          )
-
-          as.data.frame(yaml::yaml.load(system(read_command, intern = TRUE))[
-            c("model_abbr", "team_model_designation")
-          ],
-          stringsAsFactors = FALSE
-          )
+          model_metadata_path <- paste0(hub_repo_path, "/", model_metadata_path)
+          metadata_list <- yaml::read_yaml(model_metadata_path)
+          metadata_list <- metadata_list[!sapply(metadata_list, is.null)]
+          tmp <- as.data.frame(metadata_list, stringsAsFactors = FALSE)
+          return(tmp)
         }
       ) %>%
         dplyr::select(model = model_abbr, designation = team_model_designation)
