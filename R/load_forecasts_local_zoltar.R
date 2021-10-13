@@ -59,14 +59,9 @@ load_forecasts_local_zoltar <- function(models = NULL,
   Sys.setenv("DJANGO_SETTINGS_MODULE"="forecast_repo.settings.local_sqlite3")
   Sys.setenv("MAX_NUM_QUERY_ROWS"="20_000_000")
 
-  # set up Zoltar connection
-  zoltar_connection <- setup_zoltar_connection(staging = FALSE)
-
-  # construct Zoltar project url
-  project_url <- get_zoltar_project_url(
-    hub = hub,
-    zoltar_connection = zoltar_connection
-  )
+  # construct Zoltar project id
+  project_id <- get_zoltar_project_id(zoltar_sqlite_file, hub)
+  
   # get information about all models in project
   all_models <- zoltr::models(
     zoltar_connection = zoltar_connection,
@@ -75,12 +70,6 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
   # get all valid model abbrs
   all_valid_model_abbrs <- unique(all_models$model_abbr)
-
-  # get all valid timezeros in project
-  all_valid_timezeros <- zoltr::timezeros(
-    zoltar_connection = zoltar_connection,
-    project_url = project_url
-  )$timezero_date
 
   if (!is.null(models)) {
     models <- match.arg(models,
@@ -232,3 +221,38 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
   return(forecasts)
 }
+
+#' Get Zoltar project id from local zoltar sqlite file
+#'
+#' @param zoltar_sqlite_file path to local sqlite file, 
+#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`
+#'
+#' @return project id
+get_zoltar_project_id <- function(zoltar_sqlite_file,
+                                  hub = c("US", "ECDC")) {
+  # build connection to local sqlite file
+  con <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
+  
+  # create SQL query command 
+  command <- "SELECD id, name FROM forecast_app_project;"
+  
+  # execute query
+  result_set <- DBI::dbSendQuery(con, command)
+  
+  # get query results in a dataframe
+  the_projects <- DBI::dbFetch(result_set)
+  
+  # get the URL to the right forecast hub project
+  if (hub[1] == "US") {
+    project_id <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+  } else if (hub[1] == "ECDC") {
+    project_id <- the_projects[the_projects$name == "ECDC European COVID-19 Forecast Hub", "url"]
+  }
+  
+  return(project_id)
+}
+
+
+
