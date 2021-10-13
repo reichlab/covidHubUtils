@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here", "pkgdown"))
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here", "pkgdown", "textshaping"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       
