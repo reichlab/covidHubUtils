@@ -35,8 +35,7 @@
 #' Default to `NULL` to load the latest version.
 #' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #' @param local_zoltpy_path path to local clone of `zolpy` repository.
-#' @param zoltar_sqlite_file path to local sqlite file, 
-#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
+#' @param zoltar_sqlite_file an absolute path to local sqlite file.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #'
@@ -232,17 +231,19 @@ get_zoltar_project_id_local_zoltar <- function(zoltar_sqlite_file,
   conn <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
   
   # create SQL query command 
-  command <- "SELECD id, name FROM forecast_app_project;"
+  command <- "SELECT id, name FROM forecast_app_project;"
   
   # execute query
   the_projects <- DBI::dbGetQuery(conn, command)
 
   # get the URL to the right forecast hub project
   if (hub[1] == "US") {
-    project_id <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
+    project_id <- the_projects[the_projects$name == "COVID-19 Forecasts", "id"]
   } else if (hub[1] == "ECDC") {
-    project_id <- the_projects[the_projects$name == "ECDC European COVID-19 Forecast Hub", "url"]
+    project_id <- the_projects[the_projects$name == "ECDC European COVID-19 Forecast Hub", "id"]
   }
+  
+  DBI::dbDisconnect(conn)
   
   return(project_id)
 }
@@ -268,6 +269,8 @@ get_models_local_zoltar <- function(zoltar_sqlite_file, project_id){
   the_models <- DBI::dbGetQuery(conn, query) %>%
     dplyr::rename(model_abbr = abbreviation)
   
+  DBI::dbDisconnect(conn)
+  
   return (the_models)
 }
 
@@ -290,6 +293,8 @@ get_model_forecast_history_local_zoltar <- function(zoltar_sqlite_file, forecast
   
   forecast_history <- DBI::dbGetQuery(conn, query) %>%
     dplyr::mutate(forecast_date = timezero_date)
+  
+  DBI::dbDisconnect(conn)
   
   return (forecast_history)
 }
