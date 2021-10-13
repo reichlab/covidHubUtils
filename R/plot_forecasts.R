@@ -39,8 +39,8 @@
 #' Optional if `truth_data` is provided.
 #' @param use_median_as_point logical for using median quantiles as point forecasts in plot.
 #' Default to `FALSE`.
-#' @param plot_truth logical for showing truth data in plot. Default to `FALSE`.
-#' Currently supports `"JHU"`,`"USAFacts"`, `"NYTimes"`. Default to `"JHU"`.
+#' @param plot_truth logical for showing truth data in plot. Default to `TRUE`.
+#' Data used in the plot is either `truth_data` or data loaded from `truth_source`.
 #' @param plot logical for showing the plot. Default to `TRUE`.
 #' @param fill_by_model logical for specifying colors in plot.
 #' If `TRUE`, separate colors will be used for each model.
