@@ -84,10 +84,10 @@ Optional if \code{truth_data} is provided.}
 \item{use_median_as_point}{logical for using median quantiles as point forecasts in plot.
 Default to \code{FALSE}.}
 
-\item{plot_truth}{logical for showing truth data in plot. Default to \code{FALSE}.}
-
-\item{plot}{logical for showing the plot. Default to \code{TRUE}.
+\item{plot_truth}{logical for showing truth data in plot. Default to \code{FALSE}.
 Currently supports \code{"JHU"},\code{"USAFacts"}, \code{"NYTimes"}. Default to \code{"JHU"}.}
+
+\item{plot}{logical for showing the plot. Default to \code{TRUE}.}
 
 \item{fill_by_model}{logical for specifying colors in plot.
 If \code{TRUE}, separate colors will be used for each model.
