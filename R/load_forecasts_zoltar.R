@@ -207,6 +207,10 @@ reformat_forecasts <- function(zoltar_query_result, verbose = TRUE) {
         location = unit, forecast_date = timezero,
         type = class
       ) %>%
+      # cast type
+      dplyr::mutate(location = as.character(location),
+                    type = as.character(type),
+                    quantile = as.double(quantile)) %>%
       # create horizon and target_end_date columns
       tidyr::separate(target,
         into = c("horizon", "temporal_resolution", "ahead", "target_variable"),

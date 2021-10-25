@@ -275,18 +275,18 @@ from which to load forecasts. Possible options are <code>"US"</code> and <code>"
   as_of <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 32 × 16</span>
-#&gt;    model             forecast_date location horizon temporal_resolu… target_variable
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          
-#&gt; <span style='color: #BCBCBC;'> 1</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 2</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 3</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 4</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 5</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 6</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 7</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 8</span> COVIDhub-ensemble 2021-07-26    US       1       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'> 9</span> COVIDhub-ensemble 2021-07-26    US       2       wk               inc case       
-#&gt; <span style='color: #BCBCBC;'>10</span> COVIDhub-ensemble 2021-07-26    US       2       wk               inc case       
+#&gt;    model        forecast_date location horizon temporal_resolut… target_variable
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          
+#&gt; <span style='color: #BCBCBC;'> 1</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 2</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 3</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 4</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 5</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 6</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 7</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 8</span> COVIDhub-en… 2021-07-26    US       1       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'> 9</span> COVIDhub-en… 2021-07-26    US       2       wk                inc case       
+#&gt; <span style='color: #BCBCBC;'>10</span> COVIDhub-en… 2021-07-26    US       2       wk                inc case       
 #&gt; <span style='color: #949494;'># … with 22 more rows, and 10 more variables: target_end_date &lt;date&gt;,</span>
 #&gt; <span style='color: #949494;'>#   type &lt;chr&gt;, quantile &lt;dbl&gt;, value &lt;dbl&gt;, location_name &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span>
