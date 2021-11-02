@@ -18,8 +18,8 @@ US hub is using FIPS code and ECDC hub is using country name abbreviation.}
 format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 available data with an issue date on or before the given \code{as_of} date are returned.}
 
-\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
-\code{"ECDC"}}
+\item{hub}{character, which hub to use. Default is \code{"US"}.
+\code{"ECDC"} is not available now.}
 }
 \value{
 data.frame with columns \code{model}, \code{location}, \code{target_end_date}, \code{target_variable}

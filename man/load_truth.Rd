@@ -56,7 +56,7 @@ If \code{NULL}, default to \code{"remote_hub_repo"}.}
 repository. Only used when data_location is \code{"local_hub_repo"}}
 
 \item{hub}{character, which hub to use. Default is \code{"US"}, other option is
-\code{"ECDC"}}
+\code{"ECDC"}. \code{"ECDC"} is not available when \code{data_location = "zoltar"}.}
 }
 \value{
 data.frame with columns \code{model}, \code{target_variable}, \code{target_end_date},

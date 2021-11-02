@@ -44,7 +44,7 @@
 #' @param local_repo_path path to local clone of the `reichlab/covid19-forecast-hub`
 #' repository. Only used when data_location is `"local_hub_repo"`
 #' @param hub character, which hub to use. Default is `"US"`, other option is
-#' `"ECDC"`
+#' `"ECDC"`. `"ECDC"` is not available when `data_location = "zoltar"`.
 #'
 #' @return data.frame with columns `model`, `target_variable`, `target_end_date`,
 #' `location`, `value`, `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
@@ -526,8 +526,8 @@ load_from_hub_repo <- function(target_variable,
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
-#' @param hub character, which hub to use. Default is `"US"`, other option is
-#' `"ECDC"`
+#' @param hub character, which hub to use. Default is `"US"`. 
+#' `"ECDC"` is not available now.
 #' @return data.frame with columns `model`, `location`, `target_end_date`, `target_variable` 
 #' and `value`
 #'
@@ -554,8 +554,8 @@ load_from_zoltar <- function(target_variable,
     } else {
       warning("Warning in load_from_zoltar: Some of the specified target variables are not available in Zoltar.")
     }
-  } else {
-    #ECDC hub
+  } else if (hub[1] == "ECDC") {
+    stop("Error in load_from_zoltar: Truth data for ECDC hub is not available on zoltar.")
     
   }
   
