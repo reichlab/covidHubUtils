@@ -1,10 +1,11 @@
 Package: covidHubUtils
 Title: Utility functions for the COVID-19 forecast hub
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: c(
     person(given = "Serena",
            family = "Wang",
-           role = c("aut")),
+           role = c("aut", "cre"),
+           email = "yijwang@umass.edu"),
     person(given = "Ariane",
            family = "Stark",
            role = c("aut")),
@@ -21,14 +22,26 @@ Authors@R: c(
     person(given = "Yuxin David",
            family = "Huang",
            role = c("ctb")),
+    person(given = "Katharine",
+           family = "Sherratt",
+           role = c("ctb"), 
+           comment = c(ORCID = "0000-0003-2049-3423")), 
+    person(given = "Sebastian",
+           family = "Funk",
+           role = c("ctb"), 
+           comment = c(ORCID = "0000-0002-2842-3406")), 
     person(given = "Nicholas G.",
            family = "Reich",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "nick@umass.edu",
            comment = c(ORCID = "0000-0003-3503-9899")),
     person(given = "Nutcha",
            family = "Wattanachit",
-           role = c("aut")))
+           role = c("aut")),
+    person(given = "Aaron",
+           family = "Gerding",
+           role = c("ctb"))
+           )
 Description: 
     A set of utility functions for downloading, plotting, and scoring
     forecast and truth data from the COVID-19 Forecast Hub: 
@@ -58,7 +71,10 @@ Imports:
     stringr,
     yaml,
     lifecycle,
-    jsonlite
+    jsonlite,
+    foreach,
+    doParallel,
+    parallel
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

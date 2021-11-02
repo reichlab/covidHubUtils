@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_truth.R
 \name{load_from_hub_repo}
 \alias{load_from_hub_repo}
-\title{load truth data from covidData}
+\title{load truth data from a local clone of forecast hub repo}
 \usage{
 load_from_hub_repo(
   target_variable,
@@ -19,14 +19,14 @@ load_from_hub_repo(
 \code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.}
 
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \verb{"HealthData}" and \code{"ECDC"}.}
+be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.}
 
 \item{repo_path}{path to local clone or remote of the corresponding prediction hub repository.}
 
 \item{temporal_resolution}{string specifying temporal resolution
 to include: one of \code{'daily'} or \code{'weekly'}}
 
-\item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.}
+\item{truth_end_date}{date to include the last available truth point in \code{'yyyy-mm-dd'} format.}
 
 \item{data_location}{character specifying the location of truth data.
 Currently only supports \code{"local_hub_repo"} or \code{"remote_hub_repo"}.}
@@ -35,9 +35,9 @@ Currently only supports \code{"local_hub_repo"} or \code{"remote_hub_repo"}.}
 \code{"ECDC"}}
 }
 \value{
-a data frame with columns \code{model}, \code{location}, \code{target_end_date}, \code{target_variable}
-and \code{value}
+a data.frame with columns \code{model}, \code{location}, \code{target_end_date}, \code{target_variable}
+and \code{value}.
 }
 \description{
-load truth data from covidData
+load truth data from a local clone of forecast hub repo
 }

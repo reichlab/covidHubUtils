@@ -23,7 +23,7 @@ available data with an issue date on or before the given \code{as_of} date are r
 }
 \value{
 data.frame with columns \code{model}, \code{location}, \code{target_end_date}, \code{target_variable}
-and \code{value}
+and \code{value}.
 }
 \description{
 load truth data from zoltar server

@@ -18,24 +18,27 @@ load_from_coviddata(
 \item{target_variable}{string specifying target type It should be one or more of
 \code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.}
 
+\item{truth_source}{character vector specifying where the truths will
+be loaded from: currently support \code{"JHU"} and \verb{"HealthData}".}
+
 \item{locations}{vector of valid location code.
-US hub is using FIPS code and ECDC hub is using country name abbreviation.}
+The US hub is using FIPS code and the ECDC hub is using country name abbreviation.}
 
 \item{as_of}{character vector of "as of" dates to use for querying truths in
-format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
+format \code{'yyyy-mm-dd'}. For each spatial unit and temporal reporting unit, the last
 available data with an issue date on or before the given \code{as_of} date are returned.}
 
 \item{temporal_resolution}{string specifying temporal resolution
 to include: one of \code{'daily'} or \code{'weekly'}}
 
-\item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.}
+\item{truth_end_date}{date to include the last available truth point in \code{'yyyy-mm-dd'} format.}
 
 \item{hub}{character, which hub to use. Default is \code{"US"}, other option is
 \code{"ECDC"}}
 }
 \value{
-data.frame with columns \code{model}, \code{location}, \code{target_end_date}, \code{target_variable}
-and \code{value}
+a data.frame with columns \code{model}, \code{location}, \code{target_end_date}, \code{target_variable}
+and \code{value}.
 }
 \description{
 load truth data from covidData

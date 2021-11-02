@@ -2,9 +2,7 @@
 % Please edit documentation in R/load_truth.R
 \name{load_truth}
 \alias{load_truth}
-\title{Load truth data under multiple target variables
-from multiple truth sources
-using files in \code{reichlab/covid19-forecast-hub}.}
+\title{Load truth data under multiple target variables from multiple truth sources}
 \usage{
 load_truth(
   truth_source = NULL,
@@ -60,23 +58,38 @@ repository. Only used when data_location is \code{"local_hub_repo"}}
 }
 \value{
 data.frame with columns \code{model}, \code{target_variable}, \code{target_end_date},
-\code{location}, \code{value}, \code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
-and \code{full_location_name}
+\code{location}, \code{value}, \code{location_name}, \code{population} and extra information in these cases
+\itemize{
+\item If \code{hub = "US"}, it returns extra columns \code{geo_type}, \code{geo_value}, \code{abbreviation} and \code{full_location_name}.
+\item If \code{truth_source = "ECDC"}, this function returns extra columns \code{week_start}. However, when \code{target_variable} is only
+\verb{inc hosp}, there are no extra columns appended to the resulting data frame.
+}
 }
 \description{
-\code{"inc hosp"} is only available from \code{"HeatlthData"} and this function is not loading
-data for other target variables from \code{"HealthData"}.
+By default, for the US hub, the resulting data.frame contains data for weekly incident cases (JHU),
+weekly incident deaths (JHU) and daily incident hospitalization (HealthData) at all county, state and
+national level. For the ECDC hub, the default resulting data.frame contains data for weekly incident cases (JHU),
+weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries.
 }
 \details{
-When loading data for multiple \code{target_variables}, \code{temporal_resolution} will be applied
-to all target variables but \code{"inc hosp"}. In that case, this function will return
+\itemize{
+\item\code{"inc hosp"} is only available from \code{"HealthData"} and \code{"ECDC"} and this function is not loading
+data for other target variables from \code{"HealthData"}.
+
+\item When loading data for multiple target variables for the US hub, \code{temporal_resolution} will be applied
+to all target variables but \code{"inc hosp"}. In that case, the function will return
 daily incident hospitalization counts along with other data.
 
-Weekly temporal resolution will be applied to \code{"inc hosp"} if the user specifies \code{"inc hosp"}
-as the only \code{target_variable}.
+\item For the US hub, weekly temporal resolution will be applied to \code{"inc hosp"} if the user specifies \code{"inc hosp"}
+as the only \code{target_variable}.On the other hand, \code{temporal_resolution} will
+be applied to \code{"inc hosp"} in all cases for the ECDC hub.
 
-When loading weekly data, if there are not enough observations for a week, the corresponding
+\item When loading weekly data, if there are not enough observations for a week, the corresponding
 weekly count would be \code{NA} in resulting data frame.
+
+\item \code{as_of} is only supported when \code{data_location = "covidData"}. Otherwise, this function
+will return a warning.
+}
 }
 \examples{
 library(covidHubUtils)
