@@ -22,8 +22,11 @@
 #'  \item When loading weekly data, if there are not enough observations for a week, the corresponding
 #' weekly count would be `NA` in resulting data frame.
 #'
-#'  \item `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
-#' will return a warning.
+#'  \item `as_of` is only supported when `data_location = "covidData"` and `data_location = "zoltar"`. 
+#'  Otherwise, this function will return a warning.
+#'  
+#'  \item When `data_location = "zoltar"`,  only state and national level `"weekly"` data for `"cum death"` and `"inc death"`
+#'  targets are available.
 #' }
 #'
 #' @param truth_source character vector specifying where the truths will
@@ -34,6 +37,7 @@
 #' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' If `NULL`, default for US hub is `c("inc case", "inc death", "inc hosp")`.
 #' If `NULL`, default for ECDC hub is `c("inc case", "inc death")`.
+#' When `data_location = "zoltar"`, only `"cum death"` and `"inc death"` are supported.
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
@@ -45,13 +49,14 @@
 #' Currently only supports `"local_hub_repo"`, `"remote_hub_repo"`, `"covidData"` and `"zoltar"`.
 #' If `NULL`, default to `"remote_hub_repo"`.
 #' @param truth_end_date date to include the last available truth point in 'yyyy-mm-dd' format.
-#' If `NULL`,default to system date.
+#' If `NULL`, default to system date.
 #' @param temporal_resolution character specifying temporal resolution
 #' to include: currently support `"weekly"` and `"daily"`.
 #' If `NULL`, default to `"weekly"` for cases and deaths, `"daily"` for hospitalizations.
 #' Weekly `temporal_resolution` will not be applied to `"inc hosp"` when
 #' multiple target variables are specified.
 #' `"ECDC"` truth data is weekly by default. Daily level data is not available.
+#' This parameter only used when `data_location` is not `"zoltar"`.
 #' @param local_repo_path path to local clone of the `reichlab/covid19-forecast-hub`
 #' repository. Only used when data_location is `"local_hub_repo"`
 #' @param hub character, which hub to use. Default is `"US"`, other option is
@@ -97,7 +102,8 @@ load_truth <- function(truth_source = NULL,
       choices = c(
         "remote_hub_repo",
         "local_hub_repo",
-        "covidData"
+        "covidData",
+        "zoltar"
       ),
       several.ok = FALSE
     )
@@ -156,9 +162,11 @@ load_truth <- function(truth_source = NULL,
     # get list of all valid locations and codes
     valid_locations <- covidHubUtils::hub_locations
     valid_location_codes <- covidHubUtils::hub_locations$fips
-
-    # store path of remote repo
-    remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
+    
+    if (data_location == "remote_hub_repo") {
+      # store path of remote repo
+      remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
+    }
   } else if (hub[1] == "ECDC") {
     ecdc_default <- FALSE
     if (is.null(target_variable)) {
@@ -202,9 +210,11 @@ load_truth <- function(truth_source = NULL,
     # get list of all valid locations and codes
     valid_locations <- covidHubUtils::hub_locations_ecdc
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
-
-    # store path of remote repo
-    remote_repo_path <- "https://raw.githubusercontent.com/epiforecasts/covid19-forecast-hub-europe/main"
+    
+    if (data_location == "remote_hub_repo") {
+      # store path of remote repo
+      remote_repo_path <- "https://raw.githubusercontent.com/epiforecasts/covid19-forecast-hub-europe/main"
+    }
   }
 
   # validate truth end date
@@ -320,7 +330,7 @@ load_truth <- function(truth_source = NULL,
             selected_locations <- locations
           }
 
-          data <- load_from_coviddata(
+          data <- load_truth_coviddata(
             target_variable = target,
             truth_source = source,
             locations = selected_locations,
@@ -329,19 +339,28 @@ load_truth <- function(truth_source = NULL,
             truth_end_date = truth_end_date,
             hub = hub
           )
-          return(data)
-        } else {
-          data <- load_from_hub_repo(
+          
+        } else if (data_location == "zoltar") {
+          data <- load_truth_zoltar(
             target_variable = target,
+            locations = locations,
+            as_of = as_of,
+            truth_end_date = truth_end_date,
+            hub = hub)
+          
+        } else {
+          # local hub repo or remote hub repo
+          data <- load_truth_hub_repo(
+            target_variable = target,
+            locations = locations,
             truth_source = source,
             repo_path = repo_path,
             temporal_resolution = temporal_resolution,
             truth_end_date = truth_end_date,
             data_location = data_location,
-            hub = hub
-          )
-          return(data)
-        }
+            hub = hub)
+        } 
+        return(data)
       }
     }
   )
@@ -430,7 +449,7 @@ get_truth_path <- function(source,
 #' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support `"JHU"` and `"HealthData`".
-#' @param locations vector of valid location code.
+#' @param locations vector of valid location code. Default to `NULL`.
 #' The US hub is using FIPS code and the ECDC hub is using country name abbreviation.
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format `'yyyy-mm-dd'`. For each spatial unit and temporal reporting unit, the last
@@ -444,13 +463,13 @@ get_truth_path <- function(source,
 #' @return a data.frame with columns `model`, `location`, `target_end_date`, `target_variable` 
 #' and `value`.
 #'
-load_from_coviddata <- function(target_variable,
-                                truth_source,
-                                locations = NULL,
-                                as_of = NULL,
-                                temporal_resolution,
-                                truth_end_date,
-                                hub = c("US", "ECDC")) {
+load_truth_coviddata <- function(target_variable,
+                                 truth_source,
+                                 locations = NULL,
+                                 as_of = NULL,
+                                 temporal_resolution,
+                                 truth_end_date,
+                                 hub = c("US", "ECDC")) {
 
   # create geography variable
   if (hub[1] == "ECDC") {
@@ -508,6 +527,8 @@ load_from_coviddata <- function(target_variable,
 #'
 #' @param target_variable string specifying target type It should be one or more of
 #' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
+#' @param locations vector of valid location code. Default to `NULL`.
+#' The US hub is using FIPS code and the ECDC hub is using country name abbreviation.
 #' @param truth_source character vector specifying where the truths will
 #' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData"` and `"ECDC"`.
 #' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
@@ -521,13 +542,14 @@ load_from_coviddata <- function(target_variable,
 #' @return a data.frame with columns `model`, `location`, `target_end_date`, `target_variable`
 #' and `value`.
 #'
-load_from_hub_repo <- function(target_variable,
-                               truth_source,
-                               repo_path,
-                               temporal_resolution,
-                               truth_end_date,
-                               data_location,
-                               hub = c("US", "ECDC")) {
+load_truth_hub_repo <- function(target_variable,
+                                locations = NULL,
+                                truth_source,
+                                repo_path,
+                                temporal_resolution,
+                                truth_end_date,
+                                data_location,
+                                hub = c("US", "ECDC")) {
 
   # construct file path and read file from path
   file_path <- get_truth_path(
@@ -593,6 +615,13 @@ load_from_hub_repo <- function(target_variable,
       }
     }
   }
+  
+  # filter location column
+  if (!is.null(locations)) {
+    truth_data <- truth_data %>%
+      dplyr::filter(location %in% locations)
+  }
+  
   return(truth_data)
 }
 
@@ -602,20 +631,21 @@ load_from_hub_repo <- function(target_variable,
 #' @param target_variable string specifying target type It should be one or more of
 #' `"cum death"` and `"inc death"`.
 #' @param locations vector of valid location code.
-#' If `NULL`, default to all locations with available forecasts.
+#' Default to `NULL`, all locations with available forecasts.
 #' US hub is using FIPS code and ECDC hub is using country name abbreviation.
-#' @param as_of character vector of "as of" dates to use for querying truths in
+#' @param as_of optional character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
+#' Default to `NULL`, the latest available date.
 #' @param hub character, which hub to use. Default is `"US"`. 
 #' `"ECDC"` is not available now.
 #' @return data.frame with columns `model`, `location`, `target_end_date`, `target_variable` 
 #' and `value`.
 #'
-load_from_zoltar <- function(target_variable,
-                             locations,
-                             as_of,
-                             hub = c("US", "ECDC")) {
+load_truth_zoltar <- function(target_variable,
+                              locations = NULL,
+                              as_of = NULL,
+                              hub = c("US", "ECDC")) {
   
   # set up Zoltar connection
   zoltar_connection <- setup_zoltar_connection(staging = FALSE)
@@ -633,14 +663,19 @@ load_from_zoltar <- function(target_variable,
     } else if ("cum death" %in% target_variable) {
       targets <- c(targets, paste(1:20, "wk ahead cum death"))
     } else {
-      warning("Warning in load_from_zoltar: Some of the specified target variables are not available in Zoltar.")
+      stop("Error in load_from_zoltar: The selected target variable is not available in Zoltar. 
+           Only `inc death` and `cum death` are supported.")
     }
   } else if (hub[1] == "ECDC") {
     stop("Error in load_from_zoltar: Truth data for ECDC hub is not available on zoltar.")
     
   }
   
+  print(locations)
+  print(targets)
+  
   truth <- zoltr::do_zoltar_query(zoltar_connection = zoltar_connection, 
+                                  targets = targets,
                                   project_url = project_url, 
                                   units = locations, 
                                   query_type = "truth",
@@ -648,7 +683,7 @@ load_from_zoltar <- function(target_variable,
   
   # reformat 
   truth <- truth %>%
-    dplyr::mutate(model = "Observed Data (Zoltar)") %>%
+    dplyr::mutate(model = "Observed Data (JHU)") %>%
     # keep only required columns
     dplyr::select(model, timezero, unit, target, value) %>%
     dplyr::rename(location = unit, 
@@ -666,7 +701,9 @@ load_from_zoltar <- function(target_variable,
     dplyr::arrange(value, desc(forecast_date)) %>%
     dplyr::slice(1) %>% 
     dplyr::ungroup() %>%
-    dplyr::select(-forecast_date)
+    dplyr::select(-forecast_date) %>%
+    # truth end date filter
+    dplyr::filter(target_end_date <= truth_end_date)
   
   
   return (truth)

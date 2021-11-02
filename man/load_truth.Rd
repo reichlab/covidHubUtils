@@ -25,7 +25,8 @@ If \code{NULL}, default for ECDC hub is \code{c("JHU")}.}
 \item{target_variable}{string specifying target type It should be one or more of
 \code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.
 If \code{NULL}, default for US hub is \code{c("inc case", "inc death", "inc hosp")}.
-If \code{NULL}, default for ECDC hub is \code{c("inc case", "inc death")}.}
+If \code{NULL}, default for ECDC hub is \code{c("inc case", "inc death")}.
+When \code{data_location = "zoltar"}, only \code{"cum death"} and \code{"inc death"} are supported.}
 
 \item{as_of}{character vector of "as of" dates to use for querying truths in
 format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
@@ -33,14 +34,15 @@ available data with an issue date on or before the given \code{as_of} date are r
 This is only available for \code{covidData} and \code{zoltar}now.}
 
 \item{truth_end_date}{date to include the last available truth point in 'yyyy-mm-dd' format.
-If \code{NULL},default to system date.}
+If \code{NULL}, default to system date.}
 
 \item{temporal_resolution}{character specifying temporal resolution
 to include: currently support \code{"weekly"} and \code{"daily"}.
 If \code{NULL}, default to \code{"weekly"} for cases and deaths, \code{"daily"} for hospitalizations.
 Weekly \code{temporal_resolution} will not be applied to \code{"inc hosp"} when
 multiple target variables are specified.
-\code{"ECDC"} truth data is weekly by default. Daily level data is not available.}
+\code{"ECDC"} truth data is weekly by default. Daily level data is not available.
+This parameter only used when \code{data_location} is not \code{"zoltar"}.}
 
 \item{locations}{vector of valid location code.
 If \code{NULL}, default to all locations with available forecasts.
@@ -87,8 +89,11 @@ be applied to \code{"inc hosp"} in all cases for the ECDC hub.
 \item When loading weekly data, if there are not enough observations for a week, the corresponding
 weekly count would be \code{NA} in resulting data frame.
 
-\item \code{as_of} is only supported when \code{data_location = "covidData"}. Otherwise, this function
-will return a warning.
+\item \code{as_of} is only supported when \code{data_location = "covidData"} and \code{data_location = "zoltar"}.
+Otherwise, this function will return a warning.
+
+\item When \code{data_location = "zoltar"},  only state and national level \code{"weekly"} data for \code{"cum death"} and \code{"inc death"}
+targets are available.
 }
 }
 \examples{
