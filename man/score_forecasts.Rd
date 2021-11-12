@@ -43,7 +43,7 @@ Other columns will contain scores dependent on metrics parameter:
 use_median_as_point is TRUE, and absolute error based on point forecast
 if use_median_as_point is FALSE
 \item \code{wis} is the weighted interval score
-\item \code{sharpness} the component of WIS made up of interval widths
+\item \code{dispersion} the component of WIS made up of interval widths
 \item \code{overprediction} the component of WIS made up of overprediction of intervals
 \item \code{underprediction} the component of WIS made up of underprediction of intervals
 \item \code{coverage_X} are prediction interval coverage at alpha level X

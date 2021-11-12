@@ -4,7 +4,7 @@
 \alias{pivot_forecasts_wider}
 \title{Return a data frame of forecasts with predictive quantiles in columns.}
 \usage{
-pivot_forecasts_wider(forecast_data, quantiles)
+pivot_forecasts_wider(forecast_data, quantiles = NULL)
 }
 \arguments{
 \item{forecast_data}{required data.frame with forecasts in the format returned

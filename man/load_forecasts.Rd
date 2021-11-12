@@ -15,7 +15,7 @@ load_forecasts(
   source = "zoltar",
   hub_repo_path,
   local_zoltpy_path,
-  zoltar_module_path,
+  zoltar_sqlite_file,
   data_processed_subpath = "data-processed/",
   as_of = NULL,
   hub = c("US", "ECDC"),
@@ -47,11 +47,13 @@ Default to \code{NULL} which stands for all valid targets.}
 \code{"local_hub_repo"}, \code{"zoltar"} and \code{"local_zoltar"}. Default to \code{"zoltar"}.}
 
 \item{hub_repo_path}{path to local clone of the forecast hub
-repository
-#' @param local_zoltpy_path path to local clone of zolpy repository.
+repository}
+
+\item{local_zoltpy_path}{path to local clone of zolpy repository.
 Only needed when \code{source} is \verb{"local_zoltar}.}
 
-\item{zoltar_module_path}{path to local zoltar module w.r.t. \code{local_zoltpy_path}.
+\item{zoltar_sqlite_file}{path to local sqlite file,
+either a relative path w.r.t. \code{local_zoltpy_path} or an absolute path.
 Only needed when \code{source} is \verb{"local_zoltar}.}
 
 \item{data_processed_subpath}{folder within the hub_repo_path that contains
@@ -77,12 +79,18 @@ data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \co
 \code{location_name}, \code{population}, \code{geo_type}, \code{geo_value}, \code{abbreviation}
 }
 \description{
-If \code{date_window_size} is 0, this function returns all available forecasts
+\itemize{
+\item If \code{date_window_size} is 0, this function returns all available forecasts
 submitted on every day in \code{dates}.
-}
-\details{
-If\code{date_window_size}  is not 0, this function will look for all the latest
+
+\item If\code{date_window_size}  is not 0, this function will look for all the latest
 forecasts that are submitted within window size for each day in  \code{dates}.
+
+\item If \code{source} is \code{local_zoltar}, a valid sqlite3 object is required.
+Please follow the instruction in \code{\link[=load_forecasts_local_zoltar]{load_forecasts_local_zoltar()}} to set up
+required environment.
+
+}
 }
 \examples{
 # Load forecasts from US forecast hub

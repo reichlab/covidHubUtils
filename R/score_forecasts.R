@@ -24,7 +24,7 @@
 #'  use_median_as_point is TRUE, and absolute error based on point forecast
 #'  if use_median_as_point is FALSE
 #'  - `wis` is the weighted interval score
-#'  - `sharpness` the component of WIS made up of interval widths
+#'  - `dispersion` the component of WIS made up of interval widths
 #'  - `overprediction` the component of WIS made up of overprediction of intervals
 #'  - `underprediction` the component of WIS made up of underprediction of intervals
 #'  - `coverage_X` are prediction interval coverage at alpha level X
@@ -220,11 +220,12 @@ score_forecasts <- function(
           -dplyr::starts_with("underprediction_"),
           -dplyr::starts_with("overprediction_")
         ) %>%
+        dplyr::rename(dispersion = sharpness)%>%
         dplyr::select(
           1:8, dplyr::starts_with("coverage_"),
           dplyr::starts_with("abs_error"),
           "n_interval_scores", "exists_interval_score_0", "wis",
-          "sharpness", "overprediction", "underprediction"
+          "dispersion", "overprediction", "underprediction"
         )
     }
   )
@@ -281,7 +282,7 @@ score_forecasts <- function(
         c("wis")
       },
       if (!("wis_components" %in% metrics)) {
-        c("sharpness", "overprediction", "underprediction")
+        c("dispersion", "overprediction", "underprediction")
       },
       if (!("interval_coverage" %in% metrics)) {
         dplyr::starts_with("coverage_")
@@ -312,3 +313,4 @@ score_forecasts <- function(
 
   return(scores)
 }
+ 

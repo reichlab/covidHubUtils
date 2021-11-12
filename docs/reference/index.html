@@ -96,6 +96,9 @@
     <li>
       <a href="../articles/covidHubUtils-overview.html">Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package</a>
     </li>
+    <li>
+      <a href="../articles/covidHubUtils-zoltar_sqlite_setup.html">Setup Instructions: Load Forecasts from Local Zoltar sqlite File</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -146,6 +149,21 @@
           <p><code><a href="aggregate_to_weekly.html">aggregate_to_weekly()</a></code> </p>
         </td>
         <td><p>Aggregate daily data to weekly data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="align_forecasts.html">align_forecasts()</a></code> </p>
+        </td>
+        <td><p>Add reference dates and relative horizons to a dataframe of forecasts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="align_forecasts_one_temporal_resolution.html">align_forecasts_one_temporal_resolution()</a></code> </p>
+        </td>
+        <td><p>Internal function that add reference dates and relative horizons
+to a dataframe of forecasts. This function requires that the forecasts
+data frame contains only forecasts one temporal_resolution, i.e., only
+at the daily resolution or the weekly resolution.</p></td>
       </tr><tr>
         
         <td>

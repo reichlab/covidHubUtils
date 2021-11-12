@@ -4,12 +4,7 @@
 \alias{get_model_metadata}
 \title{Get Hub model metadata}
 \usage{
-get_model_metadata(
-  models = NULL,
-  source = "local_hub_repo",
-  hub_repo_path,
-  as_of = Sys.Date()
-)
+get_model_metadata(models = NULL, source = "local_hub_repo", hub_repo_path)
 }
 \arguments{
 \item{models}{optional character vector of model abbreviations for
@@ -21,8 +16,6 @@ currently only supports \code{"local_hub_repo"}}
 
 \item{hub_repo_path}{path to local clone of the \code{reichlab/covid19-forecast-hub}
 repository}
-
-\item{as_of}{optional date specifying the version. defaults to current date.}
 }
 \value{
 data.frame with columns corresponding to any fieldnames in the

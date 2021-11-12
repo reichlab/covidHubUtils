@@ -8,9 +8,9 @@ plot_forecasts(
   forecast_data,
   truth_data = NULL,
   hub = c("US", "ECDC"),
-  models,
-  target_variable,
-  locations,
+  models = NULL,
+  target_variable = NULL,
+  locations = NULL,
   facet = NULL,
   facet_scales = "fixed",
   facet_nrow = NULL,
@@ -83,10 +83,10 @@ Optional if \code{truth_data} is provided.}
 \item{use_median_as_point}{logical for using median quantiles as point forecasts in plot.
 Default to \code{FALSE}.}
 
-\item{plot_truth}{logical for showing truth data in plot. Default to \code{FALSE}.}
+\item{plot_truth}{logical for showing truth data in plot. Default to \code{TRUE}.
+Data used in the plot is either \code{truth_data} or data loaded from \code{truth_source}.}
 
-\item{plot}{logical for showing the plot. Default to \code{TRUE}.
-Currently supports \code{"JHU"},\code{"USAFacts"}, \code{"NYTimes"}. Default to \code{"JHU"}.}
+\item{plot}{logical for showing the plot. Default to \code{TRUE}.}
 
 \item{fill_by_model}{logical for specifying colors in plot.
 If \code{TRUE}, separate colors will be used for each model.

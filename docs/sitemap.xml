@@ -7,6 +7,9 @@
     <loc>/articles/covidHubUtils-overview.html</loc>
   </url>
   <url>
+    <loc>/articles/covidHubUtils-zoltar_sqlite_setup.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -20,6 +23,12 @@
   </url>
   <url>
     <loc>/reference/aggregate_to_weekly.html</loc>
+  </url>
+  <url>
+    <loc>/reference/align_forecasts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/align_forecasts_one_temporal_resolution.html</loc>
   </url>
   <url>
     <loc>/reference/calc_cramers_dist_equal_space.html</loc>
@@ -109,6 +118,9 @@
     <loc>/reference/load_forecasts.html</loc>
   </url>
   <url>
+    <loc>/reference/load_forecasts_local_zoltar.html</loc>
+  </url>
+  <url>
     <loc>/reference/load_forecasts_repo.html</loc>
   </url>
   <url>
@@ -158,6 +170,9 @@
   </url>
   <url>
     <loc>/reference/preprocess_visualization_truth.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reformat_forecasts.html</loc>
   </url>
   <url>
     <loc>/reference/save_truth_for_zoltar.html</loc>

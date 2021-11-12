@@ -39,9 +39,9 @@
 #' Optional if `truth_data` is provided.
 #' @param use_median_as_point logical for using median quantiles as point forecasts in plot.
 #' Default to `FALSE`.
-#' @param plot_truth logical for showing truth data in plot. Default to `FALSE`.
+#' @param plot_truth logical for showing truth data in plot. Default to `TRUE`.
+#' Data used in the plot is either `truth_data` or data loaded from `truth_source`.
 #' @param plot logical for showing the plot. Default to `TRUE`.
-#' Currently supports `"JHU"`,`"USAFacts"`, `"NYTimes"`. Default to `"JHU"`.
 #' @param fill_by_model logical for specifying colors in plot.
 #' If `TRUE`, separate colors will be used for each model.
 #' If `FALSE`, only blues will be used for all models. Default to `FALSE`.
@@ -111,9 +111,9 @@
 plot_forecasts <- function(forecast_data,
                            truth_data = NULL,
                            hub = c("US", "ECDC"),
-                           models,
-                           target_variable,
-                           locations,
+                           models = NULL,
+                           target_variable= NULL,
+                           locations = NULL,
                            facet = NULL,
                            facet_scales = "fixed",
                            facet_nrow = NULL,
@@ -709,14 +709,14 @@ plot_forecasts <- function(forecast_data,
 plot_forecast <- function(forecast_data,
                           truth_data = NULL,
                           hub = hub,
-                          models,
+                          models = NULL,
                           target_variable,
-                          locations,
+                          locations = NULL,
                           facet = NULL,
                           facet_scales = "fixed",
                           facet_nrow = NULL,
                           facet_ncol = NULL,
-                          forecast_dates,
+                          forecast_dates = NULL,
                           intervals,
                           horizon,
                           truth_source,

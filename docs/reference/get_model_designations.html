@@ -97,6 +97,9 @@
     <li>
       <a href="../articles/covidHubUtils-overview.html">Tools for working with COVID-19 Forecast Hub data: a brief tour of the `covidHubUtils` R package</a>
     </li>
+    <li>
+      <a href="../articles/covidHubUtils-zoltar_sqlite_setup.html">Setup Instructions: Load Forecasts from Local Zoltar sqlite File</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -127,7 +130,7 @@
     <p>Get model designations from metadata</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_model_designations</span><span class='op'>(</span><span class='va'>models</span>, <span class='va'>source</span>, <span class='va'>hub_repo_path</span>, as_of <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_model_designations</span><span class='op'>(</span>models <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>source</span>, <span class='va'>hub_repo_path</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,11 +150,6 @@ either <code>"local_hub_repo"</code> or <code>"zoltar"</code></p></td>
       <th>hub_repo_path</th>
       <td><p>path to local clone of the <code>reichlab/covid19-forecast-hub</code>
 repository</p></td>
-    </tr>
-    <tr>
-      <th>as_of</th>
-      <td><p>optional date specifying the version. Only support versioned
-model designations in <code>"local_hub_repo"</code></p></td>
     </tr>
     </table>
 

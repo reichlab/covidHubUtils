@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-pivot_forecasts_wider <- function(forecast_data, quantiles) {
+pivot_forecasts_wider <- function(forecast_data, quantiles = NULL) {
 
   # validate quantiles
   if (!missing(quantiles)) {
