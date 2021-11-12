@@ -36,4 +36,18 @@ test_that("NULL input should throw NULL",{
   
 })
 
+test_that("IF Fips codes are entered, returns fips",{
+  test_data_US <- c("Hampshire County, MA","01001","New Jersey","United States")
+  expected_data_US <- c("US","34","25015","01001")
+  function_output <- name_to_fips(test_data_US, hub = c("US"))
+  #Assert statements to test the change
+  expect_equal(function_output , expected_data_US)
+  
+  test_data_ECDC <- c("BE","Spain","IT","United Kingdom")
+  expected_data_ECDC <- c("ES","GB","BE","IT")
+  function_output <- name_to_fips(test_data_ECDC, hub = c("ECDC"))
+  #Assert statements to test the change
+  expect_equal(function_output , expected_data_ECDC)
+}
+)
 

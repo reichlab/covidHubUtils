@@ -55,7 +55,6 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
 #' @param data data frame to append location data
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`
-#' @param locations vector of county or metropolitan area names to look up.
 #' @return A vector of FIPS or CBSA codes
 #' @export
 
@@ -63,7 +62,10 @@ name_to_fips <- function(data, hub = c("US", "ECDC")){
   if (is.null(data)){
     return(NULL)}
   if (hub[1] == "US") {
-    locations <- covidHubUtils::hub_locations
+    new_df <-  data.frame(covidHubUtils::hub_locations)%>%
+      mutate(full_location_name = fips)
+    df_US <- bind_rows(covidHubUtils::hub_locations,new_df)
+    locations <- df_US
     if(!all(data %in% locations$full_location_name)){
       stop("Error in name_to_fips: Please provide valid location name.eg: BUllock County,AL")
       
@@ -72,15 +74,17 @@ name_to_fips <- function(data, hub = c("US", "ECDC")){
     
   } 
   else if (hub[1] == "ECDC") {
-    locations <- covidHubUtils::hub_locations_ecdc
+    new_df <- data.frame(covidHubUtils::hub_locations_ecdc)%>%
+      mutate(location_name = location)
+    df_ECDC <- bind_rows(covidHubUtils::hub_locations_ecdc, new_df)
+    locations <- df_ECDC
     if(!all(data %in% locations$location_name)){
       stop("Error in name_to_fips: Please provide valid location name.")
       
     }
     return(locations[locations$location_name %in% data, ]$location)
     
-}} 
-
+  }} 
 
 
 

@@ -11,8 +11,6 @@ name_to_fips(data, hub = c("US", "ECDC"))
 
 \item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}}
-
-\item{locations}{vector of county or metropolitan area names to look up.}
 }
 \value{
 A vector of FIPS or CBSA codes
