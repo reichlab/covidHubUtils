@@ -116,11 +116,11 @@
 <a href="#reading-forecast-data" class="anchor"></a>Reading Forecast Data</h3>
 <ul>
 <li>
-<code><a href="reference/get_model_designations.html">get_model_designations(models, source, hub_repo_path, as_of)</a></code>: Assemble a data frame with columns model and designation. <strong>Note:</strong> Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository.</li>
+<code>get_model_designations(models, source, hub_repo_path, as_of)</code>: Assemble a data frame with columns model and designation. <strong>Note:</strong> Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository.</li>
 <li>
-<code><a href="reference/load_latest_forecasts.html">load_latest_forecasts(models, last_forecast_date, forecast_date_window_size, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</a></code>: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
+<code>load_latest_forecasts(models, last_forecast_date, forecast_date_window_size, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load the most recent forecasts in a specified time window either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
 <li>
-<code><a href="reference/load_forecasts.html">load_forecasts(models, forecast_dates, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</a></code>: Load all available forecasts either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
+<code>load_forecasts(models, forecast_dates, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load all available forecasts either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
 </ul>
 </div>
 <div id="reading-observed-truth-data" class="section level3">
@@ -128,7 +128,7 @@
 <a href="#reading-observed-truth-data" class="anchor"></a>Reading Observed “Truth” Data</h3>
 <ul>
 <li>
-<code><a href="reference/load_truth.html">load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</a></code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li>
+<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li>
 </ul>
 </div>
 <div id="plotting-forecasts" class="section level3">
@@ -136,7 +136,7 @@
 <a href="#plotting-forecasts" class="anchor"></a>Plotting Forecasts</h3>
 <ul>
 <li>
-<code><a href="reference/plot_forecasts.html">plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</a></code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li>
+<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li>
 </ul>
 </div>
 <div id="scoring-forecasts" class="section level3">
@@ -144,7 +144,7 @@
 <a href="#scoring-forecasts" class="anchor"></a>Scoring Forecasts</h3>
 <ul>
 <li>
-<code><a href="reference/score_forecasts.html">score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</a></code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li>
+<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li>
 </ul>
 </div>
 <div id="download-and-pre-process-truth-data" class="section level3">
@@ -152,21 +152,21 @@
 <a href="#download-and-pre-process-truth-data" class="anchor"></a>Download and pre-process “Truth” Data</h3>
 <ul>
 <li>
-<code><a href="reference/download_raw_nytimes.html">download_raw_nytimes(save_location)</a></code>: Download raw truth data from NYTimes and write to CSV files.</li>
+<code>download_raw_nytimes(save_location)</code>: Download raw truth data from NYTimes and write to CSV files.</li>
 <li>
-<code><a href="reference/download_raw_usafacts.html">download_raw_usafacts(save_location)</a></code>: Download raw truth data from USAFacts and write to CSV files.</li>
+<code>download_raw_usafacts(save_location)</code>: Download raw truth data from USAFacts and write to CSV files.</li>
 <li>
-<code><a href="reference/preprocess_nytimes.html">preprocess_nytimes(save_location)</a></code>: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
+<code>preprocess_nytimes(save_location)</code>: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
 <li>
-<code><a href="reference/preprocess_usafacts.html">preprocess_usafacts(save_location)</a></code>: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
+<code>preprocess_usafacts(save_location)</code>: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
 <li>
-<code><a href="reference/preprocess_jhu.html">preprocess_jhu(save_location)</a></code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
 <li>
-<code><a href="reference/preprocess_hospitalization.html">preprocess_hospitalization(save_location)</a></code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
 <li>
-<code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar(target, issue_date)</a></code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>preprocess_truth_for_zoltar(target, issue_date)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
 <li>
-<code><a href="reference/save_truth_for_zoltar.html">save_truth_for_zoltar(save_location)</a></code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>save_truth_for_zoltar(save_location)</code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
 </ul>
 </div>
 <div id="calculating-forecast-similarities" class="section level3">
@@ -174,11 +174,11 @@
 <a href="#calculating-forecast-similarities" class="anchor"></a>Calculating Forecast Similarities</h3>
 <ul>
 <li>
-<code><a href="reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space(q_F, tau_F, q_G, tau_G, approx_rule)</a></code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles.</li>
+<code>calc_cramers_dist_equal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles.</li>
 <li>
-<code><a href="reference/calc_cramers_dist_unequal_space.html">calc_cramers_dist_unequal_space(q_F, tau_F, q_G, tau_G, approx_rule)</a></code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of unequally-spaced quantiles.</li>
+<code>calc_cramers_dist_unequal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of unequally-spaced quantiles.</li>
 <li>
-<code><a href="reference/calc_cramers_dist_one_model_pair.html">calc_cramers_dist_one_model_pair(q_F, tau_F, q_G, tau_G, approx_rule)</a></code>: A wrapper function for <code><a href="reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code> and <code><a href="reference/calc_cramers_dist_unequal_space.html">calc_cramers_dist_unequal_space()</a></code>.</li>
+<code>calc_cramers_dist_one_model_pair(q_F, tau_F, q_G, tau_G, approx_rule)</code>: A wrapper function for <code><a href="reference/calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code> and <code><a href="reference/calc_cramers_dist_unequal_space.html">calc_cramers_dist_unequal_space()</a></code>.</li>
 </ul>
 </div>
 </div>
@@ -196,7 +196,7 @@
 <li>Update <code>DESCRIPTION</code> when you are using a new dependency in your script.</li>
 <li>Add yourself as a contributor in <code>DESCRIPTION</code>.</li>
 <li>
-<strong>Optional:</strong> You could also run <code><a href="https://devtools.r-lib.org//reference/check.html">devtools::check()</a></code> or <code><a href="https://devtools.r-lib.org//reference/test.html">devtools::test()</a></code> locally. Some tests require <code>covidData</code>. To get accurate test results, please make sure to install the latest daily updates from <code>covidData</code> by using <code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("reichlab/covidData")</a></code>.</li>
+<strong>Optional:</strong> You could also run <code><a href="https://devtools.r-lib.org//reference/check.html">devtools::check()</a></code> or <code><a href="https://devtools.r-lib.org//reference/test.html">devtools::test()</a></code> locally. Some tests require <code>covidData</code>. To get accurate test results, please make sure to install the latest daily updates from <code>covidData</code> by using <code>devtools::install_github("reichlab/covidData")</code>.</li>
 <li>Make sure your pull request passes all checks in Github Action.</li>
 </ul>
 </div>
