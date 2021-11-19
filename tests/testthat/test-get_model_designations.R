@@ -16,7 +16,8 @@ test_that("get_model_designations works: local directory, all models", {
     designation = c(
       "proposed", "primary", "primary", "secondary", "proposed",
       "other", "other"
-    )
+    ),
+    stringsAsFactors = FALSE
   )
 
   expect_equal(actual, expected)
@@ -31,7 +32,8 @@ test_that("get_model_designations works: local directory, specified models", {
 
   expected <- data.frame(
     model = c("COVIDhub-baseline", "COVIDhub-ensemble", "teamA-modelA"),
-    designation = c("proposed", "primary", "primary")
+    designation = c("proposed", "primary", "primary"),
+    stringsAsFactors = FALSE
   )
 
   expect_equal(actual, expected)
@@ -46,7 +48,8 @@ test_that("get_model_designations works: zoltar, specified models", {
 
   expected <- data.frame(
     model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-    designation = c("secondary", "primary")
+    designation = c("secondary", "primary"),
+    stringsAsFactors = FALSE
   )
 
   expect_true(dplyr::all_equal(actual, expected))
@@ -61,7 +64,8 @@ test_that("get_model_designations work: local hub repo, space in hub repo path",
 
   expected <- data.frame(
     model = c("teamA-modelA", "teamB-modelB"),
-    designation = c("primary", "secondary")
+    designation = c("primary", "secondary"),
+    stringsAsFactors = FALSE
   )
 
   expect_true(dplyr::all_equal(actual, expected))
