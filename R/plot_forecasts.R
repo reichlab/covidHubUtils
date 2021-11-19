@@ -222,7 +222,7 @@ plot_forecasts <- function(forecast_data,
       }
       # check if truth_data has data from specified location
       if (!all(locations %in% truth_data$location)) {
-        stop("Error in plot_forecasts: Please provide a valid location to plot.")
+        stop("Error in plot_forecasts: At least one forecasted location not available in truth_data.")
       }
       # check if truth_data has specified target variable
       if (!(target_variable %in% truth_data$target_variable)) {
