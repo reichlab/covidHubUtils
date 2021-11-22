@@ -85,5 +85,7 @@ Suggests:
     covidData,
     knitr,
     rmarkdown
+Remotes:
+    reichlab/zoltr
 Depends: 
     R (>= 3.5.0)
