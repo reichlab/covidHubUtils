@@ -40,6 +40,9 @@ Authors@R: c(
            role = c("aut")),
     person(given = "Aaron",
            family = "Gerding",
+           role = c("ctb")),
+    person(given = "Dasuni",
+           family = "Jayawardena",
            role = c("ctb"))
            )
 Description: 

@@ -7,7 +7,9 @@
 name_to_fips(data, hub = c("US", "ECDC"))
 }
 \arguments{
-\item{data}{data frame to append location data}
+\item{data}{a vector of strings for fips code, CBSA codes, location names
+such as "Hampshire COunty, MA", "United Kingdom","Alabama"
+for a US county location names must include state abbreviation.}
 
 \item{hub}{character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}}

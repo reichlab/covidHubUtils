@@ -40,7 +40,7 @@ jobs:
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
-          devtools::test_active_file("tests/testthat/test-names_to_fips.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-name_to_fips.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Get changed files
         id: changed-files

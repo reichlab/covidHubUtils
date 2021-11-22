@@ -18,7 +18,9 @@
 #' `"cum death"`, `"inc case"`, `"inc death"` and `"inc hosp"`.
 #' `"cum death"` and `"inc hosp"` are only available in forecasts from US hub now.
 #' If there is only one `target_variable` in `forecast_data`, this parameter is optional.
-#' @param locations vector of strings for fips code, `'US'` or abbreviation of European countries.
+#' @param locations a vector of strings for fips code, CBSA codes, location names
+#' such as "Hampshire COunty, MA", "United Kingdom","Alabama"
+#' for a US county location names must include state abbreviation.
 #' Default to all locations in `forecast_data`.
 #' @param facet interpretable facet option for ggplot. Function will error
 #' if multiple locations are passed in without location in the facet formula.
@@ -152,6 +154,9 @@ plot_forecasts <- function(forecast_data,
     models <- unique(forecast_data$model)
   }
 
+  # Convert location names to fips codes or country abbreviations
+  locations <- name_to_fips(locations, hub)
+  
   # optional locations parameter. Default to all locations in forecast_data
   if (missing(locations)) {
     locations <- unique(forecast_data$location)

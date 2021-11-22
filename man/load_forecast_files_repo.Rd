@@ -17,7 +17,10 @@ load_forecast_files_repo(
 \item{file_paths}{paths to csv forecast files to read in.  It is expected that
 the file names are in the format "*YYYY-MM-DD-<model_name>.csv".}
 
-\item{locations}{list of fips. Default to all locations with available forecasts.}
+\item{locations}{a vector of strings for fips code, CBSA codes, location names
+such as "Hampshire COunty, MA", "United Kingdom","Alabama"
+for a US county location names must include state abbreviation.
+list of fips. Default to all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
 and/or \code{"point"}. Default to all valid forecast types.}

@@ -10,7 +10,10 @@
 #' This function will return the latest forecasts
 #' for each sub-list of dates.
 #' Default to  `NULL` which would include all valid forecast dates in Zoltar.
-#' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
+#' @param locations a vector of strings for fips code, CBSA codes, location names
+#' such as "Hampshire COunty, MA", "United Kingdom","Alabama"
+#' for a US county location names must include state abbreviation.
+#' Default to all locations with available forecasts in Zoltar.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
@@ -64,6 +67,9 @@ load_forecasts_zoltar <- function(models = NULL,
     project_url = project_url
   )$timezero_date
 
+  # Convert location names to fips codes or country abbreviations
+  locations <- name_to_fips(locations, hub)
+  
   `%dopar%` <- foreach::`%dopar%`
 
   if (!is.null(forecast_dates)) {
@@ -71,7 +77,8 @@ load_forecasts_zoltar <- function(models = NULL,
       models <- all_models$model_abbr
       models <- sort(models, method = "radix")
     }
-
+    
+    
     # set 2 workers
     if (verbose) {
       cl <- parallel::makeCluster(2, setup_strategy = "sequential", outfile = "")

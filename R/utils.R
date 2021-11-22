@@ -52,7 +52,9 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
 
 #' Get FIPS or CBSA codes from county or metropolitan area locations
 #'
-#' @param data data frame to append location data
+#' @param data a vector of strings for fips code, CBSA codes, location names
+#' such as "Hampshire COunty, MA", "United Kingdom","Alabama"
+#' for a US county location names must include state abbreviation.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`
 #' @return A vector of FIPS or CBSA codes
