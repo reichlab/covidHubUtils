@@ -11,7 +11,7 @@ load_from_hub_repo(
   temporal_resolution,
   truth_end_date,
   data_location,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC", "FluSight")
 )
 }
 \arguments{
@@ -31,8 +31,8 @@ to include: one of \code{'daily'} or \code{'weekly'}}
 \item{data_location}{character specifying the location of truth data.
 Currently only supports \code{"local_hub_repo"} or \code{"remote_hub_repo"}.}
 
-\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
-\code{"ECDC"}}
+\item{hub}{character, which hub to use. Default is "US".
+Other options are "ECDC" and "FluSight".}
 }
 \value{
 a data.frame with columns \code{location}, \code{target_end_date}, \code{target_variable} and \code{value}

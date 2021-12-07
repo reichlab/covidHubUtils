@@ -49,7 +49,7 @@
 #' If not, helper function will append the default timezone to your input based on `hub` parameter.
 #' Default to NULL to load the latest version.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' from which to load forecasts. Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #' @param verbose logical to print out diagnostic messages. Default is `TRUE`.
 #'
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
@@ -85,8 +85,7 @@
 #'   source = "zoltar"
 #' )
 #' @export
-load_forecasts <- function(
-                           models = NULL,
+load_forecasts <- function(models = NULL,
                            dates = NULL,
                            date_window_size = 0,
                            locations = NULL,
@@ -98,7 +97,7 @@ load_forecasts <- function(
                            zoltar_sqlite_file,
                            data_processed_subpath = "data-processed/",
                            as_of = NULL,
-                           hub = c("US", "ECDC"),
+                           hub = c("US", "ECDC", "FluSight"),
                            verbose = TRUE) {
 
   # validate source
@@ -141,6 +140,9 @@ load_forecasts <- function(
       hub = hub
     )
   } else if (source == "zoltar") {
+    if (hub[1] == "FluSight") {
+      stop("Error in load_forecasts: FluSight data is not available on zoltar.")
+    }
     forecasts <- load_forecasts_zoltar(
       models = models,
       forecast_dates = all_forecast_dates,
@@ -152,6 +154,10 @@ load_forecasts <- function(
       hub = hub
     )
   } else if (source == "local_zoltar") {
+    if (hub[1] == "FluSight") {
+      stop("Error in load_forecasts: FluSight data is not available in local zoltar.")
+    }
+    
     if (missing(local_zoltpy_path) | missing(zoltar_sqlite_file)) {
       stop("Error in load_forecasts: Please provide local_zoltpy_path and zoltar_sqlite_file.")
     }
