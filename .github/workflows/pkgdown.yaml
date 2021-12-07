@@ -1,0 +1,43 @@
+on:
+  push:
+    branches:
+      - master
+
+name: pkgdown
+
+jobs:
+  pkgdown:
+    runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v1
+
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Install dependencies
+        run: |
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here", "pkgdown", "textshaping"))
+          remotes::install_deps(dependencies = NA)
+        shell: Rscript {0}
+      
+      - name: Install zoltr and scoringutils
+        run: |
+          devtools::install_github("reichlab/zoltr")
+          devtools::install_github("epiforecasts/scoringutils")
+          devtools::install()
+        shell: Rscript {0}
+
+      - name: Build site
+        run: |
+          Rscript -e 'pkgdown::build_site()'
+      
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with: 
+          add: 'docs'
+          message: "Build pkgdown site"
+          default_author: github_actions
+          push: true
