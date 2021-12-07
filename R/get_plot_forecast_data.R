@@ -23,11 +23,11 @@
 #' `"USAFacts"`, `"NYTimes"` and `"HealthData"`.
 #' Optional if `truth_data` is provided.
 #' @param  target_variable_to_plot string specifying target type. It should be one of
-#' `"cum death"`, `"inc case"`, `"inc death"` and `"inc hosp"`.
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"` and `"inc flu hosp"`.
 #' @param  truth_as_of the plot includes the truth data that would have been
 #' in real time as of the `truth_as_of` date.
-#' @param hub character, which hub to use. Default is `"US"`, other option is
-#' `"ECDC"`
+#' @param hub character, which hub to use. Default is `"US"`. 
+#' Other options are `"ECDC"` and `"FluSight"`.
 #'
 #' @return data.frame with columns `model`,
 #' `forecast_date`, `location`, `target_variable`, `type`, `quantile`, `value`,
@@ -45,7 +45,7 @@ get_plot_forecast_data <- function(forecast_data,
                                    truth_source,
                                    target_variable_to_plot,
                                    truth_as_of = NULL,
-                                   hub = c("US", "ECDC")) {
+                                   hub = c("US", "ECDC", "FluSight")) {
 
   # get lists of valid parameter choices based on `hub`
   if (hub[1] == "US") {
@@ -59,6 +59,10 @@ get_plot_forecast_data <- function(forecast_data,
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
     valid_target_variables <- c("inc case", "inc death")
     valid_truth_sources <- c("JHU", "jhu", "ECDC", "ecdc")
+  } else if (hub[1] == "FluSight") {
+    valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
+    valid_target_variables <- c("inc flu hosp")
+    valid_truth_sources <- c("HealthData")
   }
 
   # validate locations_to_plot
@@ -188,6 +192,9 @@ get_plot_forecast_data <- function(forecast_data,
       truth <- truth %>%
         dplyr::rename(abbr = location, location = full_location_name)
     } else if (hub[1] == "ECDC") {
+      truth <- truth %>%
+        dplyr::rename(abbr = location, location = location_name)
+    } else if (hub[1] == "FluSight") {
       truth <- truth %>%
         dplyr::rename(abbr = location, location = location_name)
     }
