@@ -26,6 +26,19 @@
 #' }
 "hub_locations_ecdc"
 
+#' Available locations in the FluSight Hub
+#'
+#' Data set with available locations for the FluSight hub
+#'
+#' @format A data frame with 54 rows and 4 columns:
+#' \describe{
+#'   \item{fips}{FIPS code}
+#'   \item{location_name}{Name of the location}
+#'   \item{abbreviation}{Location abbreviation}
+#'   \item{population}{Location population}
+#' }
+"hub_locations_ecdc"
+
 #' Available targets in the US Hub
 #'
 #' List with 441 elements
@@ -35,3 +48,8 @@
 #'
 #' List with 441 elements
 "hub_targets_ecdc"
+
+#' Available targets in the FluSight Hub
+#'
+#' List with 4 elements
+"hub_targets_flusight"
