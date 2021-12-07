@@ -54,12 +54,13 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
 #'
 #' @param data data frame to append location data
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`
+#' from which to load forecasts.
+#' Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #'
 #' @return original data with corresponding location information
 #' @export
 join_with_hub_locations <- function(data,
-                                    hub = c("US", "ECDC")) {
+                                    hub = c("US", "ECDC", "FluSight")) {
   if (hub[1] == "US") {
     data <- dplyr::left_join(data,
       covidHubUtils::hub_locations,
@@ -69,6 +70,11 @@ join_with_hub_locations <- function(data,
     data <- dplyr::left_join(data,
       covidHubUtils::hub_locations_ecdc,
       by = c("location")
+    )
+  } else if (hub[1] == "FluSight") {
+    data <- dplyr::left_join(data,
+                             covidHubUtils::hub_locations_flusight,
+                             by = c("fips")
     )
   }
   return(data)

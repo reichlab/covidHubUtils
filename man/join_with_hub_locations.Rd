@@ -5,13 +5,14 @@
 \title{Add stored information about location name and population by joining the
 data with the correct stored location data}
 \usage{
-join_with_hub_locations(data, hub = c("US", "ECDC"))
+join_with_hub_locations(data, hub = c("US", "ECDC", "FluSight"))
 }
 \arguments{
 \item{data}{data frame to append location data}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}}
+from which to load forecasts.
+Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 }
 \value{
 original data with corresponding location information

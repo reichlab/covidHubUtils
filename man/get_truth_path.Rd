@@ -9,7 +9,7 @@ get_truth_path(
   repo_path,
   target_variable,
   data_location,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC", "FluSight")
 )
 }
 \arguments{
@@ -24,8 +24,8 @@ be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and
 \item{data_location}{character specifying the location of truth data.
 Currently only supports "local_hub_repo" and "remote_hub_repo".}
 
-\item{hub}{character, which hub to use. Default is "US", other option is
-"ECDC"}
+\item{hub}{character, which hub to use. Default is "US".
+Other options are "ECDC" and "FluSight".}
 }
 \value{
 character of file path
