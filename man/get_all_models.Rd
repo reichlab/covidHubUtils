@@ -4,14 +4,19 @@
 \alias{get_all_models}
 \title{Get all valid model names}
 \usage{
-get_all_models(source = "zoltar", hub = c("US", "ECDC"), hub_repo_path)
+get_all_models(
+  source = "zoltar",
+  hub = c("US", "ECDC", "FluSight"),
+  hub_repo_path
+)
 }
 \arguments{
 \item{source}{string specifying where to get all valid model names
-Currently support \code{"local_hub_repo"}, \code{"remote_hub_repo"} and \code{"zoltar"}.}
+Currently support \code{"local_hub_repo"}, \code{"remote_hub_repo"} and \code{"zoltar"}.
+\code{"FluSight"}data is not supported on \code{"zoltar"} for now.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are "US" and "ECDC"}
+from which to load forecasts. Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 
 \item{hub_repo_path}{path to local clone of the \code{reichlab/covid19-forecast-hub}
 repository}
