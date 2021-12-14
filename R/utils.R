@@ -74,7 +74,7 @@ join_with_hub_locations <- function(data,
   } else if (hub[1] == "FluSight") {
     data <- dplyr::left_join(data,
                              covidHubUtils::hub_locations_flusight,
-                             by = c("fips")
+                             by = c("location" = "fips")
     )
   }
   return(data)
