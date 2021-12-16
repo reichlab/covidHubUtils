@@ -154,7 +154,11 @@ get_plot_forecast_data <- function(forecast_data,
   } else if (hub[1] == "ECDC") {
     forecasts <- forecasts %>%
       dplyr::rename(abbr = location, location = location_name)
+  } else if (hub[1] == "FluSight") {
+    forecasts <- forecasts %>%
+      dplyr::rename(abbr = location, location = location_name)
   }
+  
 
   if (plot_truth) {
     if (is.null(truth_data)) {
