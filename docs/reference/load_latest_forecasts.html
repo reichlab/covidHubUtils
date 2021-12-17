@@ -113,7 +113,12 @@ Please use load_forecasts() instead." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/reichlab/covidHubUtils/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -130,7 +135,7 @@ Please use load_forecasts() instead." />
     <h1>Load covid forecasts from local hub repo or Zoltar.
 Return the most recent forecast from each model within
 forecast_date_window_size days of the last_forecast_date</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/reichlab/covidHubUtils/blob/master/R/load_latest_forecasts.R'><code>R/load_latest_forecasts.R</code></a></small>
     <div class="hidden name"><code>load_latest_forecasts.Rd</code></div>
     </div>
 
@@ -233,56 +238,75 @@ temporal_resolution, target_variable, target_end_date, type, quantile, value,
 location_name, population, geo_type, geo_value, abbreviation</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
-  models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,
-  last_forecast_date <span class='op'>=</span> <span class='st'>"2020-12-07"</span>,
-  forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>,
-  locations <span class='op'>=</span> <span class='st'>"US"</span>,
-  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,
-  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,
-  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  as_of <span class='op'>=</span> <span class='cn'>NULL</span>,
-  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: `load_latest_forecasts()` was deprecated in covidHubUtils 0.1.5.</span>
-#&gt; <span class='warning'>This function has been superseded by the latest load_forecasts(). Please switch your code to using the new function.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `load_latest_forecasts_zoltar()` was deprecated in covidHubUtils 0.1.5.</span>
-#&gt; <span class='warning'>This function has been superseded by the latest load_forecasts_zoltar(). Please switch your code to using the new function.</span></div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='input'>
-<span class='va'>forecasts_ECDC</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
-  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,
-  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,
-  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,
-  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,
-  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,
-  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,
-  source <span class='op'>=</span> <span class='st'>"zoltar"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span></div><div class='input'>
-<span class='fu'>load_latest_forecasts</span><span class='op'>(</span>
-  models <span class='op'>=</span> <span class='st'>"Columbia_UNC-SurvCon"</span>,
-  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-01-03"</span>,
-  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,
-  as_of <span class='op'>=</span> <span class='st'>"2021-01-04"</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  location <span class='op'>=</span> <span class='st'>"US"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>get_token(): POST: https://zoltardata.com/api-token-auth/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/projects/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/models/</span></div><div class='output co'>#&gt; <span class='message'>get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 448 × 16</span>
-#&gt;    model        forecast_date location horizon temporal_resolut… target_variable
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          
-#&gt; <span style='color: #BCBCBC;'> 1</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 2</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 3</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 4</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 5</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 6</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 7</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 8</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'> 9</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #BCBCBC;'>10</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      
-#&gt; <span style='color: #949494;'># … with 438 more rows, and 10 more variables: target_end_date &lt;date&gt;,</span>
-#&gt; <span style='color: #949494;'>#   type &lt;chr&gt;, quantile &lt;dbl&gt;, value &lt;dbl&gt;, location_name &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   full_location_name &lt;chr&gt;</span></div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>forecasts</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='st'>"COVIDhub-ensemble"</span>,</span>
+<span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='st'>"2020-12-07"</span>,</span>
+<span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>6</span>,</span>
+<span class='r-in'>  locations <span class='op'>=</span> <span class='st'>"US"</span>,</span>
+<span class='r-in'>  types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"point"</span>, <span class='st'>"quantile"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc case"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,</span>
+<span class='r-in'>  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
+<span class='r-in'>  as_of <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"US"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`load_latest_forecasts()` was deprecated in covidHubUtils 0.1.5.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> This function has been superseded by the latest load_forecasts(). Please switch your code to using the new function.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>This warning is displayed once every 8 hours.</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`load_latest_forecasts_zoltar()` was deprecated in covidHubUtils 0.1.5.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> This function has been superseded by the latest load_forecasts_zoltar(). Please switch your code to using the new function.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>This warning is displayed once every 8 hours.</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>forecasts_ECDC</span> <span class='op'>&lt;-</span> <span class='fu'>load_latest_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ILM-EKF"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  hub <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ECDC"</span>, <span class='st'>"US"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-03-08"</span>,</span>
+<span class='r-in'>  forecast_date_window_size <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>  locations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GB"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"wk ahead inc death"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/models/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>load_latest_forecasts</span><span class='op'>(</span></span>
+<span class='r-in'>  models <span class='op'>=</span> <span class='st'>"Columbia_UNC-SurvCon"</span>,</span>
+<span class='r-in'>  last_forecast_date <span class='op'>=</span> <span class='st'>"2021-01-03"</span>,</span>
+<span class='r-in'>  source <span class='op'>=</span> <span class='st'>"zoltar"</span>,</span>
+<span class='r-in'>  as_of <span class='op'>=</span> <span class='st'>"2021-01-04"</span>,</span>
+<span class='r-in'>  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
+<span class='r-in'>  location <span class='op'>=</span> <span class='st'>"US"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 448 × 16</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    model        forecast_date location horizon temporal_resolut… target_variable</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> Columbia_UN… 2021-01-03    US       1       wk                cum death      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 438 more rows, and 10 more variables: target_end_date &lt;date&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   type &lt;chr&gt;, quantile &lt;dbl&gt;, value &lt;dbl&gt;, location_name &lt;chr&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   full_location_name &lt;chr&gt;</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -294,7 +318,7 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
+  <p>Developed by Yijin Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">

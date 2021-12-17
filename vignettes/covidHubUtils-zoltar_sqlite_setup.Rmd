@@ -32,10 +32,18 @@ pip3 install pipenv
 4. Clone the `zoltpy` package from [here](https://github.com/reichlab/zoltpy).
 5. In the cloned `zoltpy` directory, run:
 ```bash
+pipenv --three
+```
+6. Start your virtual environment via 
+```bash
+pipenv shell
+```
+7. In your virtual environment, install all required packages with 
+```bash
 pipenv install
 ```
-6. Install R libraries: `DBI` and `RSQLite` in Rstudio
-7. Test installation
+8. Install R libraries: `DBI` and `RSQLite` in Rstudio
+9. Test installation
     - Download a `zoltar` sqlite file form [here](https://github.com/reichlab/covidHubUtils/blob/master/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3).
     - Run a test call of `covidHubUtils::load_forecasts()` with your actual absolute or relative paths. For example: 
 ```{r message=FALSE, eval=FALSE}

@@ -24,7 +24,8 @@ test_that("get_model_metadata works: local directory, all models", {
     ),
     ensemble_of_hub_models = c(
       NA, TRUE, NA, NA, NA, NA, NA
-      )
+    ),
+    stringsAsFactors = FALSE
   )
 
   expect_equal(actual, expected)
@@ -43,7 +44,8 @@ test_that("get_model_metadata works: local directory, specified models", {
     model = c("COVIDhub-baseline", "COVIDhub-ensemble", "teamA-modelA"),
     designation = c("proposed", "primary", "primary"),
     website_url = c(NA, "https://covid19forecasthub.org/", NA),
-    ensemble_of_hub_models = c(NA, TRUE, NA)
+    ensemble_of_hub_models = c(NA, TRUE, NA),
+    stringsAsFactors = FALSE
   )
 
   expect_equal(actual, expected)
@@ -60,7 +62,8 @@ test_that("get_model_metadata works: local hub repo, space in hub repo path", {
     team_name = c(rep("test team name", 2)),
     model_name = c("A", "teamB"),
     model = c("teamA-modelA", "teamB-modelB"),
-    designation = c("primary", "secondary")
+    designation = c("primary", "secondary"),
+    stringsAsFactors = FALSE
   )
 
   expect_true(dplyr::all_equal(actual, expected))

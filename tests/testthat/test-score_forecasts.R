@@ -9,7 +9,8 @@ test_that("missing forecasts should throw error", {
     target_variable = c("inc death", "inc death"),
     target_end_date = c(ymd(20200101), ymd(20200108)),
     location = c("01", "01"),
-    value = c(1, 2)
+    value = c(1, 2),
+    stringsAsFactors = FALSE
   )
   
   expect_error(score_forecasts(truth = test_truth))
@@ -21,7 +22,8 @@ test_that("null forecasts should throw error", {
     target_variable = c("inc death", "inc death"),
     target_end_date = c(ymd(20200101), ymd(20200108)),
     location = c("01", "01"),
-    value = c(1, 2)
+    value = c(1, 2),
+    stringsAsFactors = FALSE
   )
   
   expect_error(score_forecasts(forecasts = NULL, truth = test_truth))
