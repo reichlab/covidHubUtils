@@ -21,6 +21,10 @@ jobs:
           install.packages(c("remotes","devtools", "rcmdcheck", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
+      - name: Install TeX binary
+        run: |
+          devtools::install_github("yihui/tinytex")
+        shell: Rscript {0}
       - name: Install zoltr and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
