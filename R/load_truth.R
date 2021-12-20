@@ -620,9 +620,7 @@ load_from_hub_repo <- function(target_variable,
     if (temporal_resolution == "weekly" &
       ((hub[1] == "ECDC") |
         # in the US, only loading daily incident hospitalization truth data
-        (hub[1] == "US" & target_variable != "inc hosp")|
-        # in FluSight, inc hosp data is already at weekly level
-        (hub[1] == "FluSight" & target_variable == "inc hosp"))) {
+        (hub[1] == "US" & target_variable != "inc hosp"))) {
       if (unlist(strsplit(target_variable, " "))[1] == "cum") {
         # only keep weekly data
         truth_data <- dplyr::filter(

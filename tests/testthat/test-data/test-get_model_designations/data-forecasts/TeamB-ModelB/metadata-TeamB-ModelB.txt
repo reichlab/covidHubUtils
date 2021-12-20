@@ -1,0 +1,6 @@
+team_name: TeamB
+model_name: ModelB
+model_abbr: TeamB-ModelB
+website_url: https://covid19forecasthub.org/
+team_model_designation: primary
+ensemble_of_hub_models: false
