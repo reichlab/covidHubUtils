@@ -7,7 +7,7 @@
 plot_forecasts(
   forecast_data,
   truth_data = NULL,
-  hub = c("US", "ECDC"),
+  hub = c("US", "ECDC", "FluSight"),
   models = NULL,
   target_variable = NULL,
   locations = NULL,
@@ -42,13 +42,14 @@ It needs to have columns \code{model}, \code{target_variable},
 \code{Model} column can be \code{"Observed Data (a truth source)"}.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
+from which to load forecasts.
+Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 
 \item{models}{vector of strings specifying models to plot.
 Default to all models in \code{forecast_data}.}
 
 \item{target_variable}{string specifying target type. It should be one of
-\code{"cum death"}, \code{"inc case"}, \code{"inc death"} and \code{"inc hosp"}.
+\code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"} and \code{"inc flu hosp"}.
 \code{"cum death"} and \code{"inc hosp"} are only available in forecasts from US hub now.
 If there is only one \code{target_variable} in \code{forecast_data}, this parameter is optional.}
 

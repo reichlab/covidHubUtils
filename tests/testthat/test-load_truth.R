@@ -60,6 +60,19 @@ test_that("default selections from remote hub repo", {
       expected_ecdc_inc_hosp
     )
   ))
+  
+  # Flu hub
+  actual_flu <- load_truth(hub = "FluSight")
+  # weekly
+  expected_flu_inc_flu_hosp <- load_truth(
+    truth_source = c("HealthData"),
+    target_variable = c("inc flu hosp"),
+    hub = c("FluSight")
+  )
+  
+  expect_true(dplyr::all_equal(
+    actual_flu,
+    expected_flu_inc_flu_hosp))
 })
 
 test_that("comapre target variables and models on default selections from remote hub 
@@ -127,6 +140,16 @@ test_that("load one target variable from multiple sources from remote hub repo",
       "Observed Data (JHU)"
     )
   )
+  
+  # Flu hub
+  actual_flu <- load_truth(
+    truth_source = c("HealthData"),
+    target_variable = c("inc flu hosp"),
+    hub = c("FluSight")
+  )
+  
+  expect_equal(unique(actual_flu$target_variable), c("inc flu hosp"))
+  expect_equal(unique(actual_flu$model), c("Observed Data (HealthData)"))
 })
 
 test_that("handles `inc hosp` and `HealthData` source in US hub correctly when loading
@@ -212,3 +235,13 @@ test_that("expects warnings when loading versioned data from hub repo", {
     as_of = "2020-11-23"
   ))
 })
+
+test_that("expects error when loading flu hub data from covidData", {
+  expect_error(data <- load_truth(
+    hub = c("FluSight"),
+    data_location = "covidData"
+  ))
+})
+
+
+
