@@ -19,13 +19,13 @@
 #' daily incident COVID hospitalization counts and weekly incident Influenza hospitalization.
 #'
 #'   \item For the US hub, weekly temporal resolution will be applied to `"inc hosp"` if the user specifies `"inc hosp"`
-#' as the only `target_variable`.On the other hand, `temporal_resolution` will
+#' as the only `target_variable`. On the other hand, `temporal_resolution` will
 #' be applied to `"inc hosp"` in all cases for the ECDC hub.
 #'
-#'  \item When aggregating daily data, if there are not enough observations for a week, the corresponding
+#'   \item When aggregating daily data, if there are not enough observations for a week, the corresponding
 #' weekly count would be `NA` in resulting data frame.
 #'
-#'  \item `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
+#'   \item `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
 #' will return a warning.
 #' }
 #'
@@ -54,7 +54,7 @@
 #' @param temporal_resolution character specifying temporal resolution
 #' to include: currently support `"weekly"` and `"daily"`.
 #' If `NULL`, default to `"weekly"` for cases and deaths, `"daily"` for hospitalizations.
-#' Weekly `temporal_resolution` will not be applied to `"inc hosp"` and `"inc fluhosp"`when
+#' Weekly `temporal_resolution` will not be applied to `"inc hosp"` and `"inc flu hosp"`when
 #' multiple target variables are specified.
 #' `"ECDC"` truth data is weekly by default. Daily level data is not available.
 #' @param local_repo_path path to local clone of the hub repository. 
@@ -191,6 +191,12 @@ load_truth <- function(truth_source = NULL,
         several.ok = TRUE
       )
     }
+    
+    if (all("ECDC" %in% truth_source) &
+        (any(target_variable %in% c("inc case", "inc death")))) {
+      stop("Error in load_truth: ECDC case and death data are not available.")
+    }
+    
     # extra checks for truth source if target is inc hosp
     if ("inc hosp" %in% target_variable) {
       if (!"ECDC" %in% truth_source & data_location != "covidData") {
@@ -279,13 +285,7 @@ load_truth <- function(truth_source = NULL,
       several.ok = FALSE
     )
   }
-
-  if (all("ECDC" %in% truth_source) &
-    (any(target_variable %in% c("inc case", "inc death"))) &
-    (temporal_resolution == "daily")) {
-    warning("Warning in load_truth: ECDC case and death data will be weekly.")
-  }
-
+  
   # validate truth source for covidData
   if (data_location == "covidData") {
     if (hub[1] == "US") {
