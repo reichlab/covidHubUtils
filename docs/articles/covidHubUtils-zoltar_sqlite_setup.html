@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -65,7 +61,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/reichlab/covidHubUtils/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -79,24 +82,24 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Setup Instructions: Load Forecasts from Local Zoltar sqlite File</h1>
-                        <h4 class="author">Serena Wang, Matthew Cornell, Yuxin David Huang</h4>
+                        <h4 data-toc-skip class="author">Serena Wang, Matthew Cornell, Yuxin David Huang</h4>
             
-            <h4 class="date">25 October 2021</h4>
+            <h4 data-toc-skip class="date">28 January 2022</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/reichlab/covidHubUtils/blob/HEAD/vignettes/covidHubUtils-zoltar_sqlite_setup.Rmd" class="external-link"><code>vignettes/covidHubUtils-zoltar_sqlite_setup.Rmd</code></a></small>
       <div class="hidden name"><code>covidHubUtils-zoltar_sqlite_setup.Rmd</code></div>
 
     </div>
 
     
     
-<div id="instructions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#instructions" class="anchor"></a>Instructions</h1>
+<div class="section level2">
+<h2 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
+</h2>
 <p>We now support loading forecast from a local zoltar sqlite file in <code>covidHubUtils</code>. To use this functionality, you need to set <code>source = "local_zoltar"</code> and provide the <code>local_zoltpy_path</code> and <code>zoltar_sqlite_file</code> parameters in <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code>.</p>
 <p>Please follow these steps to set up the required environment prior to using this functionality for the first time:</p>
 <blockquote>
-<p>Note: This feature is <a href="https://docs.zoltardata.com/forecasts/#download-the-zoltar-database-for-local-use-beta">currently beta</a>, so please <a href="https://docs.zoltardata.com/#contact">contact us</a> to create an sqlite file for you that contains the forecasts you want to work with.</p>
+<p>Note: This feature is <a href="https://docs.zoltardata.com/forecasts/#download-the-zoltar-database-for-local-use-beta" class="external-link">currently beta</a>, so please <a href="https://docs.zoltardata.com/#contact" class="external-link">contact us</a> to create an sqlite file for you that contains the forecasts you want to work with.</p>
 </blockquote>
 <ol style="list-style-type: decimal">
 <li>Install Python 3.6+.</li>
@@ -104,20 +107,28 @@
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">pip3</span> install pipenv</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Set up your R environment so that the <code>PATH</code> environment variable includes both the <code>python3</code> and <code>pipenv</code> commands. You can read more about R and environment variables <a href="https://db.rstudio.com/best-practices/managing-credentials/#use-environment-variables">here</a>.</p></li>
-<li><p>Clone the <code>zoltpy</code> package from <a href="https://github.com/reichlab/zoltpy">here</a>.</p></li>
+<li><p>Set up your R environment so that the <code>PATH</code> environment variable includes both the <code>python3</code> and <code>pipenv</code> commands. You can read more about R and environment variables <a href="https://db.rstudio.com/best-practices/managing-credentials/#use-environment-variables" class="external-link">here</a>.</p></li>
+<li><p>Clone the <code>zoltpy</code> package from <a href="https://github.com/reichlab/zoltpy" class="external-link">here</a>.</p></li>
 <li><p>In the cloned <code>zoltpy</code> directory, run:</p></li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">pipenv</span> install</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">pipenv</span> --three</span></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
+<li>Start your virtual environment via</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">pipenv</span> shell</span></code></pre></div>
+<ol start="7" style="list-style-type: decimal">
+<li>In your virtual environment, install all required packages with</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">pipenv</span> install</span></code></pre></div>
+<ol start="8" style="list-style-type: decimal">
 <li>Test installation
 <ul>
-<li>Download a <code>zoltar</code> sqlite file form <a href="https://github.com/reichlab/covidHubUtils/blob/master/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3">here</a>.</li>
+<li>Download a <code>zoltar</code> sqlite file form <a href="https://github.com/reichlab/covidHubUtils/blob/master/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3" class="external-link">here</a>.</li>
 <li>Run a test call of <code><a href="../reference/load_forecasts.html">covidHubUtils::load_forecasts()</a></code> with your actual absolute or relative paths. For example:</li>
 </ul>
 </li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">covidHubUtils</span><span class="fu">::</span><span class="fu"><a href="../reference/load_forecasts.html">load_forecasts</a></span><span class="op">(</span>
   models <span class="op">=</span> <span class="st">"COVIDhub-ensemble"</span>, 
   locations <span class="op">=</span> <span class="st">"US"</span>, 
@@ -138,11 +149,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
+  <p></p>
+<p>Developed by Yijin Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -150,6 +163,8 @@
 
   
 
+
+  
 
   </body>
 </html>

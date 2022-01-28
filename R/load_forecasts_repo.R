@@ -25,7 +25,7 @@
 #' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
 #' Default to `NULL` which stands for all valid targets.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' from which to load forecasts. Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #' @param verbose logical to print out diagnostic messages. Default is `TRUE`
 #'
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
@@ -33,14 +33,13 @@
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @export
-load_forecasts_repo <- function(
-                                file_path,
+load_forecasts_repo <- function(file_path,
                                 models = NULL,
                                 forecast_dates = NULL,
                                 locations = NULL,
                                 types = NULL,
                                 targets = NULL,
-                                hub = c("US", "ECDC"),
+                                hub = c("US", "ECDC", "FluSight"),
                                 verbose = TRUE) {
 
   # validate file path to data-processed folder
@@ -71,6 +70,8 @@ load_forecasts_repo <- function(
     valid_location_codes <- covidHubUtils::hub_locations$fips
   } else if (hub[1] == "ECDC") {
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+  } else if (hub[1] == "FluSight") {
+    valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
   }
 
   # validate locations
@@ -92,6 +93,8 @@ load_forecasts_repo <- function(
     all_valid_targets <- covidHubUtils::hub_targets_us
   } else if (hub[1] == "ECDC") {
     all_valid_targets <- covidHubUtils::hub_targets_ecdc
+  } else if (hub[1] == "FluSight") {
+    all_valid_targets <- covidHubUtils::hub_targets_flusight
   }
 
   # validate targets
@@ -209,7 +212,7 @@ load_forecast_files_repo <- function(file_paths,
                                      locations = NULL,
                                      types = NULL,
                                      targets = NULL,
-                                     hub = c("US", "ECDC")) {
+                                     hub = c("US", "ECDC", "FluSight")) {
 
   # validate file_paths exist
   if (is.null(file_paths) | missing(file_paths)) {

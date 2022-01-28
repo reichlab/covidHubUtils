@@ -5,24 +5,27 @@
 #' weekly incident deaths (JHU) and daily incident hospitalization (HealthData) at all county, state and
 #' national level. For the ECDC hub, the default resulting data.frame contains data for weekly incident cases (JHU),
 #' weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries.
+#' For the FluSight hub, the default resulting data.frame contains data for weekly incident hospitalization (HealthData)
+#' for all US locations.
 #'
 #' @details
 #' \itemize{
-#'   \item`"inc hosp"` is only available from `"HealthData"` and `"ECDC"` and this function is not loading
-#' data for other target variables from `"HealthData"`.
+#'   \item`"inc hosp"` is only available from `"HealthData"` and `"ECDC"`.`"inc flu hosp"` is only available from `"HealthData"`.
+#'   
+#'   \item This function is not loading data for other target variables from `"HealthData"`.
 #'
 #'   \item When loading data for multiple target variables for the US hub, `temporal_resolution` will be applied
-#' to all target variables but `"inc hosp"`. In that case, the function will return
-#' daily incident hospitalization counts along with other data.
+#' to all target variables but `"inc hosp"` and `"inc flu hosp"`. In that case, the function will return
+#' daily incident COVID hospitalization counts and weekly incident Influenza hospitalization.
 #'
 #'   \item For the US hub, weekly temporal resolution will be applied to `"inc hosp"` if the user specifies `"inc hosp"`
-#' as the only `target_variable`.On the other hand, `temporal_resolution` will
+#' as the only `target_variable`. On the other hand, `temporal_resolution` will
 #' be applied to `"inc hosp"` in all cases for the ECDC hub.
 #'
-#'  \item When loading weekly data, if there are not enough observations for a week, the corresponding
+#'   \item When aggregating daily data, if there are not enough observations for a week, the corresponding
 #' weekly count would be `NA` in resulting data frame.
 #'
-#'  \item `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
+#'   \item `as_of` is only supported when `data_location = "covidData"`. Otherwise, this function
 #' will return a warning.
 #' }
 #'
@@ -30,10 +33,12 @@
 #' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
 #' If `NULL`, default for US hub is `c("JHU", "HealthData")`.
 #' If `NULL`, default for ECDC hub is `c("JHU")`.
+#' If `NULL`, default for FluSight hub is `c("HealthData")`.
 #' @param target_variable string specifying target type It should be one or more of
 #' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' If `NULL`, default for US hub is `c("inc case", "inc death", "inc hosp")`.
 #' If `NULL`, default for ECDC hub is `c("inc case", "inc death")`.
+#' If `NULL`, default for FluSight hub is `c("inc flu hosp")`.
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
@@ -50,13 +55,13 @@
 #' @param temporal_resolution character specifying temporal resolution
 #' to include: currently support `"weekly"` and `"daily"`.
 #' If `NULL`, default to `"weekly"` for cases and deaths, `"daily"` for hospitalizations.
-#' Weekly `temporal_resolution` will not be applied to `"inc hosp"` when
+#' Weekly `temporal_resolution` will not be applied to `"inc hosp"` and `"inc flu hosp"`when
 #' multiple target variables are specified.
 #' `"ECDC"` truth data is weekly by default. Daily level data is not available.
-#' @param local_repo_path path to local clone of the `reichlab/covid19-forecast-hub`
-#' repository. Only used when data_location is `"local_hub_repo"`
-#' @param hub character, which hub to use. Default is `"US"`, other option is
-#' `"ECDC"`
+#' @param local_repo_path path to local clone of the hub repository. 
+#' Only used when data_location is `"local_hub_repo"`
+#' @param hub character, which hub to use. Default is "US". 
+#' Other options are "ECDC" and "FluSight".
 #'
 #' @return data.frame with columns `model`, `target_variable`, `target_end_date`,
 #' `location`, `value`, `location_name`, `population` and extra information in these cases
@@ -90,7 +95,7 @@ load_truth <- function(truth_source = NULL,
                        locations = NULL,
                        data_location = NULL,
                        local_repo_path = NULL,
-                       hub = c("US", "ECDC")) {
+                       hub = c("US", "ECDC", "FluSight")) {
 
   # validate data location
   if (!is.null(data_location)) {
@@ -190,6 +195,12 @@ load_truth <- function(truth_source = NULL,
         several.ok = TRUE
       )
     }
+    
+    if (all("ECDC" %in% truth_source) &
+        (any(target_variable %in% c("inc case", "inc death")))) {
+      stop("Error in load_truth: ECDC case and death data are not available.")
+    }
+    
     # extra checks for truth source if target is inc hosp
     if ("inc hosp" %in% target_variable) {
       if (!"ECDC" %in% truth_source & data_location != "covidData") {
@@ -209,6 +220,35 @@ load_truth <- function(truth_source = NULL,
 
     # store path of remote repo
     remote_repo_path <- "https://raw.githubusercontent.com/epiforecasts/covid19-forecast-hub-europe/main"
+  } else if (hub[1] == "FluSight"){
+    if (is.null(target_variable)) {
+      target_variable <- "inc flu hosp"
+    } else {
+      # validate target variable
+      target_variable <- match.arg(
+        target_variable,
+        choices = c("inc flu hosp"),
+        several.ok = FALSE
+      )
+    }
+    
+    if (is.null(truth_source)) {
+      truth_source <- "HealthData"
+    } else {
+      # validate truth source
+      truth_source <- match.arg(
+        truth_source,
+        choices = c("HealthData"),
+        several.ok = FALSE
+      )
+    }
+    
+    # get list of all valid locations and codes
+    valid_locations <- covidHubUtils::hub_locations_flusight
+    valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
+    
+    # store path of remote repo
+    remote_repo_path <- "https://raw.githubusercontent.com/cdcepi/Flusight-forecast-data/master"
   }
 
   # validate truth end date
@@ -238,24 +278,23 @@ load_truth <- function(truth_source = NULL,
     } else {
       temporal_resolution <- "weekly"
     }
+  } else if(hub[1] == "FluSight") {
+    temporal_resolution <- match.arg(temporal_resolution,
+                                     choices = c("weekly"),
+                                     several.ok = FALSE
+    )
   } else {
     temporal_resolution <- match.arg(temporal_resolution,
       choices = c("weekly", "daily"),
       several.ok = FALSE
     )
   }
-
-  if (all("ECDC" %in% truth_source) &
-    (any(target_variable %in% c("inc case", "inc death"))) &
-    (temporal_resolution == "daily")) {
-    warning("Warning in load_truth: ECDC case and death data will be weekly.")
-  }
-
+  
   # validate truth source for covidData
   if (data_location == "covidData") {
     if (hub[1] == "US") {
       if ("USAFacts" %in% truth_source || "NYTimes" %in% truth_source) {
-        stop("Error in load_truth: The truth source you selected is not supported in for US data in covidData.")
+        stop("Error in load_truth: The truth source you selected is not supported for US data in covidData.")
       }
     } else if (hub[1] == "ECDC") {
       if ("ECDC" %in% truth_source) {
@@ -265,9 +304,11 @@ load_truth <- function(truth_source = NULL,
           warning("Warning in load_truth: inc hosp data from ECDC is not available in covidData.
                   Will skip the query for this specific truth data.")
         } else {
-          stop("Error in load_truth: The truth source you selected is not supported in for ECDC data in covidData.")
+          stop("Error in load_truth: The truth source you selected is not supported for ECDC data in covidData.")
         }
       }
+    } else if (hub[1] == "FluSight"){
+      stop("Error in load_truth: FluSight truth data is not available in covidData.")
     }
   }
 
@@ -313,7 +354,8 @@ load_truth <- function(truth_source = NULL,
     all_combinations$truth_source, all_combinations$target_variable,
     function(source, target) {
       if ((source %in% c("HealthData", "ECDC") & target == "inc hosp") |
-        (source != "HealthData" & target != "inc hosp")) {
+        (source != "HealthData" & target != "inc hosp")|
+        (target == "inc flu hosp")) {
         if (data_location == "covidData") {
           if (target == "inc hosp") {
             temporal_resolution <- "daily"
@@ -363,7 +405,7 @@ load_truth <- function(truth_source = NULL,
 
   # merge with location data to get populations and location names
   # for US the location codes are stored in a column called 'fips'
-  if (hub[1] == "US") {
+  if (hub[1] == "US" | hub[1] == "FluSight") {
     truth <- truth %>%
       dplyr::left_join(valid_locations, by = c("location" = "fips"))
   } else {
@@ -384,8 +426,8 @@ load_truth <- function(truth_source = NULL,
 #' "cum death", "inc case", "inc death", "inc hosp".
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports "local_hub_repo" and "remote_hub_repo".
-#' @param hub character, which hub to use. Default is "US", other option is
-#' "ECDC"
+#' @param hub character, which hub to use. Default is "US". 
+#' Other options are "ECDC" and "FluSight".
 #'
 #' @return character of file path
 
@@ -393,7 +435,7 @@ get_truth_path <- function(source,
                            repo_path,
                            target_variable,
                            data_location,
-                           hub = c("US", "ECDC")) {
+                           hub = c("US", "ECDC", "FluSight")) {
   # generate full target variable (this works for both hubs as previous
   # checks already made sure only applicable target_variables are used)
   if (target_variable == "cum death") {
@@ -402,9 +444,10 @@ get_truth_path <- function(source,
     full_target_variable <- "Incident Cases"
   } else if (target_variable == "inc death") {
     full_target_variable <- "Incident Deaths"
-  } else if (target_variable == "inc hosp") {
+  } else if (target_variable == "inc hosp" | 
+             target_variable == "inc flu hosp") {
     full_target_variable <- "Incident Hospitalizations"
-  }
+  } 
 
   if (data_location == "remote_hub_repo") {
     file_name <- paste0(gsub(" ", "%20", full_target_variable), ".csv")
@@ -423,6 +466,9 @@ get_truth_path <- function(source,
     file_path <- paste0(repo_path, truth_folder_path, file_name)
   } else if (hub[1] == "ECDC") {
     truth_folder_path <- paste0("/data-truth/", toupper(source), "/truth_", toupper(source), "-")
+    file_path <- paste0(repo_path, truth_folder_path, file_name)
+  } else if (hub[1] == "FluSight") {
+    truth_folder_path <- "/data-truth/truth-"
     file_path <- paste0(repo_path, truth_folder_path, file_name)
   }
   return(file_path)
@@ -519,8 +565,8 @@ load_from_coviddata <- function(target_variable,
 #' @param truth_end_date date to include the last available truth point in `'yyyy-mm-dd'` format.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports `"local_hub_repo"` or `"remote_hub_repo"`.
-#' @param hub character, which hub to use. Default is `"US"`, other option is
-#' `"ECDC"`
+#' @param hub character, which hub to use. Default is "US". 
+#' Other options are "ECDC" and "FluSight".
 #' @return a data.frame with columns `location`, `target_end_date`, `target_variable` and `value`
 #'
 load_from_hub_repo <- function(target_variable,
@@ -529,7 +575,7 @@ load_from_hub_repo <- function(target_variable,
                                temporal_resolution,
                                truth_end_date,
                                data_location,
-                               hub = c("US", "ECDC")) {
+                               hub = c("US", "ECDC", "FluSight")) {
 
   # construct file path and read file from path
   file_path <- get_truth_path(
