@@ -83,6 +83,7 @@ name_to_fips <- function(data, hub = c("US", "ECDC")){
   } else if (hub[1] == "FluSight") {
     fips_tmp <-  covidHubUtils::hub_locations_flusight %>%
       dplyr::mutate(location_name = fips)
+    fips_tmp[fips_tmp$location_name == "US",]$location_name <- "United States"
     locations <- dplyr::bind_rows(covidHubUtils::hub_locations_flusight, fips_tmp)
     if(!all(data %in% locations$location_name)){
       stop("Error in name_to_fips: Please provide valid location name.eg: Bullock County,AL")

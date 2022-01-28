@@ -12,7 +12,7 @@ test_that("name_to_fips works as with full names as inputs",{
   expect_equal(function_output , expected_data_US)
   
   test_data_Flu <- c("New Jersey","United States")
-  expected_data_Flu <- c("US","34")
+  expected_data_Flu <- c("34","US")
   function_output <- name_to_fips(test_data_Flu, hub = c("FluSight"))
   expect_equal(function_output , expected_data_Flu)
   
