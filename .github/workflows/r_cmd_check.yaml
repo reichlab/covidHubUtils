@@ -18,13 +18,9 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rcmdcheck", "rmarkdown","tidyverse","DT","here"))
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
-      - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v2
-        with:
-          root_file: main.tex
       - name: Install zoltr and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
@@ -41,7 +37,7 @@ jobs:
         working-directory: ./covidData/code/data-processing
       - name: Check
         run: |
-          rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = c("error"))
+          devtools::check(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")
         shell: Rscript {0}
       - name: Upload check results
         if: failure()
