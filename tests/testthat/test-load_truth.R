@@ -213,7 +213,7 @@ test_that("handles location name correctly", {
                           truth_source = c("JHU"),
                           target_variable = c("inc case"))
   
-  expect_equal(unique(actual_ny$location), 36)
+  expect_equal(unique(actual_ny$location), "36")
   expect_equal(unique(actual_ny$target_variable), "inc case")
   expect_equal(unique(actual_ny$model), "Observed Data (JHU)")
   
@@ -222,7 +222,7 @@ test_that("handles location name correctly", {
                           target_variable = c("inc case"),
                           hub = "ECDC")
   
-  expect_equal(unique(actual_gb$location), GB)
+  expect_equal(unique(actual_gb$location), "GB")
   expect_equal(unique(actual_gb$target_variable), "inc case")
   expect_equal(unique(actual_gb$model), "Observed Data (JHU)")
   
@@ -231,7 +231,7 @@ test_that("handles location name correctly", {
                           target_variable = c("inc flu hosp"),
                           hub = "FluSight")
   
-  expect_equal(unique(actual_ma$location), 36)
+  expect_equal(unique(actual_ma$location), "25")
   expect_equal(unique(actual_ma$target_variable), "inc flu hosp")
   expect_equal(unique(actual_ma$model), "Observed Data (HealthData)")
   
