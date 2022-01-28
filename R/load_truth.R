@@ -43,10 +43,10 @@
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
 #' This is only available for `covidData` now.
-#' @param locations  a vector of strings for fips code, CBSA codes, location names
-#' such as "Hampshire COunty, MA", "United Kingdom","Alabama"
-#' for a US county location names must include state abbreviation.
-#' If `NULL`, default to all locations with available forecasts.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports `"local_hub_repo"`, `"remote_hub_repo"` and `"covidData"`.
 #' If `NULL`, default to `"remote_hub_repo"`.

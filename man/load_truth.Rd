@@ -44,10 +44,10 @@ Weekly \code{temporal_resolution} will not be applied to \code{"inc hosp"} and \
 multiple target variables are specified.
 \code{"ECDC"} truth data is weekly by default. Daily level data is not available.}
 
-\item{locations}{a vector of strings for fips code, CBSA codes, location names
-such as "Hampshire COunty, MA", "United Kingdom","Alabama"
-for a US county location names must include state abbreviation.
-If \code{NULL}, default to all locations with available forecasts.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{data_location}{character specifying the location of truth data.
 Currently only supports \code{"local_hub_repo"}, \code{"remote_hub_repo"} and \code{"covidData"}.

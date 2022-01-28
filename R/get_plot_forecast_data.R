@@ -14,10 +14,10 @@
 #' @param horizons_to_plot forecasts are plotted for the horizon time steps after
 #' the forecast date.
 #' @param quantiles_to_plot vector of quantiles to include in the plot
-#' @param locations_to_plot  a vector of strings for fips code, CBSA codes, location names
-#' such as "Hampshire COunty, MA", "United Kingdom","Alabama"
-#' for a US county location names must include state abbreviation.
-#' Default to all locations available in `forecast_data`.
+#' @param locations_to_plot  a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations available in `forecast_data`.
 #' @param plot_truth logical to indicate whether truth data should be plotted.
 #' Default to `TRUE`.
 #' @param truth_source character specifying where the truth data will

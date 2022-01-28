@@ -1,5 +1,5 @@
 ## Changes since last release
-- All locations now take location names.
+- All `locations` parameters now take location names. This parameter should be a vector of strings of fips code or CBSA codes or location names, such as "Hampshire County, MA", "Alabama", "United Kingdom".
 - Support loading data from local zoltar module in `load_forecasts()` when `source = "local_zoltar"`. Please follow instructions in  `load_forecasts_local_zoltar()` to set up required environment for this functionality.
 - Sort `models` parameter in `load_forecasts()` and `load_latest_forecasts()` so that the resulting data frame is 
 locale-independent

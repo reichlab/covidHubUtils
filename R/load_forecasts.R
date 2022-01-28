@@ -23,7 +23,10 @@
 #' @param date_window_size The number of days across each date in `dates` parameter to
 #' look for the most recent forecasts.
 #' Default to 0, which means to only look at the `dates` parameter only.
-#' @param locations list of location codes. Default to all locations with available forecasts.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types.
 #' @param targets character vector of targets to retrieve, for example

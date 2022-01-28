@@ -34,7 +34,10 @@ Default to all valid forecast dates.}
 look for the most recent forecasts.
 Default to 0, which means to only look at the \code{dates} parameter only.}
 
-\item{locations}{list of location codes. Default to all locations with available forecasts.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
 and/or \code{"point"}. Default to all valid forecast types.}

@@ -28,10 +28,10 @@ for each sub-list of dates.
 Default to  \code{NULL} which would include all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates.}
 
-\item{locations}{a vector of strings for fips code, CBSA codes, location names
-such as "Hampshire COunty, MA", "United Kingdom","Alabama"
-for a US county location names must include state abbreviation.
-list of fips. Default to all locations with available forecasts.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
 and/or \code{"point"}. Default to all valid forecast types.}
