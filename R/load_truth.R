@@ -159,9 +159,6 @@ load_truth <- function(truth_source = NULL,
       }
     }
     
-    # Convert location names to fips codes or country abbreviations
-    locations <- name_to_fips(locations, hub)
-    
     # get list of all valid locations and codes
     valid_locations <- covidHubUtils::hub_locations
     valid_location_codes <- covidHubUtils::hub_locations$fips
@@ -315,6 +312,8 @@ load_truth <- function(truth_source = NULL,
 
   # validate locations
   if (!is.null(locations)) {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
     locations <- match.arg(locations,
       choices = valid_location_codes,
       several.ok = TRUE

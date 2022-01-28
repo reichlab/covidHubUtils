@@ -61,9 +61,6 @@ load_forecasts_repo <- function(file_path,
   }
   
   models <- sort(models, method = "radix")
-
-  # Convert location names to fips codes or country abbreviations
-  locations <- name_to_fips(locations, hub)
   
   # get valid location codes
   if (hub[1] == "US") {
@@ -76,6 +73,8 @@ load_forecasts_repo <- function(file_path,
 
   # validate locations
   if (!is.null(locations)) {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
     locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
   } else {
     locations <- valid_location_codes

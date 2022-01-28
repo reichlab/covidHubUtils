@@ -66,13 +66,13 @@ get_plot_forecast_data <- function(forecast_data,
     valid_target_variables <- c("inc flu hosp")
     valid_truth_sources <- c("HealthData")
   }
-
-  # Convert location names to fips codes or country abbreviations
-  locations_to_plot <- name_to_fips(locations_to_plot, hub)
   
   # validate locations_to_plot
   if (missing(locations_to_plot)) {
     locations_to_plot <- unique(forecast_data$location)
+  } else {
+    # Convert location names to fips codes or country abbreviations
+    locations_to_plot <- name_to_fips(locations_to_plot, hub) 
   }
 
   locations_to_plot <- intersect(

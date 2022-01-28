@@ -154,13 +154,13 @@ plot_forecasts <- function(forecast_data,
   } else {
     models <- unique(forecast_data$model)
   }
-
-  # Convert location names to fips codes or country abbreviations
-  locations <- name_to_fips(locations, hub)
   
   # optional locations parameter. Default to all locations in forecast_data
   if (missing(locations)) {
     locations <- unique(forecast_data$location)
+  } else {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
   }
 
   # get lists of valid parameter choices based on `hub`

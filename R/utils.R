@@ -53,40 +53,43 @@ get_zoltar_project_url <- function(hub = c("US", "ECDC"),
 #' Get FIPS or CBSA codes from county or metropolitan area locations
 #'
 #' @param data a vector of strings for fips code, CBSA codes, location names
-#' such as "Hampshire COunty, MA", "United Kingdom","Alabama"
-#' for a US county location names must include state abbreviation.
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`
+#' from which to load forecasts. Possible options are `"US"`, `"ECDC"` and `"FluSight"`
 #' @return A vector of FIPS or CBSA codes
 #' @export
-
 name_to_fips <- function(data, hub = c("US", "ECDC")){
   if (is.null(data)){
-    return(NULL)}
+    return (NULL)
+  }
+  
   if (hub[1] == "US") {
-    new_df <-  data.frame(covidHubUtils::hub_locations)%>%
-      mutate(full_location_name = fips)
-    df_US <- bind_rows(covidHubUtils::hub_locations,new_df)
-    locations <- df_US
+    fips_tmp <-  covidHubUtils::hub_locations %>%
+      dplyr::mutate(full_location_name = fips)
+    locations <- dplyr::bind_rows(covidHubUtils::hub_locations, fips_tmp)
     if(!all(data %in% locations$full_location_name)){
-      stop("Error in name_to_fips: Please provide valid location name.eg: BUllock County,AL")
-      
+      stop("Error in name_to_fips: Please provide valid location name.eg: Bullock County,AL")
     }
-    return(locations[locations$full_location_name %in% data, ]$fips)
-    
-  } 
-  else if (hub[1] == "ECDC") {
-    new_df <- data.frame(covidHubUtils::hub_locations_ecdc)%>%
-      mutate(location_name = location)
-    df_ECDC <- bind_rows(covidHubUtils::hub_locations_ecdc, new_df)
-    locations <- df_ECDC
+    return (locations[locations$full_location_name %in% data, ]$fips)
+  } else if (hub[1] == "ECDC") {
+    location_tmp <- covidHubUtils::hub_locations_ecdc %>%
+      dplyr::mutate(location_name = location)
+    locations <- dplyr::bind_rows(covidHubUtils::hub_locations_ecdc, location_tmp)
     if(!all(data %in% locations$location_name)){
       stop("Error in name_to_fips: Please provide valid location name.")
-      
     }
     return(locations[locations$location_name %in% data, ]$location)
-    
-  }} 
+  } else if (hub[1] == "FluSight") {
+    fips_tmp <-  covidHubUtils::hub_locations_flusight %>%
+      dplyr::mutate(location_name = fips)
+    locations <- dplyr::bind_rows(covidHubUtils::hub_locations_flusight, fips_tmp)
+    if(!all(data %in% locations$location_name)){
+      stop("Error in name_to_fips: Please provide valid location name.eg: Bullock County,AL")
+    }
+    return (locations[locations$location_name %in% data, ]$fips)
+  }
+} 
 
 
 

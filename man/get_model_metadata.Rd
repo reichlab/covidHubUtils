@@ -16,6 +16,8 @@ get_model_metadata(
 which to retrieve designations. If not provided, the function returns model
 designations for all models.}
 
+\item{hub}{character, which hub to use. Options are "US", "ECDC" and "FluSight".}
+
 \item{source}{string specifying where forecasts will be loaded from:
 currently only supports \code{"local_hub_repo"}}
 
