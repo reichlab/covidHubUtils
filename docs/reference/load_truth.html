@@ -115,13 +115,14 @@ If <code>NULL</code>,default to system date.</p></dd>
 <dd><p>character specifying temporal resolution
 to include: currently support <code>"weekly"</code> and <code>"daily"</code>.
 If <code>NULL</code>, default to <code>"weekly"</code> for cases and deaths, <code>"daily"</code> for hospitalizations.
-Weekly <code>temporal_resolution</code> will not be applied to <code>"inc hosp"</code> and <code>"inc fluhosp"</code>when
+Weekly <code>temporal_resolution</code> will not be applied to <code>"inc hosp"</code> and <code>"inc flu hosp"</code>when
 multiple target variables are specified.
 <code>"ECDC"</code> truth data is weekly by default. Daily level data is not available.</p></dd>
 <dt>locations</dt>
-<dd><p>vector of valid location code.
-If <code>NULL</code>, default to all locations with available forecasts.
-US hub is using FIPS code and ECDC hub is using country name abbreviation.</p></dd>
+<dd><p>a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to <code>NULL</code> which would include all locations with available forecasts.</p></dd>
 <dt>data_location</dt>
 <dd><p>character specifying the location of truth data.
 Currently only supports <code>"local_hub_repo"</code>, <code>"remote_hub_repo"</code> and <code>"covidData"</code>.
@@ -149,7 +150,7 @@ Other options are "ECDC" and "FluSight".</p></dd>
 to all target variables but <code>"inc hosp"</code> and <code>"inc flu hosp"</code>. In that case, the function will return
 daily incident COVID hospitalization counts and weekly incident Influenza hospitalization.</p></li>
 <li><p>For the US hub, weekly temporal resolution will be applied to <code>"inc hosp"</code> if the user specifies <code>"inc hosp"</code>
-as the only <code>target_variable</code>.On the other hand, <code>temporal_resolution</code> will
+as the only <code>target_variable</code>. On the other hand, <code>temporal_resolution</code> will
 be applied to <code>"inc hosp"</code> in all cases for the ECDC hub.</p></li>
 <li><p>When aggregating daily data, if there are not enough observations for a week, the corresponding
 weekly count would be <code>NA</code> in resulting data frame.</p></li>

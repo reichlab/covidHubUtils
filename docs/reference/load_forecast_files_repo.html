@@ -86,7 +86,10 @@ without rows having NULLs in value column.</p>
 <dd><p>paths to csv forecast files to read in.  It is expected that
 the file names are in the format "*YYYY-MM-DD-&lt;model_name&gt;.csv".</p></dd>
 <dt>locations</dt>
-<dd><p>list of fips. Default to all locations with available forecasts.</p></dd>
+<dd><p>a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to <code>NULL</code> which would include all locations with available forecasts.</p></dd>
 <dt>types</dt>
 <dd><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
 and/or <code>"point"</code>. Default to all valid forecast types.</p></dd>

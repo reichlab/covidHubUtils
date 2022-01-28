@@ -95,7 +95,10 @@ This function will return the latest forecasts
 for each sub-list of dates.
 Default to  <code>NULL</code> which would include all valid forecast dates in Zoltar.</p></dd>
 <dt>locations</dt>
-<dd><p>list of fips. Default to all locations with available forecasts in Zoltar.</p></dd>
+<dd><p>a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to <code>NULL</code> which would include all locations with available forecasts in <code>zoltar_sqlite_file</code>.</p></dd>
 <dt>types</dt>
 <dd><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
 and/or <code>"point"</code>. Default to all valid forecast types in Zoltar.</p></dd>

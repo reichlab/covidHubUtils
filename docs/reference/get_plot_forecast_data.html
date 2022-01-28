@@ -105,8 +105,10 @@ the forecast date.</p></dd>
 <dt>quantiles_to_plot</dt>
 <dd><p>vector of quantiles to include in the plot</p></dd>
 <dt>locations_to_plot</dt>
-<dd><p>optional character vector of location fips codes.
-Default to all locations available in <code>forecast_data</code>.</p></dd>
+<dd><p>a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to <code>NULL</code> which would include all locations available in <code>forecast_data</code>.</p></dd>
 <dt>plot_truth</dt>
 <dd><p>logical to indicate whether truth data should be plotted.
 Default to <code>TRUE</code>.</p></dd>
