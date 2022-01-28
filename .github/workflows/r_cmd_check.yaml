@@ -18,7 +18,7 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rcmdcheck", "rmarkdown","tidyverse","DT","here"))
+          install.packages(c("remotes","devtools","rmarkdown","tidyverse","DT","here"))
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr and scoringutils
@@ -37,7 +37,7 @@ jobs:
         working-directory: ./covidData/code/data-processing
       - name: Check
         run: |
-          rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = c("error"))
+          devtools::check(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")
         shell: Rscript {0}
       - name: Upload check results
         if: failure()
