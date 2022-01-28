@@ -43,9 +43,10 @@
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
 #' available data with an issue date on or before the given `as_of` date are returned.
 #' This is only available for `covidData` now.
-#' @param locations vector of valid location code.
-#' If `NULL`, default to all locations with available forecasts.
-#' US hub is using FIPS code and ECDC hub is using country name abbreviation.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations with available forecasts.
 #' @param data_location character specifying the location of truth data.
 #' Currently only supports `"local_hub_repo"`, `"remote_hub_repo"` and `"covidData"`.
 #' If `NULL`, default to `"remote_hub_repo"`.
@@ -157,7 +158,7 @@ load_truth <- function(truth_source = NULL,
         stop("Error in load_truth: This function does not support selected target_variable from HealthData.")
       }
     }
-
+    
     # get list of all valid locations and codes
     valid_locations <- covidHubUtils::hub_locations
     valid_location_codes <- covidHubUtils::hub_locations$fips
@@ -311,6 +312,8 @@ load_truth <- function(truth_source = NULL,
 
   # validate locations
   if (!is.null(locations)) {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
     locations <- match.arg(locations,
       choices = valid_location_codes,
       several.ok = TRUE

@@ -4,18 +4,24 @@
 \alias{get_model_designations}
 \title{Get model designations from metadata}
 \usage{
-get_model_designations(models = NULL, source, hub_repo_path)
+get_model_designations(
+  models = NULL,
+  hub = c("US", "ECDC", "FluSight"),
+  source,
+  hub_repo_path
+)
 }
 \arguments{
 \item{models}{optional character vector of model abbreviations for
 which to retrieve designations. If not provided, the function returns model
 designations for all models.}
 
+\item{hub}{character, which hub to use. Options are "US", "ECDC" and "FluSight".}
+
 \item{source}{string specifying where forecasts will be loaded from:
 either \code{"local_hub_repo"} or \code{"zoltar"}}
 
-\item{hub_repo_path}{path to local clone of the \code{reichlab/covid19-forecast-hub}
-repository}
+\item{hub_repo_path}{path to local clone of hub repository}
 }
 \value{
 data.frame with columns \code{model} and \code{designation}

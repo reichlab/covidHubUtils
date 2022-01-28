@@ -54,8 +54,10 @@ Default to all models in \code{forecast_data}.}
 \code{"cum death"} and \code{"inc hosp"} are only available in forecasts from US hub now.
 If there is only one \code{target_variable} in \code{forecast_data}, this parameter is optional.}
 
-\item{locations}{vector of strings for fips code, \code{'US'} or abbreviation of European countries.
-Default to all locations in \code{forecast_data}.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations in \code{forecast_data}.}
 
 \item{facet}{interpretable facet option for ggplot. Function will error
 if multiple locations are passed in without location in the facet formula.}

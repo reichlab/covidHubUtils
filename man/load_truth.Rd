@@ -40,13 +40,14 @@ If \code{NULL},default to system date.}
 \item{temporal_resolution}{character specifying temporal resolution
 to include: currently support \code{"weekly"} and \code{"daily"}.
 If \code{NULL}, default to \code{"weekly"} for cases and deaths, \code{"daily"} for hospitalizations.
-Weekly \code{temporal_resolution} will not be applied to \code{"inc hosp"} and \code{"inc fluhosp"}when
+Weekly \code{temporal_resolution} will not be applied to \code{"inc hosp"} and \code{"inc flu hosp"}when
 multiple target variables are specified.
 \code{"ECDC"} truth data is weekly by default. Daily level data is not available.}
 
-\item{locations}{vector of valid location code.
-If \code{NULL}, default to all locations with available forecasts.
-US hub is using FIPS code and ECDC hub is using country name abbreviation.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{data_location}{character specifying the location of truth data.
 Currently only supports \code{"local_hub_repo"}, \code{"remote_hub_repo"} and \code{"covidData"}.
@@ -86,7 +87,7 @@ to all target variables but \code{"inc hosp"} and \code{"inc flu hosp"}. In that
 daily incident COVID hospitalization counts and weekly incident Influenza hospitalization.
 
 \item For the US hub, weekly temporal resolution will be applied to \code{"inc hosp"} if the user specifies \code{"inc hosp"}
-as the only \code{target_variable}.On the other hand, \code{temporal_resolution} will
+as the only \code{target_variable}. On the other hand, \code{temporal_resolution} will
 be applied to \code{"inc hosp"} in all cases for the ECDC hub.
 
 \item When aggregating daily data, if there are not enough observations for a week, the corresponding

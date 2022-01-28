@@ -15,7 +15,10 @@
 #' for each sub-list of dates.
 #' Default to  `NULL` which would include all valid forecast dates.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates.
-#' @param locations list of fips. Default to all locations with available forecasts.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types.
 #' @param targets character vector of targets to retrieve, for example
@@ -58,7 +61,7 @@ load_forecasts_repo <- function(file_path,
   }
   
   models <- sort(models, method = "radix")
-
+  
   # get valid location codes
   if (hub[1] == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
@@ -70,6 +73,8 @@ load_forecasts_repo <- function(file_path,
 
   # validate locations
   if (!is.null(locations)) {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
     locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
   } else {
     locations <- valid_location_codes

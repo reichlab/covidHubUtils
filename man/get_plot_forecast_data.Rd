@@ -40,8 +40,10 @@ the forecast date.}
 
 \item{quantiles_to_plot}{vector of quantiles to include in the plot}
 
-\item{locations_to_plot}{optional character vector of location fips codes.
-Default to all locations available in \code{forecast_data}.}
+\item{locations_to_plot}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations available in \code{forecast_data}.}
 
 \item{plot_truth}{logical to indicate whether truth data should be plotted.
 Default to \code{TRUE}.}
