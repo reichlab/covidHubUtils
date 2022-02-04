@@ -340,7 +340,7 @@ p +
 
 ## Plot multiple forecast dates
 
-The following code looks at three models' forecasts of incident deaths at one time point for multiple locations. Note the use of the `facet_scales` option which is passed to `ggplot` and allows the y-axes to be on different scales.
+The following code looks at two models’ forecasts of incident deaths for the same location at three different forecast time points. 
 
 ```{r message=FALSE}
 fdat <- load_forecasts(
