@@ -532,7 +532,7 @@ load_from_coviddata <- function(target_variable,
     dplyr::filter(
       location != "11001",
       target_end_date >= as.Date("2020-01-25"),
-      target_end_date <= truth_end_date
+      target_end_date <= as.Date(truth_end_date)
     )
 
   if (inc_cum == "inc") {
@@ -615,7 +615,9 @@ load_from_hub_repo <- function(target_variable,
   }
 
   truth_data <- truth_data %>%
-    dplyr::filter(target_end_date >= as.Date("2020-01-25"))
+    dplyr::filter(location != "11001",
+                  target_end_date >= as.Date("2020-01-25"),
+                  target_end_date <= as.Date(truth_end_date))
 
   # optional aggregation step based on temporal resolution
   # ECDC case/death already in weeks
