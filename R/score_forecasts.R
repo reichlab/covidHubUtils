@@ -134,7 +134,7 @@ score_forecasts <- function(
     stop("use_median_as_point should only have a length of 1")
   }
 
-  if (use_median_as_point == FALSE && !("point" %in% unique(forecasts$type))) {
+  if (use_median_as_point == FALSE && !("point" %in% unique(forecasts[["type"]]))) {
     stop("Want to use point forecast when scoring but no point forecast in forecast data")
   }
 
@@ -169,7 +169,7 @@ score_forecasts <- function(
 
   # two sided
   scores <- purrr::map_dfr(
-    unique(joint_df$target_variable),
+    unique(joint_df[["target_variable"]]),
     function(var) {
       joint_df_target <- suppressMessages(joint_df %>%
         dplyr::filter(target_variable == var))
