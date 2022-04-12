@@ -25,7 +25,7 @@ jobs:
       - name: Install zoltr and scoringutils
         run: |
           devtools::install_github("reichlab/zoltr")
-          devtools::install_github("epiforecasts/scoringutils")
+          devtools::install_github("epiforecasts/scoringutils") 
           devtools::install()
         shell: Rscript {0}
       - name: Run unit tests
