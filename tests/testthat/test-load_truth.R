@@ -237,5 +237,21 @@ test_that("handles location name correctly", {
   
 })
 
-
+test_that("handles truth_end_date filter correctly", {
+  actual_US <- load_truth(locations = "New York",
+                          truth_source = c("JHU"),
+                          target_variable = c("inc case"),
+                          truth_end_date = "2021-12-01",
+                          hub = "US")
+  
+  expect_true(max(actual_US$target_end_date) <= "2021-12-01")
+  
+  actual_ECDC <- load_truth(locations = "GB",
+                          truth_source = c("JHU"),
+                          target_variable = c("inc case"),
+                          truth_end_date = "2021-12-01",
+                          hub = "ECDC")
+  
+  expect_true(max(actual_ECDC$target_end_date) <= "2021-12-01")
+})
 
