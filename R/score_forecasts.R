@@ -166,12 +166,15 @@ score_forecasts <- function(
     abs_var_rename <- "ae_point_NA"
   }
   
+ 
+    
+  
   #two sided
   scores <- NULL
   for (var in unique(joint_df[["target_variable"]])) {
     joint_df_target <- suppressMessages(joint_df %>%
                                           dplyr::filter(target_variable == var))
-    var_scores <-scoringutils::score(
+    var_scores <- scoringutils::score(
       data = joint_df_target) %>% 
       scoringutils::summarise_scores(by = c(observation_cols, "range")) %>%
       tidyr::pivot_wider(
