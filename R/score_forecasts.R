@@ -265,6 +265,13 @@ score_forecasts <- function(
       scores
     ))
   }
+  
+  # add back in true_value column
+  scores <- truth %>% 
+    dplyr::select(c("location", "target_variable", "target_end_date","value")) %>% 
+    dplyr::left_join(x = scores, y = .,
+    by = c("location", "target_variable", "target_end_date")) %>%
+    dplyr::rename(true_value = value)
 
 
   # remove unwanted columns note if quantile coverage not wanted value is not calculated

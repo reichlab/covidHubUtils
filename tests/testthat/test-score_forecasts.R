@@ -2,6 +2,7 @@ library(covidHubUtils)
 library(dplyr)
 library(lubridate)
 library(stringr)
+library(scoringutils)
 
 test_that("missing forecasts should throw error", {
   test_truth <- data.frame(
