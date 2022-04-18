@@ -14,6 +14,7 @@
 #' scoring. Defaults to `FALSE`
 #'
 #' @importFrom dplyr any_of
+#' @importFrom scoringutils score summarise_scores
 #' @return data.frame with scores. The result will have some columns that
 #' define the observation, namely, `model`, `forecast_date`, `location`,
 #' `horizon`, `temporal_resolution`, `target_variable`, `horizon`, and
