@@ -42,6 +42,7 @@
 #' \url{https://arxiv.org/abs/2005.12881}.
 #'
 #' @examples
+#' library(scoringutils)
 #' forecasts <- load_latest_forecasts(
 #'   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
 #'   last_forecast_date = "2020-12-14",
