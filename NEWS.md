@@ -10,7 +10,8 @@ locale-independent
 - Fix bug resulting in error in `get_model_metadata()` when a metadata file has `NULL` fields.
 - Fix bug resulting in empty ouput in `load_forecats_zoltar()` when verbose is `TRUE`.
 - Add validation for `temporal_resolution` in `calc_target_end_date()`.
-- Update `load_truth()` to turn off `"inc case"` and `"inc death"` target variables for `"ECDC"` truth soource.
+- Update `load_truth()` to turn off `"inc case"` and `"inc death"` target variables for `"ECDC"` truth soource
+- Update `score_forecasts()` to handle new version of `scoringutils`
 
 ## covidHubUtils 0.1.6
 
