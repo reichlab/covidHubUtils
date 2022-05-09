@@ -4,5 +4,5 @@ pkgdown_sha: ~
 articles:
   covidHubUtils-overview: covidHubUtils-overview.html
   covidHubUtils-zoltar_sqlite_setup: covidHubUtils-zoltar_sqlite_setup.html
-last_built: 2022-05-09T18:50Z
+last_built: 2022-05-09T20:15Z
 

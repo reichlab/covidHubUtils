@@ -61,6 +61,47 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.7" id="covidhubutils-017">covidHubUtils 0.1.7<a class="anchor" aria-label="anchor" href="#covidhubutils-017"></a></h2>
+<p>This is a release focusing on new features and bug fixes in some major functions.</p>
+<p>covidHubUtils now works with new version of <code>scoringutils</code> pacakge on GitHub.</p>
+<div class="section level3">
+<h3 id="feature-updates-0-1-7">Feature updates<a class="anchor" aria-label="anchor" href="#feature-updates-0-1-7"></a></h3>
+<ul><li><p>All <code>locations</code> parameters now take location names. This parameter should be a vector of strings of fips code or CBSA codes or location names, such as “Hampshire County, MA”, “Alabama”, “United Kingdom”.</p></li>
+<li>
+<p>Update <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code></p>
+<ul><li><p>Support loading data from local zoltar module in <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> when <code>source = "local_zoltar"</code>. Please follow instructions in <code><a href="../reference/load_forecasts_local_zoltar.html">load_forecasts_local_zoltar()</a></code> to set up required environment for this functionality.</p></li>
+<li><p>Fix bug resulting in empty ouput in <code>load_forecats_zoltar()</code> when verbose is <code>TRUE</code>.</p></li>
+<li><p>Update warning messages and error messages in <code><a href="../reference/load_forecasts_zoltar.html">load_forecasts_zoltar()</a></code>.</p></li>
+<li><p>Sort <code>models</code> parameter in <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and <code><a href="../reference/load_latest_forecasts.html">load_latest_forecasts()</a></code> so that the resulting data frame is locale-independent.</p></li>
+</ul></li>
+<li>
+<p>Update <code><a href="../reference/score_forecasts.html">score_forecasts()</a></code></p>
+<ul><li><p>Rename sharpness score as dispersion.</p></li>
+<li><p>Update all functionality to handle new version of <code>scoringutils</code>.</p></li>
+</ul></li>
+<li>
+<p>Update <code><a href="../reference/load_truth.html">load_truth()</a></code></p>
+<ul><li>Turn off <code>"inc case"</code> and <code>"inc death"</code> target variables for <code>"ECDC"</code> truth source.</li></ul></li>
+<li>
+<p>Update <code><a href="../reference/get_model_metadata.html">get_model_metadata()</a></code></p>
+<ul><li><p>Remove <code>as_of</code> functionality in <code><a href="../reference/get_model_metadata.html">get_model_metadata()</a></code> and <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code>. <code>as_of</code> parameter is not available now.</p></li>
+<li><p>Fix bug resulting in error in <code><a href="../reference/get_model_metadata.html">get_model_metadata()</a></code> when a metadata file has <code>NULL</code> fields.</p></li>
+</ul></li>
+<li>
+<p>Update <code><a href="../reference/get_all_models.html">get_all_models()</a></code></p>
+<ul><li>Add <code>hub</code> parameter. It does not support loading model names for <code>"ECDC"</code> hub from remote hub repo for now.</li></ul></li>
+<li>
+<p>Update <code><a href="../reference/calc_target_end_date.html">calc_target_end_date()</a></code>.</p>
+<ul><li>Add validation for <code>temporal_resolution</code>
+</li></ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="package-updates-0-1-7">Package updates<a class="anchor" aria-label="anchor" href="#package-updates-0-1-7"></a></h3>
+<ul><li>There is no backwards compatibility.</li>
+<li>New vignette and pkgdown site</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.6" id="covidhubutils-016">covidHubUtils 0.1.6<a class="anchor" aria-label="anchor" href="#covidhubutils-016"></a></h2>
 <p>This is a release focusing on new features in most of the major functions.</p>
 <p>covidHubUtils now requires additional R packages <code>doParallel</code>, <code>parallel</code> and <code>foreach</code>.</p>
