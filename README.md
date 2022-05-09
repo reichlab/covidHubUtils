@@ -9,7 +9,7 @@ The `covidHubUtils` package relies on a small number of packages, including many
 ```r
 devtools::install_github("reichlab/zoltr")
 ```
-Additional functionalities in `covidHubUtils` also rely on `scoringutils`. Because of new updates in `scoringutils` that uses functions not yet on the cran version, please install `scoringutils` from GitHub, as this development:
+Additional functionalities in `covidHubUtils` also rely on `scoringutils`. Because of new updates in `scoringutils` that uses functions not yet on the cran version, please install `scoringutils` from GitHub:
 ``` r
 devtools::install_github("epiforecasts/scoringutils")
 ```
