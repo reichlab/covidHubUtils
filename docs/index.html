@@ -96,11 +96,14 @@
 <p>The <code>covidHubUtils</code> package relies on a small number of packages, including many from the <code>tidyverse</code> and, importantly, <a href="http://reichlab.io/zoltr/" class="external-link">the <code>zoltr</code> package</a> that is used to access the Zoltar API for downloading forecasts. Please install <code>zoltr</code> from GitHub, as this development version often has important features not yet on the CRAN version:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/zoltr"</span><span class="op">)</span></code></pre></div>
-<p>Some additional functionalities in <code>covidHubUtils</code> also rely on <code>covidData</code>. Because there are daily data updates in <code>covidData</code>, please install the latest version of it before using related functions in <code>covidHubUtils</code>:</p>
+<p>Additional functionalities in <code>covidHubUtils</code> also rely on <code>scoringutils</code>. Because of new updates in <code>scoringutils</code> that uses functions not yet on the cran version, please install <code>scoringutils</code> from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span><span class="op">)</span></code></pre></div>
+<p>Some additional functionalities in <code>covidHubUtils</code> also rely on <code>covidData</code>. Because there are daily data updates in <code>covidData</code>, please install the latest version of it before using related functions in <code>covidHubUtils</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidData"</span><span class="op">)</span></code></pre></div>
 <p>The <code>covidHubUtils</code> package currently is only available on GitHub, and it may be installed using the <code>devtools</code> package:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidHubUtils"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level1">
@@ -129,26 +132,20 @@
 <div class="section level3">
 <h3 id="reading-observed-truth-data">Reading Observed “Truth” Data<a class="anchor" aria-label="anchor" href="#reading-observed-truth-data"></a>
 </h3>
-<ul>
-<li>
-<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li>
-</ul>
+<ul><li>
+<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li></ul>
 </div>
 <div class="section level3">
 <h3 id="plotting-forecasts">Plotting Forecasts<a class="anchor" aria-label="anchor" href="#plotting-forecasts"></a>
 </h3>
-<ul>
-<li>
-<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li>
-</ul>
+<ul><li>
+<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li></ul>
 </div>
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring Forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
-<ul>
-<li>
-<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li>
-</ul>
+<ul><li>
+<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li></ul>
 </div>
 <div class="section level3">
 <h3 id="download-and-pre-process-truth-data">Download and pre-process “Truth” Data<a class="anchor" aria-label="anchor" href="#download-and-pre-process-truth-data"></a>
@@ -261,7 +258,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

@@ -126,7 +126,9 @@ in an interval format. arXiv:2005.12881.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_latest_forecasts.html">load_latest_forecasts</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://epiforecasts.io/scoringutils/" class="external-link">scoringutils</a></span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: scoringutils 1.0.0 introduces a lot of breaking changes and we apologise for any inconvenience. If you prefer the old interface, please download version 0.1.8 using remotes::install_github("epiforecasts/scoringutils@v0.1.8")</span>
+<span class="r-in"><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_latest_forecasts.html">load_latest_forecasts</a></span><span class="op">(</span></span>
 <span class="r-in">  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COVIDhub-ensemble"</span>, <span class="st">"UMass-MechBayes"</span><span class="op">)</span>,</span>
 <span class="r-in">  last_forecast_date <span class="op">=</span> <span class="st">"2020-12-14"</span>,</span>
 <span class="r-in">  forecast_date_window_size <span class="op">=</span> <span class="fl">7</span>,</span>
@@ -139,7 +141,7 @@ in an interval format. arXiv:2005.12881.
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
 <span class="r-in"><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_truth.html">load_truth</a></span><span class="op">(</span><span class="st">"JHU"</span>, target_variable <span class="op">=</span> <span class="st">"inc death"</span>, locations <span class="op">=</span> <span class="st">"US"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">2566400</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">4</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">2678400</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">4</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Delimiter:</span> ","</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">chr</span>  (2): location, location_name</span>
@@ -149,6 +151,10 @@ in an interval format. arXiv:2005.12881.
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
 <span class="r-in"><span class="fu">score_forecasts</span><span class="op">(</span><span class="va">forecasts</span>, <span class="va">truth</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 49</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   model          location horizon temporal_resolu… target_variable forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       </span>
@@ -160,13 +166,13 @@ in an interval format. arXiv:2005.12881.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> UMass-MechBay… US       2       wk               inc death       2020-12-13   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> UMass-MechBay… US       3       wk               inc death       2020-12-13   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> UMass-MechBay… US       4       wk               inc death       2020-12-13   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;, true_value &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.5 &lt;dbl&gt;, quantile_coverage_0.01 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.025 &lt;dbl&gt;, quantile_coverage_0.05 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.1 &lt;dbl&gt;, quantile_coverage_0.15 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.2 &lt;dbl&gt;, quantile_coverage_0.25 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.3 &lt;dbl&gt;, quantile_coverage_0.35 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.4 &lt;dbl&gt;, quantile_coverage_0.45 &lt;dbl&gt;, …</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_latest_forecasts.html">load_latest_forecasts</a></span><span class="op">(</span></span>
 <span class="r-in">  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ILM-EKF"</span><span class="op">)</span>,</span>
@@ -184,7 +190,7 @@ in an interval format. arXiv:2005.12881.
 <span class="r-in">  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ECDC"</span>, <span class="st">"US"</span><span class="op">)</span>,</span>
 <span class="r-in">  target_variable <span class="op">=</span> <span class="st">"inc death"</span>, locations <span class="op">=</span> <span class="st">"GB"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">25728</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">4</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">26784</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">4</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Delimiter:</span> ","</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">chr</span>  (2): location, location_name</span>
@@ -194,6 +200,10 @@ in an interval format. arXiv:2005.12881.
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
 <span class="r-in"><span class="fu">score_forecasts</span><span class="op">(</span><span class="va">forecasts</span>, <span class="va">truth</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 49</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   model   location horizon temporal_resolution target_variable forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       </span>
@@ -201,13 +211,13 @@ in an interval format. arXiv:2005.12881.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ILM-EKF GB       2       wk                  inc death       2021-03-08   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ILM-EKF GB       3       wk                  inc death       2021-03-08   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> ILM-EKF GB       4       wk                  inc death       2021-03-08   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;, true_value &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.5 &lt;dbl&gt;, quantile_coverage_0.01 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.025 &lt;dbl&gt;, quantile_coverage_0.05 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.1 &lt;dbl&gt;, quantile_coverage_0.15 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.2 &lt;dbl&gt;, quantile_coverage_0.25 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.3 &lt;dbl&gt;, quantile_coverage_0.35 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.4 &lt;dbl&gt;, quantile_coverage_0.45 &lt;dbl&gt;, …</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -223,7 +233,7 @@ in an interval format. arXiv:2005.12881.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
