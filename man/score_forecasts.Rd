@@ -59,6 +59,7 @@ If return_format is \code{"wide"}, each calculated score is in its own column.
 Score forecasts
 }
 \examples{
+library(scoringutils)
 forecasts <- load_latest_forecasts(
   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
   last_forecast_date = "2020-12-14",

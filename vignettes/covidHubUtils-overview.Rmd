@@ -430,6 +430,13 @@ To find the most recent weekly forecast evaluation summary, please visit the [ev
 
 The inputs to the `scored_forecasts()` include a `forecasts` data frame created by `load_forecasts()` and a `truth` data frame created by `load_truth()`. 
 
+
+The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install and load the most up-to-date development version of `scoringutils` from GitHub:
+``` {r}
+devtools::install_github("epiforecasts/scoringutils")
+library(scoringutils)
+```
+
 The following code scores forecasts by the corresponding truth data loaded earlier in this vignette in long format. This is the example for the US Forecast Hub:
 ```{r}
 inc_case_targets <- paste(1:4, "wk ahead inc case")
@@ -498,11 +505,6 @@ datatable(scores_ECDC,
 
 We use plotting functions from `scoringutils` to visualize different scoring metrics.
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install the most up-to-date development version of `scoringutils` from GitHub:
-``` {r}
-devtools::install_github("epiforecasts/scoringutils")
-
-```
 
 Heatmaps are a great way to visualize your data over a large number of models. The following code provides a skeleton for visualizing the WIS score of multiple models over the 4 horizons:
 
@@ -510,7 +512,7 @@ Heatmaps are a great way to visualize your data over a large number of models. T
 scores %>%
   dplyr::group_by(model, horizon) %>%
   dplyr::summarise(wis = mean(wis)) %>%
-  scoringutils::score_heatmap(metric = "wis", x = "horizon")
+  scoringutils::plot_heatmap(metric = "wis", x = "horizon")
 ```
 
 The following snippet of code produce a bar plot for WIS score components in absolute values for selected models. Each bar is divided based on the percentage of each component's contribution to the total WIS score.
@@ -549,5 +551,5 @@ scores %>%
   dplyr::group_by(model, range) %>%
   dplyr::summarise(coverage = mean(coverage)) %>%
   dplyr::mutate(range = as.numeric(sub("coverage_", "", range))) %>%
-  scoringutils::interval_coverage()
+  scoringutils::plot_interval_coverage()
 ```
