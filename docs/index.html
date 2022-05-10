@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,23 +36,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/reichlab/covidHubUtils/">
+  <a href="https://github.com/reichlab/covidHubUtils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,39 +84,42 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="covidhubutils" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#covidhubutils" class="anchor"></a>covidHubUtils</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="covidhubutils">covidHubUtils<a class="anchor" aria-label="anchor" href="#covidhubutils"></a>
+</h1></div>
 
 <p>Utility functions for the COVID-19 forecast hub</p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
-<p>The <code>covidHubUtils</code> package relies on a small number of packages, including many from the <code>tidyverse</code> and, importantly, <a href="http://reichlab.io/zoltr/">the <code>zoltr</code> package</a> that is used to access the Zoltar API for downloading forecasts. Please install <code>zoltr</code> from GitHub, as this development version often has important features not yet on the CRAN version:</p>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
+<p>The <code>covidHubUtils</code> package relies on a small number of packages, including many from the <code>tidyverse</code> and, importantly, <a href="http://reichlab.io/zoltr/" class="external-link">the <code>zoltr</code> package</a> that is used to access the Zoltar API for downloading forecasts. Please install <code>zoltr</code> from GitHub, as this development version often has important features not yet on the CRAN version:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"reichlab/zoltr"</span><span class="op">)</span></code></pre></div>
-<p>Some additional functionalities in <code>covidHubUtils</code> also rely on <code>covidData</code>. Because there are daily data updates in <code>covidData</code>, please install the latest version of it before using related functions in <code>covidHubUtils</code>:</p>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/zoltr"</span><span class="op">)</span></code></pre></div>
+<p>Additional functionalities in <code>covidHubUtils</code> also rely on <code>scoringutils</code>. Because of new updates in <code>scoringutils</code> that uses functions not yet on the cran version, please install <code>scoringutils</code> from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidData"</span><span class="op">)</span></code></pre></div>
-<p>The <code>covidHubUtils</code> package currently is only available on GitHub, and it may be installed using the <code>devtools</code> package:</p>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span><span class="op">)</span></code></pre></div>
+<p>Some additional functionalities in <code>covidHubUtils</code> also rely on <code>covidData</code>. Because there are daily data updates in <code>covidData</code>, please install the latest version of it before using related functions in <code>covidHubUtils</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidHubUtils"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidData"</span><span class="op">)</span></code></pre></div>
+<p>The <code>covidHubUtils</code> package currently is only available on GitHub, and it may be installed using the <code>devtools</code> package:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidHubUtils"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="getting-started" class="section level1">
-<h1 class="hasAnchor">
-<a href="#getting-started" class="anchor"></a>Getting Started</h1>
-<p>For those starting out we recommend you begin with the <a href="http://reichlab.io/covidHubUtils/articles/covidHubUtils-overview.html">Getting Started vignette</a>.</p>
+<div class="section level1">
+<h1 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+</h1>
+<p>For those starting out we recommend you begin with the <a href="http://reichlab.io/covidHubUtils/articles/covidHubUtils-overview.html" class="external-link">Getting Started vignette</a>.</p>
 </div>
-<div id="features" class="section level1">
-<h1 class="hasAnchor">
-<a href="#features" class="anchor"></a>Features</h1>
-<div id="currently-available" class="section level2">
-<h2 class="hasAnchor">
-<a href="#currently-available" class="anchor"></a>Currently available:</h2>
-<div id="reading-forecast-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reading-forecast-data" class="anchor"></a>Reading Forecast Data</h3>
+<div class="section level1">
+<h1 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h1>
+<div class="section level2">
+<h2 id="currently-available">Currently available:<a class="anchor" aria-label="anchor" href="#currently-available"></a>
+</h2>
+<div class="section level3">
+<h3 id="reading-forecast-data">Reading Forecast Data<a class="anchor" aria-label="anchor" href="#reading-forecast-data"></a>
+</h3>
 <ul>
 <li>
 <code>get_model_designations(models, source, hub_repo_path, as_of)</code>: Assemble a data frame with columns model and designation. <strong>Note:</strong> Currently only support versioned model designations in a local clone of the covid19-forecast-hub repository.</li>
@@ -130,33 +129,27 @@
 <code>load_forecasts(models, forecast_dates, locations, types, targets, source, hub_repo_path, as_of, verbose, hub)</code>: Load all available forecasts either from a local clone of the covid19-forecast-hub repository or Zoltar.</li>
 </ul>
 </div>
-<div id="reading-observed-truth-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reading-observed-truth-data" class="anchor"></a>Reading Observed “Truth” Data</h3>
-<ul>
-<li>
-<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li>
-</ul>
+<div class="section level3">
+<h3 id="reading-observed-truth-data">Reading Observed “Truth” Data<a class="anchor" aria-label="anchor" href="#reading-observed-truth-data"></a>
+</h3>
+<ul><li>
+<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li></ul>
 </div>
-<div id="plotting-forecasts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-forecasts" class="anchor"></a>Plotting Forecasts</h3>
-<ul>
-<li>
-<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li>
-</ul>
+<div class="section level3">
+<h3 id="plotting-forecasts">Plotting Forecasts<a class="anchor" aria-label="anchor" href="#plotting-forecasts"></a>
+</h3>
+<ul><li>
+<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li></ul>
 </div>
-<div id="scoring-forecasts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#scoring-forecasts" class="anchor"></a>Scoring Forecasts</h3>
-<ul>
-<li>
-<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li>
-</ul>
+<div class="section level3">
+<h3 id="scoring-forecasts">Scoring Forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
+</h3>
+<ul><li>
+<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li></ul>
 </div>
-<div id="download-and-pre-process-truth-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#download-and-pre-process-truth-data" class="anchor"></a>Download and pre-process “Truth” Data</h3>
+<div class="section level3">
+<h3 id="download-and-pre-process-truth-data">Download and pre-process “Truth” Data<a class="anchor" aria-label="anchor" href="#download-and-pre-process-truth-data"></a>
+</h3>
 <ul>
 <li>
 <code>download_raw_nytimes(save_location)</code>: Download raw truth data from NYTimes and write to CSV files.</li>
@@ -167,18 +160,18 @@
 <li>
 <code>preprocess_usafacts(save_location)</code>: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
 <li>
-<code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
 <li>
-<code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
 <li>
-<code>preprocess_truth_for_zoltar(target, issue_date)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>preprocess_truth_for_zoltar(target, issue_date)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
 <li>
-<code>save_truth_for_zoltar(save_location)</code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData">covidData</a> package needs to be installed.</li>
+<code>save_truth_for_zoltar(save_location)</code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
 </ul>
 </div>
-<div id="calculating-forecast-similarities" class="section level3">
-<h3 class="hasAnchor">
-<a href="#calculating-forecast-similarities" class="anchor"></a>Calculating Forecast Similarities</h3>
+<div class="section level3">
+<h3 id="calculating-forecast-similarities">Calculating Forecast Similarities<a class="anchor" aria-label="anchor" href="#calculating-forecast-similarities"></a>
+</h3>
 <ul>
 <li>
 <code>calc_cramers_dist_equal_space(q_F, tau_F, q_G, tau_G, approx_rule)</code>: Calculating approximated Cramer’s distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles.</li>
@@ -190,9 +183,9 @@
 </div>
 </div>
 </div>
-<div id="contributing-guidelines" class="section level1">
-<h1 class="hasAnchor">
-<a href="#contributing-guidelines" class="anchor"></a>Contributing Guidelines</h1>
+<div class="section level1">
+<h1 id="contributing-guidelines">Contributing Guidelines<a class="anchor" aria-label="anchor" href="#contributing-guidelines"></a>
+</h1>
 <p>If you would like to contribute your work, please follow this list to create a pull request:</p>
 <ul>
 <li>New functions should come with unit tests, or a promise of a new unit test in the form of an issue if getting the functionality merged in is urgent.</li>
@@ -203,7 +196,7 @@
 <li>Update <code>DESCRIPTION</code> when you are using a new dependency in your script.</li>
 <li>Add yourself as a contributor in <code>DESCRIPTION</code>.</li>
 <li>
-<strong>Optional:</strong> You could also run <code><a href="https://devtools.r-lib.org//reference/check.html">devtools::check()</a></code> or <code><a href="https://devtools.r-lib.org//reference/test.html">devtools::test()</a></code> locally. Some tests require <code>covidData</code>. To get accurate test results, please make sure to install the latest daily updates from <code>covidData</code> by using <code>devtools::install_github("reichlab/covidData")</code>.</li>
+<strong>Optional:</strong> You could also run <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> or <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code> locally. Some tests require <code>covidData</code>. To get accurate test results, please make sure to install the latest daily updates from <code>covidData</code> by using <code>devtools::install_github("reichlab/covidData")</code>.</li>
 <li>Make sure your pull request passes all checks in Github Action.</li>
 </ul>
 </div>
@@ -212,48 +205,60 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/reichlab/covidHubUtils/">https://​github.com/​reichlab/​covidHubUtils/​</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="https://opensource.org/licenses/mit-license.php">MIT</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Yijin Serena Wang <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4438-6366" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Ariane Stark <br><small class="roles"> Author </small>  </li>
-<li>Evan L Ray <br><small class="roles"> Author </small>  </li>
-<li>Nikos I. Bosse <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7750-5280" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Nicholas G. Reich <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3503-9899" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Nutcha Wattanachit <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://github.com/reichlab/covidHubUtils/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/reichlab/covidHubUtils/actions"><img src="https://github.com/reichlab/covidHubUtils/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://doi.org/10.5281/zenodo.5207940"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5207940.svg" alt="DOI"></a></li>
+<li><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing covidHubUtils</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Yijin Serena Wang <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4438-6366" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Ariane Stark <br><small class="roles"> Author </small>  </li>
+<li>Evan L Ray <br><small class="roles"> Author </small>  </li>
+<li>Nikos I. Bosse <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7750-5280" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Nicholas G. Reich <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3503-9899" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Nutcha Wattanachit <br><small class="roles"> Author </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/reichlab/covidHubUtils/actions" class="external-link"><img src="https://github.com/reichlab/covidHubUtils/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.5207940" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5207940.svg" alt="DOI"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Yijin Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
+  <p></p>
+<p>Developed by Yijin Serena Wang, Ariane Stark, Evan L Ray, Nikos I. Bosse, Nicholas G. Reich, Nutcha Wattanachit.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -261,6 +266,8 @@
 
   
 
+
+  
 
   </body>
 </html>

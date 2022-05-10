@@ -15,14 +15,17 @@
 #' for each sub-list of dates.
 #' Default to  `NULL` which would include all valid forecast dates.
 #' The function will throw an error if all dates in this parameter are invalid forecast dates.
-#' @param locations list of fips. Default to all locations with available forecasts.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations with available forecasts.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types.
 #' @param targets character vector of targets to retrieve, for example
 #' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
 #' Default to `NULL` which stands for all valid targets.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' from which to load forecasts. Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #' @param verbose logical to print out diagnostic messages. Default is `TRUE`
 #'
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
@@ -30,14 +33,13 @@
 #' `location_name`, `population`, `geo_type`, `geo_value`, `abbreviation`
 #'
 #' @export
-load_forecasts_repo <- function(
-                                file_path,
+load_forecasts_repo <- function(file_path,
                                 models = NULL,
                                 forecast_dates = NULL,
                                 locations = NULL,
                                 types = NULL,
                                 targets = NULL,
-                                hub = c("US", "ECDC"),
+                                hub = c("US", "ECDC", "FluSight"),
                                 verbose = TRUE) {
 
   # validate file path to data-processed folder
@@ -59,16 +61,20 @@ load_forecasts_repo <- function(
   }
   
   models <- sort(models, method = "radix")
-
+  
   # get valid location codes
   if (hub[1] == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
   } else if (hub[1] == "ECDC") {
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
+  } else if (hub[1] == "FluSight") {
+    valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
   }
 
   # validate locations
   if (!is.null(locations)) {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
     locations <- match.arg(locations, choices = valid_location_codes, several.ok = TRUE)
   } else {
     locations <- valid_location_codes
@@ -86,6 +92,8 @@ load_forecasts_repo <- function(
     all_valid_targets <- covidHubUtils::hub_targets_us
   } else if (hub[1] == "ECDC") {
     all_valid_targets <- covidHubUtils::hub_targets_ecdc
+  } else if (hub[1] == "FluSight") {
+    all_valid_targets <- covidHubUtils::hub_targets_flusight
   }
 
   # validate targets
@@ -203,7 +211,7 @@ load_forecast_files_repo <- function(file_paths,
                                      locations = NULL,
                                      types = NULL,
                                      targets = NULL,
-                                     hub = c("US", "ECDC")) {
+                                     hub = c("US", "ECDC", "FluSight")) {
 
   # validate file_paths exist
   if (is.null(file_paths) | missing(file_paths)) {

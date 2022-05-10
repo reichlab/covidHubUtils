@@ -21,7 +21,10 @@
 #' This function will return the latest forecasts
 #' for each sub-list of dates.
 #' Default to  `NULL` which would include all valid forecast dates in Zoltar.
-#' @param locations list of fips. Default to all locations with available forecasts in Zoltar.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations with available forecasts in `zoltar_sqlite_file`.
 #' @param types Character vector specifying type of forecasts to load: `"quantile"`
 #' and/or `"point"`. Default to all valid forecast types in Zoltar.
 #' @param targets character vector of targets to retrieve, for example
@@ -73,6 +76,9 @@ load_forecasts_local_zoltar <- function(models = NULL,
       several.ok = TRUE
     )
   }
+  
+  # Convert location names to fips codes or country abbreviations
+  locations <- name_to_fips(locations, hub)
 
   original_wd <- setwd(local_zoltpy_path)
   

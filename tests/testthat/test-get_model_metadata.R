@@ -2,7 +2,7 @@ context("get_model_metadata")
 library(covidHubUtils)
 library(dplyr)
 
-test_that("get_model_metadata works: local directory, all models", {
+test_that("get_model_metadata works: local directory, data-processed folder, all models", {
   actual <- covidHubUtils::get_model_metadata(
     source = "local_hub_repo",
     hub_repo_path = "test-data/test-get_model_designations"
@@ -31,7 +31,29 @@ test_that("get_model_metadata works: local directory, all models", {
   expect_equal(actual, expected)
 })
 
-test_that("get_model_metadata works: local directory, specified models", {
+test_that("get_model_metadata works: local directory, data-forecasts folder, all models", {
+  actual <- covidHubUtils::get_model_metadata(
+    source = "local_hub_repo",
+    hub_repo_path = "test-data/test-get_model_designations",
+    hub = c("FluSight")
+  )
+  
+  expected <- data.frame(
+    team_name = c("TeamA", "TeamB"),
+    model_name = c("ModelA", "ModelB"),
+    model = c("TeamA-ModelA","TeamB-ModelB"),
+    website_url = c(
+      "https://covid19forecasthub.org/", "https://covid19forecasthub.org/"
+    ),
+    designation = c("primary", "primary"),
+    ensemble_of_hub_models = c(FALSE, FALSE),
+    stringsAsFactors = FALSE
+  )
+  
+  expect_equal(actual, expected)
+})
+
+test_that("get_model_metadata works: local directory, data-processed folder, specified models", {
   actual <- covidHubUtils::get_model_metadata(
     source = "local_hub_repo",
     models = c("COVIDhub-baseline", "COVIDhub-ensemble", "teamA-modelA"),
@@ -48,6 +70,27 @@ test_that("get_model_metadata works: local directory, specified models", {
     stringsAsFactors = FALSE
   )
 
+  expect_equal(actual, expected)
+})
+
+test_that("get_model_metadata works: local directory, data-forecasts folder, specified models", {
+  actual <- covidHubUtils::get_model_metadata(
+    source = "local_hub_repo",
+    models = c("TeamA-ModelA"),
+    hub_repo_path = "test-data/test-get_model_designations",
+    hub = c("FluSight")
+  )
+  
+  expected <- data.frame(
+    team_name = c("TeamA"),
+    model_name = c("ModelA"),
+    model = c("TeamA-ModelA"),
+    website_url = c("https://covid19forecasthub.org/"),
+    designation = c("primary"),
+    ensemble_of_hub_models = c(FALSE),
+    stringsAsFactors = FALSE
+  )
+  
   expect_equal(actual, expected)
 })
 

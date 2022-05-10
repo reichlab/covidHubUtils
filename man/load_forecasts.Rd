@@ -18,7 +18,7 @@ load_forecasts(
   zoltar_sqlite_file,
   data_processed_subpath = "data-processed/",
   as_of = NULL,
-  hub = c("US", "ECDC"),
+  hub = c("US", "ECDC", "FluSight"),
   verbose = TRUE
 )
 }
@@ -34,7 +34,10 @@ Default to all valid forecast dates.}
 look for the most recent forecasts.
 Default to 0, which means to only look at the \code{dates} parameter only.}
 
-\item{locations}{list of location codes. Default to all locations with available forecasts.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
 and/or \code{"point"}. Default to all valid forecast types.}
@@ -69,7 +72,7 @@ If not, helper function will append the default timezone to your input based on 
 Default to NULL to load the latest version.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
+from which to load forecasts. Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 
 \item{verbose}{logical to print out diagnostic messages. Default is \code{TRUE}.}
 }

@@ -3,10 +3,10 @@
 #' @param models optional character vector of model abbreviations for
 #' which to retrieve designations. If not provided, the function returns model
 #' designations for all models.
+#' @param hub character, which hub to use. Options are "US", "ECDC" and "FluSight".
 #' @param source string specifying where forecasts will be loaded from:
-#'  currently only supports `"local_hub_repo"`
-#' @param hub_repo_path path to local clone of the `reichlab/covid19-forecast-hub`
-#' repository
+#' currently only supports `"local_hub_repo"`
+#' @param hub_repo_path path to local clone of the forecast hub repository
 #'
 #' @return data.frame with columns corresponding to any fieldnames in the 
 #' metadata files from the queried models. NA represents an absence of data
@@ -19,6 +19,7 @@
 #' @export
 
 get_model_metadata <- function(models =  NULL, 
+                               hub = c("US", "ECDC", "FluSight"),
                                source = "local_hub_repo", 
                                hub_repo_path) {
   source <- match.arg(source, choices = c("local_hub_repo"))
@@ -30,7 +31,8 @@ get_model_metadata <- function(models =  NULL,
     # validate models
     all_valid_models <- get_all_models(
       source = "local_hub_repo",
-      hub_repo_path = hub_repo_path
+      hub_repo_path = hub_repo_path,
+      hub = hub
     )
     
     if (!missing(models)) {
@@ -39,8 +41,14 @@ get_model_metadata <- function(models =  NULL,
       models <- all_valid_models
     }
     
+    if (hub[1] == "US" | hub[1] == "ECDC") {
+      forecast_foldername <- "data-processed/"
+    } else if (hub[1] == "FluSight") {
+      forecast_foldername <- "data-forecasts/"
+    }
+    
     # construct path to metadata file from the root of hub repo
-    model_metadata_paths <- paste0("data-processed/", models, "/metadata-", models, ".txt")
+    model_metadata_paths <- paste0(forecast_foldername, models, "/metadata-", models, ".txt")
     
     # replace space in hub repo path with a backslash and a space
     hub_repo_path <- gsub(" ", "\ ", hub_repo_path, fixed = TRUE)

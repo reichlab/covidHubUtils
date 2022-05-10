@@ -5,7 +5,7 @@
 \title{Create a datetime by appending time and/or UTC timezone
 to the given date string, if necessary}
 \usage{
-date_to_datetime(date = NULL, hub = c("US", "ECDC"))
+date_to_datetime(date = NULL, hub = c("US", "ECDC", "FluSight"))
 }
 \arguments{
 \item{date}{date in character.
@@ -15,7 +15,7 @@ or a YYYY-MM-DD date with HH:MM:SS time and UTC timezone.
 Default to NULL}
 
 \item{hub}{character vector, where the first element indicates the hub
-to set default timezone. Possible options are "US" and "ECDC".}
+to set default timezone. Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 }
 \value{
 NULL or datetime characters with date, time in UTC timezone

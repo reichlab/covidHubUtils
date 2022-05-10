@@ -11,15 +11,18 @@
 #' `target_end_date`, `location and value`.
 #' `Model` column can be `"Observed Data (a truth source)"`.
 #' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
+#' from which to load forecasts. 
+#' Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #' @param models vector of strings specifying models to plot.
 #' Default to all models in `forecast_data`.
 #' @param target_variable string specifying target type. It should be one of
-#' `"cum death"`, `"inc case"`, `"inc death"` and `"inc hosp"`.
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"` and `"inc flu hosp"`.
 #' `"cum death"` and `"inc hosp"` are only available in forecasts from US hub now.
 #' If there is only one `target_variable` in `forecast_data`, this parameter is optional.
-#' @param locations vector of strings for fips code, `'US'` or abbreviation of European countries.
-#' Default to all locations in `forecast_data`.
+#' @param locations a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations in `forecast_data`.
 #' @param facet interpretable facet option for ggplot. Function will error
 #' if multiple locations are passed in without location in the facet formula.
 #' @param facet_scales argument for scales in [ggplot2::facet_wrap]. Default to `"fixed"`.
@@ -110,7 +113,7 @@
 #' @export
 plot_forecasts <- function(forecast_data,
                            truth_data = NULL,
-                           hub = c("US", "ECDC"),
+                           hub = c("US", "ECDC", "FluSight"),
                            models = NULL,
                            target_variable= NULL,
                            locations = NULL,
@@ -151,10 +154,13 @@ plot_forecasts <- function(forecast_data,
   } else {
     models <- unique(forecast_data$model)
   }
-
+  
   # optional locations parameter. Default to all locations in forecast_data
   if (missing(locations)) {
     locations <- unique(forecast_data$location)
+  } else {
+    # Convert location names to fips codes or country abbreviations
+    locations <- name_to_fips(locations, hub)
   }
 
   # get lists of valid parameter choices based on `hub`
@@ -169,7 +175,12 @@ plot_forecasts <- function(forecast_data,
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
     valid_target_variables <- c("inc case", "inc death")
     valid_truth_sources <- c("JHU", "jhu", "ECDC", "ecdc")
+  } else if (hub[1] == "FluSight") {
+    valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
+    valid_target_variables <- c("inc flu hosp")
+    valid_truth_sources <- c("HealthData")
   }
+  
 
   # validate locations
   if (!all(locations %in% forecast_data$location)) {
@@ -236,7 +247,7 @@ plot_forecasts <- function(forecast_data,
       several.ok = FALSE
     )
 
-    if (target_variable == "inc hosp") {
+    if (target_variable == "inc hosp" | target_variable == "inc flu hosp") {
       if (truth_source != "HealthData") {
         stop("Error in plot_forecasts: Incident hopsitalization truth data is only available from HealthData.gov now.")
       }
@@ -425,10 +436,11 @@ plot_forecasts <- function(forecast_data,
     full_target_variable <- "Incident Cases"
   } else if (target_variable == "inc death") {
     full_target_variable <- "Incident Deaths"
-  } else if (target_variable == "inc hosp") {
+  } else if (target_variable == "inc hosp" |
+             target_variable == "inc flu hosp") {
     full_target_variable <- "Incident Hospitalizations"
   }
-
+  
   # split plot data
   plot_data_forecast <- plot_data %>%
     dplyr::filter(truth_forecast == "forecast")
@@ -440,9 +452,14 @@ plot_forecasts <- function(forecast_data,
 
   # generate title if specified as "default", otherwise leave as is
   if (title == "default") {
-    if (target_variable == "inc hosp") {
+    if (target_variable == "inc hosp" & hub[1] != "FluSight") {
       title <- paste0(
         "Daily COVID-19 ", full_target_variable,
+        ": observed and forecasted"
+      )
+    } else if (hub[1] == "FluSight"){
+      title <- paste0(
+        "Weekly Influenza ", full_target_variable,
         ": observed and forecasted"
       )
     } else {
@@ -708,7 +725,7 @@ plot_forecasts <- function(forecast_data,
 #'
 plot_forecast <- function(forecast_data,
                           truth_data = NULL,
-                          hub = hub,
+                          hub = c("US", "ECDC", "FluSight"),
                           models = NULL,
                           target_variable,
                           locations = NULL,

@@ -2,7 +2,7 @@ context("get_model_designations")
 library(covidHubUtils)
 library(dplyr)
 
-test_that("get_model_designations works: local directory, all models", {
+test_that("get_model_designations works: local directory, data-processed folder, all models", {
   actual <- covidHubUtils::get_model_designations(
     source = "local_hub_repo",
     hub_repo_path = "test-data/test-get_model_designations"
@@ -23,7 +23,23 @@ test_that("get_model_designations works: local directory, all models", {
   expect_equal(actual, expected)
 })
 
-test_that("get_model_designations works: local directory, specified models", {
+test_that("get_model_designations works: local directory, data-forecasts folder, all models", {
+  actual <- covidHubUtils::get_model_designations(
+    source = "local_hub_repo",
+    hub_repo_path = "test-data/test-get_model_designations",
+    hub = "FluSight"
+  )
+  
+  expected <- data.frame(
+    model = c("TeamA-ModelA","TeamB-ModelB"),
+    designation = c("primary", "primary"),
+    stringsAsFactors = FALSE
+  )
+  
+  expect_equal(actual, expected)
+})
+
+test_that("get_model_designations works: local directory, data-processed folder, specified models", {
   actual <- covidHubUtils::get_model_designations(
     source = "local_hub_repo",
     models = c("COVIDhub-baseline", "COVIDhub-ensemble", "teamA-modelA"),
@@ -36,6 +52,23 @@ test_that("get_model_designations works: local directory, specified models", {
     stringsAsFactors = FALSE
   )
 
+  expect_equal(actual, expected)
+})
+
+test_that("get_model_designations works: local directory, data-forecasts folder, specified models", {
+  actual <- covidHubUtils::get_model_designations(
+    source = "local_hub_repo",
+    models = c("TeamA-ModelA"),
+    hub_repo_path = "test-data/test-get_model_designations",
+    hub = "FluSight"
+  )
+  
+  expected <- data.frame(
+    model = c("TeamA-ModelA"),
+    designation = c("primary"),
+    stringsAsFactors = FALSE
+  )
+  
   expect_equal(actual, expected)
 })
 

@@ -8,6 +8,7 @@ test_that("load_forecast from local repo works with window size", {
   all_forecasts <- covidHubUtils::load_forecasts(
     models = c("COVIDhub-ensemble", "COVIDhub-baseline"),
     dates = c("2020-12-08", "2020-12-15"),
+    locations = c("New York", "US"),
     date_window_size = 1,
     source = "local_hub_repo",
     hub_repo_path = "test-data/test-load_forecasts/")
@@ -15,11 +16,12 @@ test_that("load_forecast from local repo works with window size", {
   # expect correct combinations of model and forecast date
   expect_identical(
     all_forecasts %>%
-      dplyr::distinct(model, forecast_date) %>%
+      dplyr::distinct(model, location, forecast_date) %>%
       dplyr::arrange(model, forecast_date),
     tidyr::expand_grid(
       model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14"))
+      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14")),
+      location = c("36", "US")
     )
   )
 })
@@ -68,17 +70,19 @@ test_that("load_forecast from zoltar works with window size", {
   all_forecasts <- covidHubUtils::load_forecasts(
     models = c("COVIDhub-ensemble", "COVIDhub-baseline"),
     dates = c("2020-12-08", "2020-12-15"),
+    locations = c("New York", "US"),
     date_window_size = 1,
     source = "zoltar")
   
   # expect correct combinations of model and forecast date
   expect_identical(
     all_forecasts %>%
-      dplyr::distinct(model, forecast_date) %>%
+      dplyr::distinct(model, location, forecast_date) %>%
       dplyr::arrange(model, forecast_date),
     tidyr::expand_grid(
       model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14"))
+      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14")),
+      location = c("US", "36"),
     )
   )
 })

@@ -16,7 +16,7 @@ get_plot_forecast_data(
   truth_source,
   target_variable_to_plot,
   truth_as_of = NULL,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC", "FluSight")
 )
 }
 \arguments{
@@ -40,8 +40,10 @@ the forecast date.}
 
 \item{quantiles_to_plot}{vector of quantiles to include in the plot}
 
-\item{locations_to_plot}{optional character vector of location fips codes.
-Default to all locations available in \code{forecast_data}.}
+\item{locations_to_plot}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations available in \code{forecast_data}.}
 
 \item{plot_truth}{logical to indicate whether truth data should be plotted.
 Default to \code{TRUE}.}
@@ -52,13 +54,13 @@ be loaded from if truth_data is not provided. Currently support \code{"JHU"},
 Optional if \code{truth_data} is provided.}
 
 \item{target_variable_to_plot}{string specifying target type. It should be one of
-\code{"cum death"}, \code{"inc case"}, \code{"inc death"} and \code{"inc hosp"}.}
+\code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"} and \code{"inc flu hosp"}.}
 
 \item{truth_as_of}{the plot includes the truth data that would have been
 in real time as of the \code{truth_as_of} date.}
 
-\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
-\code{"ECDC"}}
+\item{hub}{character, which hub to use. Default is \code{"US"}.
+Other options are \code{"ECDC"} and \code{"FluSight"}.}
 }
 \value{
 data.frame with columns \code{model},

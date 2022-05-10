@@ -13,19 +13,21 @@ load_truth(
   locations = NULL,
   data_location = NULL,
   local_repo_path = NULL,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC", "FluSight")
 )
 }
 \arguments{
 \item{truth_source}{character vector specifying where the truths will
 be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \verb{"HealthData}" and \code{"ECDC"}.
 If \code{NULL}, default for US hub is \code{c("JHU", "HealthData")}.
-If \code{NULL}, default for ECDC hub is \code{c("JHU")}.}
+If \code{NULL}, default for ECDC hub is \code{c("JHU")}.
+If \code{NULL}, default for FluSight hub is \code{c("HealthData")}.}
 
 \item{target_variable}{string specifying target type It should be one or more of
 \code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.
 If \code{NULL}, default for US hub is \code{c("inc case", "inc death", "inc hosp")}.
-If \code{NULL}, default for ECDC hub is \code{c("inc case", "inc death")}.}
+If \code{NULL}, default for ECDC hub is \code{c("inc case", "inc death")}.
+If \code{NULL}, default for FluSight hub is \code{c("inc flu hosp")}.}
 
 \item{as_of}{character vector of "as of" dates to use for querying truths in
 format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
@@ -38,23 +40,24 @@ If \code{NULL},default to system date.}
 \item{temporal_resolution}{character specifying temporal resolution
 to include: currently support \code{"weekly"} and \code{"daily"}.
 If \code{NULL}, default to \code{"weekly"} for cases and deaths, \code{"daily"} for hospitalizations.
-Weekly \code{temporal_resolution} will not be applied to \code{"inc hosp"} when
+Weekly \code{temporal_resolution} will not be applied to \code{"inc hosp"} and \code{"inc flu hosp"}when
 multiple target variables are specified.
 \code{"ECDC"} truth data is weekly by default. Daily level data is not available.}
 
-\item{locations}{vector of valid location code.
-If \code{NULL}, default to all locations with available forecasts.
-US hub is using FIPS code and ECDC hub is using country name abbreviation.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{data_location}{character specifying the location of truth data.
 Currently only supports \code{"local_hub_repo"}, \code{"remote_hub_repo"} and \code{"covidData"}.
 If \code{NULL}, default to \code{"remote_hub_repo"}.}
 
-\item{local_repo_path}{path to local clone of the \code{reichlab/covid19-forecast-hub}
-repository. Only used when data_location is \code{"local_hub_repo"}}
+\item{local_repo_path}{path to local clone of the hub repository.
+Only used when data_location is \code{"local_hub_repo"}}
 
-\item{hub}{character, which hub to use. Default is \code{"US"}, other option is
-\code{"ECDC"}}
+\item{hub}{character, which hub to use. Default is "US".
+Other options are "ECDC" and "FluSight".}
 }
 \value{
 data.frame with columns \code{model}, \code{target_variable}, \code{target_end_date},
@@ -70,21 +73,24 @@ By default, for the US hub, the resulting data.frame contains data for weekly in
 weekly incident deaths (JHU) and daily incident hospitalization (HealthData) at all county, state and
 national level. For the ECDC hub, the default resulting data.frame contains data for weekly incident cases (JHU),
 weekly incident deaths (JHU) and daily incident hospitalization (ECDC) for all European countries.
+For the FluSight hub, the default resulting data.frame contains data for weekly incident hospitalization (HealthData)
+for all US locations.
 }
 \details{
 \itemize{
-\item\code{"inc hosp"} is only available from \code{"HealthData"} and \code{"ECDC"} and this function is not loading
-data for other target variables from \code{"HealthData"}.
+\item\code{"inc hosp"} is only available from \code{"HealthData"} and \code{"ECDC"}.\code{"inc flu hosp"} is only available from \code{"HealthData"}.
+
+\item This function is not loading data for other target variables from \code{"HealthData"}.
 
 \item When loading data for multiple target variables for the US hub, \code{temporal_resolution} will be applied
-to all target variables but \code{"inc hosp"}. In that case, the function will return
-daily incident hospitalization counts along with other data.
+to all target variables but \code{"inc hosp"} and \code{"inc flu hosp"}. In that case, the function will return
+daily incident COVID hospitalization counts and weekly incident Influenza hospitalization.
 
 \item For the US hub, weekly temporal resolution will be applied to \code{"inc hosp"} if the user specifies \code{"inc hosp"}
-as the only \code{target_variable}.On the other hand, \code{temporal_resolution} will
+as the only \code{target_variable}. On the other hand, \code{temporal_resolution} will
 be applied to \code{"inc hosp"} in all cases for the ECDC hub.
 
-\item When loading weekly data, if there are not enough observations for a week, the corresponding
+\item When aggregating daily data, if there are not enough observations for a week, the corresponding
 weekly count would be \code{NA} in resulting data frame.
 
 \item \code{as_of} is only supported when \code{data_location = "covidData"}. Otherwise, this function

@@ -164,18 +164,18 @@ calc_submission_due_date <- function(forecast_date, submission_day = "Monday") {
 #' or a YYYY-MM-DD date with HH:MM:SS time and UTC timezone.
 #' Default to NULL
 #' @param hub character vector, where the first element indicates the hub
-#' to set default timezone. Possible options are "US" and "ECDC".
+#' to set default timezone. Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #'
 #' @return NULL or datetime characters with date, time in UTC timezone
 #'
 #' @export
-date_to_datetime <- function(date = NULL, hub = c("US", "ECDC")) {
+date_to_datetime <- function(date = NULL, hub = c("US", "ECDC", "FluSight")) {
   # default for `as_of` in zoltr
   if (is.null(date)) {
     return(NULL)
   }
 
-  if (hub[1] == "US") {
+  if (hub[1] == "US" | hub[1] == "FluSight") {
     default_timezone_location <- "America/New_York"
   } else if (hub[1] == "ECDC") {
     default_timezone_location <- "Europe/Stockholm"

@@ -1,14 +1,49 @@
-## Changes since last release
-- Support loading data from local zoltar module in `load_forecasts()` when `source = "local_zoltar"`. Please follow instructions in  `load_forecasts_local_zoltar()` to set up required environment for this functionality.
-- Sort `models` parameter in `load_forecasts()` and `load_latest_forecasts()` so that the resulting data frame is 
-locale-independent
-- Add `hub` parameter in `get_all_models()`. It does not support loading model names for ECDC hub from remote hub repo for now. 
-- Rename sharpness score as dispersion. 
-- Update warning messages and error messages in `load_forecasts_zoltar()`.
-- Remove `as_of` functionality in `get_model_metadata()` and `get_model_designations()`. `as_of` parameter is not available now.
-- Fix bug resulting in error in `get_model_metadata()` when a metadata file has `NULL` fields.
-- Fix bug resulting in empty ouput in `load_forecats_zoltar()` when verbose is `TRUE`.
-- Add validation for `temporal_resolution` in `calc_target_end_date()`.
+## covidHubUtils 0.1.7
+
+This is a release focusing on new features and bug fixes in some major functions.
+
+covidHubUtils now works with new version of `scoringutils` pacakge on GitHub.
+
+### Feature updates
+- All `locations` parameters now take location names. This parameter should be a vector of strings of fips code or CBSA codes or location names, such as "Hampshire County, MA", "Alabama", "United Kingdom".
+
+- Update `load_forecasts()`
+
+  + Support loading data from local zoltar module in `load_forecasts()` when `source = "local_zoltar"`. Please follow instructions in  `load_forecasts_local_zoltar()` to set up required environment for this functionality.
+  
+  + Fix bug resulting in empty ouput in `load_forecats_zoltar()` when verbose is `TRUE`.
+  
+  + Update warning messages and error messages in `load_forecasts_zoltar()`.
+  
+  + Sort `models` parameter in `load_forecasts()` and `load_latest_forecasts()` so that the resulting data frame is locale-independent.
+
+- Update `score_forecasts()`
+
+  + Rename sharpness score as dispersion. 
+  
+  + Update all functionality to handle new version of `scoringutils`.
+
+- Update `load_truth()`
+
+  + Turn off `"inc case"` and `"inc death"` target variables for `"ECDC"` truth source.
+  
+- Update `get_model_metadata()`
+  
+  + Remove `as_of` functionality in `get_model_metadata()` and `get_model_designations()`. `as_of` parameter is not available now.
+  
+  + Fix bug resulting in error in `get_model_metadata()` when a metadata file has `NULL` fields.
+  
+- Update `get_all_models()`
+
+  + Add `hub` parameter. It does not support loading model names for `"ECDC"` hub from remote hub repo for now. 
+
+- Update `calc_target_end_date()`.
+
+  + Add validation for `temporal_resolution` 
+
+### Package updates
+- There is no backwards compatibility.
+- New vignette and pkgdown site
 
 ## covidHubUtils 0.1.6
 

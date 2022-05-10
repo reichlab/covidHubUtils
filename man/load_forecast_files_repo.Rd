@@ -10,14 +10,17 @@ load_forecast_files_repo(
   locations = NULL,
   types = NULL,
   targets = NULL,
-  hub = c("US", "ECDC")
+  hub = c("US", "ECDC", "FluSight")
 )
 }
 \arguments{
 \item{file_paths}{paths to csv forecast files to read in.  It is expected that
 the file names are in the format "*YYYY-MM-DD-<model_name>.csv".}
 
-\item{locations}{list of fips. Default to all locations with available forecasts.}
+\item{locations}{a vector of strings of fips code or CBSA codes or location names,
+such as "Hampshire County, MA", "Alabama", "United Kingdom".
+A US county location names must include state abbreviation.
+Default to \code{NULL} which would include all locations with available forecasts.}
 
 \item{types}{Character vector specifying type of forecasts to load: \code{"quantile"}
 and/or \code{"point"}. Default to all valid forecast types.}
@@ -27,7 +30,7 @@ and/or \code{"point"}. Default to all valid forecast types.}
 Default to \code{NULL} which stands for all valid targets.}
 
 \item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}.}
+from which to load forecasts. Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,

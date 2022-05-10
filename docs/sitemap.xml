@@ -103,6 +103,9 @@
     <loc>/reference/hub_targets_ecdc.html</loc>
   </url>
   <url>
+    <loc>/reference/hub_targets_flusight.html</loc>
+  </url>
+  <url>
     <loc>/reference/hub_targets_us.html</loc>
   </url>
   <url>
@@ -143,6 +146,9 @@
   </url>
   <url>
     <loc>/reference/load_truth.html</loc>
+  </url>
+  <url>
+    <loc>/reference/name_to_fips.html</loc>
   </url>
   <url>
     <loc>/reference/pivot_forecasts_wider.html</loc>

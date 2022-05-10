@@ -1,0 +1,6 @@
+team_name: TeamA
+model_name: ModelA
+model_abbr: TeamA-ModelA
+website_url: https://covid19forecasthub.org/
+team_model_designation: primary
+ensemble_of_hub_models: false

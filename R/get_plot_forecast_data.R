@@ -14,8 +14,10 @@
 #' @param horizons_to_plot forecasts are plotted for the horizon time steps after
 #' the forecast date.
 #' @param quantiles_to_plot vector of quantiles to include in the plot
-#' @param locations_to_plot  optional character vector of location fips codes.
-#' Default to all locations available in `forecast_data`.
+#' @param locations_to_plot  a vector of strings of fips code or CBSA codes or location names,
+#' such as "Hampshire County, MA", "Alabama", "United Kingdom".
+#' A US county location names must include state abbreviation. 
+#' Default to `NULL` which would include all locations available in `forecast_data`.
 #' @param plot_truth logical to indicate whether truth data should be plotted.
 #' Default to `TRUE`.
 #' @param truth_source character specifying where the truth data will
@@ -23,11 +25,11 @@
 #' `"USAFacts"`, `"NYTimes"` and `"HealthData"`.
 #' Optional if `truth_data` is provided.
 #' @param  target_variable_to_plot string specifying target type. It should be one of
-#' `"cum death"`, `"inc case"`, `"inc death"` and `"inc hosp"`.
+#' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"` and `"inc flu hosp"`.
 #' @param  truth_as_of the plot includes the truth data that would have been
 #' in real time as of the `truth_as_of` date.
-#' @param hub character, which hub to use. Default is `"US"`, other option is
-#' `"ECDC"`
+#' @param hub character, which hub to use. Default is `"US"`. 
+#' Other options are `"ECDC"` and `"FluSight"`.
 #'
 #' @return data.frame with columns `model`,
 #' `forecast_date`, `location`, `target_variable`, `type`, `quantile`, `value`,
@@ -45,7 +47,7 @@ get_plot_forecast_data <- function(forecast_data,
                                    truth_source,
                                    target_variable_to_plot,
                                    truth_as_of = NULL,
-                                   hub = c("US", "ECDC")) {
+                                   hub = c("US", "ECDC", "FluSight")) {
 
   # get lists of valid parameter choices based on `hub`
   if (hub[1] == "US") {
@@ -59,11 +61,18 @@ get_plot_forecast_data <- function(forecast_data,
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
     valid_target_variables <- c("inc case", "inc death")
     valid_truth_sources <- c("JHU", "jhu", "ECDC", "ecdc")
+  } else if (hub[1] == "FluSight") {
+    valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
+    valid_target_variables <- c("inc flu hosp")
+    valid_truth_sources <- c("HealthData")
   }
-
+  
   # validate locations_to_plot
   if (missing(locations_to_plot)) {
     locations_to_plot <- unique(forecast_data$location)
+  } else {
+    # Convert location names to fips codes or country abbreviations
+    locations_to_plot <- name_to_fips(locations_to_plot, hub) 
   }
 
   locations_to_plot <- intersect(
@@ -150,7 +159,11 @@ get_plot_forecast_data <- function(forecast_data,
   } else if (hub[1] == "ECDC") {
     forecasts <- forecasts %>%
       dplyr::rename(abbr = location, location = location_name)
+  } else if (hub[1] == "FluSight") {
+    forecasts <- forecasts %>%
+      dplyr::rename(abbr = location, location = location_name)
   }
+  
 
   if (plot_truth) {
     if (is.null(truth_data)) {
@@ -188,6 +201,9 @@ get_plot_forecast_data <- function(forecast_data,
       truth <- truth %>%
         dplyr::rename(abbr = location, location = full_location_name)
     } else if (hub[1] == "ECDC") {
+      truth <- truth %>%
+        dplyr::rename(abbr = location, location = location_name)
+    } else if (hub[1] == "FluSight") {
       truth <- truth %>%
         dplyr::rename(abbr = location, location = location_name)
     }

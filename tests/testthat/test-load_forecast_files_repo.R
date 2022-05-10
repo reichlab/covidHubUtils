@@ -4,7 +4,7 @@ library(covidHubUtils)
 library(dplyr)
 library(lubridate)
 
-test_that("load_forecast_files_repo works", {
+test_that("load_forecast_files_repo works with data-processed folder", {
   forecast_files <-
     Sys.glob("test-data/test-load_forecasts/data-processed/*/*.csv")
   
@@ -23,6 +23,24 @@ test_that("load_forecast_files_repo works", {
                                        "2020-12-07", "2020-12-14", "2021-05-03 ",
                                        "2020-12-07", "2020-12-14"
                                        ))
+    )
+  )
+})
+
+test_that("load_forecast_files_repo works with data-forecasts folder", {
+  forecast_files <-
+    Sys.glob("test-data/test-load_forecasts/data-forecasts/*/*.csv")
+  
+  all_forecasts <- covidHubUtils::load_forecast_files_repo(forecast_files)
+  
+  # expect correct combinations of model and forecast date
+  expect_identical(
+    all_forecasts %>%
+      dplyr::distinct(model, forecast_date) %>%
+      dplyr::arrange(model, forecast_date),
+    dplyr::tibble(
+      model = c("TeamA-ModelA","TeamB-ModelB"),
+      forecast_date = lubridate::ymd(c("2021-12-13", "2021-12-13"))
     )
   )
 })
