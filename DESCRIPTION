@@ -1,6 +1,6 @@
 Package: covidHubUtils
 Title: Utility functions for the COVID-19 forecast hub
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(
     person(given = "Yijin Serena",
            family = "Wang",
