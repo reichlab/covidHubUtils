@@ -90,7 +90,7 @@ Suggests:
     knitr,
     rmarkdown
 Remotes:
-    reichlab/zoltr
+    reichlab/zoltr,
     epiforecasts/scoringutils
 Depends: 
     R (>= 3.5.0)
