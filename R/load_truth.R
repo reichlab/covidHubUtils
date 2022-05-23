@@ -585,7 +585,7 @@ load_from_hub_repo <- function(target_variable,
     hub = hub
   )
   # load data from file path
-  truth_data <- readr::read_csv(file_path)
+  truth_data <- readr::read_csv(file_path, show_col_types = FALSE)
 
   truth_data <- truth_data %>%
     # add inc_cum and death_case columns
