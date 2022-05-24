@@ -1,5 +1,7 @@
 ## Changes since last release
 - Update `download_raw_nytimes()` to load county level data from separate files for each year on nytimes github repository.
+- Remove `"USAFacts"` as `truth_source` from `load_truth()`, `plot_forecasts()` and vignettes. 
+- Update `load_truth()` to work with files stored with Git LFS in the US forecast hub. 
 
 ## covidHubUtils 0.1.7
 
