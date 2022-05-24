@@ -3,13 +3,16 @@
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth/nytimes/raw/"`
 #' @importFrom readr cols col_date col_integer col_character write_csv
+#' @importFrom purrr map_dfr
 #' @return data.frame of national, state and county level raw truth data
 #'
 #' @export
 download_raw_nytimes <- function(save_location = "./data-truth/nytimes/raw/") {
   us_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv"
   states_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
-  counties_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
+  counties_urls <- c("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2020.csv",
+                    "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2021.csv",
+                    "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv")
 
   us <- readr::read_csv(us_url,
     col_types = readr::cols(
@@ -29,16 +32,17 @@ download_raw_nytimes <- function(save_location = "./data-truth/nytimes/raw/") {
     )
   )
 
-  counties <- readr::read_csv(counties_url,
-    col_types = readr::cols(
-      date = readr::col_date(format = "%Y-%m-%d"),
-      county = readr::col_character(),
-      state = readr::col_character(),
-      fips = readr::col_character(),
-      cases = readr::col_integer(),
-      deaths = readr::col_integer()
+  counties <- counties_urls %>%
+    purrr::map_dfr(
+      readr::read_csv,
+      col_types = readr::cols(
+        date = readr::col_date(format = "%Y-%m-%d"),
+        state = readr::col_character(),
+        fips = readr::col_character(),
+        cases = readr::col_integer(),
+        deaths = readr::col_integer()
+      )
     )
-  )
 
   readr::write_csv(us, file = paste0(save_location, "us.csv"))
   readr::write_csv(states, file = paste0(save_location, "us-states.csv"))
