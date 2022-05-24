@@ -107,7 +107,7 @@ test_that("comapre target variables and models on default selections from remote
 test_that("load one target variable from multiple sources from remote hub repo", {
   # US hub
   actual_us <- load_truth(
-    truth_source = c("JHU", "NYTimes", "USAFacts"),
+    truth_source = c("JHU", "NYTimes"),
     target_variable = c("inc case")
   )
   expect_equal(unique(actual_us$target_variable), c("inc case"))
@@ -115,8 +115,7 @@ test_that("load one target variable from multiple sources from remote hub repo",
     unique(actual_us$model),
     c(
       "Observed Data (JHU)",
-      "Observed Data (NYTimes)",
-      "Observed Data (USAFacts)"
+      "Observed Data (NYTimes)"
     )
   )
   expect_equal(

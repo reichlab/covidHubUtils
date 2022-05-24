@@ -30,7 +30,7 @@
 #' }
 #'
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
+#' be loaded from: currently support `"JHU"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
 #' If `NULL`, default for US hub is `c("JHU", "HealthData")`.
 #' If `NULL`, default for ECDC hub is `c("JHU")`.
 #' If `NULL`, default for FluSight hub is `c("HealthData")`.
@@ -141,7 +141,7 @@ load_truth <- function(truth_source = NULL,
     } else {
       # validate truth source
       truth_source <- match.arg(truth_source,
-        choices = c("JHU", "USAFacts", "NYTimes", "HealthData"),
+        choices = c("JHU", "NYTimes", "HealthData"),
         several.ok = TRUE
       )
     }
@@ -164,13 +164,7 @@ load_truth <- function(truth_source = NULL,
     valid_location_codes <- covidHubUtils::hub_locations$fips
 
     # store path of remote repo
-    if (!"USAFacts" %in% truth_source){
-      remote_repo_path <- "https://media.githubusercontent.com/media/reichlab/covid19-forecast-hub/master/"
-    } else if (length(truth_source) == 1){
-      if (truth_source == "USAFacts") {
-        remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/"
-      }
-    }
+    remote_repo_path <- "https://media.githubusercontent.com/media/reichlab/covid19-forecast-hub/master/"
   } else if (hub[1] == "ECDC") {
     ecdc_default <- FALSE
     if (is.null(target_variable)) {
@@ -296,7 +290,7 @@ load_truth <- function(truth_source = NULL,
   # validate truth source for covidData
   if (data_location == "covidData") {
     if (hub[1] == "US") {
-      if ("USAFacts" %in% truth_source || "NYTimes" %in% truth_source) {
+      if ("NYTimes" %in% truth_source) {
         stop("Error in load_truth: The truth source you selected is not supported for US data in covidData.")
       }
     } else if (hub[1] == "ECDC") {
@@ -425,7 +419,7 @@ load_truth <- function(truth_source = NULL,
 #' Construct the file path to a truth file
 #'
 #' @param source character vector specifying where the truths will
-#' be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".
+#' be loaded from: currently support "JHU", "NYTimes", "HealthData" and "ECDC".
 #' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
 #' @param target_variable string specifying target type It should be one or more of
 #' "cum death", "inc case", "inc death", "inc hosp".
@@ -563,7 +557,7 @@ load_from_coviddata <- function(target_variable,
 #' @param target_variable string specifying target type It should be one or more of
 #' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support `"JHU"`, `"USAFacts"`, `"NYTimes"`, `"HealthData"` and `"ECDC"`.
+#' be loaded from: currently support `"JHU"`, `"NYTimes"`, `"HealthData"` and `"ECDC"`.
 #' @param repo_path path to local clone or remote of the corresponding prediction hub repository.
 #' @param temporal_resolution string specifying temporal resolution
 #' to include: one of `'daily'` or `'weekly'`

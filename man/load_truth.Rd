@@ -18,7 +18,7 @@ load_truth(
 }
 \arguments{
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \verb{"HealthData}" and \code{"ECDC"}.
+be loaded from: currently support \code{"JHU"}, \code{"NYTimes"}, \verb{"HealthData}" and \code{"ECDC"}.
 If \code{NULL}, default for US hub is \code{c("JHU", "HealthData")}.
 If \code{NULL}, default for ECDC hub is \code{c("JHU")}.
 If \code{NULL}, default for FluSight hub is \code{c("HealthData")}.}

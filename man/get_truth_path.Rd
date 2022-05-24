@@ -14,7 +14,7 @@ get_truth_path(
 }
 \arguments{
 \item{source}{character vector specifying where the truths will
-be loaded from: currently support "JHU", "USAFacts", "NYTimes", "HealthData" and "ECDC".}
+be loaded from: currently support "JHU", "NYTimes", "HealthData" and "ECDC".}
 
 \item{repo_path}{path to local clone or remote of the corresponding prediction hub repository.}
 
