@@ -19,7 +19,7 @@ load_from_hub_repo(
 \code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.}
 
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support \code{"JHU"}, \code{"USAFacts"}, \code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.}
+be loaded from: currently support \code{"JHU"}, \code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.}
 
 \item{repo_path}{path to local clone or remote of the corresponding prediction hub repository.}
 
