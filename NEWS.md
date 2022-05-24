@@ -1,3 +1,6 @@
+## Changes since last release
+- Update `download_raw_nytimes()` to load county level data from separate files for each year on nytimes github repository.
+
 ## covidHubUtils 0.1.7
 
 This is a release focusing on new features and bug fixes in some major functions.
