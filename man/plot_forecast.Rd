@@ -81,7 +81,7 @@ forecast date. Default to all available horizons in \code{forecast_data}.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if \code{truth_data} is not provided. Currently support \code{"JHU"},
-\code{"USAFacts"}, \code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.
+\code{"NYTimes"}, \code{"HealthData"} and \code{"ECDC"}.
 Optional if \code{truth_data} is provided.}
 
 \item{use_median_as_point}{logical for using median quantiles as point forecasts in plot.

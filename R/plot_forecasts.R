@@ -38,7 +38,7 @@
 #' forecast date. Default to all available horizons in `forecast_data`.
 #' @param truth_source character specifying where the truth data will
 #' be loaded from if `truth_data` is not provided. Currently support `"JHU"`,
-#' `"USAFacts"`, `"NYTimes"`, `"HealthData"` and `"ECDC"`.
+#' `"NYTimes"`, `"HealthData"` and `"ECDC"`.
 #' Optional if `truth_data` is provided.
 #' @param use_median_as_point logical for using median quantiles as point forecasts in plot.
 #' Default to `FALSE`.
@@ -170,7 +170,7 @@ plot_forecasts <- function(forecast_data,
       "cum death", "inc case",
       "inc death", "inc hosp"
     )
-    valid_truth_sources <- c("JHU", "USAFacts", "NYTimes", "HealthData")
+    valid_truth_sources <- c("JHU", "NYTimes", "HealthData")
   } else if (hub[1] == "ECDC") {
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
     valid_target_variables <- c("inc case", "inc death")
