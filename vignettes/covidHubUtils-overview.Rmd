@@ -372,14 +372,14 @@ p + scale_x_date(name = NULL, date_breaks = "1 months", date_labels = "%b") +
 
 By default `plot_forecasts()` uses JHU CSSE data as the "Observed Data" in the above plots. However, users can specify custom "ground truth" data that either they provide themselves or that is loaded in from the package. 
 
-Here is an example of a call to `plot_forecasts()` that simply specifies an alternate truth source, which must be one of "JHU", "USAFacts", or "NYTimes".
+Here is an example of a call to `plot_forecasts()` that simply specifies an alternate truth source, which must be one of "JHU", "HealthData" or "NYTimes".
 
 ```{r}
 plot_forecasts(
   forecast_data = forecasts_case,
   target_variable = "inc case",
   locations = "US",
-  truth_source = "USAFacts",
+  truth_source = "NYTimes",
   intervals = c(.5, .8, .95)
 )
 ```
@@ -411,7 +411,7 @@ plot_forecasts(
   forecast_data = forecasts_case,
   target_variable = "inc case",
   truth_data = truth_data,
-  truth_source = "USAFacts",
+  truth_source = "JHU",
   intervals = c(.5, .8, .95)
 )
 ```
