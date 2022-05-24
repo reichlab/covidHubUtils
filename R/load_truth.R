@@ -164,7 +164,13 @@ load_truth <- function(truth_source = NULL,
     valid_location_codes <- covidHubUtils::hub_locations$fips
 
     # store path of remote repo
-    remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master"
+    if (!"USAFacts" %in% truth_source){
+      remote_repo_path <- "https://media.githubusercontent.com/media/reichlab/covid19-forecast-hub/master/"
+    } else if (length(truth_source) == 1){
+      if (truth_source == "USAFacts") {
+        remote_repo_path <- "https://raw.githubusercontent.com/reichlab/covid19-forecast-hub/master/"
+      }
+    }
   } else if (hub[1] == "ECDC") {
     ecdc_default <- FALSE
     if (is.null(target_variable)) {
