@@ -470,6 +470,10 @@ get_truth_path <- function(source,
     truth_folder_path <- "/data-truth/truth-"
     file_path <- paste0(repo_path, truth_folder_path, file_name)
   }
+  
+  if (data_location == "local_hub_repo") {
+    file_path <- file.path(file_path)
+  }
   return(file_path)
 }
 
