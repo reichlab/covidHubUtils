@@ -609,7 +609,7 @@ load_from_hub_repo <- function(target_variable,
   } else {
     # for daily data, rename date column
     truth_data <- truth_data %>%
-      dplyr::mutate(date = as.Date(date)) %>%
+      dplyr::mutate(date = as.Date(date,"%Y-%m-%d")) %>%
       dplyr::rename(target_end_date = date) %>%
       dplyr::select(model, target_variable, target_end_date, location, value)
   }
