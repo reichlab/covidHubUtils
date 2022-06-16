@@ -79,7 +79,13 @@
     <loc>/reference/get_model_designations.html</loc>
   </url>
   <url>
+    <loc>/reference/get_model_forecast_history_local_zoltar.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_model_metadata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_models_local_zoltar.html</loc>
   </url>
   <url>
     <loc>/reference/get_plot_forecast_data.html</loc>
@@ -89,6 +95,9 @@
   </url>
   <url>
     <loc>/reference/get_valid_target_list.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_zoltar_project_id_local_zoltar.html</loc>
   </url>
   <url>
     <loc>/reference/get_zoltar_project_url.html</loc>
