@@ -450,29 +450,40 @@ get_truth_path <- function(source,
 
   if (data_location == "remote_hub_repo") {
     file_name <- paste0(gsub(" ", "%20", full_target_variable), ".csv")
+    if (hub[1] == "US") {
+      truth_folder_path <- ifelse((tolower(source) == "jhu" || tolower(source) == "healthdata"),
+                                  "/data-truth/truth-",
+                                  paste0(
+                                    "/data-truth/", tolower(source), "/truth_",
+                                    tolower(source), "-"
+                                  )
+      )
+      file_path <- paste0(repo_path, truth_folder_path, file_name)
+    } else if (hub[1] == "ECDC") {
+      truth_folder_path <- paste0("/data-truth/", toupper(source), "/truth_", toupper(source), "-")
+      file_path <- paste0(repo_path, truth_folder_path, file_name)
+    } else if (hub[1] == "FluSight") {
+      truth_folder_path <- "/data-truth/truth-"
+      file_path <- paste0(repo_path, truth_folder_path, file_name)
+    }
   } else if (data_location == "local_hub_repo") {
     file_name <- paste0(full_target_variable, ".csv")
-  }
-
-  if (hub[1] == "US") {
-    truth_folder_path <- ifelse((tolower(source) == "jhu" || tolower(source) == "healthdata"),
-      "/data-truth/truth-",
-      paste0(
-        "/data-truth/", tolower(source), "/truth_",
-        tolower(source), "-"
+    if (hub[1] == "US") {
+      truth_folder_path <- ifelse((tolower(source) == "jhu" || tolower(source) == "healthdata"),
+                                  file.path("data-truth","truth-"),
+                                  file.path(
+                                    "data-truth", tolower(source), "truth_",
+                                    tolower(source), "-"
+                                  )
       )
-    )
-    file_path <- paste0(repo_path, truth_folder_path, file_name)
-  } else if (hub[1] == "ECDC") {
-    truth_folder_path <- paste0("/data-truth/", toupper(source), "/truth_", toupper(source), "-")
-    file_path <- paste0(repo_path, truth_folder_path, file_name)
-  } else if (hub[1] == "FluSight") {
-    truth_folder_path <- "/data-truth/truth-"
-    file_path <- paste0(repo_path, truth_folder_path, file_name)
-  }
-  
-  if (data_location == "local_hub_repo") {
-    file_path <- file.path(file_path)
+      file_path <- file.path(repo_path, truth_folder_path, file_name)
+    } else if (hub[1] == "ECDC") {
+      truth_folder_path <- file.path("data-truth", toupper(source), "truth_", toupper(source), "-")
+      file_path <- file.path(repo_path, truth_folder_path, file_name)
+    } else if (hub[1] == "FluSight") {
+      truth_folder_path <- file.path("data-truth","truth-")
+      file_path <- file.path(repo_path, truth_folder_path, file_name)
+    }
   }
   return(file_path)
 }
