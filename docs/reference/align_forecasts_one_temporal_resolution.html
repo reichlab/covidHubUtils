@@ -94,6 +94,8 @@ at the daily resolution or the weekly resolution.</p>
     <h2>Arguments</h2>
     <dl><dt>forecasts</dt>
 <dd><p>dataframe in format returned by <code>load_forecasts</code></p></dd>
+
+
 <dt>reference_dates</dt>
 <dd><p>a vector of reference dates for forecasts, grouping
 forecasts that were made during the same week. May be a character vector in
@@ -102,10 +104,14 @@ daily hospitalizations is issued with a forecast date that is Saturday,
 2021-09-04, and we want to align analyses around a Monday, the reference
 date would be Monday, 2021-09-06. This can be accomplished more easily by
 providing the <code>reference_weekday</code> argument below.</p></dd>
+
+
 <dt>reference_weekday</dt>
 <dd><p>capitalized weekday, e.g. "Monday". The day of week
 to use for reference dates, if the <code>reference_dates</code> argument is missing or
 <code>NULL</code></p></dd>
+
+
 <dt>reference_windows</dt>
 <dd><p>an integer vector of offset values indicating the
 set of forecast dates should be assigned to a particular reference date,
@@ -116,14 +122,19 @@ date of that Monday. By default, if the <code>reference_weekday</code> is "Satur
 the function defaults to <code>-4:2</code>. This is appropriate for forecasts of
 weekly targets, in which case we might like to assign a forecast issued on
 a Monday to have a reference date of the previous Saturday.</p></dd>
+
+
 <dt>drop_nonpos_relative_horizons</dt>
 <dd><p>boolean indicating whether forecasts that have a
 non-positive horizon relative to the reference date should be dropped.
 Defaults to <code>TRUE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>forecast dataframe augmented by columns reference_date and
+    
+
+<p>forecast dataframe augmented by columns reference_date and
 relative_horizon</p>
     </div>
 
@@ -139,7 +150,7 @@ relative_horizon</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

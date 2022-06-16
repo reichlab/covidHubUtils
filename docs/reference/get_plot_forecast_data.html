@@ -89,47 +89,72 @@
 by <code><a href="load_forecasts.html">load_forecasts()</a></code>.
 It has columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>target</code>, <code>type</code>, <code>quantile</code>,
 <code>value</code>, <code>horizon</code> and <code>target_end_date</code>.</p></dd>
+
+
 <dt>truth_data</dt>
 <dd><p>optional data.frame from one truth source in the format returned
 by <code><a href="load_truth.html">load_truth()</a></code>. It needs to have columns <code>model</code>, <code>target_variable</code>,
 <code>target_end_date</code>, <code>location</code> and <code>value</code>.
 <code>Model</code> column can be "Observed Data (a truth source)".</p></dd>
+
+
 <dt>models_to_plot</dt>
 <dd><p>characters of model abbreviations</p></dd>
+
+
 <dt>forecast_dates_to_plot</dt>
 <dd><p>date string vectors for forecast dates to plot.
 Default to all forecast dates available in <code>forecast_data</code>.</p></dd>
+
+
 <dt>horizons_to_plot</dt>
 <dd><p>forecasts are plotted for the horizon time steps after
 the forecast date.</p></dd>
+
+
 <dt>quantiles_to_plot</dt>
 <dd><p>vector of quantiles to include in the plot</p></dd>
+
+
 <dt>locations_to_plot</dt>
 <dd><p>a vector of strings of fips code or CBSA codes or location names,
 such as "Hampshire County, MA", "Alabama", "United Kingdom".
 A US county location names must include state abbreviation.
 Default to <code>NULL</code> which would include all locations available in <code>forecast_data</code>.</p></dd>
+
+
 <dt>plot_truth</dt>
 <dd><p>logical to indicate whether truth data should be plotted.
 Default to <code>TRUE</code>.</p></dd>
+
+
 <dt>truth_source</dt>
 <dd><p>character specifying where the truth data will
 be loaded from if truth_data is not provided. Currently support <code>"JHU"</code>,
 <code>"USAFacts"</code>, <code>"NYTimes"</code> and <code>"HealthData"</code>.
 Optional if <code>truth_data</code> is provided.</p></dd>
+
+
 <dt>target_variable_to_plot</dt>
 <dd><p>string specifying target type. It should be one of
 <code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code>, <code>"inc hosp"</code> and <code>"inc flu hosp"</code>.</p></dd>
+
+
 <dt>truth_as_of</dt>
 <dd><p>the plot includes the truth data that would have been
 in real time as of the <code>truth_as_of</code> date.</p></dd>
+
+
 <dt>hub</dt>
 <dd><p>character, which hub to use. Default is <code>"US"</code>.
 Other options are <code>"ECDC"</code> and <code>"FluSight"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with columns <code>model</code>,
+    
+
+<p>data.frame with columns <code>model</code>,
 <code>forecast_date</code>, <code>location</code>, <code>target_variable</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
 <code>horizon</code> and <code>target_end_date</code>.</p>
     </div>
@@ -146,7 +171,7 @@ Other options are <code>"ECDC"</code> and <code>"FluSight"</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

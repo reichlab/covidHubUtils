@@ -82,28 +82,45 @@
     <dl><dt>target_variable</dt>
 <dd><p>string specifying target type It should be one or more of
 "cum death", "inc case", "inc death", "inc hosp".</p></dd>
+
+
 <dt>truth_source</dt>
 <dd><p>character vector specifying where the truths will
 be loaded from: currently support <code>"JHU"</code> and <code>"HealthData</code>".</p></dd>
+
+
 <dt>locations</dt>
 <dd><p>vector of valid location code.
 The US hub is using FIPS code and the ECDC hub is using country name abbreviation.</p></dd>
+
+
 <dt>as_of</dt>
 <dd><p>character vector of "as of" dates to use for querying truths in
 format <code>'yyyy-mm-dd'</code>. For each spatial unit and temporal reporting unit, the last
 available data with an issue date on or before the given <code>as_of</code> date are returned.</p></dd>
+
+
 <dt>temporal_resolution</dt>
 <dd><p>string specifying temporal resolution
 to include: one of <code>'daily'</code> or <code>'weekly'</code></p></dd>
+
+
 <dt>truth_end_date</dt>
 <dd><p>date to include the last available truth point in <code>'yyyy-mm-dd'</code> format.</p></dd>
+
+
 <dt>hub</dt>
 <dd><p>character, which hub to use. Default is <code>"US"</code>, other option is
 <code>"ECDC"</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame with columns <code>location</code>, <code>target_end_date</code>, <code>target_variable</code> and <code>value</code></p>
+    
+
+<p>a data.frame with columns <code>location</code>, <code>target_end_date</code>, <code>target_variable</code> and <code>value</code></p>
+
+
     </div>
 
   </div>
@@ -118,7 +135,7 @@ to include: one of <code>'daily'</code> or <code>'weekly'</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

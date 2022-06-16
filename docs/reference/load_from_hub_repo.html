@@ -82,26 +82,43 @@
     <dl><dt>target_variable</dt>
 <dd><p>string specifying target type It should be one or more of
 <code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code>, <code>"inc hosp"</code>.</p></dd>
+
+
 <dt>truth_source</dt>
 <dd><p>character vector specifying where the truths will
 be loaded from: currently support <code>"JHU"</code>, <code>"NYTimes"</code>, <code>"HealthData"</code> and <code>"ECDC"</code>.</p></dd>
+
+
 <dt>repo_path</dt>
 <dd><p>path to local clone or remote of the corresponding prediction hub repository.</p></dd>
+
+
 <dt>temporal_resolution</dt>
 <dd><p>string specifying temporal resolution
 to include: one of <code>'daily'</code> or <code>'weekly'</code></p></dd>
+
+
 <dt>truth_end_date</dt>
 <dd><p>date to include the last available truth point in <code>'yyyy-mm-dd'</code> format.</p></dd>
+
+
 <dt>data_location</dt>
 <dd><p>character specifying the location of truth data.
 Currently only supports <code>"local_hub_repo"</code> or <code>"remote_hub_repo"</code>.</p></dd>
+
+
 <dt>hub</dt>
 <dd><p>character, which hub to use. Default is "US".
 Other options are "ECDC" and "FluSight".</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame with columns <code>location</code>, <code>target_end_date</code>, <code>target_variable</code> and <code>value</code></p>
+    
+
+<p>a data.frame with columns <code>location</code>, <code>target_end_date</code>, <code>target_variable</code> and <code>value</code></p>
+
+
     </div>
 
   </div>
@@ -116,7 +133,7 @@ Other options are "ECDC" and "FluSight".</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -109,43 +109,65 @@ required environment.</p></li>
     <dl><dt>models</dt>
 <dd><p>Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.</p></dd>
+
+
 <dt>dates</dt>
 <dd><p>The forecast date of forecasts to retrieve.
 A vector of one or more Date objects or character strings in format “YYYY-MM-DD”
 Default to all valid forecast dates.</p></dd>
+
+
 <dt>date_window_size</dt>
 <dd><p>The number of days across each date in <code>dates</code> parameter to
 look for the most recent forecasts.
 Default to 0, which means to only look at the <code>dates</code> parameter only.</p></dd>
+
+
 <dt>locations</dt>
 <dd><p>a vector of strings of fips code or CBSA codes or location names,
 such as "Hampshire County, MA", "Alabama", "United Kingdom".
 A US county location names must include state abbreviation.
 Default to <code>NULL</code> which would include all locations with available forecasts.</p></dd>
+
+
 <dt>types</dt>
 <dd><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
 and/or <code>"point"</code>. Default to all valid forecast types.</p></dd>
+
+
 <dt>targets</dt>
 <dd><p>character vector of targets to retrieve, for example
 <code>c('1 wk ahead cum death', '2 wk ahead cum death')</code>.
 Default to <code>NULL</code> which stands for all valid targets.</p></dd>
+
+
 <dt>source</dt>
 <dd><p>string specifying where forecasts will be loaded from: one of
 <code>"local_hub_repo"</code>, <code>"zoltar"</code> and <code>"local_zoltar"</code>. Default to <code>"zoltar"</code>.</p></dd>
+
+
 <dt>hub_repo_path</dt>
 <dd><p>path to local clone of the forecast hub
 repository</p></dd>
+
+
 <dt>local_zoltpy_path</dt>
 <dd><p>path to local clone of zolpy repository.
 Only needed when <code>source</code> is <code>"local_zoltar</code>.</p></dd>
+
+
 <dt>zoltar_sqlite_file</dt>
 <dd><p>path to local sqlite file,
 either a relative path w.r.t. <code>local_zoltpy_path</code> or an absolute path.
 Only needed when <code>source</code> is <code>"local_zoltar</code>.</p></dd>
+
+
 <dt>data_processed_subpath</dt>
 <dd><p>folder within the hub_repo_path that contains
 forecast submission files.  Default to <code>"data-processed/"</code>, which is
 appropriate for the covid19-forecast-hub repository.</p></dd>
+
+
 <dt>as_of</dt>
 <dd><p>character for date time to load forecasts submitted as of this time from Zoltar.
 Ignored if <code>source = "local_hub_repo"</code>.
@@ -154,17 +176,26 @@ It could use the format of one of the three examples:
 If you would like to set a timezone, it has to be UTC now.
 If not, helper function will append the default timezone to your input based on <code>hub</code> parameter.
 Default to NULL to load the latest version.</p></dd>
+
+
 <dt>hub</dt>
 <dd><p>character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are <code>"US"</code>, <code>"ECDC"</code> and <code>"FluSight"</code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>logical to print out diagnostic messages. Default is <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
+    
+
+<p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
 <code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
 <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
+
+
     </div>
 
     <div id="ref-examples">
@@ -251,7 +282,7 @@ from which to load forecasts. Possible options are <code>"US"</code>, <code>"ECD
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -76,15 +76,20 @@
 by <code><a href="load_forecasts.html">load_forecasts()</a></code>.
 It has columns <code>model</code>,<code>forecast_date</code>,<code>location</code>, <code>target</code>, <code>type</code>,
 <code>quantile</code>, <code>value</code>, <code>horizon</code> and <code>target_end_date</code>.</p></dd>
+
+
 <dt>quantiles</dt>
 <dd><p>vector of quantiles to return for plotting
 Default to all available quantiles in <code>forecast_data</code>.
 Note that point forecasts and median quantiles do not necessarily align.
 Throws an error if quantile levels are not in the forecast data.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>,
+    
+
+<p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>,
 <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>point</code>,
 <code>point_type</code>, <code>Prediction Interval</code>, <code>upper</code>, <code>lower</code>.</p>
     </div>
@@ -101,7 +106,7 @@ Throws an error if quantile levels are not in the forecast data.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

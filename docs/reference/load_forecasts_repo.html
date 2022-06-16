@@ -89,38 +89,57 @@ any dates in <code>forecast_dates</code> for selected <code>models</code>,
     <h2>Arguments</h2>
     <dl><dt>file_path</dt>
 <dd><p>path to the data-processed folder within a local clone of the hub repo</p></dd>
+
+
 <dt>models</dt>
 <dd><p>Character vector of model abbreviations.
 Default all models that submitted forecasts meeting the other criteria.</p></dd>
+
+
 <dt>forecast_dates</dt>
 <dd><p>A 2 dimensional list of forecast dates to retrieve forecasts.
 This function will return the latest forecasts
 for each sub-list of dates.
 Default to  <code>NULL</code> which would include all valid forecast dates.
 The function will throw an error if all dates in this parameter are invalid forecast dates.</p></dd>
+
+
 <dt>locations</dt>
 <dd><p>a vector of strings of fips code or CBSA codes or location names,
 such as "Hampshire County, MA", "Alabama", "United Kingdom".
 A US county location names must include state abbreviation.
 Default to <code>NULL</code> which would include all locations with available forecasts.</p></dd>
+
+
 <dt>types</dt>
 <dd><p>Character vector specifying type of forecasts to load: <code>"quantile"</code>
 and/or <code>"point"</code>. Default to all valid forecast types.</p></dd>
+
+
 <dt>targets</dt>
 <dd><p>character vector of targets to retrieve, for example
 <code>c('1 wk ahead cum death', '2 wk ahead cum death')</code>.
 Default to <code>NULL</code> which stands for all valid targets.</p></dd>
+
+
 <dt>hub</dt>
 <dd><p>character vector, where the first element indicates the hub
 from which to load forecasts. Possible options are <code>"US"</code>, <code>"ECDC"</code> and <code>"FluSight"</code>.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>logical to print out diagnostic messages. Default is <code>TRUE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
+    
+
+<p>data.frame with columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>,
 <code>temporal_resolution</code>, <code>target_variable</code>, <code>target_end_date</code>, <code>type</code>, <code>quantile</code>, <code>value</code>,
 <code>location_name</code>, <code>population</code>, <code>geo_type</code>, <code>geo_value</code>, <code>abbreviation</code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -139,7 +158,7 @@ from which to load forecasts. Possible options are <code>"US"</code>, <code>"ECD
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -101,88 +101,137 @@ supported with specified facet formula.</p>
     <dl><dt>forecast_data</dt>
 <dd><p>required data.frame with forecasts in the format returned
 by <code><a href="load_forecasts.html">load_forecasts()</a></code></p></dd>
+
+
 <dt>truth_data</dt>
 <dd><p>optional data.frame from one truth source in the format returned
 by <code><a href="load_truth.html">load_truth()</a></code>.
 It needs to have columns <code>model</code>, <code>target_variable</code>,
 <code>target_end_date</code>, <code>location and value</code>.
 <code>Model</code> column can be <code>"Observed Data (a truth source)"</code>.</p></dd>
+
+
 <dt>hub</dt>
 <dd><p>character vector, where the first element indicates the hub
 from which to load forecasts.
 Possible options are <code>"US"</code>, <code>"ECDC"</code> and <code>"FluSight"</code>.</p></dd>
+
+
 <dt>models</dt>
 <dd><p>vector of strings specifying models to plot.
 Default to all models in <code>forecast_data</code>.</p></dd>
+
+
 <dt>target_variable</dt>
 <dd><p>string specifying target type. It should be one of
 <code>"cum death"</code>, <code>"inc case"</code>, <code>"inc death"</code>, <code>"inc hosp"</code> and <code>"inc flu hosp"</code>.
 <code>"cum death"</code> and <code>"inc hosp"</code> are only available in forecasts from US hub now.
 If there is only one <code>target_variable</code> in <code>forecast_data</code>, this parameter is optional.</p></dd>
+
+
 <dt>locations</dt>
 <dd><p>a vector of strings of fips code or CBSA codes or location names,
 such as "Hampshire County, MA", "Alabama", "United Kingdom".
 A US county location names must include state abbreviation.
 Default to <code>NULL</code> which would include all locations in <code>forecast_data</code>.</p></dd>
+
+
 <dt>facet</dt>
 <dd><p>interpretable facet option for ggplot. Function will error
 if multiple locations are passed in without location in the facet formula.</p></dd>
+
+
 <dt>facet_scales</dt>
 <dd><p>argument for scales in <a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap</a>. Default to <code>"fixed"</code>.</p></dd>
+
+
 <dt>facet_nrow</dt>
 <dd><p>number of rows for facetting; optional.</p></dd>
+
+
 <dt>facet_ncol</dt>
 <dd><p>number of columns for facetting; optional.</p></dd>
+
+
 <dt>forecast_dates</dt>
 <dd><p>date string vectors for forecast dates to plot.
 Default to forecast_dates present in the data.</p></dd>
+
+
 <dt>intervals</dt>
 <dd><p>values indicating which central prediction interval levels
 to plot. <code>NULL</code> means only plotting point forecasts.
 If not provided, it will default to <code>c(.5, .8, .95)</code>.
 When plotting 6 models or more, the plot will be reduced to show .95 interval only.</p></dd>
+
+
 <dt>horizon</dt>
 <dd><p>forecasts are plotted for the horizon time steps after the
 forecast date. Default to all available horizons in <code>forecast_data</code>.</p></dd>
+
+
 <dt>truth_source</dt>
 <dd><p>character specifying where the truth data will
 be loaded from if <code>truth_data</code> is not provided. Currently support <code>"JHU"</code>,
 <code>"NYTimes"</code>, <code>"HealthData"</code> and <code>"ECDC"</code>.
 Optional if <code>truth_data</code> is provided.</p></dd>
+
+
 <dt>use_median_as_point</dt>
 <dd><p>logical for using median quantiles as point forecasts in plot.
 Default to <code>FALSE</code>.</p></dd>
+
+
 <dt>plot_truth</dt>
 <dd><p>logical for showing truth data in plot. Default to <code>TRUE</code>.
 Data used in the plot is either <code>truth_data</code> or data loaded from <code>truth_source</code>.</p></dd>
+
+
 <dt>plot</dt>
 <dd><p>logical for showing the plot. Default to <code>TRUE</code>.</p></dd>
+
+
 <dt>fill_by_model</dt>
 <dd><p>logical for specifying colors in plot.
 If <code>TRUE</code>, separate colors will be used for each model.
 If <code>FALSE</code>, only blues will be used for all models. Default to <code>FALSE</code>.</p></dd>
+
+
 <dt>fill_transparency</dt>
 <dd><p>numeric value used to set transparency of intervals.
 0 means fully transparent, 1 means opaque.</p></dd>
+
+
 <dt>truth_as_of</dt>
 <dd><p>the plot includes the truth data that would have been
 in real time as of the <code>truth_as_of</code> date (not using this parameter when truth data
 is from github repo)</p></dd>
+
+
 <dt>top_layer</dt>
 <dd><p>character vector, where the first element indicates the top layer
 of the resulting plot. Possible options are <code>"forecast"</code> and <code>"truth"</code>.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>optional text for the title of the plot. If left as <code>"default"</code>,
 the title will be automatically generated. If <code>"none"</code>, no title will be plotted.</p></dd>
+
+
 <dt>subtitle</dt>
 <dd><p>optional text for the subtitle of the plot. If left as <code>"default"</code>,
 the subtitle will be automatically generated. If <code>"none"</code>, no subtitle will be plotted.</p></dd>
+
+
 <dt>show_caption</dt>
 <dd><p>logical, if <code>TRUE</code>, caption will be included showing data sources</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>invisible ggplot object</p>
+    
+
+<p>invisible ggplot object</p>
     </div>
 
     <div id="ref-examples">
@@ -260,7 +309,7 @@ the subtitle will be automatically generated. If <code>"none"</code>, no subtitl
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

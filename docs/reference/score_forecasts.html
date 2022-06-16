@@ -81,24 +81,35 @@
     <dl><dt>forecasts</dt>
 <dd><p>required data.frame with forecasts in the format returned
 by <code><a href="load_forecasts.html">load_forecasts</a></code></p></dd>
+
+
 <dt>truth</dt>
 <dd><p>required data.frame with forecasts in the format returned
 by <code><a href="load_truth.html">load_truth</a></code></p></dd>
+
+
 <dt>return_format</dt>
 <dd><p>string: <code>"long"</code> returns long format with a column for
 <code>"score_name"</code> and a column for <code>"score_value"</code>; <code>"wide"</code> returns wide format with
 a separate column for each score. Defaults to <code>"wide"</code>.</p></dd>
+
+
 <dt>metrics</dt>
 <dd><p>character vector of the metrics to be returned with options
 <code>"abs_error"</code>, <code>"wis"</code>, <code>"wis_components"</code>,<code>"interval_coverage"</code>, and <code>"quantile_coverage"</code></p></dd>
+
+
 <dt>use_median_as_point</dt>
 <dd><p>logical: <code>TRUE</code> uses the median as the point
 forecast when scoring; <code>FALSE</code> uses the point forecasts from the data when
 scoring. Defaults to <code>FALSE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with scores. The result will have some columns that
+    
+
+<p>data.frame with scores. The result will have some columns that
 define the observation, namely, <code>model</code>, <code>forecast_date</code>, <code>location</code>,
 <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, <code>horizon</code>, and
 <code>target_end_date</code>.
@@ -215,7 +226,7 @@ in an interval format. arXiv:2005.12881.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
