@@ -38,8 +38,7 @@
 #' Default to `NULL` to load the latest version.
 #' @param verbose logical for printing messages on zoltar job status. Default to `TRUE`.
 #' @param local_zoltpy_path path to local clone of `zolpy` repository.
-#' @param zoltar_sqlite_file path to local sqlite file, 
-#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
+#' @param zoltar_sqlite_file an absolute path to local sqlite file.
 #' @param hub character vector, where the first element indicates the hub
 #' from which to load forecasts. Possible options are `"US"` and `"ECDC"`.
 #'
@@ -62,28 +61,14 @@ load_forecasts_local_zoltar <- function(models = NULL,
   Sys.setenv("DJANGO_SETTINGS_MODULE"="forecast_repo.settings.local_sqlite3")
   Sys.setenv("MAX_NUM_QUERY_ROWS"="20_000_000")
 
-  # set up Zoltar connection
-  zoltar_connection <- setup_zoltar_connection(staging = FALSE)
-
-  # construct Zoltar project url
-  project_url <- get_zoltar_project_url(
-    hub = hub,
-    zoltar_connection = zoltar_connection
-  )
+  # construct Zoltar project id
+  project_id <- get_zoltar_project_id_local_zoltar(zoltar_sqlite_file, hub)
+  
   # get information about all models in project
-  all_models <- zoltr::models(
-    zoltar_connection = zoltar_connection,
-    project_url = project_url
-  )
+  all_models <- get_models_local_zoltar(zoltar_sqlite_file, project_id)
 
   # get all valid model abbrs
   all_valid_model_abbrs <- unique(all_models$model_abbr)
-
-  # get all valid timezeros in project
-  all_valid_timezeros <- zoltr::timezeros(
-    zoltar_connection = zoltar_connection,
-    project_url = project_url
-  )$timezero_date
 
   if (!is.null(models)) {
     models <- match.arg(models,
@@ -96,6 +81,7 @@ load_forecasts_local_zoltar <- function(models = NULL,
   locations <- name_to_fips(locations, hub)
 
   original_wd <- setwd(local_zoltpy_path)
+  
   if (!is.null(forecast_dates)) {
     if (is.null(models)) {
       models <- all_models$model_abbr
@@ -105,12 +91,10 @@ load_forecasts_local_zoltar <- function(models = NULL,
     doParallel::registerDoParallel(cl)
     forecasts <- foreach::foreach(i = 1:length(models), .combine = rbind) %dopar% {
       curr_model <- models[i]
-      model_url <- all_models[all_models$model_abbr == curr_model, ]$url
-      model_forecasts_history <- zoltr::forecasts(
-        zoltar_connection = zoltar_connection,
-        model_url = model_url
-      )$timezero_date
-
+      model_id <- all_models[all_models$model_abbr == curr_model, ]$id
+      model_forecasts_history <- get_model_forecast_history_local_zoltar(
+        zoltar_sqlite_file, model_id)$forecast_date
+        
       # get the latest of each subset of forecast_dates
       latest_dates <- purrr::map(
         forecast_dates,
@@ -238,3 +222,86 @@ load_forecasts_local_zoltar <- function(models = NULL,
 
   return(forecasts)
 }
+
+#' Get Zoltar project id from local zoltar sqlite file
+#'
+#' @param zoltar_sqlite_file path to local sqlite file, 
+#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
+#' @param hub character vector, where the first element indicates the hub
+#' from which to load forecasts. Possible options are `"US"` and `"ECDC"`
+#'
+#' @return project id
+get_zoltar_project_id_local_zoltar <- function(zoltar_sqlite_file,
+                                  hub = c("US", "ECDC")) {
+  # build connection to local sqlite file
+  conn <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
+  
+  # create SQL query command 
+  command <- "SELECT id, name FROM forecast_app_project;"
+  
+  # execute query
+  the_projects <- DBI::dbGetQuery(conn, command)
+
+  # get the URL to the right forecast hub project
+  if (hub[1] == "US") {
+    project_id <- the_projects[the_projects$name == "COVID-19 Forecasts", "id"]
+  } else if (hub[1] == "ECDC") {
+    project_id <- the_projects[the_projects$name == "ECDC European COVID-19 Forecast Hub", "id"]
+  }
+  
+  DBI::dbDisconnect(conn)
+  
+  return(project_id)
+}
+
+#' Get id and abbrevations of all models available in a specified project
+#' from local zoltar sqlite file
+#'
+#' @param zoltar_sqlite_file path to local sqlite file, 
+#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
+#' @param project_id one valid id number of a project available in 
+#' local zoltar sqlite file. This should come from the result of [get_zoltar_project_id()]
+#'
+#' @return data.frame with `id` and `model_abbr` columns
+get_models_local_zoltar <- function(zoltar_sqlite_file, project_id){
+  # build connection to local sqlite file
+  conn <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
+  
+  # create SQL query command 
+  command <- "SELECT id, abbreviation FROM forecast_app_forecastmodel WHERE project_id = ?project_id;"
+  query <- DBI::sqlInterpolate(conn, command, project_id = project_id)
+  
+  # execute query
+  the_models <- DBI::dbGetQuery(conn, query) %>%
+    dplyr::rename(model_abbr = abbreviation)
+  
+  DBI::dbDisconnect(conn)
+  
+  return (the_models)
+}
+
+#' Get forecast submission history of a specified model from local zoltar sqlite file
+#'
+#' @param zoltar_sqlite_file path to local sqlite file, 
+#' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
+#' @param forecast_model_id one valid id number of a forecast model available in 
+#' local zoltar sqlite file. This should come from the result of [get_models()]
+#'
+#' @return data.frame with `id` and `forecast_date` columns
+get_model_forecast_history_local_zoltar <- function(zoltar_sqlite_file, forecast_model_id){
+  # build connection to local sqlite file
+  conn <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
+  
+  # create SQL query command 
+  command <- "SELECT f.id, tz.timezero_date FROM forecast_app_forecast AS f 
+  JOIN forecast_app_timezero AS tz ON f.time_zero_id = tz.id WHERE forecast_model_id = ?forecast_model_id;"
+  query <- DBI::sqlInterpolate(conn, command, forecast_model_id = forecast_model_id)
+  
+  forecast_history <- DBI::dbGetQuery(conn, query) %>%
+    dplyr::mutate(forecast_date = timezero_date)
+  
+  DBI::dbDisconnect(conn)
+  
+  return (forecast_history)
+}
+

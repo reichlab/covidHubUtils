@@ -5,16 +5,16 @@ library(dplyr)
 library(lubridate)
 
 # Need to change these to valid paths
-# path from your covidHubUtils folder to your local clone of zoltpy
+# path to local clone of zolpy repository.
 local_zoltpy_path <- NA
-# path from your local clone of zoltpy to
+# an absolute path to
 # covidHubUtils/tests/testthat/test-data/test-load_forecasts_local_zoltar/db.sqlite3
 zoltar_sqlite_file <- NA
 
 skip_if_no_zoltpy_or_sqlite <- function() {
   if (!is.na(local_zoltpy_path) & !is.na(zoltar_sqlite_file)) {
     if (!dir.exists(local_zoltpy_path) |
-      !file.exists(paste(local_zoltpy_path, zoltar_sqlite_file, sep = "/"))) {
+      !file.exists(zoltar_sqlite_file)) {
       skip("zoltpy or sqlite data not available")
     }
   } else {

@@ -52,8 +52,7 @@ from which to load forecasts. Possible options are \code{"US"} and \code{"ECDC"}
 
 \item{local_zoltpy_path}{path to local clone of \code{zolpy} repository.}
 
-\item{zoltar_sqlite_file}{path to local sqlite file,
-either a relative path w.r.t. \code{local_zoltpy_path} or an absolute path.}
+\item{zoltar_sqlite_file}{an absolute path to local sqlite file.}
 }
 \value{
 data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \code{horizon},
