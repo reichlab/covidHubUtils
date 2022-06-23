@@ -169,12 +169,12 @@ in an interval format. arXiv:2005.12881.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> UMass-MechBay… US       3       wk               inc death       2020-12-13   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> UMass-MechBay… US       4       wk               inc death       2020-12-13   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.5 &lt;dbl&gt;, quantile_coverage_0.01 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.025 &lt;dbl&gt;, quantile_coverage_0.05 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.1 &lt;dbl&gt;, quantile_coverage_0.15 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.2 &lt;dbl&gt;, quantile_coverage_0.25 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.3 &lt;dbl&gt;, quantile_coverage_0.35 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.4 &lt;dbl&gt;, quantile_coverage_0.45 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;, …</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_latest_forecasts.html">load_latest_forecasts</a></span><span class="op">(</span></span>
 <span class="r-in">  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ILM-EKF"</span><span class="op">)</span>,</span>
@@ -205,12 +205,12 @@ in an interval format. arXiv:2005.12881.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ILM-EKF GB       3       wk                  inc death       2021-03-08   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> ILM-EKF GB       4       wk                  inc death       2021-03-08   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.5 &lt;dbl&gt;, quantile_coverage_0.01 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.025 &lt;dbl&gt;, quantile_coverage_0.05 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.1 &lt;dbl&gt;, quantile_coverage_0.15 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.2 &lt;dbl&gt;, quantile_coverage_0.25 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.3 &lt;dbl&gt;, quantile_coverage_0.35 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.4 &lt;dbl&gt;, quantile_coverage_0.45 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;, …</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -226,7 +226,7 @@ in an interval format. arXiv:2005.12881.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
