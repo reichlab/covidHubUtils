@@ -168,7 +168,9 @@ score_forecasts <- function(
     abs_var_rename <- "ae_point_NA"
   }
   
- 
+ # column names always included in final output
+  col_names_include <- c("model", "location", "horizon", "temporal_resolution",
+                        "target_variable", "forecast_date", "target_end_date")
     
   
   #two sided
@@ -221,7 +223,7 @@ score_forecasts <- function(
         -dplyr::starts_with("overprediction_")
       ) %>%
       dplyr::select(
-        1:8, dplyr::starts_with("coverage_"),
+        col_names_include, dplyr::starts_with("coverage_"),
         dplyr::starts_with("abs_error"),
         "n_interval_scores", "exists_interval_score_0", "wis",
         "dispersion", "overprediction", "underprediction"
@@ -259,7 +261,7 @@ score_forecasts <- function(
 
     # select necessary columns and the one-sided quantiles in ascending order
     scores_one_sided <- sq %>%
-      dplyr::select(1:8, dplyr::all_of(quantile_coverage_columns))
+      dplyr::select(col_names_include, dplyr::all_of(quantile_coverage_columns))
 
     # combine one and two sided
     scores <- suppressMessages(dplyr::full_join(
