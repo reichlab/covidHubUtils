@@ -49,7 +49,12 @@ load_forecasts_zoltar <- function(models = NULL,
 
   # set up Zoltar connection
   zoltar_connection <- setup_zoltar_connection(staging = FALSE)
-
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC"),
+                   several.ok = TRUE
+  )
+  
   # construct Zoltar project url
   project_url <- get_zoltar_project_url(
     hub = hub,

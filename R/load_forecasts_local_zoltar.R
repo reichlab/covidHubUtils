@@ -60,6 +60,11 @@ load_forecasts_local_zoltar <- function(models = NULL,
   # set up environment variables
   Sys.setenv("DJANGO_SETTINGS_MODULE"="forecast_repo.settings.local_sqlite3")
   Sys.setenv("MAX_NUM_QUERY_ROWS"="20_000_000")
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC"),
+                   several.ok = TRUE
+  )
 
   # construct Zoltar project id
   project_id <- get_zoltar_project_id_local_zoltar(zoltar_sqlite_file, hub)
@@ -233,6 +238,12 @@ load_forecasts_local_zoltar <- function(models = NULL,
 #' @return project id
 get_zoltar_project_id_local_zoltar <- function(zoltar_sqlite_file,
                                   hub = c("US", "ECDC")) {
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC"),
+                   several.ok = TRUE
+  )
+  
   # build connection to local sqlite file
   conn <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
   

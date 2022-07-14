@@ -162,7 +162,12 @@ plot_forecasts <- function(forecast_data,
     # Convert location names to fips codes or country abbreviations
     locations <- name_to_fips(locations, hub)
   }
-
+  
+  hub <- match.arg(hub,
+                  choices = c("US", "ECDC", "FluSight"),
+                  several.ok = TRUE
+  )
+  
   # get lists of valid parameter choices based on `hub`
   if (hub[1] == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
