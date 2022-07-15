@@ -11,7 +11,7 @@ get_model_forecast_history_local_zoltar(zoltar_sqlite_file, forecast_model_id)
 either a relative path w.r.t. \code{local_zoltpy_path} or an absolute path.}
 
 \item{forecast_model_id}{one valid id number of a forecast model available in
-local zoltar sqlite file. This should come from the result of \code{\link[=get_models]{get_models()}}}
+local zoltar sqlite file. This should come from the result of \code{get_models()}.}
 }
 \value{
 data.frame with \code{id} and \code{forecast_date} columns
