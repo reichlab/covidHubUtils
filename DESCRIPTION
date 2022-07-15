@@ -78,7 +78,10 @@ Imports:
     jsonlite,
     foreach,
     doParallel,
-    parallel
+    parallel,
+    DBI,
+    RSQLite,
+    devtools
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

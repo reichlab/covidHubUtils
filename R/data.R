@@ -37,7 +37,7 @@
 #'   \item{abbreviation}{Location abbreviation}
 #'   \item{population}{Location population}
 #' }
-"hub_locations_ecdc"
+"hub_locations_flusight"
 
 #' Available targets in the US Hub
 #'

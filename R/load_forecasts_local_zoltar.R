@@ -260,7 +260,7 @@ get_zoltar_project_id_local_zoltar <- function(zoltar_sqlite_file,
 #' @param zoltar_sqlite_file path to local sqlite file, 
 #' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
 #' @param project_id one valid id number of a project available in 
-#' local zoltar sqlite file. This should come from the result of [get_zoltar_project_id()]
+#' local zoltar sqlite file. This should come from the result of `get_zoltar_project_id()`.
 #'
 #' @return data.frame with `id` and `model_abbr` columns
 get_models_local_zoltar <- function(zoltar_sqlite_file, project_id){
@@ -285,7 +285,7 @@ get_models_local_zoltar <- function(zoltar_sqlite_file, project_id){
 #' @param zoltar_sqlite_file path to local sqlite file, 
 #' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
 #' @param forecast_model_id one valid id number of a forecast model available in 
-#' local zoltar sqlite file. This should come from the result of [get_models()]
+#' local zoltar sqlite file. This should come from the result of `get_models()`.
 #'
 #' @return data.frame with `id` and `forecast_date` columns
 get_model_forecast_history_local_zoltar <- function(zoltar_sqlite_file, forecast_model_id){
