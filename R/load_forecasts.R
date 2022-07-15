@@ -120,7 +120,7 @@ load_forecasts <- function(models = NULL,
   if (source == "local_hub_repo") {
     # validate hub repo path
     if (missing(hub_repo_path) | !dir.exists(hub_repo_path)) {
-      stop("Error in load_forecasts: Please provide a vaid path to hub repo.")
+      stop("Error in load_forecasts: Please provide a valid path to hub repo.")
     }
 
     if (!is.null(as_of)) {
