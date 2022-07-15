@@ -76,20 +76,20 @@ Please use <code><a href="load_forecasts.html">load_forecasts()</a></code> inste
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">load_latest_forecasts</span><span class="op">(</span>
-  models <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">last_forecast_date</span>,
-  forecast_date_window_size <span class="op">=</span> <span class="fl">0</span>,
-  locations <span class="op">=</span> <span class="cn">NULL</span>,
-  types <span class="op">=</span> <span class="cn">NULL</span>,
-  targets <span class="op">=</span> <span class="cn">NULL</span>,
-  source <span class="op">=</span> <span class="st">"local_hub_repo"</span>,
-  <span class="va">hub_repo_path</span>,
-  data_processed_subpath <span class="op">=</span> <span class="st">"data-processed/"</span>,
-  as_of <span class="op">=</span> <span class="cn">NULL</span>,
-  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"ECDC"</span><span class="op">)</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_latest_forecasts</span><span class="op">(</span></span>
+<span>  models <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">last_forecast_date</span>,</span>
+<span>  forecast_date_window_size <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  locations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  types <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  targets <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  source <span class="op">=</span> <span class="st">"local_hub_repo"</span>,</span>
+<span>  <span class="va">hub_repo_path</span>,</span>
+<span>  data_processed_subpath <span class="op">=</span> <span class="st">"data-processed/"</span>,</span>
+<span>  as_of <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"ECDC"</span><span class="op">)</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -171,18 +171,18 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">load_latest_forecasts</span><span class="op">(</span></span>
-<span class="r-in">  models <span class="op">=</span> <span class="st">"COVIDhub-ensemble"</span>,</span>
-<span class="r-in">  last_forecast_date <span class="op">=</span> <span class="st">"2020-12-07"</span>,</span>
-<span class="r-in">  forecast_date_window_size <span class="op">=</span> <span class="fl">6</span>,</span>
-<span class="r-in">  locations <span class="op">=</span> <span class="st">"US"</span>,</span>
-<span class="r-in">  types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"point"</span>, <span class="st">"quantile"</span><span class="op">)</span>,</span>
-<span class="r-in">  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="st">"wk ahead inc case"</span><span class="op">)</span>,</span>
-<span class="r-in">  source <span class="op">=</span> <span class="st">"zoltar"</span>,</span>
-<span class="r-in">  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">  as_of <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">load_latest_forecasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  models <span class="op">=</span> <span class="st">"COVIDhub-ensemble"</span>,</span></span>
+<span class="r-in"><span>  last_forecast_date <span class="op">=</span> <span class="st">"2020-12-07"</span>,</span></span>
+<span class="r-in"><span>  forecast_date_window_size <span class="op">=</span> <span class="fl">6</span>,</span></span>
+<span class="r-in"><span>  locations <span class="op">=</span> <span class="st">"US"</span>,</span></span>
+<span class="r-in"><span>  types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"point"</span>, <span class="st">"quantile"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="st">"wk ahead inc case"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"zoltar"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  as_of <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`load_latest_forecasts()` was deprecated in covidHubUtils 0.1.5.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> This function has been superseded by the latest load_forecasts(). Please switch your code to using the new function.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
@@ -195,29 +195,29 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">forecasts_ECDC</span> <span class="op">&lt;-</span> <span class="fu">load_latest_forecasts</span><span class="op">(</span></span>
-<span class="r-in">  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ILM-EKF"</span><span class="op">)</span>,</span>
-<span class="r-in">  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ECDC"</span>, <span class="st">"US"</span><span class="op">)</span>,</span>
-<span class="r-in">  last_forecast_date <span class="op">=</span> <span class="st">"2021-03-08"</span>,</span>
-<span class="r-in">  forecast_date_window_size <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GB"</span><span class="op">)</span>,</span>
-<span class="r-in">  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="st">"wk ahead inc death"</span><span class="op">)</span>,</span>
-<span class="r-in">  source <span class="op">=</span> <span class="st">"zoltar"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">forecasts_ECDC</span> <span class="op">&lt;-</span> <span class="fu">load_latest_forecasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ILM-EKF"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ECDC"</span>, <span class="st">"US"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  last_forecast_date <span class="op">=</span> <span class="st">"2021-03-08"</span>,</span></span>
+<span class="r-in"><span>  forecast_date_window_size <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GB"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="st">"wk ahead inc death"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"zoltar"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/models/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/238/timezeros/</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">load_latest_forecasts</span><span class="op">(</span></span>
-<span class="r-in">  models <span class="op">=</span> <span class="st">"Columbia_UNC-SurvCon"</span>,</span>
-<span class="r-in">  last_forecast_date <span class="op">=</span> <span class="st">"2021-01-03"</span>,</span>
-<span class="r-in">  source <span class="op">=</span> <span class="st">"zoltar"</span>,</span>
-<span class="r-in">  as_of <span class="op">=</span> <span class="st">"2021-01-04"</span>,</span>
-<span class="r-in">  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">  location <span class="op">=</span> <span class="st">"US"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">load_latest_forecasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  models <span class="op">=</span> <span class="st">"Columbia_UNC-SurvCon"</span>,</span></span>
+<span class="r-in"><span>  last_forecast_date <span class="op">=</span> <span class="st">"2021-01-03"</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"zoltar"</span>,</span></span>
+<span class="r-in"><span>  as_of <span class="op">=</span> <span class="st">"2021-01-04"</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  location <span class="op">=</span> <span class="st">"US"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_token(): POST: https://zoltardata.com/api-token-auth/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/projects/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
