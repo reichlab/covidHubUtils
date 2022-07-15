@@ -48,6 +48,11 @@ get_plot_forecast_data <- function(forecast_data,
                                    target_variable_to_plot,
                                    truth_as_of = NULL,
                                    hub = c("US", "ECDC", "FluSight")) {
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC", "FluSight"),
+                   several.ok = TRUE
+  )
 
   # get lists of valid parameter choices based on `hub`
   if (hub[1] == "US") {

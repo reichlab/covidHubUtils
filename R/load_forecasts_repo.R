@@ -66,6 +66,11 @@ load_forecasts_repo <- function(file_path,
   
   models <- sort(models, method = "radix")
   
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC", "FluSight"),
+                   several.ok = TRUE
+  )
+  
   # get valid location codes
   if (hub[1] == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
@@ -217,6 +222,11 @@ load_forecast_files_repo <- function(file_paths,
                                      targets = NULL,
                                      hub = c("US", "ECDC", "FluSight")) {
 
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC", "FluSight"),
+                   several.ok = TRUE
+  )
+  
   # validate file_paths exist
   if (is.null(file_paths) | missing(file_paths)) {
     stop("In load_forecast_files_repo, file_paths are not provided.")
