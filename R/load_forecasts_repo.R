@@ -53,9 +53,13 @@ load_forecasts_repo <- function(file_path,
   all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
   
   if (!is.null(models)) {
-    models <- unlist(purrr::map(models, function(model) {
-      match.arg(model, choices = all_valid_models)
-    }))
+    invalid_models <- models[!(models %in% all_valid_models)]
+    if (length(invalid_models) > 0) {
+      stop(paste0("\nError in load_forecasts_repo: models parameter contains invalid model name: ",
+                  invalid_models,"."
+      ))
+    }
+    
   } else {
     models <- all_valid_models
   }
