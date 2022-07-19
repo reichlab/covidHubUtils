@@ -235,9 +235,7 @@ load_forecast_files_repo <- function(file_paths,
     file_paths,
     function(file_path) {
       # extract model name from file name
-      model <- strsplit(file_path, .Platform$file.sep) %>%
-        `[[`(1) %>%
-        tail(1)
+      model <- basename(file_path)
       date_start_ind <- regexpr("\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d\\-", model)
       if (date_start_ind == -1) {
         stop("In load_forecast_files_repo, incorrect file name format: must include date in YYYY-MM-DD format")
