@@ -290,7 +290,7 @@ load_forecast_files_repo <- function(file_paths,
   ) %>%
     tidyr::separate(target,
       into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
-      remove = FALSE, extra = "merge"
+      sep = " ",  remove = FALSE, extra = "merge"
     ) %>%
     dplyr::select(
       model, forecast_date, location, horizon, temporal_resolution,
