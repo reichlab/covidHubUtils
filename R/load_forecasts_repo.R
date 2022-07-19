@@ -272,15 +272,13 @@ load_forecast_files_repo <- function(file_paths,
       }
 
       single_forecast <- single_forecast %>%
-        dplyr::transmute(
-          model = model,
-          forecast_date = forecast_date,
-          location = location,
+        dplyr::mutate(
           target = tolower(target),
-          target_end_date = target_end_date,
-          type = type,
-          quantile = quantile,
-          value = value
+          model = model
+        ) %>%
+        dplyr::select(
+          model, forecast_date, location, target, target_end_date, type,
+          quantile, value
         )
 
       # drop rows with NULL in value column
