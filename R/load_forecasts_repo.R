@@ -55,9 +55,9 @@ load_forecasts_repo <- function(file_path,
   if (!is.null(models)) {
     invalid_models <- models[!(models %in% all_valid_models)]
     if (length(invalid_models) > 0) {
-      stop(paste0("\nError in load_forecasts_repo: models parameter contains invalid model name: ",
-                  invalid_models,"."
-      ))
+      stop("\nError in load_forecasts_repo: models parameter contains invalid model name: ",
+           invalid_models, "."
+      )
     }
     
   } else {
@@ -186,12 +186,11 @@ get_forecast_file_path <- function(models,
 
       if (length(results_path) == 0) {
         if (verbose) {
-          message <- paste(
+          warning(
             "Warning in get_forecast_file_path: Couldn't find forecasts for model",
             model, "on the following forceast dates:",
             forecast_dates
           )
-          warning(message)
         }
         return(NULL)
       } else {
