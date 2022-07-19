@@ -87,6 +87,11 @@ load_forecasts_repo <- function(file_path,
   }
 
   # validate types
+  # We still have to handle this edge case manually as NULL will automatically
+  # set to choices[1], *even if several.ok = TRUE*
+  if (is.null(types)) {
+    types <- c("point", "quantile")
+  }
   types <- match.arg(types, several.ok = TRUE)
 
   # get valid targets
