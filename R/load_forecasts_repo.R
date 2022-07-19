@@ -50,7 +50,7 @@ load_forecasts_repo <- function(file_path,
 
   # validate models
   all_valid_models <- list.dirs(file_path, full.names = FALSE)
-  all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
+  all_valid_models <- all_valid_models[nzchar(all_valid_models)]
   
   if (!is.null(models)) {
     invalid_models <- models[!(models %in% all_valid_models)]
