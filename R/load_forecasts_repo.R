@@ -169,7 +169,8 @@ get_forecast_file_path <- function(models,
 
       results_path <- file.path(
         file_path,
-        paste0(model, "/", forecast_dates, "-", model, ".csv")
+        model, 
+        paste0(forecast_dates, "-", model, ".csv")
       )
       results_path <- results_path[file.exists(results_path)]
 
