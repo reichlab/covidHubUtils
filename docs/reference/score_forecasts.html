@@ -158,23 +158,24 @@ in an interval format. arXiv:2005.12881.
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 49</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   model          location horizon temporal_resolu… target_variable forecast_date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> COVIDhub-ense… US       1       wk               inc death       2020-12-14   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> COVIDhub-ense… US       2       wk               inc death       2020-12-14   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> COVIDhub-ense… US       3       wk               inc death       2020-12-14   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> COVIDhub-ense… US       4       wk               inc death       2020-12-14   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> UMass-MechBay… US       1       wk               inc death       2020-12-13   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> UMass-MechBay… US       2       wk               inc death       2020-12-13   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> UMass-MechBay… US       3       wk               inc death       2020-12-13   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> UMass-MechBay… US       4       wk               inc death       2020-12-13   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   model    locat…¹ horizon tempo…² targe…³ forecast…⁴ target_e…⁵ quant…⁶ quant…⁷</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> COVIDhu… US      1       wk      inc de… 2020-12-14 2020-12-19       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> COVIDhu… US      2       wk      inc de… 2020-12-14 2020-12-26       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> COVIDhu… US      3       wk      inc de… 2020-12-14 2021-01-02       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> COVIDhu… US      4       wk      inc de… 2020-12-14 2021-01-09       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> UMass-M… US      1       wk      inc de… 2020-12-13 2020-12-19       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> UMass-M… US      2       wk      inc de… 2020-12-13 2020-12-26       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> UMass-M… US      3       wk      inc de… 2020-12-13 2021-01-02       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> UMass-M… US      4       wk      inc de… 2020-12-13 2021-01-09       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more variables: quantile_coverage_0.05 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.1 &lt;dbl&gt;, quantile_coverage_0.15 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.2 &lt;dbl&gt;, quantile_coverage_0.25 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.3 &lt;dbl&gt;, quantile_coverage_0.35 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.4 &lt;dbl&gt;, quantile_coverage_0.45 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.5 &lt;dbl&gt;, quantile_coverage_0.55 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.6 &lt;dbl&gt;, quantile_coverage_0.65 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_latest_forecasts.html">load_latest_forecasts</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ILM-EKF"</span><span class="op">)</span>,</span></span>
@@ -198,19 +199,20 @@ in an interval format. arXiv:2005.12881.
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 49</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   model   location horizon temporal_resolution target_variable forecast_date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ILM-EKF GB       1       wk                  inc death       2021-03-08   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ILM-EKF GB       2       wk                  inc death       2021-03-08   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ILM-EKF GB       3       wk                  inc death       2021-03-08   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> ILM-EKF GB       4       wk                  inc death       2021-03-08   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 43 more variables: target_end_date &lt;date&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.01 &lt;dbl&gt;, quantile_coverage_0.025 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.05 &lt;dbl&gt;, quantile_coverage_0.1 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.15 &lt;dbl&gt;, quantile_coverage_0.2 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.25 &lt;dbl&gt;, quantile_coverage_0.3 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.35 &lt;dbl&gt;, quantile_coverage_0.4 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.45 &lt;dbl&gt;, quantile_coverage_0.5 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   model   location horizon tempo…¹ targe…² forecast…³ target_e…⁴ quant…⁵ quant…⁶</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ILM-EKF GB       1       wk      inc de… 2021-03-08 2021-03-13       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ILM-EKF GB       2       wk      inc de… 2021-03-08 2021-03-20       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ILM-EKF GB       3       wk      inc de… 2021-03-08 2021-03-27       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> ILM-EKF GB       4       wk      inc de… 2021-03-08 2021-04-03       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more variables: quantile_coverage_0.05 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.1 &lt;dbl&gt;, quantile_coverage_0.15 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.2 &lt;dbl&gt;, quantile_coverage_0.25 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.3 &lt;dbl&gt;, quantile_coverage_0.35 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.4 &lt;dbl&gt;, quantile_coverage_0.45 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.5 &lt;dbl&gt;, quantile_coverage_0.55 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   quantile_coverage_0.6 &lt;dbl&gt;, quantile_coverage_0.65 &lt;dbl&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -226,7 +228,7 @@ in an interval format. arXiv:2005.12881.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
