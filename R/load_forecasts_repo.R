@@ -24,8 +24,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
 #' Default to `NULL` which stands for all valid targets.
-#' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
+#' @param hub character vector indicating the hub from which to load forecasts.
+#' Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #' @param verbose logical to print out diagnostic messages. Default is `TRUE`
 #'
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
@@ -37,7 +37,7 @@ load_forecasts_repo <- function(file_path,
                                 models = NULL,
                                 forecast_dates = NULL,
                                 locations = NULL,
-                                types = NULL,
+                                types = c("point", "quantile"),
                                 targets = NULL,
                                 hub = c("US", "ECDC", "FluSight"),
                                 verbose = TRUE) {
@@ -50,14 +50,14 @@ load_forecasts_repo <- function(file_path,
 
   # validate models
   all_valid_models <- list.dirs(file_path, full.names = FALSE)
-  all_valid_models <- all_valid_models[nchar(all_valid_models) > 0]
+  all_valid_models <- all_valid_models[nzchar(all_valid_models)]
   
   if (!is.null(models)) {
     invalid_models <- models[!(models %in% all_valid_models)]
     if (length(invalid_models) > 0) {
-      stop(paste0("\nError in load_forecasts_repo: models parameter contains invalid model name: ",
-                  invalid_models,"."
-      ))
+      stop("\nError in load_forecasts_repo: models parameter contains invalid model name: ",
+           invalid_models, "."
+      )
     }
     
   } else {
@@ -66,17 +66,14 @@ load_forecasts_repo <- function(file_path,
   
   models <- sort(models, method = "radix")
   
-  hub <- match.arg(hub,
-                   choices = c("US", "ECDC", "FluSight"),
-                   several.ok = TRUE
-  )
+  hub <- match.arg(hub)
   
   # get valid location codes
-  if (hub[1] == "US") {
+  if (hub == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
-  } else if (hub[1] == "ECDC") {
+  } else if (hub == "ECDC") {
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
-  } else if (hub[1] == "FluSight") {
+  } else if (hub == "FluSight") {
     valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
   }
 
@@ -90,11 +87,7 @@ load_forecasts_repo <- function(file_path,
   }
 
   # validate types
-  if (!is.null(types)) {
-    types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } else {
-    types <- c("point", "quantile")
-  }
+  types <- match.arg(types, several.ok = TRUE)
 
   # get valid targets
   if (hub[1] == "US") {
@@ -170,13 +163,14 @@ get_forecast_file_path <- function(models,
   forecast_files <- purrr::map(
     models,
     function(model) {
-      if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
+      if (endsWith(file_path, "/")) {
         file_path <- substr(file_path, 1, nchar(file_path) - 1)
       }
 
       results_path <- file.path(
         file_path,
-        paste0(model, "/", forecast_dates, "-", model, ".csv")
+        model, 
+        paste0(forecast_dates, "-", model, ".csv")
       )
       results_path <- results_path[file.exists(results_path)]
 
@@ -186,12 +180,11 @@ get_forecast_file_path <- function(models,
 
       if (length(results_path) == 0) {
         if (verbose) {
-          message <- paste(
+          warning(
             "Warning in get_forecast_file_path: Couldn't find forecasts for model",
             model, "on the following forceast dates:",
             forecast_dates
           )
-          warning(message)
         }
         return(NULL)
       } else {
@@ -222,13 +215,10 @@ load_forecast_files_repo <- function(file_paths,
                                      targets = NULL,
                                      hub = c("US", "ECDC", "FluSight")) {
 
-  hub <- match.arg(hub,
-                   choices = c("US", "ECDC", "FluSight"),
-                   several.ok = TRUE
-  )
+  hub <- match.arg(hub)
   
   # validate file_paths exist
-  if (is.null(file_paths) | missing(file_paths)) {
+  if (is.null(file_paths) || missing(file_paths)) {
     stop("In load_forecast_files_repo, file_paths are not provided.")
   }
 
@@ -245,9 +235,7 @@ load_forecast_files_repo <- function(file_paths,
     file_paths,
     function(file_path) {
       # extract model name from file name
-      model <- strsplit(file_path, .Platform$file.sep) %>%
-        `[[`(1) %>%
-        tail(1)
+      model <- basename(file_path)
       date_start_ind <- regexpr("\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d\\-", model)
       if (date_start_ind == -1) {
         stop("In load_forecast_files_repo, incorrect file name format: must include date in YYYY-MM-DD format")
@@ -282,15 +270,13 @@ load_forecast_files_repo <- function(file_paths,
       }
 
       single_forecast <- single_forecast %>%
-        dplyr::transmute(
-          model = model,
-          forecast_date = forecast_date,
-          location = location,
+        dplyr::mutate(
           target = tolower(target),
-          target_end_date = target_end_date,
-          type = type,
-          quantile = quantile,
-          value = value
+          model = model
+        ) %>%
+        dplyr::select(
+          model, forecast_date, location, target, target_end_date, type,
+          quantile, value
         )
 
       # drop rows with NULL in value column
@@ -302,11 +288,7 @@ load_forecast_files_repo <- function(file_paths,
   ) %>%
     tidyr::separate(target,
       into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
-      remove = FALSE, extra = "merge"
-    ) %>%
-    dplyr::select(
-      model, forecast_date, location, horizon, temporal_resolution,
-      target_variable, target_end_date, type, quantile, value
+      sep = " ",  remove = FALSE, extra = "merge"
     ) %>%
     join_with_hub_locations(hub = hub)
   return(all_forecasts)
