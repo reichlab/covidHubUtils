@@ -163,7 +163,7 @@ get_forecast_file_path <- function(models,
   forecast_files <- purrr::map(
     models,
     function(model) {
-      if (substr(file_path, nchar(file_path), nchar(file_path)) == "/") {
+      if (endsWith(file_path, "/")) {
         file_path <- substr(file_path, 1, nchar(file_path) - 1)
       }
 
