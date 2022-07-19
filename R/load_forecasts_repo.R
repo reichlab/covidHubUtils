@@ -24,8 +24,8 @@
 #' @param targets character vector of targets to retrieve, for example
 #' `c('1 wk ahead cum death', '2 wk ahead cum death')`.
 #' Default to `NULL` which stands for all valid targets.
-#' @param hub character vector, where the first element indicates the hub
-#' from which to load forecasts. Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
+#' @param hub character vector indicating the hub from which to load forecasts.
+#' Possible options are `"US"`, `"ECDC"` and `"FluSight"`.
 #' @param verbose logical to print out diagnostic messages. Default is `TRUE`
 #'
 #' @return data.frame with columns `model`, `forecast_date`, `location`, `horizon`,
@@ -37,7 +37,7 @@ load_forecasts_repo <- function(file_path,
                                 models = NULL,
                                 forecast_dates = NULL,
                                 locations = NULL,
-                                types = NULL,
+                                types = c("point", "quantile"),
                                 targets = NULL,
                                 hub = c("US", "ECDC", "FluSight"),
                                 verbose = TRUE) {
@@ -66,17 +66,14 @@ load_forecasts_repo <- function(file_path,
   
   models <- sort(models, method = "radix")
   
-  hub <- match.arg(hub,
-                   choices = c("US", "ECDC", "FluSight"),
-                   several.ok = TRUE
-  )
+  hub <- match.arg(hub)
   
   # get valid location codes
-  if (hub[1] == "US") {
+  if (hub == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
-  } else if (hub[1] == "ECDC") {
+  } else if (hub == "ECDC") {
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
-  } else if (hub[1] == "FluSight") {
+  } else if (hub == "FluSight") {
     valid_location_codes <- covidHubUtils::hub_locations_flusight$fips
   }
 
@@ -90,11 +87,7 @@ load_forecasts_repo <- function(file_path,
   }
 
   # validate types
-  if (!is.null(types)) {
-    types <- match.arg(types, choices = c("point", "quantile"), several.ok = TRUE)
-  } else {
-    types <- c("point", "quantile")
-  }
+  types <- match.arg(types, several.ok = TRUE)
 
   # get valid targets
   if (hub[1] == "US") {
@@ -221,10 +214,7 @@ load_forecast_files_repo <- function(file_paths,
                                      targets = NULL,
                                      hub = c("US", "ECDC", "FluSight")) {
 
-  hub <- match.arg(hub,
-                   choices = c("US", "ECDC", "FluSight"),
-                   several.ok = TRUE
-  )
+  hub <- match.arg(hub)
   
   # validate file_paths exist
   if (is.null(file_paths) | missing(file_paths)) {
