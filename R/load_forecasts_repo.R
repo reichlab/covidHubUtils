@@ -87,6 +87,11 @@ load_forecasts_repo <- function(file_path,
   }
 
   # validate types
+  # We still have to handle this edge case manually as NULL will automatically
+  # set to choices[1], *even if several.ok = TRUE*
+  if (is.null(types)) {
+    types <- c("point", "quantile")
+  }
   types <- match.arg(types, several.ok = TRUE)
 
   # get valid targets
@@ -289,6 +294,10 @@ load_forecast_files_repo <- function(file_paths,
     tidyr::separate(target,
       into = c("horizon", "temporal_resolution", "ahead", "target_variable"),
       sep = " ",  remove = FALSE, extra = "merge"
+    ) %>%
+    dplyr::select(
+      model, forecast_date, location, horizon, temporal_resolution,
+      target_variable, target_end_date, type, quantile, value
     ) %>%
     join_with_hub_locations(hub = hub)
   return(all_forecasts)
