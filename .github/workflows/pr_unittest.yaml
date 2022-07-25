@@ -19,27 +19,28 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rmarkdown","tidyverse","DT","here","testthat"))
-          remotes::install_github("epiforecasts/scoringutils")
+          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here"))
+          devtools::install_github("epiforecasts/scoringutils")
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr
         run: |
-          remotes::install_github("reichlab/zoltr")
+          devtools::install_github("reichlab/zoltr")
+          devtools::install()
         shell: Rscript {0}
       - name: Run unit tests
         run: |
-          testthat::test_dir("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-score_forecasts.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-get_model_metadata.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-load_forecasts.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
-          testthat::test_dir("tests/testthat/test-name_to_fips.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-score_forecasts.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-get_model_designations.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-get_model_metadata.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_as_of.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_forecasts.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-calc_cramers_dist_equal_space.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-calc_cramers_dist_unequal_space.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-calc_cramers_dist_one_model_pair.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-name_to_fips.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Get changed files
         id: changed-files
@@ -67,17 +68,17 @@ jobs:
       - name: Run unit test for get_truth.R
         if: contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R')
         run: |
-          testthat::test_dir("tests/testthat/test-get_truth.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-get_truth.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Run unit test for aggregate_to_weekly.R
         if: contains(steps.changed-files.outputs.modified_files, 'R/aggregate_to_weekly.R')
         run: |
-          testthat::test_dir("tests/testthat/test-aggregate_to_weekly.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-aggregate_to_weekly.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Run unit test for load_truth.R
         if: contains(steps.changed-files.outputs.modified_files, 'R/load_truth.R')
         run: |
-          testthat::test_dir("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
+          devtools::test_active_file("tests/testthat/test-load_truth.R", stop_on_failure = TRUE)
         shell: Rscript {0}
       - name: Render vignettes
         run: |

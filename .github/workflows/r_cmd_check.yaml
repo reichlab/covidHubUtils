@@ -18,13 +18,14 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","rmarkdown","tidyverse","DT","here"))
-          remotes::install_github("epiforecasts/scoringutils")
+          install.packages(c("remotes","devtools","rmarkdown","tidyverse","DT","here"))
+          devtools::install_github("epiforecasts/scoringutils")
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr
         run: |
-          remotes::install_github("reichlab/zoltr")
+          devtools::install_github("reichlab/zoltr")
+          devtools::install()
         shell: Rscript {0}
       - name: Checkout covidData
         uses: actions/checkout@v2
@@ -36,8 +37,7 @@ jobs:
         working-directory: ./covidData/code/data-processing
       - name: Check
         run: |
-          withr::with_envvar(env_vars, action = "replace", {
-          rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")})
+          devtools::check(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")
         shell: Rscript {0}
       - name: Upload check results
         if: failure()
