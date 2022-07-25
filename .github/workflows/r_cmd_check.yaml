@@ -36,8 +36,7 @@ jobs:
         working-directory: ./covidData/code/data-processing
       - name: Check
         run: |
-          withr::with_envvar(env_vars, action = "replace", {
-          rcmdcheck::rcmdcheck(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")})
+          devtools::check(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")
         shell: Rscript {0}
       - name: Upload check results
         if: failure()
