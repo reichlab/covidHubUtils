@@ -98,13 +98,13 @@
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/zoltr"</span><span class="op">)</span></span></code></pre></div>
 <p>Additional functionalities in <code>covidHubUtils</code> also rely on <code>scoringutils</code>. Because of new updates in <code>scoringutils</code> that uses functions not yet on the cran version, please install <code>scoringutils</code> from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"epiforecasts/scoringutils"</span><span class="op">)</span></span></code></pre></div>
 <p>Some additional functionalities in <code>covidHubUtils</code> also rely on <code>covidData</code>. Because there are daily data updates in <code>covidData</code>, please install the latest version of it before using related functions in <code>covidHubUtils</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidData"</span><span class="op">)</span></span></code></pre></div>
-<p>The <code>covidHubUtils</code> package currently is only available on GitHub, and it may be installed using the <code>devtools</code> package:</p>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidData"</span><span class="op">)</span></span></code></pre></div>
+<p>The <code>covidHubUtils</code> package currently is only available on GitHub, and it may be installed using the <code>remotes</code> package:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidHubUtils"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"reichlab/covidHubUtils"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -196,7 +196,7 @@
 <li>Update <code>DESCRIPTION</code> when you are using a new dependency in your script.</li>
 <li>Add yourself as a contributor in <code>DESCRIPTION</code>.</li>
 <li>
-<strong>Optional:</strong> You could also run <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> or <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code> locally. Some tests require <code>covidData</code>. To get accurate test results, please make sure to install the latest daily updates from <code>covidData</code> by using <code>devtools::install_github("reichlab/covidData")</code>.</li>
+<strong>Optional:</strong> You could also run <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> or <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code> locally. Some tests require <code>covidData</code>. To get accurate test results, please make sure to install the latest daily updates from <code>covidData</code> by using <code>remotes::install_github("reichlab/covidData")</code>.</li>
 <li>Make sure your pull request passes all checks in Github Action.</li>
 </ul>
 </div>
