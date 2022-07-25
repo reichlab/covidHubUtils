@@ -148,7 +148,8 @@ score_forecasts <- function(
   ) %>%
     dplyr::select(-c("model.y")) %>%
     dplyr::rename(model = model.x, prediction = value.x, true_value = value.y) %>%
-    dplyr::filter(!is.na(true_value))
+    dplyr::filter(!is.na(true_value)) %>% 
+    dplyr::select(-c(ends_with(".x"),ends_with(".y")))
 
   # score using scoringutil
   observation_cols <- c(
@@ -176,8 +177,37 @@ score_forecasts <- function(
   for (var in unique(joint_df[["target_variable"]])) {
     joint_df_target <- suppressMessages(joint_df %>%
                                           dplyr::filter(target_variable == var))
-    var_scores <- scoringutils::score(
+    
+    range_test <- scoringutils::score(
       data = joint_df_target) %>% 
+      pull(range) %>% 
+      unique()
+    
+    var_scores_3 <- scoringutils::score(
+      data = joint_df_target) %>%
+      # dplyr::mutate(
+      #   n_interval_scores = rowSums(!is.na(dplyr::select(., dplyr::starts_with("interval_score")))),
+      #   exists_interval_score_0 = "interval_score_0" %in% names(.)
+      # ) %>% 
+      scoringutils::add_coverage(ranges=range_test, by=observation_cols) %>%
+      summarise_scores() %>% 
+      dplyr::select(-c("type")) %>% 
+      group_by(model,location,horizon,temporal_resolution,target_variable,
+               forecast_date, target_end_date) %>% 
+      fill(everything(), .direction = "downup") %>%
+      slice(1) %>% 
+      ungroup() %>% 
+      rename("wis"=interval_score) %>% 
+      purrr::set_names(~ sub(abs_var_rename, "abs_error", .x)) %>%
+      dplyr::select(
+        -dplyr::ends_with("_NA"),
+        -c("se_point","coverage_deviation","bias")
+      ) %>% 
+    
+    
+    
+    var_scores <- scoringutils::score(
+      data = joint_df_target) %>%
       scoringutils::summarise_scores(by = c(observation_cols, "range")) %>%
       tidyr::pivot_wider(
         id_cols = observation_cols,
