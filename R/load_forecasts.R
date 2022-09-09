@@ -6,7 +6,7 @@
 #'   \item If `date_window_size` is 0, this function returns all available forecasts
 #' submitted on every day in `dates`.
 #'
-#'   \item If`date_window_size`  is not 0, this function will look for all the latest
+#'   \item If`date_window_size`  is not 0, this function will look for the latest
 #' forecasts that are submitted within window size for each day in  `dates`.
 #'
 #'   \item If `source` is `local_zoltar`, a valid sqlite3 object is required. 
