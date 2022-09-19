@@ -162,7 +162,12 @@ plot_forecasts <- function(forecast_data,
     # Convert location names to fips codes or country abbreviations
     locations <- name_to_fips(locations, hub)
   }
-
+  
+  hub <- match.arg(hub,
+                  choices = c("US", "ECDC", "FluSight"),
+                  several.ok = TRUE
+  )
+  
   # get lists of valid parameter choices based on `hub`
   if (hub[1] == "US") {
     valid_location_codes <- covidHubUtils::hub_locations$fips
@@ -366,7 +371,7 @@ plot_forecasts <- function(forecast_data,
       forecast_colors <- unlist(lapply(model_colors, tail, n = 1))
       # create 95% PI color
       interval_colors <- unlist(lapply(model_colors, function(color) {
-        colorspace::lighten(color, 0.4)
+        colorspace::lighten(color, 0.2)
       }))
     }
   } else {
@@ -379,6 +384,7 @@ plot_forecasts <- function(forecast_data,
     getPalette <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(4, "Blues"))
     blues <- getPalette(colourCount)
     forecast_colors <- rep(tail(blues, 1), length(unique(models)))
+    blues[1:2] <- colorspace::darken(blues[1:2], 0.1)
     interval_colors <- rep(
       blues[1:(length(blues) - 1)],
       length(unique(models))

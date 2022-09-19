@@ -25,6 +25,14 @@ test_that("load_forecast_files_repo works with data-processed folder", {
                                        ))
     )
   )
+  
+  expect_named(
+    all_forecasts,
+    c("model", "forecast_date", "location", "horizon", "temporal_resolution",
+      "target_variable", "target_end_date", "type", "quantile", "value",
+      "location_name", "population", "geo_type", "geo_value", "abbreviation",
+      "full_location_name"
+    ))
 })
 
 test_that("load_forecast_files_repo works with data-forecasts folder", {

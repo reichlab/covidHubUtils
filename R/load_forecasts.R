@@ -105,7 +105,12 @@ load_forecasts <- function(models = NULL,
 
   # validate source
   source <- match.arg(source, choices = c("local_hub_repo", "zoltar", "local_zoltar"))
-
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC", "FluSight"),
+                   several.ok = TRUE
+  )
+  
   if (!is.null(dates) & date_window_size > 0) {
     # 2d array
     all_forecast_dates <- purrr::map(
@@ -120,7 +125,7 @@ load_forecasts <- function(models = NULL,
   if (source == "local_hub_repo") {
     # validate hub repo path
     if (missing(hub_repo_path) | !dir.exists(hub_repo_path)) {
-      stop("Error in load_forecasts: Please provide a vaid path to hub repo.")
+      stop("Error in load_forecasts: Please provide a valid path to hub repo.")
     }
 
     if (!is.null(as_of)) {

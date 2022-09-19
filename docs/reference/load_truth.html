@@ -76,17 +76,17 @@ for all US locations.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">load_truth</span><span class="op">(</span>
-  truth_source <span class="op">=</span> <span class="cn">NULL</span>,
-  target_variable <span class="op">=</span> <span class="cn">NULL</span>,
-  as_of <span class="op">=</span> <span class="cn">NULL</span>,
-  truth_end_date <span class="op">=</span> <span class="cn">NULL</span>,
-  temporal_resolution <span class="op">=</span> <span class="cn">NULL</span>,
-  locations <span class="op">=</span> <span class="cn">NULL</span>,
-  data_location <span class="op">=</span> <span class="cn">NULL</span>,
-  local_repo_path <span class="op">=</span> <span class="cn">NULL</span>,
-  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"ECDC"</span>, <span class="st">"FluSight"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_truth</span><span class="op">(</span></span>
+<span>  truth_source <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  target_variable <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  as_of <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  truth_end_date <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  temporal_resolution <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  locations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_location <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  local_repo_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hub <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"ECDC"</span>, <span class="st">"FluSight"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -179,49 +179,54 @@ will return a warning.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/reichlab/covidHubUtils" class="external-link">covidHubUtils</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># load for US</span></span>
-<span class="r-in"><span class="fu">load_truth</span><span class="op">(</span></span>
-<span class="r-in">  truth_source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"JHU"</span>, <span class="st">"HealthData"</span><span class="op">)</span>,</span>
-<span class="r-in">  target_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inc case"</span>, <span class="st">"inc death"</span>, <span class="st">"inc hosp"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 838,201 × 11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    model target_variable target_end_date location value location_name population</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Obse… inc hosp        2020-10-15      78           0 Virgin Islan…     <span style="text-decoration: underline;">107</span>268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Obse… inc hosp        2020-10-12      78           0 Virgin Islan…     <span style="text-decoration: underline;">107</span>268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Obse… inc hosp        2020-10-11      50           0 Vermont           <span style="text-decoration: underline;">623</span>989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Obse… inc hosp        2020-10-08      46          51 South Dakota      <span style="text-decoration: underline;">884</span>659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Obse… inc hosp        2020-10-06      50           1 Vermont           <span style="text-decoration: underline;">623</span>989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Obse… inc hosp        2020-10-03      50           0 Vermont           <span style="text-decoration: underline;">623</span>989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Obse… inc hosp        2020-10-02      78           0 Virgin Islan…     <span style="text-decoration: underline;">107</span>268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Obse… inc hosp        2020-09-29      78           0 Virgin Islan…     <span style="text-decoration: underline;">107</span>268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Obse… inc hosp        2020-09-28      78           0 Virgin Islan…     <span style="text-decoration: underline;">107</span>268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Obse… inc hosp        2020-09-27      50           0 Vermont           <span style="text-decoration: underline;">623</span>989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 838,191 more rows, and 4 more variables: geo_type &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;, full_location_name &lt;chr&gt;</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># load for ECDC</span></span>
-<span class="r-in"><span class="fu">load_truth</span><span class="op">(</span></span>
-<span class="r-in">  truth_source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"JHU"</span><span class="op">)</span>,</span>
-<span class="r-in">  target_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inc case"</span>, <span class="st">"inc death"</span><span class="op">)</span>,</span>
-<span class="r-in">  hub <span class="op">=</span> <span class="st">"ECDC"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8,000 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    model location target_end_date target_variable value location_name population</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Obse… AT       2020-01-25      inc case            0 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Obse… AT       2020-02-01      inc case            0 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Obse… AT       2020-02-08      inc case            0 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Obse… AT       2020-02-15      inc case            0 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Obse… AT       2020-02-22      inc case            0 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Obse… AT       2020-02-29      inc case            3 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Obse… AT       2020-03-07      inc case           43 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Obse… AT       2020-03-14      inc case          363 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Obse… AT       2020-03-21      inc case         <span style="text-decoration: underline;">1</span>989 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Obse… AT       2020-03-28      inc case         <span style="text-decoration: underline;">4</span>895 Austria          8<span style="text-decoration: underline;">809</span>212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 7,990 more rows</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/reichlab/covidHubUtils" class="external-link">covidHubUtils</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load for US</span></span></span>
+<span class="r-in"><span><span class="fu">load_truth</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  truth_source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"JHU"</span>, <span class="st">"HealthData"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  target_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inc case"</span>, <span class="st">"inc death"</span>, <span class="st">"inc hosp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 872,126 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model        targe…¹ target_e…² locat…³ value locat…⁴ popul…⁵ geo_t…⁶ geo_v…⁷</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Observed Da… inc ho… 2020-12-21 16         56 Idaho   1<span style="text-decoration: underline;">787</span>065 state   id     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Observed Da… inc ho… 2020-12-19 72         44 Puerto… 3<span style="text-decoration: underline;">754</span>939 state   pr     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Observed Da… inc ho… 2020-10-15 78          0 Virgin…  <span style="text-decoration: underline;">107</span>268 state   vi     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Observed Da… inc ho… 2020-10-12 50          0 Vermont  <span style="text-decoration: underline;">623</span>989 state   vt     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Observed Da… inc ho… 2020-10-11 50          0 Vermont  <span style="text-decoration: underline;">623</span>989 state   vt     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Observed Da… inc ho… 2020-10-08 50          0 Vermont  <span style="text-decoration: underline;">623</span>989 state   vt     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Observed Da… inc ho… 2020-10-07 78          0 Virgin…  <span style="text-decoration: underline;">107</span>268 state   vi     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Observed Da… inc ho… 2020-10-06 78          0 Virgin…  <span style="text-decoration: underline;">107</span>268 state   vi     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Observed Da… inc ho… 2020-10-03 44          3 Rhode … 1<span style="text-decoration: underline;">059</span>361 state   ri     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Observed Da… inc ho… 2020-10-02 78          0 Virgin…  <span style="text-decoration: underline;">107</span>268 state   vi     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 872,116 more rows, 2 more variables: abbreviation &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   full_location_name &lt;chr&gt;, and abbreviated variable names ¹​target_variable,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​target_end_date, ³​location, ⁴​location_name, ⁵​population, ⁶​geo_type,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁷​geo_value</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load for ECDC</span></span></span>
+<span class="r-in"><span><span class="fu">load_truth</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  truth_source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"JHU"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  target_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"inc case"</span>, <span class="st">"inc death"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  hub <span class="op">=</span> <span class="st">"ECDC"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8,384 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model               location target_end_date target_v…¹ value locat…² popul…³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Observed Data (JHU) AT       2020-01-25      inc case       0 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Observed Data (JHU) AT       2020-02-01      inc case       0 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Observed Data (JHU) AT       2020-02-08      inc case       0 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Observed Data (JHU) AT       2020-02-15      inc case       0 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Observed Data (JHU) AT       2020-02-22      inc case       0 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Observed Data (JHU) AT       2020-02-29      inc case       3 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Observed Data (JHU) AT       2020-03-07      inc case      43 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Observed Data (JHU) AT       2020-03-14      inc case     363 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Observed Data (JHU) AT       2020-03-21      inc case    <span style="text-decoration: underline;">1</span>989 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Observed Data (JHU) AT       2020-03-28      inc case    <span style="text-decoration: underline;">4</span>895 Austria 8<span style="text-decoration: underline;">809</span>212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 8,374 more rows, and abbreviated variable names ¹​target_variable,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​location_name, ³​population</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -236,7 +241,7 @@ will return a warning.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

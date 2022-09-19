@@ -60,6 +60,11 @@ load_forecasts_local_zoltar <- function(models = NULL,
   # set up environment variables
   Sys.setenv("DJANGO_SETTINGS_MODULE"="forecast_repo.settings.local_sqlite3")
   Sys.setenv("MAX_NUM_QUERY_ROWS"="20_000_000")
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC"),
+                   several.ok = TRUE
+  )
 
   # construct Zoltar project id
   project_id <- get_zoltar_project_id_local_zoltar(zoltar_sqlite_file, hub)
@@ -233,6 +238,12 @@ load_forecasts_local_zoltar <- function(models = NULL,
 #' @return project id
 get_zoltar_project_id_local_zoltar <- function(zoltar_sqlite_file,
                                   hub = c("US", "ECDC")) {
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC"),
+                   several.ok = TRUE
+  )
+  
   # build connection to local sqlite file
   conn <- DBI::dbConnect(RSQLite::SQLite(), zoltar_sqlite_file)
   
@@ -260,7 +271,7 @@ get_zoltar_project_id_local_zoltar <- function(zoltar_sqlite_file,
 #' @param zoltar_sqlite_file path to local sqlite file, 
 #' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
 #' @param project_id one valid id number of a project available in 
-#' local zoltar sqlite file. This should come from the result of [get_zoltar_project_id()]
+#' local zoltar sqlite file. This should come from the result of `get_zoltar_project_id()`.
 #'
 #' @return data.frame with `id` and `model_abbr` columns
 get_models_local_zoltar <- function(zoltar_sqlite_file, project_id){
@@ -285,7 +296,7 @@ get_models_local_zoltar <- function(zoltar_sqlite_file, project_id){
 #' @param zoltar_sqlite_file path to local sqlite file, 
 #' either a relative path w.r.t. `local_zoltpy_path` or an absolute path.
 #' @param forecast_model_id one valid id number of a forecast model available in 
-#' local zoltar sqlite file. This should come from the result of [get_models()]
+#' local zoltar sqlite file. This should come from the result of `get_models()`.
 #'
 #' @return data.frame with `id` and `forecast_date` columns
 get_model_forecast_history_local_zoltar <- function(zoltar_sqlite_file, forecast_model_id){

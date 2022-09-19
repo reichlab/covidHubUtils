@@ -47,13 +47,13 @@ The goal of the `covidHubUtils` R package is to create a set of basic utility fu
 
 The `covidHubUtils` package relies on a small number of packages, including many from the `tidyverse` and, importantly, [the `zoltr` package](http://reichlab.io/zoltr/) that is used to access the Zoltar API for downloading forecasts. Please install `zoltr` from GitHub, as this development version often has important features not yet on the CRAN version:
 ```{r message=FALSE, eval=FALSE}
-devtools::install_github("reichlab/zoltr")
+remotes::install_github("reichlab/zoltr")
 ```
 
-The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `devtools` package:
+The `covidHubUtils` package currently is only available on GitHub, and it may be installed using the `remotes` package:
 
 ```{r message=FALSE, eval=FALSE}
-devtools::install_github("reichlab/covidHubUtils")
+remotes::install_github("reichlab/covidHubUtils")
 ```
 
 
@@ -433,7 +433,7 @@ The inputs to the `scored_forecasts()` include a `forecasts` data frame created 
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install and load the most up-to-date development version of `scoringutils` from GitHub:
 ``` {r}
-devtools::install_github("epiforecasts/scoringutils")
+remotes::install_github("epiforecasts/scoringutils")
 library(scoringutils)
 ```
 

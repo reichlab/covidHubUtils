@@ -11,23 +11,11 @@ A data frame with 32 rows and 3 columns:
 \item{location}{Location abbreviation}
 \item{population}{Location population}
 }
-
-A data frame with 54 rows and 4 columns:
-\describe{
-\item{fips}{FIPS code}
-\item{location_name}{Name of the location}
-\item{abbreviation}{Location abbreviation}
-\item{population}{Location population}
-}
 }
 \usage{
-hub_locations_ecdc
-
 hub_locations_ecdc
 }
 \description{
 Data set with available locations for the ECDC hub
-
-Data set with available locations for the FluSight hub
 }
 \keyword{datasets}

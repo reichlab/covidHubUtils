@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.4
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   covidHubUtils-overview: covidHubUtils-overview.html
   covidHubUtils-zoltar_sqlite_setup: covidHubUtils-zoltar_sqlite_setup.html
-last_built: 2022-06-16T22:03Z
+last_built: 2022-07-25T16:23Z
 

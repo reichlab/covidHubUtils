@@ -49,7 +49,12 @@ load_forecasts_zoltar <- function(models = NULL,
 
   # set up Zoltar connection
   zoltar_connection <- setup_zoltar_connection(staging = FALSE)
-
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC"),
+                   several.ok = TRUE
+  )
+  
   # construct Zoltar project url
   project_url <- get_zoltar_project_url(
     hub = hub,
@@ -76,8 +81,14 @@ load_forecasts_zoltar <- function(models = NULL,
     if (is.null(models)) {
       models <- all_models$model_abbr
       models <- sort(models, method = "radix")
+    } else {
+      invalid_models <- models[!(models %in% all_models$model_abbr)]
+      if (length(invalid_models) > 0) {
+        stop(paste0("\nError in load_forecasts_zoltar: models parameter contains invalid model name: ",
+                    invalid_models,"."
+                    ))
+      }
     }
-    
     
     # set 2 workers
     if (verbose) {

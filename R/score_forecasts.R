@@ -171,7 +171,9 @@ score_forecasts <- function(
     abs_var_remove <- c("ae_median","se_point") # the variables we don't want returned
   }
   
- 
+ # column names always included in final output
+  col_names_include <- c("model", "location", "horizon", "temporal_resolution",
+                        "target_variable", "forecast_date", "target_end_date")
     
   
   #two sided
@@ -236,6 +238,7 @@ score_forecasts <- function(
       
     }
     
+
     scores <- rbind(scores,var_scores)
   }
 
@@ -272,7 +275,7 @@ score_forecasts <- function(
       dplyr::select("model","location", "horizon", "temporal_resolution", "target_variable",        
                     "forecast_date", "target_end_date", 
                     dplyr::all_of(quantile_coverage_columns))
-    
+
     # combine one and two sided
     scores <- suppressMessages(dplyr::full_join(
       scores_one_sided,

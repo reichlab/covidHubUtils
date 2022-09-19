@@ -12,7 +12,7 @@ get_models_local_zoltar(zoltar_sqlite_file, project_id)
 either a relative path w.r.t. \code{local_zoltpy_path} or an absolute path.}
 
 \item{project_id}{one valid id number of a project available in
-local zoltar sqlite file. This should come from the result of \code{\link[=get_zoltar_project_id]{get_zoltar_project_id()}}}
+local zoltar sqlite file. This should come from the result of \code{get_zoltar_project_id()}.}
 }
 \value{
 data.frame with \code{id} and \code{model_abbr} columns

@@ -118,6 +118,11 @@ load_truth <- function(truth_source = NULL,
               Will be loading the latest data as of today.")
     }
   }
+  
+  hub <- match.arg(hub,
+                   choices = c("US", "ECDC", "FluSight"),
+                   several.ok = TRUE
+  )
 
   # preparations and validation checks that are different for US and ECDC hub
   if (hub[1] == "US") {
