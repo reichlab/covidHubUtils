@@ -43,10 +43,10 @@
 #'
 #' @examples
 #' library(scoringutils)
-#' forecasts <- load_latest_forecasts(
+#' forecasts <- load_forecasts(
 #'   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
-#'   last_forecast_date = "2020-12-14",
-#'   forecast_date_window_size = 7,
+#'   dates = "2020-12-14",
+#'   date_window_size = 7,
 #'   locations = c("US"),
 #'   targets = paste(1:4, "wk ahead inc death"),
 #'   source = "zoltar"
@@ -54,10 +54,10 @@
 #' truth <- load_truth("JHU", target_variable = "inc death", locations = "US")
 #' score_forecasts(forecasts, truth)
 #' 
-#' forecasts <- load_latest_forecasts(
+#' forecasts <- load_forecasts(
 #'   models = c("ILM-EKF"),
-#'   hub = c("ECDC", "US"), last_forecast_date = "2021-03-08",
-#'   forecast_date_window_size = 0,
+#'   hub = c("ECDC", "US"), dates = "2021-03-08",
+#'   date_window_size = 0,
 #'   locations = c("GB"),
 #'   targets = paste(1:4, "wk ahead inc death"),
 #'   source = "zoltar"
@@ -184,7 +184,7 @@ score_forecasts <- function(
     
     range_test <- scoringutils::score(
       data = joint_df_target) %>% 
-      pull(range) %>% 
+      dplyr::pull(range) %>% 
       unique()
     
     var_scores <- scoringutils::score(
