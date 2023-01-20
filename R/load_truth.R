@@ -483,8 +483,8 @@ get_truth_path <- function(source,
       )
       file_path <- file.path(repo_path, truth_folder_path, file_name)
     } else if (hub[1] == "ECDC") {
-      truth_folder_path <- file.path("data-truth", toupper(source), "truth_", toupper(source), "-")
-      file_path <- file.path(repo_path, truth_folder_path, file_name)
+      truth_folder_path <- file.path("data-truth", toupper(source), paste0("truth_", toupper(source), "-"))
+      file_path <- file.path(repo_path, paste0(truth_folder_path, file_name))
     } else if (hub[1] == "FluSight") {
       truth_folder_path <- file.path("data-truth","truth-")
       file_path <- file.path(repo_path, truth_folder_path, file_name)
