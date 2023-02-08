@@ -65,7 +65,7 @@ Imports:
     RcppRoll,
     colorspace,
     ggnewscale,
-    zoltr (>= 0.9.1),
+    zoltr (>= 1.0.0),
     grDevices,
     RColorBrewer,
     stats,
