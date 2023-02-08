@@ -379,7 +379,6 @@ load_truth <- function(truth_source = NULL,
             truth_end_date = truth_end_date,
             hub = hub
           )
-          return(data)
         } else {
           data <- load_from_hub_repo(
             target_variable = target,
@@ -390,8 +389,9 @@ load_truth <- function(truth_source = NULL,
             data_location = data_location,
             hub = hub
           )
-          return(data)
         }
+        if (nrow(data) == 0) data <- NULL
+        return(data)
       }
     }
   )
