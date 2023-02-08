@@ -22,25 +22,26 @@ aggregate_to_weekly <- function(data) {
            target_variable, target_end_date, location and value in data.")
   }
 
-  data <- data %>%
-    dplyr::mutate(
-      sat_date = lubridate::ceiling_date(
-        lubridate::ymd(target_end_date),
-        unit = "week"
-      ) - 1
-    ) %>%
-    dplyr::group_by(model, location, target_variable) %>%
-    # if the last week is not complete, drop all observations from the
-    # previous Saturday in that week
-    dplyr::filter(
-      if (max(target_end_date) < max(sat_date)) target_end_date <= max(sat_date) - 7 else TRUE
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-target_end_date) %>%
-    dplyr::rename(target_end_date = sat_date) %>%
-    dplyr::group_by(model, location, target_end_date, target_variable) %>%
-    dplyr::summarize(value = sum(value, na.rm = FALSE)) %>%
-    dplyr::ungroup()
-
+  if (nrow(data) > 0) {
+    data <- data %>%
+      dplyr::mutate(
+        sat_date = lubridate::ceiling_date(
+          lubridate::ymd(target_end_date),
+          unit = "week"
+        ) - 1
+      ) %>%
+      dplyr::group_by(model, location, target_variable) %>%
+      # if the last week is not complete, drop all observations from the
+      # previous Saturday in that week
+      dplyr::filter(
+        if (max(target_end_date) < max(sat_date)) target_end_date <= max(sat_date) - 7 else TRUE
+      ) %>%
+      dplyr::ungroup() %>%
+      dplyr::select(-target_end_date) %>%
+      dplyr::rename(target_end_date = sat_date) %>%
+      dplyr::group_by(model, location, target_end_date, target_variable) %>%
+      dplyr::summarize(value = sum(value, na.rm = FALSE)) %>%
+      dplyr::ungroup()
+  }
   return(data)
 }

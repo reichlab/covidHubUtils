@@ -87,7 +87,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="covidhubutils">covidHubUtils<a class="anchor" aria-label="anchor" href="#covidhubutils"></a>
 </h1></div>
-
+<p><a href="https://github.com/reichlab/covidHubUtils/actions" class="external-link"><img src="https://github.com/reichlab/covidHubUtils/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://doi.org/10.5281/zenodo.5207940" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5207940.svg" alt="DOI"></a></p>
 <p>Utility functions for the COVID-19 forecast hub</p>
 </div>
 <div class="section level1">
@@ -132,20 +132,26 @@
 <div class="section level3">
 <h3 id="reading-observed-truth-data">Reading Observed “Truth” Data<a class="anchor" aria-label="anchor" href="#reading-observed-truth-data"></a>
 </h3>
-<ul><li>
-<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li></ul>
+<ul>
+<li>
+<code>load_truth(truth_source, target_variable, truth_end_date, temporal_resolution, locations, data_location, local_repo_path, hub)</code>: Load truth data for specified target variable and locations from covid19-forecast-hub repository. <strong>Note:</strong> Only support national level and state level truth data for <code>"inc hosp"</code> from <code>"HealthData"</code> source.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="plotting-forecasts">Plotting Forecasts<a class="anchor" aria-label="anchor" href="#plotting-forecasts"></a>
 </h3>
-<ul><li>
-<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li></ul>
+<ul>
+<li>
+<code>plot_forecasts(forecast_data, truth_data, hub, models, target_variable, locations, facet, facet_scales, forecast_dates, intervals, horizon, truth_source, use_median_as_point, plot_truth, plot, fill_by_model, truth_as_of, title, subtitle, show_caption)</code>: Plot forecasts with optional truth data for multiple models, locations and forecast dates.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="scoring-forecasts">Scoring Forecasts<a class="anchor" aria-label="anchor" href="#scoring-forecasts"></a>
 </h3>
-<ul><li>
-<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li></ul>
+<ul>
+<li>
+<code>score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))</code> Calculate specified scores for each combination of <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>horizon</code>, <code>temporal_resolution</code>, <code>target_variable</code>, and <code>target_end_date</code> in the <code>forecasts</code> data frame. Please see <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="download-and-pre-process-truth-data">Download and pre-process “Truth” Data<a class="anchor" aria-label="anchor" href="#download-and-pre-process-truth-data"></a>
@@ -239,13 +245,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/reichlab/covidHubUtils/actions" class="external-link"><img src="https://github.com/reichlab/covidHubUtils/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://doi.org/10.5281/zenodo.5207940" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5207940.svg" alt="DOI"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -258,7 +258,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
