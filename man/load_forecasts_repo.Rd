@@ -10,7 +10,7 @@ load_forecasts_repo(
   models = NULL,
   forecast_dates = NULL,
   locations = NULL,
-  types = NULL,
+  types = c("point", "quantile"),
   targets = NULL,
   hub = c("US", "ECDC", "FluSight"),
   verbose = TRUE
@@ -40,8 +40,8 @@ and/or \code{"point"}. Default to all valid forecast types.}
 \code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
 Default to \code{NULL} which stands for all valid targets.}
 
-\item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
+\item{hub}{character vector indicating the hub from which to load forecasts.
+Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 
 \item{verbose}{logical to print out diagnostic messages. Default is \code{TRUE}}
 }
