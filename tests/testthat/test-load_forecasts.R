@@ -17,11 +17,11 @@ test_that("load_forecast from local repo works with window size", {
   expect_identical(
     all_forecasts %>%
       dplyr::distinct(model, location, forecast_date) %>%
-      dplyr::arrange(model, forecast_date),
+      dplyr::arrange(model, location),
     tidyr::expand_grid(
       model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14")),
-      location = c("36", "US")
+      location = c("36", "US"),
+      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14"))
     )
   )
 })
@@ -78,11 +78,11 @@ test_that("load_forecast from zoltar works with window size", {
   expect_identical(
     all_forecasts %>%
       dplyr::distinct(model, location, forecast_date) %>%
-      dplyr::arrange(model, forecast_date),
+      dplyr::arrange(model, location),
     tidyr::expand_grid(
       model = c("COVIDhub-baseline", "COVIDhub-ensemble"),
-      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14")),
-      location = c("US", "36"),
+      location = c("36", "US"),
+      forecast_date = lubridate::ymd(c("2020-12-07", "2020-12-14"))
     )
   )
 })
