@@ -86,7 +86,7 @@ data.frame with columns \code{model}, \code{forecast_date}, \code{location}, \co
 \item If \code{date_window_size} is 0, this function returns all available forecasts
 submitted on every day in \code{dates}.
 
-\item If\code{date_window_size}  is not 0, this function will look for all the latest
+\item If\code{date_window_size}  is not 0, this function will look for the latest
 forecasts that are submitted within window size for each day in  \code{dates}.
 
 \item If \code{source} is \code{local_zoltar}, a valid sqlite3 object is required.

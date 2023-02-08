@@ -29,8 +29,8 @@ and/or \code{"point"}. Default to all valid forecast types.}
 \code{c('1 wk ahead cum death', '2 wk ahead cum death')}.
 Default to \code{NULL} which stands for all valid targets.}
 
-\item{hub}{character vector, where the first element indicates the hub
-from which to load forecasts. Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
+\item{hub}{character vector indicating the hub from which to load forecasts.
+Possible options are \code{"US"}, \code{"ECDC"} and \code{"FluSight"}.}
 }
 \value{
 data frame with columns model, forecast_date, location, horizon,
