@@ -299,7 +299,7 @@ load_truth <- function(truth_source = NULL,
         stop("Error in load_truth: The truth source you selected is not supported for US data in covidData.")
       }
     } else if (hub[1] == "ECDC") {
-      if (any("ECDC", "OWID") %in% truth_source) {
+      if (any(c("ECDC", "OWID") %in% truth_source)) {
         if ("inc hosp" %in% target_variable) {
           target_variable <- target_variable[target_variable != "inc hosp"]
           truth_source <- truth_source[!truth_source %in% c("ECDC", "OWID")]
