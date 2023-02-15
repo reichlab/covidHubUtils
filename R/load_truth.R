@@ -10,7 +10,7 @@
 #'
 #' @details
 #' \itemize{
-#'   \item`"inc hosp"` is only available from `"HealthData"` and `"ECDC"`.`"inc flu hosp"` is only available from `"HealthData"`.
+#'   \item`"inc hosp"` is only available from `"HealthData"`, `"ECDC"` and `"OWID"`.`"inc flu hosp"` is only available from `"HealthData"`.
 #'   
 #'   \item This function is not loading data for other target variables from `"HealthData"`.
 #'
@@ -30,14 +30,14 @@
 #' }
 #'
 #' @param truth_source character vector specifying where the truths will
-#' be loaded from: currently support `"JHU"`, `"NYTimes"`, `"HealthData`" and `"ECDC"`.
+#' be loaded from: currently support `"JHU"`, `"NYTimes"`, `"HealthData`", `"ECDC"` and `"OWID"`
 #' If `NULL`, default for US hub is `c("JHU", "HealthData")`.
-#' If `NULL`, default for ECDC hub is `c("JHU")`.
+#' If `NULL`, default for ECDC hub is `c("OWID")`.
 #' If `NULL`, default for FluSight hub is `c("HealthData")`.
 #' @param target_variable string specifying target type It should be one or more of
 #' `"cum death"`, `"inc case"`, `"inc death"`, `"inc hosp"`.
 #' If `NULL`, default for US hub is `c("inc case", "inc death", "inc hosp")`.
-#' If `NULL`, default for ECDC hub is `c("inc case", "inc death")`.
+#' If `NULL`, default for ECDC hub is `c("inc hosp")`.
 #' If `NULL`, default for FluSight hub is `c("inc flu hosp")`.
 #' @param as_of character vector of "as of" dates to use for querying truths in
 #' format 'yyyy-mm-dd'. For each spatial unit and temporal reporting unit, the last
@@ -193,25 +193,25 @@ load_truth <- function(truth_source = NULL,
     } else {
       # validate truth source
       truth_source <- match.arg(truth_source,
-        choices = c("JHU", "ECDC"),
+        choices = c("JHU", "ECDC", "OWID"),
         several.ok = TRUE
       )
     }
     
-    if (all("ECDC" %in% truth_source) &
+    if (any(c("ECDC", "OWID") %in% truth_source) &
         (any(target_variable %in% c("inc case", "inc death")))) {
-      stop("Error in load_truth: ECDC case and death data are not available.")
+      stop("Error in load_truth: ECDC/OWID case and death data are not available.")
     }
     
     # extra checks for truth source if target is inc hosp
     if ("inc hosp" %in% target_variable) {
-      if (!"ECDC" %in% truth_source & data_location != "covidData") {
-        warning("Warning in load_truth: Incident hospitalization truth data is only available from ECDC.
-              Will be loading data from ECDC instead.")
-        truth_source <- c(truth_source, "ECDC")
+      if (!any(c("ECDC", "OWID") %in% truth_source) & data_location != "covidData") {
+        warning("Warning in load_truth: Incident hospitalization truth data is only available from ECDC or OWID.
+              Will be loading data from OWID instead.")
+        truth_source <- c(truth_source, "OWID")
         if (!ecdc_default) {
-          warning("Warning in load_truth: ECDC is added to truth_source.
-              Will also be loading data for all selected target_variable from ECDC.")
+          warning("Warning in load_truth: OWID is added to truth_source.
+              Will also be loading data for all selected target_variable from OWID.")
         }
       }
     }
@@ -299,14 +299,14 @@ load_truth <- function(truth_source = NULL,
         stop("Error in load_truth: The truth source you selected is not supported for US data in covidData.")
       }
     } else if (hub[1] == "ECDC") {
-      if ("ECDC" %in% truth_source) {
+      if (any("ECDC", "OWID") %in% truth_source) {
         if ("inc hosp" %in% target_variable) {
           target_variable <- target_variable[target_variable != "inc hosp"]
-          truth_source <- truth_source[truth_source != "ECDC"]
-          warning("Warning in load_truth: inc hosp data from ECDC is not available in covidData.
+          truth_source <- truth_source[!truth_source %in% c("ECDC", "OWID")]
+          warning("Warning in load_truth: inc hosp data from ECDC/OWID is not available in covidData.
                   Will skip the query for this specific truth data.")
         } else {
-          stop("Error in load_truth: The truth source you selected is not supported for ECDC data in covidData.")
+          stop("Error in load_truth: The truth source you selected is not supported for ECDC/OWID data in covidData.")
         }
       }
     } else if (hub[1] == "FluSight"){
@@ -340,11 +340,12 @@ load_truth <- function(truth_source = NULL,
   all_combinations <- tidyr::crossing(truth_source, target_variable)
   if (hub[1] == "ECDC") {
     if (ecdc_default) {
-      # take out ECDC - inc case and ECDC - inc death
+      # take out OWID - inc case and OWID - inc death
       all_combinations <- all_combinations %>%
         dplyr::filter(
+          (truth_source == "OWID" & target_variable == "inc hosp") |
           (truth_source == "ECDC" & target_variable == "inc hosp") |
-            (truth_source != "ECDC")
+          !(truth_source %in% c("OWID", "ECDC")) & target_variable != "inc hosp"
         )
     }
   }
@@ -357,7 +358,7 @@ load_truth <- function(truth_source = NULL,
   truth <- purrr::map2_dfr(
     all_combinations$truth_source, all_combinations$target_variable,
     function(source, target) {
-      if ((source %in% c("HealthData", "ECDC") & target == "inc hosp") |
+      if ((source %in% c("HealthData", "ECDC", "OWID") & target == "inc hosp") |
         (source != "HealthData" & target != "inc hosp")|
         (target == "inc flu hosp")) {
         if (data_location == "covidData") {
