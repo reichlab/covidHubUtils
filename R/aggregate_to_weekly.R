@@ -9,6 +9,7 @@
 #' @return data.frame with the same set of input columns and weekly 
 #' aggregated data in `value` column
 #'
+#' @importFrom dplyr mutate group_by n ungroup filter rename summarize
 #' @export
 aggregate_to_weekly <- function(data) {
   # check if data has all needed columns
@@ -31,7 +32,7 @@ aggregate_to_weekly <- function(data) {
         ) - 1
       ) %>%
       dplyr::group_by(model, location, target_variable, sat_date)  %>%
-      dplyr::mutate(n = n())  %>% ## count observations per Saturday date
+      dplyr::mutate(n = dplyr::n())  %>% ## count observations per Saturday date
       dplyr::group_by(model, location, target_variable)  %>%
       ## check if data is weekly or daily
       dplyr::mutate(
