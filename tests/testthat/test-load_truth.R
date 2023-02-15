@@ -47,7 +47,7 @@ test_that("default selections from remote hub repo", {
   )
   # daily
   expected_ecdc_inc_hosp <- load_truth(
-    truth_source = c("ECDC"),
+    truth_source = c("OWID"),
     target_variable = c("inc hosp"),
     hub = c("ECDC")
   )
