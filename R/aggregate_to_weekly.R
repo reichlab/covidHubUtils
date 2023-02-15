@@ -30,6 +30,22 @@ aggregate_to_weekly <- function(data) {
           unit = "week"
         ) - 1
       ) %>%
+      dplyr::group_by(model, location, target_variable, sat_date)  %>%
+      dplyr::mutate(n = n())  %>% ## count observations per Saturday date
+      dplyr::group_by(model, location, target_variable)  %>%
+      ## check if data is weekly or daily
+      dplyr::mutate(
+        frequency = dplyr::if_else(all(n == 1), "weekly", "daily")
+      ) %>%
+      dplyr::ungroup() %>%
+      ## if weekly and end date is previous Sunday, make end date the Saturday
+      ## instead, i.e. interpret Mon-Sun as Sun-Sat
+      dplyr::mutate(
+        target_end_date = dplyr::if_else(
+          frequency == "weekly" & target_end_date + 6 == sat_date,
+          target_end_date + 6, target_end_date
+        )
+      ) %>%
       dplyr::group_by(model, location, target_variable) %>%
       # if the last week is not complete, drop all observations from the
       # previous Saturday in that week
