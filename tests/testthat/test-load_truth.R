@@ -32,16 +32,16 @@ test_that("default selections from remote hub repo", {
     )
   ))
   # ECDC hub
-  expect_warning(actual_ecdc <- load_truth(hub = c("ECDC")))
+  actual_ecdc <- load_truth(hub = c("ECDC"))
   # weekly
   expected_ecdc_inc_case <- load_truth(
-    truth_source = c("JHU"),
+    truth_source = c("ECDC"),
     target_variable = c("inc case"),
     hub = c("ECDC")
   )
   # weekly
   expected_ecdc_inc_death <- load_truth(
-    truth_source = c("JHU"),
+    truth_source = c("ECDC"),
     target_variable = c("inc death"),
     hub = c("ECDC")
   )
@@ -93,7 +93,12 @@ test_that("comapre target variables and models on default selections from remote
   )
 
   # ECDC hub from covidData
-  actual_ecdc <- load_truth(hub = c("ECDC"), data_location = "covidData")
+  expect_warning(
+    actual_ecdc <- load_truth(
+      hub = c("ECDC"), target_variable = c("inc case", "inc death"),
+      truth_source = "JHU", data_location = "covidData"
+    )
+  )
   expect_equal(unique(actual_ecdc$target_variable), c(
     "inc case",
     "inc death"
@@ -184,7 +189,7 @@ test_that("handles `ECDC`source in ECDC hub correctly when loading from remote
           hub repo", {
   # for case/death data, return warning and weekly data when temporal resolution is daily
   expect_error(actual <- load_truth(
-    truth_source = c("ECDC"),
+    truth_source = c("OWID"),
     target_variable = c("inc case", "inc death"),
     temporal_resolution = "daily",
     hub = c("ECDC")
