@@ -93,11 +93,9 @@ test_that("comapre target variables and models on default selections from remote
   )
 
   # ECDC hub from covidData
-  expect_warning(
-    actual_ecdc <- load_truth(
-      hub = c("ECDC"), target_variable = c("inc case", "inc death"),
-      truth_source = "JHU", data_location = "covidData"
-    )
+  actual_ecdc <- load_truth(
+    hub = c("ECDC"), target_variable = c("inc case", "inc death"),
+    truth_source = "JHU", data_location = "covidData"
   )
   expect_equal(unique(actual_ecdc$target_variable), c(
     "inc case",
