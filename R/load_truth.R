@@ -189,7 +189,7 @@ load_truth <- function(truth_source = NULL,
 
     if (is.null(truth_source)) {
       ecdc_default <- TRUE & ecdc_default
-      truth_source <- c("JHU")
+      truth_source <- c("ECDC", "OWID")
     } else {
       # validate truth source
       truth_source <- match.arg(truth_source,
@@ -198,9 +198,9 @@ load_truth <- function(truth_source = NULL,
       )
     }
     
-    if (any(c("ECDC", "OWID") %in% truth_source) &
+    if (!any(c("ECDC", "JHU") %in% truth_source) &
         (any(target_variable %in% c("inc case", "inc death")))) {
-      stop("Error in load_truth: ECDC/OWID case and death data are not available.")
+      stop("Error in load_truth: OWID case and death data are not available.")
     }
     
     # extra checks for truth source if target is inc hosp
@@ -343,9 +343,8 @@ load_truth <- function(truth_source = NULL,
       # take out OWID - inc case and OWID - inc death
       all_combinations <- all_combinations %>%
         dplyr::filter(
-          (truth_source == "OWID" & target_variable == "inc hosp") |
-          (truth_source == "ECDC" & target_variable == "inc hosp") |
-          !(truth_source %in% c("OWID", "ECDC")) & target_variable != "inc hosp"
+          (truth_source %in% c("OWID") & target_variable == "inc hosp") |
+          (truth_source %in% c("JHU", "ECDC")) & target_variable != "inc hosp"
         )
     }
   }
