@@ -223,23 +223,22 @@ location_name, population, geo_type, geo_value, abbreviation</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/models/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_resource(): GET: https://zoltardata.com/api/project/44/timezeros/</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 448 × 16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    model     forecast…¹ locat…² horizon tempo…³ targe…⁴ target_e…⁵ type  quant…⁶</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 point  <span style="color: #BB0000;">NA</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.01 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.05 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.1  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.15 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.25 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.3  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Columbia… 2021-01-03 US      1       wk      cum de… 2021-01-09 quan…   0.35 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 438 more rows, 7 more variables: value &lt;dbl&gt;, location_name &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   population &lt;dbl&gt;, geo_type &lt;chr&gt;, geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   full_location_name &lt;chr&gt;, and abbreviated variable names ¹​forecast_date,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​location, ³​temporal_resolution, ⁴​target_variable, ⁵​target_end_date,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁶​quantile</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model      forecast_date location horizon temporal_resolution target_variable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Columbia_… 2021-01-03    US       1       wk                  cum death      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 438 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 10 more variables: target_end_date &lt;date&gt;, type &lt;chr&gt;, quantile &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   value &lt;dbl&gt;, location_name &lt;chr&gt;, population &lt;dbl&gt;, geo_type &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   geo_value &lt;chr&gt;, abbreviation &lt;chr&gt;, full_location_name &lt;chr&gt;</span></span>
 </code></pre></div>
     </div>
   </div>
