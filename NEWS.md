@@ -1,8 +1,15 @@
 ## Changes since last release
+- None yet
+
+## covidHubUtils 0.1.8
+
+This update has minor changes.
+### Updates
 - Update `download_raw_nytimes()` to load county level data from separate files for each year on nytimes github repository.
 - Remove `"USAFacts"` as `truth_source` from `load_truth()`, `plot_forecasts()` and vignettes. 
 - Update `load_truth()` to work with files stored with Git LFS in the US forecast hub.
 - Performance improvements in `load_forecasts_repo()`
+- Bug fix in use of `&&` in `align_forecasts`, only relevant for R version 4.3.0 and higher.
 
 ## covidHubUtils 0.1.7
 
