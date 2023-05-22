@@ -65,9 +65,9 @@ align_forecasts <- function(
   drop_nonpos_relative_horizons = TRUE
 ) {
   if (!(
-    c("wk", "day") %in% (names(reference_dates)) &&
-    c("wk", "day") %in% (names(reference_weekday)) &&
-    c("wk", "day") %in% (names(reference_windows))
+    all(c("wk", "day") %in% (names(reference_dates))) &&
+    all(c("wk", "day") %in% (names(reference_weekday))) &&
+    all(c("wk", "day") %in% (names(reference_windows)))
     )) {
     stop(paste0("reference_dates, reference_weekday, and reference_windows ",
                 "must be named lists with entries for 'wk' and 'day'."))
