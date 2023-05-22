@@ -32,6 +32,7 @@ jobs:
         shell: Rscript {0}
       - name: Run unit tests
         run: |
+          devtools::test_active_file("tests/testthat/test-align.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-date_management.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-score_forecasts.R", stop_on_failure = TRUE)
           devtools::test_active_file("tests/testthat/test-load_forecast_files_repo.R", stop_on_failure = TRUE)
