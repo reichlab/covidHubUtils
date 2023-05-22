@@ -3,6 +3,7 @@
 - Remove `"USAFacts"` as `truth_source` from `load_truth()`, `plot_forecasts()` and vignettes. 
 - Update `load_truth()` to work with files stored with Git LFS in the US forecast hub.
 - Performance improvements in `load_forecasts_repo()`
+- update to force unit tests
 
 ## covidHubUtils 0.1.7
 
