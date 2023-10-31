@@ -7,16 +7,14 @@
 #'
 #' @param model_outputs an object of class `model_output_tbl` with component
 #'   model outputs (e.g., predictions). Should have columns containing the
-#'   following information: model name, reference date, location, horizon,
-#'   target, temporal resolution*, output type, output type id, and value.
-#'   Note that the temporal resolution may be included in the target column.
+#'   following information: model name, reference date or target end date, 
+#'   location, horizon, target, temporal resolution*, output type, output 
+#'   type id, and value. Note that the temporal resolution may be included 
+#'   in the target column.
 #' @param model_id_col `character` string of the name of the column 
 #'   containing the model name(s) for the forecasts. Defaults to "model_id".
 #'   Should be set to NULL if no such column exists, in which case a model_id
 #'   column will be created populated with the value "model_id".
-#' @param reference_date_col `character` string of the name of the column
-#'   containing the reference dates for the forecasts. Defaults to 
-#'   "forecast_date".
 #' @param location_col `character` string of the name of the column 
 #'   containing the locations for the forecasts. Defaults to "location".
 #' @param horizon_col `character` string of the name of the column 
@@ -27,6 +25,16 @@
 #'   to contain targets of the form "[temporal resolution] [target]" or 
 #'   "[temporal resolution] ahead [target]", such as "wk ahead inc flu hosp"
 #'   "wk inc flu hosp".
+#' @param reference_date_col `character` string of the name of the column
+#'   containing the reference dates for the forecasts. Defaults to 
+#'   "forecast_date". Should be set to NULL if no such column exists, in which 
+#'   case the column will be created using the following information: 
+#'   horizon, target end date, and temporal resolution.
+#' @param target_end_date_col `character` string of the name of the column 
+#'   containing the target end dates for the forecasts. Defaults to 
+#'   "target_end_date". Should be set to NULL if no such column exists, in
+#'   which case the column will be created using the following information:
+#'   horizon, forecast date, and temporal resolution.
 #' @param output_type_col `character` string of the name of the column 
 #'   containing the output types for the forecasts. Defaults to "output_type".
 #' @param output_type_id_col `character` string of the name of the column 
@@ -38,18 +46,34 @@
 #'   containing the temporal resolutions for the forecasts. Defaults to 
 #'   "temporal_resolution". Should be set to NULL if no such column exists,
 #'   in which case the column will be created from the existing target column.
-#' @param target_end_date_col `character` string of the name of the column 
-#'   containing the target end dates for the forecasts. Defaults to 
-#'   "target_end_date". Should be set to NULL if no such column exists, in
-#'   which case the column will be created from the temporal resolution column.
 #'
 #' @return a `data.frame` of reformatted model outputs that may be fed into 
 #'   any of the `covidHubUtils` functions with 10 total columns: model,
 #'   forecast_date, location, horizon, temporal_resolution, target_variable,
-#'   target_end_date, type, quantile, value.
+#'   target_end_date, type, quantile, value. Other columns are removed.
 #' @export
 #'
 #' @examples
+# ' forecasts <- load_forecasts(
+#'   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
+#'   dates = "2020-12-14",
+#'   date_window_size = 7,
+#'   locations = c("US"),
+#'   targets = paste(1:4, "wk ahead inc death"),
+#'   source = "zoltar"
+#' ) 
+#' altered_forecasts <- forecasts |> # Alter forecasts to not be CovidHub format
+# '   rename(model_id=model, output_type=type, output_type_id=quantile) |>
+#'   mutate(target_variable = "wk ahead inc death", horizon=as.numeric(horizon)) |>
+#'   select(-temporal_resolution)
+#' formatted_forecasts <- as_covid_hub_forecasts(
+#'    altered_forecasts, 
+#'    target_col="target_variable", 
+#'    temp_res_col=NULL 
+#' ) |>
+#' mutate(horizon=as.character(horizon))
+#' expect_equal(formatted_forecasts, dplyr::select(forecasts, model:value)) 
+
 as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
                                   reference_date_col="forecast_date", 
                                   location_col="location", 
@@ -62,7 +86,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
 
   provided_names <- c(model_id_col, reference_date_col, location_col, horizon_col, target_col, output_type_col, output_type_id_col, value_col, temp_res_col, target_end_date_col)
   
-  if (isFALSE(all(order(provided_names)) %in% order(names(quantile_outputs)))) {
+  if (isFALSE(all(order(provided_names)) %in% order(names(model_outputs)))) {
     stop("Not all provided column names exist in the provided model_outputs.")
   }
 
@@ -70,8 +94,13 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
     stop("You must provide at least one date column")
   }
   
+  if (all(c("mean", "median") %in% unique(model_outputs[[output_type_col]]))){
+    stop("You may only have one type of point forecast.")
+  }
+  
   if (is.null(model_id_col)) {
-    model_outputs <- dplyr::mutate(model_outputs, model_id = "model_id")
+    warning("No model_id_col provided, creating one automatically.")
+    model_outputs <- dplyr::mutate(model_outputs, model_id = "model_id", .before = 1)
   }
   
   model_outputs <- model_outputs |> 
@@ -100,7 +129,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
         .default = target_end_date), 
       .before = type) 
   }
-  
+
   if (is.null(target_end_date_col)) {
     model_outputs <- model_outputs |>
       dplyr::mutate(target_end_date=case_when(

@@ -2,6 +2,7 @@
 
 export(aggregate_to_weekly)
 export(align_forecasts)
+export(as_covid_hub_forecasts)
 export(calc_cramers_dist_equal_space)
 export(calc_cramers_dist_one_model_pair)
 export(calc_cramers_dist_unequal_space)
