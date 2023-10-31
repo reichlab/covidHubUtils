@@ -85,13 +85,18 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
                                   target_end_date_col="target_end_date") {
 
   provided_names <- c(model_id_col, reference_date_col, location_col, horizon_col, target_col, output_type_col, output_type_id_col, value_col, temp_res_col, target_end_date_col)
+  mandatory_cols <- list(location_col, horizon_col, target_col, output_type_col, output_type_id_col, value_col)
   
-  if (isFALSE(all(order(provided_names)) %in% order(names(model_outputs)))) {
+  if (any(map_lgl(mandatory_cols, is.null))) {
+    stop("You must provide the names of columns with location, horizon, target, output_type, output_type_id, and value information.")
+  }
+  
+  if (isFALSE(all(sort(provided_names) %in% sort(names(model_outputs))))) {
     stop("Not all provided column names exist in the provided model_outputs.")
   }
 
   if (is.null(reference_date_col) & is.null(target_end_date_col)) {
-    stop("You must provide at least one date column")
+    stop("You must provide the name of at least one date column.")
   }
   
   if (all(c("mean", "median") %in% unique(model_outputs[[output_type_col]]))){
@@ -100,6 +105,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
   
   if (is.null(model_id_col)) {
     warning("No model_id_col provided, creating one automatically.")
+    model_id_col = "model_id"
     model_outputs <- dplyr::mutate(model_outputs, model_id = "model_id", .before = 1)
   }
   
@@ -107,7 +113,8 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
     dplyr::rename(model = model_id_col, 
                   type = output_type_col, quantile = output_type_id_col,
                   forecast_date = reference_date_col, location = location_col, 
-                  value = value_col, target_variable = target_col) 
+                  value = value_col, target_variable = target_col) |>
+    dplyr::mutate(horizon = as.numeric(horizon)) 
   
   if (is.null(temp_res_col)) {
     model_outputs <- model_outputs |>
@@ -120,7 +127,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
   }
   
   if (is.null(reference_date_col)) {
-    outputs <- outputs |>
+    model_outputs <- model_outputs |>
       dplyr::mutate(forecast_date=case_when(
         temporal_resolution %in% c("d", "day") ~ target_end_date - lubridate::days(horizon),
         temporal_resolution %in% c("w", "wk", "week") ~ target_end_date - lubridate::weeks(horizon),
@@ -142,7 +149,8 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
   }
   
   covid_hub_outputs <- model_outputs |>                
-    dplyr::mutate(type = ifelse(type %in% c("mean", "median"), "point", type)) |>
+    dplyr::mutate(horizon=as.character(horizon), 
+                  type = ifelse(type %in% c("mean", "median"), "point", type)) |>
     dplyr::select(model, forecast_date, location, horizon, temporal_resolution, 
                   target_variable, target_end_date, type, quantile, value)
 
