@@ -22,8 +22,8 @@
 #' @param target_col `character` string of the name of the column 
 #'   containing the targets for the forecasts. Defaults to "target". If 
 #'   `temp_res_col` is NULL, the target column in `model_outputs` is assumed
-#'   to contain targets of the form "[temporal resolution] [target]" or 
-#'   "[temporal resolution] ahead [target]", such as "wk ahead inc flu hosp"
+#'   to contain targets of the form "temporal_resolution target" or 
+#'   "temporal_resolution ahead target", such as "wk ahead inc flu hosp"
 #'   "wk inc flu hosp".
 #' @param reference_date_col `character` string of the name of the column
 #'   containing the reference dates for the forecasts. Defaults to 
@@ -54,7 +54,7 @@
 #' @export
 #'
 #' @examples
-# ' forecasts <- load_forecasts(
+#' forecasts <- load_forecasts(
 #'   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
 #'   dates = "2020-12-14",
 #'   date_window_size = 7,

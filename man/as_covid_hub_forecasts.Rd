@@ -51,8 +51,8 @@ containing the horizons for the forecasts. Defaults to "horizon".}
 \item{target_col}{\code{character} string of the name of the column
 containing the targets for the forecasts. Defaults to "target". If
 \code{temp_res_col} is NULL, the target column in \code{model_outputs} is assumed
-to contain targets of the form "\link{temporal resolution} \link{target}" or
-"\link{temporal resolution} ahead \link{target}", such as "wk ahead inc flu hosp"
+to contain targets of the form "temporal_resolution target" or
+"temporal_resolution ahead target", such as "wk ahead inc flu hosp"
 "wk inc flu hosp".}
 
 \item{output_type_col}{\code{character} string of the name of the column
@@ -91,6 +91,7 @@ package such as \code{score_forecasts()} or \code{plot_forecasts()}. The supplie
 reference dates, locations, horizons, and targets.
 }
 \examples{
+forecasts <- load_forecasts(
   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
   dates = "2020-12-14",
   date_window_size = 7,
