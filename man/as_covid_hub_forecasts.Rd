@@ -91,6 +91,7 @@ package such as \code{score_forecasts()} or \code{plot_forecasts()}. The supplie
 reference dates, locations, horizons, and targets.
 }
 \examples{
+library(dplyr)
 forecasts <- load_forecasts(
   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
   dates = "2020-12-14",
@@ -100,13 +101,14 @@ forecasts <- load_forecasts(
   source = "zoltar"
 ) 
 altered_forecasts <- forecasts |> # Alter forecasts to not be CovidHub format
-  mutate(target_variable = "wk ahead inc death", horizon=as.numeric(horizon)) |>
-  select(-temporal_resolution)
+  dplyr::rename(model_id=model, output_type=type, output_type_id=quantile) |>
+  dplyr::mutate(target_variable = "wk ahead inc death", horizon=as.numeric(horizon)) |>
+  dplyr::select(-temporal_resolution)
 formatted_forecasts <- as_covid_hub_forecasts(
    altered_forecasts, 
    target_col="target_variable", 
    temp_res_col=NULL 
 ) |>
-mutate(horizon=as.character(horizon))
-expect_equal(formatted_forecasts, dplyr::select(forecasts, model:value)) 
+dplyr::mutate(horizon=as.character(horizon))
+testthat::expect_equal(formatted_forecasts, dplyr::select(forecasts, model:value)) 
 }

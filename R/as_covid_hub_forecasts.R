@@ -54,6 +54,7 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' forecasts <- load_forecasts(
 #'   models = c("COVIDhub-ensemble", "UMass-MechBayes"),
 #'   dates = "2020-12-14",
@@ -63,16 +64,16 @@
 #'   source = "zoltar"
 #' ) 
 #' altered_forecasts <- forecasts |> # Alter forecasts to not be CovidHub format
-# '   rename(model_id=model, output_type=type, output_type_id=quantile) |>
-#'   mutate(target_variable = "wk ahead inc death", horizon=as.numeric(horizon)) |>
-#'   select(-temporal_resolution)
+#'   dplyr::rename(model_id=model, output_type=type, output_type_id=quantile) |>
+#'   dplyr::mutate(target_variable = "wk ahead inc death", horizon=as.numeric(horizon)) |>
+#'   dplyr::select(-temporal_resolution)
 #' formatted_forecasts <- as_covid_hub_forecasts(
 #'    altered_forecasts, 
 #'    target_col="target_variable", 
 #'    temp_res_col=NULL 
 #' ) |>
-#' mutate(horizon=as.character(horizon))
-#' expect_equal(formatted_forecasts, dplyr::select(forecasts, model:value)) 
+#' dplyr::mutate(horizon=as.character(horizon))
+#' testthat::expect_equal(formatted_forecasts, dplyr::select(forecasts, model:value)) 
 
 as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
                                   reference_date_col="forecast_date", 
@@ -87,7 +88,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
   provided_names <- c(model_id_col, reference_date_col, location_col, horizon_col, target_col, output_type_col, output_type_id_col, value_col, temp_res_col, target_end_date_col)
   mandatory_cols <- list(location_col, horizon_col, target_col, output_type_col, output_type_id_col, value_col)
   
-  if (any(map_lgl(mandatory_cols, is.null))) {
+  if (any(purrr::map_lgl(mandatory_cols, is.null))) {
     stop("You must provide the names of columns with location, horizon, target, output_type, output_type_id, and value information.")
   }
   
@@ -119,7 +120,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
   if (is.null(temp_res_col)) {
     model_outputs <- model_outputs |>
       dplyr::rename(target = target_variable) |>
-      mutate(target = ifelse(
+      dplyr::mutate(target = ifelse(
         stringr::str_detect(target, "ahead"), 
         stringr::str_replace(target, "ahead", "") |> stringr::str_squish(), 
         target)) |>
@@ -128,7 +129,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
   
   if (is.null(reference_date_col)) {
     model_outputs <- model_outputs |>
-      dplyr::mutate(forecast_date=case_when(
+      dplyr::mutate(forecast_date=dplyr::case_when(
         temporal_resolution %in% c("d", "day") ~ target_end_date - lubridate::days(horizon),
         temporal_resolution %in% c("w", "wk", "week") ~ target_end_date - lubridate::weeks(horizon),
         temporal_resolution %in% c("m", "mth", "mnth", "month") ~ target_end_date %m-% months(horizon),
@@ -139,7 +140,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
 
   if (is.null(target_end_date_col)) {
     model_outputs <- model_outputs |>
-      dplyr::mutate(target_end_date=case_when(
+      dplyr::mutate(target_end_date=dplyr::case_when(
         temporal_resolution %in% c("d", "day") ~ forecast_date + lubridate::days(horizon),
         temporal_resolution %in% c("w", "wk", "week") ~ forecast_date + lubridate::weeks(horizon),
         temporal_resolution %in% c("m", "mth", "mnth", "month") ~ forecast_date %m+% months(horizon),
