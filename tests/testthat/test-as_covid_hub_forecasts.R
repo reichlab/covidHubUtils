@@ -1,4 +1,3 @@
-library(covidHubUtils)
 library(dplyr)
 library(lubridate)
 library(stringr)
