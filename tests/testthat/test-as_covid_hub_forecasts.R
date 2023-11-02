@@ -49,7 +49,7 @@ test_that("Inclusion of multiple types of point forecasts throws an error", {
     expect_error()
 })
 
-test_that("Inclusion of multiple types of point forecasts generates a warning", {
+test_that("Not including a model_id column generates a warning", {
   simple_test_forecasts |>
     dplyr::select(-model_id) |>
     as_covid_hub_forecasts(model_id=NULL, target_col="target_variable", 

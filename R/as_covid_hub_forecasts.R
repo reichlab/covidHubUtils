@@ -92,7 +92,7 @@ as_covid_hub_forecasts <- function(model_outputs, model_id_col = "model_id",
     stop("You must provide the names of columns with location, horizon, target, output_type, output_type_id, and value information.")
   }
   
-  if (isFALSE(all(sort(provided_names) %in% sort(names(model_outputs))))) {
+  if (isFALSE(all(provided_names %in% names(model_outputs)))) {
     stop("Not all provided column names exist in the provided model_outputs.")
   }
 
