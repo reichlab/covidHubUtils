@@ -79,6 +79,15 @@ to a dataframe of forecasts. This function requires that the forecasts
 data frame contains only forecasts one temporal_resolution, i.e., only
 at the daily resolution or the weekly resolution.</p></td>
       </tr><tr><td>
+          <p><code><a href="as_covid_hub_forecasts.html">as_covid_hub_forecasts()</a></code> </p>
+        </td>
+        <td><p>Reformat model outputs stored as a <code>model_output_tbl</code> class (or similar) to
+that of a <code>data.frame</code> formatted according to standards of the COVID-19
+Forecasting Hub which can be processed by functions from the <code>covidHubUtils</code>
+package such as <code><a href="../reference/score_forecasts.html">score_forecasts()</a></code> or <code><a href="../reference/plot_forecasts.html">plot_forecasts()</a></code>. The supplied
+<code>model_output_tbl</code> should have columns defining properties akin to
+reference dates, locations, horizons, and targets.</p></td>
+      </tr><tr><td>
           <p><code><a href="calc_cramers_dist_equal_space.html">calc_cramers_dist_equal_space()</a></code> </p>
         </td>
         <td><p>Approximate the Cramer’s distance between a pair of distributions

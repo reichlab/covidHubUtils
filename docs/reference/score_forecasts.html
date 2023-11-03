@@ -137,7 +137,7 @@ in an interval format. arXiv:2005.12881.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://epiforecasts.io/scoringutils/" class="external-link">scoringutils</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">scoringutils</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_latest_forecasts.html">load_latest_forecasts</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COVIDhub-ensemble"</span>, <span class="st">"UMass-MechBayes"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  last_forecast_date <span class="op">=</span> <span class="st">"2020-12-14"</span>,</span></span>
@@ -153,9 +153,21 @@ in an interval format. arXiv:2005.12881.
 <span class="r-in"><span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_truth.html">load_truth</a></span><span class="op">(</span><span class="st">"JHU"</span>, target_variable <span class="op">=</span> <span class="st">"inc death"</span>, locations <span class="op">=</span> <span class="st">"US"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">score_forecasts</span><span class="op">(</span><span class="va">forecasts</span>, <span class="va">truth</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 2.  (e.g. quantiles or samples). </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 3.  scoringutils found: </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 4.  1, 23</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 5.  . This may be a problem (it can potentially distort scores, </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 6.  making it more difficult to compare them), </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 7.  so make sure this is intended.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 2.  (e.g. quantiles or samples). </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 3.  scoringutils found: </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 4.  1, 23</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 5.  . This may be a problem (it can potentially distort scores, </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 6.  making it more difficult to compare them), </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 7.  so make sure this is intended.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 49</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   model       location horizon temporal_resolution target_variable forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       </span>
@@ -193,9 +205,21 @@ in an interval format. arXiv:2005.12881.
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">score_forecasts</span><span class="op">(</span><span class="va">forecasts</span>, <span class="va">truth</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 2.  (e.g. quantiles or samples). </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 3.  scoringutils found: </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 4.  1, 23</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 5.  . This may be a problem (it can potentially distort scores, </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 6.  making it more difficult to compare them), </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 7.  so make sure this is intended.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following warnings were produced when checking inputs:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows (e.g. quantiles or samples). scoringutils found: 1, 23. This is not necessarily a problem, but make sure this is intended.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 1.  Some forecasts have different numbers of rows </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 2.  (e.g. quantiles or samples). </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 3.  scoringutils found: </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 4.  1, 23</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 5.  . This may be a problem (it can potentially distort scores, </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 6.  making it more difficult to compare them), </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 7.  so make sure this is intended.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 49</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   model   location horizon temporal_resolution target_variable forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       </span>
