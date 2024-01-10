@@ -92,8 +92,7 @@ Suggests:
     knitr,
     rmarkdown
 Remotes:
-    reichlab/zoltr,
-    epiforecasts/scoringutils
+    reichlab/zoltr
 Depends: 
     R (>= 3.5.0)
 URL: https://github.com/reichlab/covidHubUtils
