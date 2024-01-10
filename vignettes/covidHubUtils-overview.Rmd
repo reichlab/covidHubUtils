@@ -431,9 +431,8 @@ To find the most recent weekly forecast evaluation summary, please visit the [ev
 The inputs to the `scored_forecasts()` include a `forecasts` data frame created by `load_forecasts()` and a `truth` data frame created by `load_truth()`. 
 
 
-The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. Please install and load the most up-to-date development version of `scoringutils` from GitHub:
+The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. 
 ``` {r}
-remotes::install_github("epiforecasts/scoringutils")
 library(scoringutils)
 ```
 
