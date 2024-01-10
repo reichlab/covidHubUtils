@@ -58,7 +58,7 @@ Imports:
     MMWRweek (>= 0.1.1),
     lubridate (>= 1.7.4),
     purrr (>= 0.3.3),
-    scoringutils (>= 1.0.0),
+    scoringutils (>= 1.2.2),
     ggplot2,
     magrittr,
     forcats,
