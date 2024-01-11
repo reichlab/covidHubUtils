@@ -433,6 +433,7 @@ The inputs to the `scored_forecasts()` include a `forecasts` data frame created 
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. 
 ``` {r}
+# devtools::install_github("epiforecasts/scoringutils@v1.2.2")
 library(scoringutils)
 ```
 

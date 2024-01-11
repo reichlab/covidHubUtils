@@ -93,6 +93,7 @@ Suggests:
     rmarkdown
 Remotes:
     reichlab/zoltr
+    epiforecasts/scoringutils@v1.2.2"
 Depends: 
     R (>= 3.5.0)
 URL: https://github.com/reichlab/covidHubUtils
