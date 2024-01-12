@@ -1,6 +1,7 @@
-library(tidyverse)
 library(covidHubUtils)
 library(testthat)
+library(tibble)
+library(tidyr)
 
 
 #     Aug/Sep 2021
@@ -51,7 +52,7 @@ test_that("original columns preserved and new columns are correct", {
         )
     )
     reference_dates <- as.Date(c(
-        "2021-08-14", 
+        "2021-08-14",
         "2021-08-14",
         "2021-08-16",
         "2021-08-21",

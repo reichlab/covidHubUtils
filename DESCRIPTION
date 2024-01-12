@@ -52,6 +52,7 @@ Description:
     https://covid19forecasthub.org/.
 License: MIT
 Imports:
+    covidData,
     dplyr (>= 0.8.4),
     tibble (>= 2.1.3),
     tidyr (>= 1.0.2),
@@ -86,12 +87,13 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
-Suggests: 
-    testthat,
-    covidData,
+Suggests:
+    DT,
     knitr,
-    rmarkdown
+    mockery,
+    testthat
 Remotes:
+    reichlab/covidData,
     reichlab/zoltr,
     epiforecasts/scoringutils@v1.2.2
 Depends: 

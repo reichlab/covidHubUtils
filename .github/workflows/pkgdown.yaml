@@ -21,14 +21,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here", "pkgdown", "textshaping"))
-          devtools::install_github("epiforecasts/scoringutils")
-          remotes::install_deps(dependencies = NA)
-        shell: Rscript {0}
-      
-      - name: Install zoltr
-        run: |
-          devtools::install_github("reichlab/zoltr")
+          install.packages(c("devtools"))
+          remotes::install_deps(dependencies = TRUE)
           devtools::install()
         shell: Rscript {0}
 
