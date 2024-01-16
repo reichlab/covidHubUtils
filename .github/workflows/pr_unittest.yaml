@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here","RSocrata"))
-          devtools::install_github("epiforecasts/scoringutils")
+          devtools::install_github("epiforecasts/scoringutils@v1.2.2")
           remotes::install_deps(dependencies = NA)
         shell: Rscript {0}
       - name: Install zoltr
@@ -48,7 +48,7 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v2.1
-      - name: Checkout covidData when get_truth.R, aggregate_to_weekly.R or load_truth.R has changed 
+      - name: Checkout covidData when get_truth.R, aggregate_to_weekly.R or load_truth.R has changed
         if: >-
           ${{ contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') ||
           contains(steps.changed-files.outputs.modified_files,
@@ -59,7 +59,7 @@ jobs:
         with:
           repository: reichlab/covidData
           path: covidData
-      - name: Install covidData when get_truth.R, aggregate_to_weekly.R or load_truth.R has changed 
+      - name: Install covidData when get_truth.R, aggregate_to_weekly.R or load_truth.R has changed
         if: >-
           ${{ contains(steps.changed-files.outputs.modified_files, 'R/get_truth.R') ||
           contains(steps.changed-files.outputs.modified_files,
@@ -87,8 +87,8 @@ jobs:
         run: |
           rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
         shell: Rscript {0}
-    
-          
-        
+
+
+
 
 
