@@ -10,6 +10,7 @@ inst/doc
 
 # pre-commit isn't part of the team workflow, so don't commit the config
 **/.pre-commit-config.yaml
+
 docs
 Meta
 
