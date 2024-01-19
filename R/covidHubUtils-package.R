@@ -2,7 +2,7 @@
 #'
 #' @author Evan L. Ray <elray@umass.edu>
 #' @docType package
-#' @importFrom dplyr `%>%`
+#' @importFrom dplyr %>%
 #' @name covidHubUtils
 #' @aliases covidHubUtils covidHubUtils-package
 #' @description Utility functions for the COVID-19 forecast hub
@@ -12,7 +12,7 @@ NULL
 ##' @name hub_locations
 ##' @title Information on locations in the COVID-19 Forecast Hub
 ##' @docType data
-##' @format A data frame with information and metadata about national, state, and county locations for the US. 3,200 observations on the following 6 variables. 
+##' @format A data frame with information and metadata about national, state, and county locations for the US. 3,200 observations on the following 6 variables.
 ##' \describe{
 ##'   \item{\code{fips}}{the FIPS code for each location}
 ##'   \item{\code{location_name}}{A non-abbreviated name for each location}

@@ -8,6 +8,13 @@
 \description{
 Utility functions for the COVID-19 forecast hub
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/reichlab/covidHubUtils}
+}
+
+}
 \author{
 Evan L. Ray \href{mailto:elray@umass.edu}{elray@umass.edu}
 }
