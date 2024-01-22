@@ -66,12 +66,6 @@ load_forecasts_zoltar <- function(models = NULL,
     project_url = project_url
   )
 
-  # get all valid timezeros in project
-  all_valid_timezeros <- zoltr::timezeros(
-    zoltar_connection = zoltar_connection,
-    project_url = project_url
-  )$timezero_date
-
   # Convert location names to fips codes or country abbreviations
   locations <- name_to_fips(locations, hub)
   
@@ -149,14 +143,12 @@ load_forecasts_zoltar <- function(models = NULL,
             forecast <- data.frame()
           }
         }
-        forecast <- reformat_forecasts(forecast, verbose)
       } else {
         if (verbose) {
           warning(paste0(
             "Warning in load_forecasts_zoltar: No available forecast dates for current model ",
             curr_model
           ))
-          forecast <-  data.frame()
         }
       }
     }
