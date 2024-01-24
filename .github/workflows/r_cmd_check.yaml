@@ -20,23 +20,10 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools","rmarkdown","tidyverse","DT","here","RSocrata"))
+          install.packages(c("devtools"))
           devtools::install_github("epiforecasts/scoringutils@v1.2.2")
-          remotes::install_deps(dependencies = NA)
+          devtools::install_deps(dependencies = TRUE)
         shell: Rscript {0}
-      - name: Install zoltr
-        run: |
-          devtools::install_github("reichlab/zoltr")
-          devtools::install()
-        shell: Rscript {0}
-      - name: Checkout covidData
-        uses: actions/checkout@v3
-        with:
-          repository: reichlab/covidData
-          path: covidData
-      - name: Install covidData
-        run: make recent_data
-        working-directory: ./covidData/code/data-processing
       - name: Check
         run: |
           devtools::check(args = c("--no-tests", "--no-manual", "--no-vignettes"),error_on = "error")

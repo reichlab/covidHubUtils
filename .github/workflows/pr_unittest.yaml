@@ -21,13 +21,8 @@ jobs:
           key: r-${{ hashFiles('DESCRIPTION') }}
       - name: Install dependencies
         run: |
-          install.packages(c("remotes","devtools", "rmarkdown","tidyverse","DT","here","RSocrata"))
-          devtools::install_github("epiforecasts/scoringutils@v1.2.2")
-          remotes::install_deps(dependencies = NA)
-        shell: Rscript {0}
-      - name: Install zoltr
-        run: |
-          devtools::install_github("reichlab/zoltr")
+          install.packages(c("devtools"))
+          remotes::install_deps(dependencies = TRUE)
           devtools::install()
         shell: Rscript {0}
       - name: Run unit tests
@@ -85,7 +80,7 @@ jobs:
         shell: Rscript {0}
       - name: Render vignettes
         run: |
-          rmarkdown::render("vignettes/covidHubUtils-overview.Rmd")
+          devtools::build_vignettes()
         shell: Rscript {0}
 
 

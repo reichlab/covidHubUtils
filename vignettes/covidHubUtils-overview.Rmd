@@ -67,12 +67,12 @@ We have identified two central use cases for downloading data using `load_foreca
 
 2. Downloading all available forecasts for selected models that are submitted on a set of dates. This is achieved by using a vector of dates in `dates` parameter.
 
-Below are some examples of reading in data. We start by loading the `covidHubUtils` package and the `tidyverse`.
+Below are some examples of reading in data. We start by loading the `covidHubUtils` package.
 
 ```{r message=FALSE}
 library(covidHubUtils)
 library(doParallel)
-library(tidyverse)
+library(ggplot2)
 theme_set(theme_bw())
 ```
 
@@ -433,7 +433,6 @@ The inputs to the `scored_forecasts()` include a `forecasts` data frame created 
 
 The `scoringutils` package provides a collection of metrics and proper scoring rules that make it simple to score forecasts against the true observed values. 
 ``` {r}
-# devtools::install_github("epiforecasts/scoringutils@v1.2.2")
 library(scoringutils)
 ```
 
