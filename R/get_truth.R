@@ -1,4 +1,5 @@
-#' Download raw truth data from NYTimes and write to CSV files
+#' Download historical raw truth data from NYTimes and write to CSV files. Note:
+#' updates to the NYTimes data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth/nytimes/raw/"`
@@ -51,7 +52,8 @@ download_raw_nytimes <- function(save_location = "./data-truth/nytimes/raw/") {
 }
 
 
-#' Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
+#' Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs.
+#' Note: updates to the NYTimes data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth/nytimes/raw/"`
@@ -103,7 +105,8 @@ preprocess_nytimes <- function(save_location = "./data-truth/nytimes/") {
 }
 
 
-#' Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs
+#' Preprocess historical raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs.
+#' Note: updates to the JHU CSSE data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth"`
@@ -169,7 +172,7 @@ preprocess_jhu <- function(save_location = "./data-truth") {
 
 
 #' Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for visualization
-#' purpose and write to JSON files
+#' purpose and write to JSON files. Note: updates to the JHU CSSE data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./visualization/vis-master/covid-csv-tools/dist/truth"`
