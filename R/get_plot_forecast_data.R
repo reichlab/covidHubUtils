@@ -61,7 +61,7 @@ get_plot_forecast_data <- function(forecast_data,
       "cum death", "inc case",
       "inc death", "inc hosp"
     )
-    valid_truth_sources <- c("JHU", "NYTimes", "HealthData")
+    valid_truth_sources <- c("JHU", "NYTimes", "HealthData", "USAFacts")
   } else if (hub[1] == "ECDC") {
     valid_location_codes <- covidHubUtils::hub_locations_ecdc$location
     valid_target_variables <- c("inc case", "inc death")
@@ -122,6 +122,9 @@ get_plot_forecast_data <- function(forecast_data,
     }
   } else {
     # validate truth_source
+    if (tolower(truth_source) == "usafacts") {
+      stop("USAFacts can no longer be downloaded. Please use another truth source.")
+    }
     truth_source <- match.arg(truth_source,
       choices = valid_truth_sources,
       several.ok = FALSE
