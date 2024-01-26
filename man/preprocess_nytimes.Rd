@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_truth.R
 \name{preprocess_nytimes}
 \alias{preprocess_nytimes}
-\title{Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs}
+\title{Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs.
+Note: updates to the NYTimes data stopped in March 2023.}
 \usage{
 preprocess_nytimes(save_location = "./data-truth/nytimes/")
 }
@@ -11,5 +12,6 @@ preprocess_nytimes(save_location = "./data-truth/nytimes/")
 Default to \code{"./data-truth/nytimes/raw/"}}
 }
 \description{
-Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
+Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs.
+Note: updates to the NYTimes data stopped in March 2023.
 }

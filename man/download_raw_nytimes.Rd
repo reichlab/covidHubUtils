@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_truth.R
 \name{download_raw_nytimes}
 \alias{download_raw_nytimes}
-\title{Download raw truth data from NYTimes and write to CSV files}
+\title{Download historical raw truth data from NYTimes and write to CSV files. Note:
+updates to the NYTimes data stopped in March 2023.}
 \usage{
 download_raw_nytimes(save_location = "./data-truth/nytimes/raw/")
 }
@@ -14,5 +15,6 @@ Default to \code{"./data-truth/nytimes/raw/"}}
 data.frame of national, state and county level raw truth data
 }
 \description{
-Download raw truth data from NYTimes and write to CSV files
+Download historical raw truth data from NYTimes and write to CSV files. Note:
+updates to the NYTimes data stopped in March 2023.
 }

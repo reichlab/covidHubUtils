@@ -2,7 +2,8 @@
 % Please edit documentation in R/get_truth.R
 \name{preprocess_jhu}
 \alias{preprocess_jhu}
-\title{Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs}
+\title{Preprocess historical raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs.
+Note: updates to the JHU CSSE data stopped in March 2023.}
 \usage{
 preprocess_jhu(save_location = "./data-truth")
 }
@@ -11,5 +12,6 @@ preprocess_jhu(save_location = "./data-truth")
 Default to \code{"./data-truth"}}
 }
 \description{
-Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs
+Preprocess historical raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs.
+Note: updates to the JHU CSSE data stopped in March 2023.
 }
