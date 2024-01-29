@@ -50,7 +50,7 @@ Default to \code{TRUE}.}
 
 \item{truth_source}{character specifying where the truth data will
 be loaded from if truth_data is not provided. Currently support \code{"JHU"},
-\code{"USAFacts"}, \code{"NYTimes"} and \code{"HealthData"}.
+\verb{NYTimes"} and \code{"HealthData"}.
 Optional if \code{truth_data} is provided.}
 
 \item{target_variable_to_plot}{string specifying target type. It should be one of

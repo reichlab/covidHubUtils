@@ -3,7 +3,7 @@
 \name{preprocess_visualization_truth}
 \alias{preprocess_visualization_truth}
 \title{Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for visualization
-purpose and write to JSON files}
+purpose and write to JSON files. Note: updates to the JHU CSSE data stopped in March 2023.}
 \usage{
 preprocess_visualization_truth(
   save_location = "./visualization/vis-master/covid-csv-tools/dist/truth"
@@ -15,5 +15,5 @@ Default to \code{"./visualization/vis-master/covid-csv-tools/dist/truth"}}
 }
 \description{
 Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for visualization
-purpose and write to JSON files
+purpose and write to JSON files. Note: updates to the JHU CSSE data stopped in March 2023.
 }

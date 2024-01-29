@@ -1,4 +1,5 @@
-#' Download raw truth data from NYTimes and write to CSV files
+#' Download historical raw truth data from NYTimes and write to CSV files. Note:
+#' updates to the NYTimes data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth/nytimes/raw/"`
@@ -51,7 +52,8 @@ download_raw_nytimes <- function(save_location = "./data-truth/nytimes/raw/") {
 }
 
 
-#' Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
+#' Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs.
+#' Note: updates to the NYTimes data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth/nytimes/raw/"`
@@ -103,147 +105,8 @@ preprocess_nytimes <- function(save_location = "./data-truth/nytimes/") {
 }
 
 
-#' Download raw truth data from USAFacts
-#'
-#' @param save_location character specifying the location of to save raw truth data.
-#' Default to `"./data-truth/usafacts/raw/"`
-#'
-#' @importFrom readr read_csv write_csv
-#' @return data frame of cases and deaths raw truth data
-#'
-#' @export
-download_raw_usafacts <- function(save_location = "./data-truth/usafacts/raw/") {
-  confirmed_url <- "https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv"
-  deaths_url <- "https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_deaths_usafacts.csv"
-
-  cases <- readr::read_csv(confirmed_url,
-    col_types = readr::cols(
-      countyFIPS = readr::col_integer(),
-      `County Name` = readr::col_character(),
-      State = readr::col_character(),
-      StateFIPS = readr::col_integer(),
-      .default = readr::col_integer()
-    )
-  )
-
-  deaths <- readr::read_csv(deaths_url,
-    col_types = readr::cols(
-      countyFIPS = readr::col_integer(),
-      `County Name` = readr::col_character(),
-      State = readr::col_character(),
-      StateFIPS = readr::col_integer(),
-      .default = readr::col_integer()
-    )
-  )
-
-
-  readr::write_csv(cases, file = paste0(save_location, "covid_confirmed_usafacts.csv"))
-  readr::write_csv(deaths, file = paste0(save_location, "covid_deaths_usafacts.csv"))
-  return(list("cases" = cases, "deaths" = deaths))
-}
-
-
-#' Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs
-#'
-#' @param save_location character specifying the location of to save raw truth data.
-#' Default to `"./data-truth/usafacts/raw/"`
-#'
-#' @importFrom readr write_csv
-#' @export
-preprocess_usafacts <- function(save_location = "./data-truth/usafacts/") {
-  raw_dframes <- download_raw_usafacts(paste0(save_location, "raw/"))
-  cases <- raw_dframes$cases
-  deaths <- raw_dframes$deaths
-
-  counties <- cases %>%
-    dplyr::mutate(cases_deaths = "case") %>%
-    dplyr::bind_rows(deaths %>% dplyr::mutate(cases_deaths = "death")) %>%
-    dplyr::select(-`County Name`, -State, -StateFIPS) %>%
-    dplyr::rename(location = countyFIPS) %>%
-    dplyr::filter(location >= 1000) %>%
-    dplyr::mutate(location = sprintf("%05d", location)) %>%
-    tidyr::pivot_longer(
-      -c(location, cases_deaths),
-      names_to = "date",
-      values_to = "cum"
-    ) %>%
-    dplyr::mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
-    dplyr::group_by(location, cases_deaths) %>%
-    dplyr::arrange(date) %>%
-    dplyr::mutate(inc = diff(c(0, cum))) %>%
-    dplyr::ungroup()
-
-
-  states <- cases %>%
-    dplyr::mutate(cases_deaths = "case") %>%
-    dplyr::bind_rows(deaths %>% dplyr::mutate(cases_deaths = "death")) %>%
-    dplyr::select(-countyFIPS, -`County Name`, -State) %>%
-    dplyr::rename(location = StateFIPS) %>%
-    dplyr::mutate(location = sprintf("%02d", location)) %>%
-    tidyr::pivot_longer(
-      -c(location, cases_deaths),
-      names_to = "date",
-      values_to = "cum"
-    ) %>%
-    dplyr::mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
-
-    # Calculate incident cases and deaths
-    # aggregated across counties within a state
-    dplyr::group_by(location, cases_deaths, date) %>%
-    dplyr::summarize(cum = sum(cum)) %>%
-    dplyr::group_by(location, cases_deaths) %>%
-    dplyr::arrange(date) %>%
-    dplyr::mutate(inc = diff(c(0, cum))) %>%
-    dplyr::ungroup()
-
-  us <- states %>%
-    dplyr::group_by(cases_deaths, date) %>%
-    dplyr::summarize(cum = sum(cum)) %>%
-    dplyr::group_by(cases_deaths) %>%
-    dplyr::arrange(date) %>%
-    dplyr::mutate(inc = diff(c(0, cum))) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(location = "US")
-
-  d <- dplyr::bind_rows(counties, states, us)
-
-
-
-  readr::write_csv(
-    d %>%
-      dplyr::filter(cases_deaths == "death") %>%
-      dplyr::rename(value = cum) %>%
-      dplyr::select(date, location, value),
-    file = paste0(save_location, "truth_usafacts-Cumulative Deaths.csv")
-  )
-
-  readr::write_csv(
-    d %>%
-      dplyr::filter(cases_deaths == "death") %>%
-      dplyr::rename(value = inc) %>%
-      dplyr::select(date, location, value),
-    file = paste0(save_location, "truth_usafacts-Incident Deaths.csv")
-  )
-
-  readr::write_csv(
-    d %>%
-      dplyr::filter(cases_deaths == "case") %>%
-      dplyr::rename(value = cum) %>%
-      dplyr::select(date, location, value),
-    file = paste0(save_location, "truth_usafacts-Cumulative Cases.csv")
-  )
-
-  readr::write_csv(
-    d %>%
-      dplyr::filter(cases_deaths == "case") %>%
-      dplyr::rename(value = inc) %>%
-      dplyr::select(date, location, value),
-    file = paste0(save_location, "truth_usafacts-Incident Cases.csv")
-  )
-}
-
-
-#' Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs
+#' Preprocess historical raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs.
+#' Note: updates to the JHU CSSE data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./data-truth"`
@@ -309,7 +172,7 @@ preprocess_jhu <- function(save_location = "./data-truth") {
 
 
 #' Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for visualization
-#' purpose and write to JSON files
+#' purpose and write to JSON files. Note: updates to the JHU CSSE data stopped in March 2023.
 #'
 #' @param save_location character specifying the location of to save raw truth data.
 #' Default to `"./visualization/vis-master/covid-csv-tools/dist/truth"`
@@ -445,122 +308,4 @@ preprocess_hospitalization <- function(save_location = "./data-truth") {
   readr::write_csv(incident_hosp, file = file.path(save_location, "truth-Incident Hospitalizations.csv"))
 
   return(list("cumulative_hosp" = cumulative_hosp, "incident_hosp" = incident_hosp))
-}
-
-#' Generate versioned truth data for zoltar for a specified target
-#' It only includes national and state-level truth data.
-#'
-#' @param target string specifying target.
-#' Currently only support `"Cumulative Deaths"` and `"Incident Deaths"`.
-#' @param issue_date optional date specifying issue date of truth data.
-#' Default to `NULL` which will load the latest truth data from `covidData`.
-#'
-#' @return data.frame with timezero, unit, target and value
-#'
-#' @export
-preprocess_truth_for_zoltar <- function(target, issue_date = NULL) {
-
-  # validate target
-  target <- match.arg(target,
-    choices = c("Cumulative Deaths", "Incident Deaths"),
-    several.ok = FALSE
-  )
-
-  # load the most up to date weeky truth data from JHU CSSE
-  df <- covidData::load_jhu_data(
-    issue_date = issue_date,
-    spatial_resolution = c("national", "state"),
-    temporal_resolution = "weekly",
-    measure = "deaths",
-    replace_negatives = FALSE,
-    adjustment_cases = "none",
-    adjustment_method = "none"
-  )
-
-  # select columns needed for target
-  if (target == "Cumulative Deaths") {
-    target_var <- " wk ahead cum death"
-    df <- df %>%
-      dplyr::select(-inc) %>%
-      dplyr::rename(value = cum, unit = location)
-  } else {
-    target_var <- " wk ahead inc death"
-    df <- df %>%
-      dplyr::select(-cum) %>%
-      dplyr::rename(value = inc, unit = location)
-  }
-
-  # expand the data frame where for each observed value at time t,
-  # that observation is the observed value at each horizon 1 through 20
-  # relative to the corresponding past forecast timezeros from times t-1 through t-20
-  df <- tidyr::expand_grid(df, horizon = seq_len(20)) %>%
-    dplyr::mutate(target = paste0(horizon, target_var))
-
-  # set up Zoltar connection
-  zoltar_connection <- zoltr::new_connection()
-  if (Sys.getenv("Z_USERNAME") == "" | Sys.getenv("Z_PASSWORD") == "") {
-    zoltr::zoltar_authenticate(zoltar_connection, "zoltar_demo", "Dq65&aP0nIlG")
-  } else {
-    zoltr::zoltar_authenticate(zoltar_connection, Sys.getenv("Z_USERNAME"), Sys.getenv("Z_PASSWORD"))
-  }
-
-  # construct Zoltar project url
-  the_projects <- zoltr::projects(zoltar_connection)
-  project_url <- the_projects[the_projects$name == "COVID-19 Forecasts", "url"]
-
-  # get all valid timezeros from zoltar
-  zoltar_timezeros <- zoltr::timezeros(zoltar_connection, project_url)$timezero_date
-
-  # generate target end date with horzion 1 to 20 for all zoltar_timezeros
-  df_zoltar <- tidyr::expand_grid(
-    zoltar_timezeros = zoltar_timezeros, horizon = seq_len(20)
-  ) %>%
-    dplyr::mutate(
-      target_end_date =
-        covidHubUtils::calc_target_week_end_date(
-          zoltar_timezeros, horizon
-        )
-    )
-
-  # merge zoltar timezeros with truth values and targets
-  df_final <- merge(
-    x = df,
-    y = df_zoltar,
-    by.x = c("date", "horizon"),
-    by.y = c("target_end_date", "horizon"),
-    all.y = TRUE
-  )
-
-  # select columns and drop empty rows
-  df_final <- df_final %>%
-    dplyr::select(zoltar_timezeros, unit, target, value) %>%
-    dplyr::rename(timezero = zoltar_timezeros) %>%
-    tidyr::drop_na()
-
-  return(df_final)
-}
-
-
-#' Generate the most up to date truth data for zoltar
-#' and save the differences between the new version and old version.
-#' It only includes national and state-level truth data.
-#'
-#' @param save_location character specifying the location of to save zoltar truth data.
-#' Default to `"./data-truth"`
-#'
-#' @importFrom readr write_csv
-#' @export
-#'
-save_truth_for_zoltar <- function(save_location = "./data-truth") {
-  df_cum_death <- preprocess_truth_for_zoltar("Cumulative Deaths")
-  df_inc_death <- preprocess_truth_for_zoltar("Incident Deaths")
-  zoltar_truth <- rbind(df_cum_death, df_inc_death)
-
-  zoltar_connection <- setup_zoltar_connection()
-  project_url <- get_zoltar_project_url(zoltar_connection = zoltar_connection)
-  old_version <- zoltr::do_zoltar_query(zoltar_connection, project_url, "truth")
-  diff <- dplyr::setdiff(zoltar_truth, old_version)
-
-  file_path <- file.path(save_location, "zoltar-truth.csv")
-  readr::write_csv(diff, file_path)
 }

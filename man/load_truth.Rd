@@ -18,15 +18,15 @@ load_truth(
 }
 \arguments{
 \item{truth_source}{character vector specifying where the truths will
-be loaded from: currently support \code{"JHU"}, \code{"NYTimes"}, \verb{"HealthData}" and \code{"ECDC"}.
+be loaded from: currently support \code{"JHU"}, \code{"NYTimes"}, \verb{"HealthData}", \code{"ECDC"} and \code{"OWID"}
 If \code{NULL}, default for US hub is \code{c("JHU", "HealthData")}.
-If \code{NULL}, default for ECDC hub is \code{c("JHU")}.
+If \code{NULL}, default for ECDC hub is \code{c("OWID")}.
 If \code{NULL}, default for FluSight hub is \code{c("HealthData")}.}
 
 \item{target_variable}{string specifying target type It should be one or more of
 \code{"cum death"}, \code{"inc case"}, \code{"inc death"}, \code{"inc hosp"}.
 If \code{NULL}, default for US hub is \code{c("inc case", "inc death", "inc hosp")}.
-If \code{NULL}, default for ECDC hub is \code{c("inc case", "inc death")}.
+If \code{NULL}, default for ECDC hub is \code{c("inc hosp")}.
 If \code{NULL}, default for FluSight hub is \code{c("inc flu hosp")}.}
 
 \item{as_of}{character vector of "as of" dates to use for querying truths in
@@ -78,7 +78,7 @@ for all US locations.
 }
 \details{
 \itemize{
-\item\code{"inc hosp"} is only available from \code{"HealthData"} and \code{"ECDC"}.\code{"inc flu hosp"} is only available from \code{"HealthData"}.
+\item\code{"inc hosp"} is only available from \code{"HealthData"}, \code{"ECDC"} and \code{"OWID"}.\code{"inc flu hosp"} is only available from \code{"HealthData"}.
 
 \item This function is not loading data for other target variables from \code{"HealthData"}.
 

@@ -44,16 +44,14 @@ For those starting out we recommend you begin with the [Getting Started vignette
 ### Scoring Forecasts
 - `score_forecasts(forecasts, truth, desired_score_types = c(...), return_format = c("long", "wide"))` Calculate specified scores for each combination of `model`, `forecast_date`, `location`, `horizon`, `temporal_resolution`, `target_variable`, and `target_end_date` in the `forecasts` data frame. Please see [this reference](https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details) for valid scores in the `desired_score_types` vector.
 
-### Download and pre-process "Truth" Data
+### Download and pre-process "Truth" Data.
+**Note:** case and death information from NYTimes and JHU CSSE stopped updating in March 2023, but
+covidHubUtils can still be used to access the historical data.
 - `download_raw_nytimes(save_location)`: Download raw truth data from NYTimes and write to CSV files.
-- `download_raw_usafacts(save_location)`: Download raw truth data from USAFacts and write to CSV files.
 - `preprocess_nytimes(save_location)`: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs
-- `preprocess_usafacts(save_location)`: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs
 - `preprocess_jhu(save_location)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
 - `preprocess_hospitalization(save_location)`: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
-- `preprocess_truth_for_zoltar(target, issue_date)`: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed. 
-- `save_truth_for_zoltar(save_location)`: Write results from `preprocess_truth_for_zoltar()` to CSVs. **Note:** To use this method, the [covidData](https://github.com/reichlab/covidData) package needs to be installed.
- 
+
 ### Calculating Forecast Similarities
 - `calc_cramers_dist_equal_space(q_F, tau_F, q_G, tau_G, approx_rule)`: Calculating approximated Cramer's 
 distance between a pair of distributions F and G that are represented by a collection of equally-spaced quantiles.

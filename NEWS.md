@@ -1,6 +1,16 @@
 ## Changes since last release
 - None yet
 
+## covidHubUtils 0.1.9
+
+This update removes truth data functions that are no longer relevant.
+### Updates
+- Remove `download_raw_usafacts` and `preprocess_usafacts` because the last release
+deprecated USAFacts as a truth source.
+- Remove `preprocess_truth_for_zoltar` and `save_truth_for_zoltar`, as the truth
+data being sent to Zoltar (JHU CSSE cases and deaths) stopped updating in March 2023.
+
+
 ## covidHubUtils 0.1.8
 
 This update has minor changes.
