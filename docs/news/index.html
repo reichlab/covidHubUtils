@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -60,6 +60,10 @@
       <small>Source: <a href="https://github.com/reichlab/covidHubUtils/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.9" id="covidhubutils-019">covidHubUtils 0.1.9<a class="anchor" aria-label="anchor" href="#covidhubutils-019"></a></h2>
+<p>This update removes truth data functions that are no longer relevant. ### Updates - Remove <code>download_raw_usafacts</code> and <code>preprocess_usafacts</code> because the last release deprecated USAFacts as a truth source. - Remove <code>preprocess_truth_for_zoltar</code> and <code>save_truth_for_zoltar</code>, as the truth data being sent to Zoltar (JHU CSSE cases and deaths) stopped updating in March 2023.</p>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.8" id="covidhubutils-018">covidHubUtils 0.1.8<a class="anchor" aria-label="anchor" href="#covidhubutils-018"></a></h2>
 <p>This update has minor changes. ### Updates - Update <code><a href="../reference/download_raw_nytimes.html">download_raw_nytimes()</a></code> to load county level data from separate files for each year on nytimes github repository. - Remove <code>"USAFacts"</code> as <code>truth_source</code> from <code><a href="../reference/load_truth.html">load_truth()</a></code>, <code><a href="../reference/plot_forecasts.html">plot_forecasts()</a></code> and vignettes. - Update <code><a href="../reference/load_truth.html">load_truth()</a></code> to work with files stored with Git LFS in the US forecast hub. - Performance improvements in <code><a href="../reference/load_forecasts_repo.html">load_forecasts_repo()</a></code> - Bug fix in use of <code>&amp;&amp;</code> in <code>align_forecasts</code>, only relevant for R version 4.3.0 and higher.</p>
@@ -143,7 +147,7 @@
 <li><p>Calculate one-sided quantile coverage denoted quantile_coverage0.xx.</p></li>
 <li><p>Add <code>metrics</code> parameter which is a character vector of the metrics to be returned with options “abs_error”, “wis”, “wis_components”,“interval_coverage”, and “quantile_coverage”</p></li>
 </ul></li>
-<li><p>Update <code><a href="../reference/save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> to return differences between the new version and the current version of truth on zoltar server.</p></li>
+<li><p>Update <code>save_truth_for_zoltar()</code> to return differences between the new version and the current version of truth on zoltar server.</p></li>
 <li><p>Update <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code> to handle spaces in <code>hub_repo_path</code> parameters.</p></li>
 <li><p>Add <code><a href="../reference/get_model_metadata.html">get_model_metadata()</a></code> based off of <code><a href="../reference/get_model_designations.html">get_model_designations()</a></code> but to retrieve all fields in metadata.</p></li>
 <li><p>Add <code><a href="../reference/preprocess_visualization_truth.html">preprocess_visualization_truth()</a></code> to generate JSON truth file for covid19 hub visualization, and its corresponding unit tests</p></li>
@@ -212,7 +216,7 @@
 <p><code><a href="../reference/score_forecasts.html">score_forecasts()</a></code> is now implemented for quantile-format forecasts to compute absolute error, weighted interval score, sharpness, overprediction, underprediction, and prediction interval coverage at any specified quantile. Minimally one should have the <code>forecasts</code> dataframe produced by <code><a href="../reference/load_forecasts.html">load_forecasts()</a></code> and the truth dataframe produced by <code><a href="../reference/load_truth.html">load_truth()</a></code> to calculate scores. If one desires to specify a subset of all available scores, one should consult <a href="https://epiforecasts.io/scoringutils/reference/eval_forecasts.html#details" class="external-link">this reference</a> for valid scores in the <code>desired_score_types</code> vector.</p>
 <ul><li>wis calculation changed to reflect preferred weighting scheme for interval scores.</li>
 </ul></li>
-<li><p><code><a href="../reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> and <code><a href="../reference/save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> are now implemented to create standard cumulative and incident death truth csv files for Zoltar.</p></li>
+<li><p><code>preprocess_truth_for_zoltar()</code> and <code>save_truth_for_zoltar()</code> are now implemented to create standard cumulative and incident death truth csv files for Zoltar.</p></li>
 <li><p><code><a href="../reference/preprocess_hospitalization.html">preprocess_hospitalization()</a></code> is now implemented to create standard cumulative and incident hospitalization truth csv files.</p></li>
 </ul></div>
 <div class="section level3">

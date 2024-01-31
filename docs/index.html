@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -154,26 +154,9 @@
 </ul>
 </div>
 <div class="section level3">
-<h3 id="download-and-pre-process-truth-data">Download and pre-process “Truth” Data<a class="anchor" aria-label="anchor" href="#download-and-pre-process-truth-data"></a>
+<h3 id="download-and-pre-process-truth-data">Download and pre-process “Truth” Data.<a class="anchor" aria-label="anchor" href="#download-and-pre-process-truth-data"></a>
 </h3>
-<ul>
-<li>
-<code>download_raw_nytimes(save_location)</code>: Download raw truth data from NYTimes and write to CSV files.</li>
-<li>
-<code>download_raw_usafacts(save_location)</code>: Download raw truth data from USAFacts and write to CSV files.</li>
-<li>
-<code>preprocess_nytimes(save_location)</code>: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
-<li>
-<code>preprocess_usafacts(save_location)</code>: Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs</li>
-<li>
-<code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
-<li>
-<code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
-<li>
-<code>preprocess_truth_for_zoltar(target, issue_date)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for Zoltar. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
-<li>
-<code>save_truth_for_zoltar(save_location)</code>: Write results from <code><a href="reference/preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</li>
-</ul>
+<p><strong>Note:</strong> case and death information from NYTimes and JHU CSSE stopped updating in March 2023, but covidHubUtils can still be used to access the historical data. - <code>download_raw_nytimes(save_location)</code>: Download raw truth data from NYTimes and write to CSV files. - <code>preprocess_nytimes(save_location)</code>: Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs - <code>preprocess_jhu(save_location)</code>: Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed. - <code>preprocess_hospitalization(save_location)</code>: Preprocess raw hospitalization data into Cumulative/Incident hospitalizations and write to CSVs. <strong>Note:</strong> To use this method, the <a href="https://github.com/reichlab/covidData" class="external-link">covidData</a> package needs to be installed.</p>
 </div>
 <div class="section level3">
 <h3 id="calculating-forecast-similarities">Calculating Forecast Similarities<a class="anchor" aria-label="anchor" href="#calculating-forecast-similarities"></a>

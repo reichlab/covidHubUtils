@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">covidHubUtils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -137,11 +137,8 @@ of epidemic week from a specified date</p></td>
       </tr><tr><td>
           <p><code><a href="download_raw_nytimes.html">download_raw_nytimes()</a></code> </p>
         </td>
-        <td><p>Download raw truth data from NYTimes and write to CSV files</p></td>
-      </tr><tr><td>
-          <p><code><a href="download_raw_usafacts.html">download_raw_usafacts()</a></code> </p>
-        </td>
-        <td><p>Download raw truth data from USAFacts</p></td>
+        <td><p>Download historical raw truth data from NYTimes and write to CSV files. Note:
+updates to the NYTimes data stopped in March 2023.</p></td>
       </tr><tr><td>
           <p><code><a href="get_all_models.html">get_all_models()</a></code> </p>
         </td>
@@ -296,25 +293,18 @@ supported with specified facet formula.</p></td>
       </tr><tr><td>
           <p><code><a href="preprocess_jhu.html">preprocess_jhu()</a></code> </p>
         </td>
-        <td><p>Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs</p></td>
+        <td><p>Preprocess historical raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases and write to CSVs.
+Note: updates to the JHU CSSE data stopped in March 2023.</p></td>
       </tr><tr><td>
           <p><code><a href="preprocess_nytimes.html">preprocess_nytimes()</a></code> </p>
         </td>
-        <td><p>Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs</p></td>
-      </tr><tr><td>
-          <p><code><a href="preprocess_truth_for_zoltar.html">preprocess_truth_for_zoltar()</a></code> </p>
-        </td>
-        <td><p>Generate versioned truth data for zoltar for a specified target
-It only includes national and state-level truth data.</p></td>
-      </tr><tr><td>
-          <p><code><a href="preprocess_usafacts.html">preprocess_usafacts()</a></code> </p>
-        </td>
-        <td><p>Preprocess raw truth data from USAFacts into Cumulative/Incident - Deaths/Cases and write to CSVs</p></td>
+        <td><p>Preprocess raw truth data from NYTimes into Cumulative/Incident - Deaths/Cases and write to CSVs.
+Note: updates to the NYTimes data stopped in March 2023.</p></td>
       </tr><tr><td>
           <p><code><a href="preprocess_visualization_truth.html">preprocess_visualization_truth()</a></code> </p>
         </td>
         <td><p>Preprocess raw truth data from JHU CSSE into Cumulative/Incident - Deaths/Cases for visualization
-purpose and write to JSON files</p></td>
+purpose and write to JSON files. Note: updates to the JHU CSSE data stopped in March 2023.</p></td>
       </tr><tr><td>
           <p><code><a href="reformat_forecasts.html">reformat_forecasts()</a></code> </p>
         </td>
@@ -322,12 +312,6 @@ purpose and write to JSON files</p></td>
 This function will throw a warning and return an empty data.frame with
 columns <code>model</code>, <code>forecast_date</code>, <code>location</code>, <code>type</code>, <code>quantile</code> and <code>value</code>, when
 no forecasts are available in <code>zoltar_query_result</code>.</p></td>
-      </tr><tr><td>
-          <p><code><a href="save_truth_for_zoltar.html">save_truth_for_zoltar()</a></code> </p>
-        </td>
-        <td><p>Generate the most up to date truth data for zoltar
-and save the differences between the new version and old version.
-It only includes national and state-level truth data.</p></td>
       </tr><tr><td>
           <p><code><a href="score_forecasts.html">score_forecasts()</a></code> </p>
         </td>
