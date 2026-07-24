@@ -38,7 +38,7 @@ date_to_week_end_date <- function(forecast_date, week_offset = 0) {
 calc_forecast_week_end_date <- function(forecast_date) {
   forecast_date <- lubridate::ymd(forecast_date)
   result <- rep(NA_character_, length(forecast_date))
-  inds <- (lubridate::wday(forecast_date, label = TRUE) %in% c("Sun", "Mon"))
+  inds <- lubridate::wday(forecast_date) %in% 1:2
   result[inds] <- date_to_week_end_date(forecast_date[inds], week_offset = -1)
   result[!inds] <- date_to_week_end_date(forecast_date[!inds], week_offset = 0)
 
@@ -66,7 +66,7 @@ calc_forecast_week_end_date <- function(forecast_date) {
 calc_target_week_end_date <- function(forecast_date, horizon) {
   forecast_date <- lubridate::ymd(forecast_date)
   result <- rep(NA_character_, length(forecast_date))
-  inds <- (lubridate::wday(forecast_date, label = TRUE) %in% c("Sun", "Mon"))
+  inds <- lubridate::wday(forecast_date) %in% 1:2
 
   if (length(horizon) == 1) {
     result[inds] <- date_to_week_end_date(forecast_date[inds],
